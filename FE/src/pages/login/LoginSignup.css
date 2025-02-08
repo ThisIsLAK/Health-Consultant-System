@@ -122,8 +122,8 @@ a.forgot{
 
 button{
     border-radius: 20px;
-    border: 1px solid var(--grad-clr1);
-    background: var(--grad-clr2);
+    border: 1px solid #4281c8;
+    background: var(--linear-grad);
     color: #fff;
     font-size: 12px;
     font-weight: bold;
@@ -164,6 +164,10 @@ button{
     border: 1px solid #fff;
     background: transparent;
     border-radius: 20px;
+}
+
+#loginsignup{
+    cursor: pointer;
 }
 
 .overlay{

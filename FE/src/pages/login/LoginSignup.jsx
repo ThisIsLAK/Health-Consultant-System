@@ -36,7 +36,7 @@ const LoginSignup = () => {
           <div className="infield">
             <input type="password" placeholder="Password" />
           </div>
-          <button>Sign Up</button>
+          <button id="loginsignup">Sign Up</button>
         </form>
       </div>
 
@@ -57,7 +57,7 @@ const LoginSignup = () => {
             <input type="password" placeholder="Password" />
           </div>
           <a href="#" className="forgot">Forgot your password?</a>
-          <button>Sign In</button>
+          <button id="loginsignup">Sign In</button>
         </form>
       </div>
 
