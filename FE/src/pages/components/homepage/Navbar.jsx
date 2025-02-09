@@ -4,7 +4,7 @@ const Navbar = () => (
     <nav className="navbar-container">
         <div className="navbar-brand">FPT Support</div>
         <div className="navbar-links">
-            <a href="#">Home</a>
+            <a href="/">Home</a>
             <a href="#">Multiple Test</a>
             <a href="#">Support Program</a>
             <a href="#">Notice</a>

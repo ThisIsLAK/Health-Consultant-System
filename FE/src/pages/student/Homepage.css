@@ -49,21 +49,6 @@ body {
   color: white;
 }
 
-/* Hero Section */
-.hero-section {
-  position: relative;
-  /* Make the hero section relative for positioning the blur effect */
-  text-align: center;
-  padding: 200px 20px;
-  background-color: #e3f2fd;
-  background-image: url('../components/image/Hero.png');
-  /* Ensure the path to the background image is correct */
-  background-size: cover;
-  background-position: center;
-  overflow: hidden;
-  /* Hide overflow to ensure the blur effect doesn't extend outside the section */
-}
-
 /* Navbar */
 .navbar-brand {
   font-size: 1.5rem;
@@ -107,22 +92,22 @@ body {
   color: white;
 }
 
+
 /* Hero Section */
 .hero-section {
   position: relative;
   /* Make the hero section relative for positioning the blur effect */
   text-align: center;
-  padding: 5rem 1rem;
+  padding: 200px 20px;
   background-color: #e3f2fd;
-  background-image: url('image/Hero.png');
+  background-image: url('../components/image/Hero.png');
   /* Ensure the path to the background image is correct */
   background-size: cover;
   background-position: center;
   overflow: hidden;
   /* Hide overflow to ensure the blur effect doesn't extend outside the section */
-  width: 100%;
-  box-sizing: border-box;
 }
+
 
 .hero-section::before {
   content: "";
@@ -284,76 +269,62 @@ body {
 
 /* Footer */
 .footer-container {
-  background-color: #6200ea;
-  color: white;
-  padding: 2rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  box-sizing: border-box;
-}
+    background-color: #6200ea;
+    color: white;
+    padding: 40px 100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+  }
+  .footer-column h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  .footer-column ul {
+    list-style: none;
+    padding: 0;
+  }
+  .footer-column ul li {
+    margin-bottom: 10px;
+  }
+  .footer-column ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  .footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .footer-social a {
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  .newsletter-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+  .btn-subscribe {
+    background-color: #5c5ee0;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
 
-.footer-column {
-  flex: 1;
-  min-width: 200px;
-  margin: 10px;
-}
-
-.footer-column h4 {
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-.footer-column ul {
-  list-style: none;
-  padding: 0;
-}
-
-.footer-column ul li {
-  margin-bottom: 10px;
-}
-
-.footer-column ul li a {
-  color: white;
-  text-decoration: none;
-}
-
-.footer-social {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.footer-social a {
-  color: white;
-  font-size: 20px;
-  text-decoration: none;
-}
-
-.newsletter-input {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  margin-top: 10px;
-}
-
-.btn-subscribe {
-  background-color: #5c5ee0;
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.policies-footer-column {
-  display: flex;
-  justify-content: center;
-}
-
-body {
-  overflow-x: hidden;
-}
+  .policies-footer-column{
+    display: flex;
+    justify-content: center;  
+  }
+  
