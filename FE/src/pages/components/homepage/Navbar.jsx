@@ -8,7 +8,7 @@ const Navbar = () => (
             <a href="#">Multiple Test</a>
             <a href="#">Support Program</a>
             <a href="#">Notice</a>
-            <a href="#">About Us</a>
+            <a href="/aboutus">About Us</a>
             <a href="/contact">Contact Us</a>
         </div>
         <div className="navbar-actions">
