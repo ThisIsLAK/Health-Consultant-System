@@ -4,7 +4,7 @@ import { faUserPlus, faQuestionCircle, faDesktop, faClipboardCheck } from "@fort
 
 const HowItWorks = () => (
     <div className="how-it-works-section">
-        <h1 className="how-it-works-title">How It Works</h1>
+        <h1 className="how-it-works-title" style={{color: "white"}}>How It Works</h1>
         <div className="how-it-works-container">
             <div className="how-it-works-step">
                 <FontAwesomeIcon icon={faUserPlus} className="icon-style" />
