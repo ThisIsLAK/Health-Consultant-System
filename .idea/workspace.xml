@@ -5,17 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserUpdateRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/repository/UserRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BE/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/service/ApiService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UseCases/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Text.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/application.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/UserServiceApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/controller/UserController.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/dto/request/UserCreationRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/dto/request/UserUpdateRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/entity/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/repository/UserRepository.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/service/UserService.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,20 +43,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.UserServiceApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Hoang",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/SEMESTER 7/SWP391/Health_Consultant"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Duong&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/SEMESTER 7/SWP391&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="UserServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="22" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.swp.user_service.UserServiceApplication" />
-      <module name="user-service" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="com.swp.user_service.*" />
