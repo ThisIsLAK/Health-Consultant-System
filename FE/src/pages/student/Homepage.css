@@ -1,0 +1,255 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+  }
+  
+  /* Navbar */
+  .navbar-brand{
+    font-size: 1.5rem;
+    font-weight: 700;
+    /* color: #8489f6; */
+    color: #6200ea;
+  }
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    padding: 16px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .navbar-links a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+  }
+  .navbar-actions button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  .btn-signin {
+    background-color: #4CAF50;
+    color: white;
+    margin: auto 20px;
+  }
+  .btn-get-started {
+    background-color: #6200ea;
+    color: white;
+  }
+  
+  /* Hero Section */
+  .hero-section {
+    position: relative; /* Make the hero section relative for positioning the blur effect */
+    text-align: center;
+    padding: 200px 20px;
+    background-color: #e3f2fd;
+    background-image: url('image/Hero.png'); /* Ensure the path to the background image is correct */
+    background-size: cover;
+    background-position: center;
+    overflow: hidden; /* Hide overflow to ensure the blur effect doesn't extend outside the section */
+  }
+
+  .hero-section::before {
+    content: "";
+    position: absolute; /* Position the blur effect absolutely within the hero section */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: inherit; /* Inherit the background image */
+    background-size: inherit;
+    background-position: inherit;
+    filter: blur(3px); /* Apply the blur effect */
+    z-index: 0; /* Place the blur effect behind the content */
+  }
+
+  .hero-title,
+  .hero-description,
+  .btn-learn-more {
+    position: relative; /* Position the content relative to ensure it appears above the blur effect */
+    z-index: 1; /* Ensure the content appears above the blur effect */
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+    color: #fff; /* Change text color to white for better contrast against the background */
+  }
+  .hero-description {
+    font-size: 1.2rem;
+    color: #fff; /* Change text color to white for better contrast against the background */
+  }
+  .btn-learn-more {
+    background-color: #6200ea;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  /* Success Metrics */
+  .metrics-section {
+    text-align: center;
+    padding: 50px;
+  }
+  .metrics-container {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin: 50px 0;
+  }
+  .metrics-item {
+    font-size: 1.5rem;
+  }
+  
+  
+  /* How It Works */
+ .how-it-works-section {
+  background-color: #6200ea;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+.how-it-works-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.how-it-works-title {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+}
+
+.how-it-works-step {
+  text-align: center;
+  max-width: 250px;
+}
+.icon-style {
+  font-size: 40px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 50%;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+  
+  /* Contact Form */
+  .contact-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+  }
+
+  .contact-form-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 66.67%; /* 8/12 of the container width */
+  }
+
+  .contact-form-image {
+    flex: 1;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .contact-form-box {
+    flex: 1;
+    max-width: 50%;
+    margin: 0;
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .contact-input,
+  .contact-textarea {
+    width: 95%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  .btn-join-now {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  
+  /* Footer
+  .footer-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    color: white;
+  } */
+
+  /* Footer */
+.footer-container {
+    background-color: #6200ea;
+    color: white;
+    padding: 40px 100px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+  }
+  .footer-column h4 {
+    margin-bottom: 15px;
+    font-size: 18px;
+  }
+  .footer-column ul {
+    list-style: none;
+    padding: 0;
+  }
+  .footer-column ul li {
+    margin-bottom: 10px;
+  }
+  .footer-column ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  .footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  .footer-social a {
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+  }
+  .newsletter-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+  .btn-subscribe {
+    background-color: #5c5ee0;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .policies-footer-column{
+    display: flex;
+    justify-content: center;  
+  }
+  
