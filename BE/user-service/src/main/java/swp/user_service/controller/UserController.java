@@ -1,5 +1,7 @@
 package swp.user_service.controller;
 
+import jakarta.validation.Valid;
+import swp.user_service.dto.request.ApiResponse;
 import swp.user_service.dto.request.UserCreationRequest;
 import swp.user_service.dto.request.UserUpdateRequest;
 import swp.user_service.entity.User;
@@ -16,12 +18,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    public UserController() {
-    }
-
     @PostMapping
-    User createUser(@RequestBody UserCreationRequest request) {
-        return this.userService.createUser(request);
+    ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request) {
+
+        ApiResponse<User> apiResponse = new ApiResponse<>();
+
+        apiResponse.setResult(userService.createUser(request));
+        return apiResponse;
     }
 
     @GetMapping
