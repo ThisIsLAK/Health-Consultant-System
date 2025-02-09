@@ -8,13 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-<<<<<<< HEAD
-//CrossOrigin(
-//        origins = {"http://localhost:5173"}
-//)@
-=======
-@CrossOrigin(origins = "http://localhost:5177")
->>>>>>> main
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping({"/users"})
 public class UserController {

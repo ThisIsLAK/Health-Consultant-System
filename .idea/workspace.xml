@@ -5,27 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/HELP.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/application.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/UserServiceApplication.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/dto/request/UserCreationRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/dto/request/UserUpdateRequest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/entity/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/repository/UserRepository.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/classes/com/swp/user_service/service/UserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/service/ApiService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
