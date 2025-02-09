@@ -7,13 +7,16 @@
 }
 
 .container{
-    position: relative;
+    position: absolute;
     width: 850px;
     height: 500px;
     background-color: #fff;
     box-shadow: 25px 30px 55px #5557;
     border-radius: 13px;
     overflow: hidden;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .form-container{
@@ -33,7 +36,7 @@
     z-index: 2;
 }
 
-form{
+.loginsignup-form{
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -42,7 +45,7 @@ form{
     padding: 0 50px;
 }
 
-h1{
+.loginsignup-h1{
     color: var(--grad-clr1);
 }
 
@@ -61,7 +64,7 @@ h1{
     width: 40px;
 }
 
-span{
+.loginsignup-span{
     font-size: 12px;
 }
 
@@ -71,14 +74,14 @@ span{
     width: 100%;
 }
 
-input{
+.loginsignup-input{
     width: 100%;
     padding: 12px 8px;
     background-color: #f3f3f3;
     border: none;
     outline: none;
 }
-
+/* 
 label{
     position: absolute;
     left: 50%;
@@ -86,30 +89,30 @@ label{
     transform: translateX(-50%);
     width: 0%;
     height: 2px;
-    background: var(--linear-grad);
+    background: #6200ea;
     transition: 0.3s;
 }
 
 input:focus ~ label{
     width: 100%;
-}
+} */
 
-a{
+.form-container a{
     color: #333;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
 }
 
-a.forgot{
+.form-container a.forgot{
     padding-bottom: 3px;
     border-bottom: 2px solid #eee;
 }
 
 button{
     border-radius: 20px;
-    border: 1px solid #4281c8;
-    background: var(--linear-grad);
+    border: 1px solid #6200ea;
+    background: #6200ea;
     color: #fff;
     font-size: 12px;
     font-weight: bold;
@@ -143,7 +146,7 @@ button{
     cursor: pointer;
     position: absolute;
     left: 50%;
-    top: 304px;
+    top: 300px;
     transform: translateX(-50%);
     width: 143.67px;
     height: 40px;
@@ -158,7 +161,7 @@ button{
 
 .overlay{
     position: relative;
-    background: var(--linear-grad);
+    background: #6200ea;
     color: #fff;
     left: -150%;
     height: 100%;
@@ -205,6 +208,7 @@ p{
     border: none;
     background-color: transparent;
 }
+
 
 .right-panel-active .overlay-container{
     transform: translateX(-150%);

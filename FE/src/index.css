@@ -3,11 +3,3 @@
     margin: 0px;
     box-sizing: border-box;
 }
-
-body {
-    height: 100vh;
-    background: #f6f5f7;
-    display: grid;
-    place-content: center;
-    font-family: 'Poppins', sans-serif;
-}

@@ -14,7 +14,7 @@ const LoginSignup = () => {
     const { name, value } = e.target;
     setSigninData({ ...signinData, [name]: value });
   };
-  
+
   const handleSignupChange = (e) => {
     const { name, value } = e.target;
     setSignupData({ ...signupData, [name]: value });
@@ -25,7 +25,7 @@ const LoginSignup = () => {
 
   const handleToggle = () => {
     setIsRightPanelActive(!isRightPanelActive);
-    setMessage(null); 
+    setMessage(null);
 
     // Trigger the button scale animation
     setBtnScaled(false);
@@ -70,16 +70,16 @@ const LoginSignup = () => {
     <div className={`container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
       {/* Sign Up Form */}
       <div className="form-container sign-up-container">
-        <form onSubmit={handleSignup}>
-          <h1>Create Account</h1>
+        <form className="loginsignup-form" onSubmit={handleSignup}>
+          <h1 className="loginsignup-h1">Create Account</h1>
           <div className="social-container">
             <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
             <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
             <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
           </div>
-          <span>or use your email for registration</span>
+          <span className="loginsignup-span">or use your email for registration</span>
           <div className="infield">
-            <input
+            <input className="loginsignup-input"
               type="text"
               name="name"
               placeholder="Name"
@@ -88,7 +88,7 @@ const LoginSignup = () => {
               required />
           </div>
           <div className="infield">
-            <input
+            <input className="loginsignup-input"
               type="email"
               name="email"
               placeholder="Email"
@@ -97,7 +97,7 @@ const LoginSignup = () => {
               required />
           </div>
           <div className="infield">
-            <input
+            <input className="loginsignup-input"
               type="password"
               name="password"
               placeholder="Password"
@@ -111,17 +111,17 @@ const LoginSignup = () => {
 
       {/* Sign In Form */}
       <div className="form-container sign-in-container">
-        <form onSubmit={handleSignin}>
-          <h1>Sign in</h1>
+        <form className="loginsignup-form" onSubmit={handleSignin}>
+          <h1 className="loginsignup-h1">Sign in</h1>
           {message && <p className="message">{message}</p>}
           <div className="social-container">
             <a href="#" className="social"><i className="fab fa-facebook-f"></i></a>
             <a href="#" className="social"><i className="fab fa-google-plus-g"></i></a>
             <a href="#" className="social"><i className="fab fa-linkedin-in"></i></a>
           </div>
-          <span>or use your account</span>
+          <span className="loginsignup-span">or use your account</span>
           <div className="infield">
-            <input
+            <input className="loginsignup-input"
               type="email"
               name="email"
               placeholder="Email"
@@ -130,7 +130,7 @@ const LoginSignup = () => {
               required />
           </div>
           <div className="infield">
-            <input
+            <input className="loginsignup-input"
               type="password"
               name="password"
               placeholder="Password"
@@ -148,14 +148,14 @@ const LoginSignup = () => {
         <div className="overlay">
           {/* Overlay Left (For Returning Users) */}
           <div className="overlay-panel overlay-left">
-            <h1>Welcome Back!</h1>
+            <h1 className="loginsignup-h1">Welcome Back!</h1>
             <p>To keep connected with us please login with your personal info</p>
             <button onClick={handleToggle}>Sign In</button>
           </div>
 
           {/* Overlay Right (For New Users) */}
           <div className="overlay-panel overlay-right">
-            <h1>Hello, Friend!</h1>
+            <h1 className="loginsignup-h1">Hello, Friend!</h1>
             <p>Enter your personal details and start your journey with us</p>
             <button onClick={handleToggle}>Sign Up</button>
           </div>
