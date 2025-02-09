@@ -49,7 +49,7 @@ body {
     text-align: center;
     padding: 200px 20px;
     background-color: #e3f2fd;
-    background-image: url('image/Hero.png'); /* Ensure the path to the background image is correct */
+    background-image: url('../components/image/Hero.png'); /* Ensure the path to the background image is correct */
     background-size: cover;
     background-position: center;
     overflow: hidden; /* Hide overflow to ensure the blur effect doesn't extend outside the section */
