@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/Health_Consultant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Health_Consultant.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/BE.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/jarRepositories.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +51,7 @@
     "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.com.swp.user_service.UserServiceApplication">
+  <component name="RunManager" selected="Application.com.swp.user_service.UserServiceApplication (1)">
     <configuration name="UserServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -74,6 +60,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="swp.user_service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="com.swp.user_service.UserServiceApplication (1)" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.swp.user_service.UserServiceApplication" />
+      <module name="user-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.swp.user_service.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -96,6 +95,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.com.swp.user_service.UserServiceApplication (1)" />
         <item itemvalue="Application.com.swp.user_service.UserServiceApplication" />
         <item itemvalue="Application.UserServiceApplication" />
       </list>
