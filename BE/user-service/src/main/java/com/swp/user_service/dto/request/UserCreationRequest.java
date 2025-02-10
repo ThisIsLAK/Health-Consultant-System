@@ -2,11 +2,7 @@ package com.swp.user_service.dto.request;
 
 public class UserCreationRequest {
 
-<<<<<<< HEAD
-    private String username ;
-=======
     private String name;
->>>>>>> Hoang
     private String email;
     private String password;
 

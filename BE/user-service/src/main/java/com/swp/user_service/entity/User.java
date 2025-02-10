@@ -10,11 +10,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-<<<<<<< HEAD
-    private String username ;
-=======
     private String name;
->>>>>>> Hoang
     private String email;
     private String password;
 

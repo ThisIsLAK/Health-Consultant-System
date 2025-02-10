@@ -5,20 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/UserServiceApplication.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/ApiResponse.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserCreationRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserLoginRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserUpdateRequest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/entity/User.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/AppException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/ErrorCode.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/GlobalExceptionHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/repository/UserRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/service/UserService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +66,17 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Health_Consultant" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Health_Consultant" />
+      <option name="filePath" />
+      <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
