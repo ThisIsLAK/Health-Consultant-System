@@ -29,6 +29,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User authenticateUser(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        return user;
+    }
+
     public User updateUser(String userId, UserUpdateRequest request) {
         User user = getUser(userId);
 
