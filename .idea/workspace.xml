@@ -5,59 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/Health_Consultant.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/BE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/UserServiceApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/test/java/com/swp/user_service/UserServiceApplicationTests.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/public/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/ContactForm.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/Hero.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/HowItWorks.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/Navbar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/homepage/SuccessMetrics.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/image/Contact.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/image/Hero.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/components/image/Support.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/AboutUs.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/AboutUs.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/ContactUs.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/ContactUs.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/Homepage.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/UserProfile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/FE/src/pages/student/UserProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/resources/application.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DB/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/FE/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/FE/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/login/LoginSignup.css" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/login/LoginSignup.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/login/LoginSignup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/login/LoginSignup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/student/Homepage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/student/Homepage.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/service/ApiService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UseCases/Text.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/Text.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BE/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/UserServiceApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/controller/UserController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/ApiResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserCreationRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserLoginRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/dto/request/UserUpdateRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/AppException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/ErrorCode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/exception/GlobalExceptionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/swp/user_service/service/UserService.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,18 +50,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.UserServiceApplication.executor": "Run",
-    "Application.swp.user_service.UserServiceApplication.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Hoang",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/SEMESTER 7/SWP391/Health_Consultant/FE",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;Application.swp.user_service.UserServiceApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Duong&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/SEMESTER 7/SWP391/BE&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="UserServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="openjdk-23" />
