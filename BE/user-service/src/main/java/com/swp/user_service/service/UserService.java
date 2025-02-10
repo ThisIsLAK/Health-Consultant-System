@@ -17,6 +17,9 @@ public class UserService {
     public User createUser(UserCreationRequest request){
         User user = new User();
 
+        if(userRepository.existsByEmail(request.getEmail()))
+            throw new RuntimeException("Email is existed");
+
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
