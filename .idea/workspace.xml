@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c51e6c4d-3504-4a3c-aac2-6acc85c0307e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/controller/PysController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistCreationRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistUpdateRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/entity/Pyschologist.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/PysRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/PysService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/request/UserLoginRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/dto/response/UserLoginResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,9 +56,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "Merging Duong",
+    "git-widget-placeholder": "Duong",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/SEMESTER 7/SWP391/BE",
+    "last_opened_file_path": "D:/SEMESTER 7/SWP391/FE",
     "nodejs_package_manager_path": "npm",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
@@ -128,7 +127,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="" />
+      <changelist id="c51e6c4d-3504-4a3c-aac2-6acc85c0307e" name="Changes" comment="" />
       <created>1739028833312</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
