@@ -10,10 +10,12 @@ import UserProfile from './pages/student/UserProfile';
 import ContactUs from './pages/student/ContactUs';
 import AboutUs from './pages/student/AboutUs';
 import LoginSignup from './pages/login/LoginSignup';
+
 import CustomerList from './pages/manager/CustomerList/CustomerList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
 import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
+import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
 
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
         <Route path='/psychologistlist' element={<PsychologistList/>}/>
         <Route path='/adminlist' element={<AdminList/>}/>
         <Route path='/apphistory' element={<AppointmentHistory/>}/>
+        <Route path='/applist' element={<AppointmentList/>}/>
       </Routes>
     </BrowserRouter>
   );

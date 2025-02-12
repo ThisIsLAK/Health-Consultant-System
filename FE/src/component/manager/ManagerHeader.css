@@ -19,8 +19,7 @@
     height: 60px;
     box-shadow: 0 2px 20px rgba(1, 41, 112, 0.1);
     background-color: #fff;
-    padding-left: 120px;
-    
+    padding-left: 30px;
 }
 
 .header .toggle-sidebar-btn{
