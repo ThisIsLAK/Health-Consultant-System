@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f10529fb-251a-483e-b815-4ad03517eb44" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/src/main/java/com/swp/user_service/service/UserService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +47,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "Duong",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/SEMESTER 7/SWP391/BE",
+    "last_opened_file_path": "D:/SEMESTER 7/SWP391",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
