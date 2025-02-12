@@ -2,7 +2,7 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faPhone, faMapMarkerAlt, faEdit, faCalendarAlt, faClipboardList, faCog } from "@fortawesome/free-solid-svg-icons";
 import "./UserProfile.css";
-import Navbar from "../components/homepage/Navbar";
+import Navbar from "../../components/homepage/Navbar";
 
 const Sidebar = () => (
   <aside className="sidebar">

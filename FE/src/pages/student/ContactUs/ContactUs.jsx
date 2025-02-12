@@ -1,8 +1,8 @@
 import React from "react";
 import "./ContactUs.css";
-import Support from "../../pages/components/image/Support.jpg";
-import Footer from "../components/homepage/Footer";
-import Navbar from "../components/homepage/Navbar";
+import Support from "../../components/image/Support.jpg";
+import Footer from "../../components/homepage/Footer";
+import Navbar from "../../components/homepage/Navbar";
 
 
 const ContactUs = () => (

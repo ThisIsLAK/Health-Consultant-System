@@ -5,9 +5,9 @@ const Navbar = () => (
         <div className="navbar-brand">FPT Support</div>
         <div className="navbar-links">
             <a href="/">Home</a>
-            <a href="#">Multiple Test</a>
-            <a href="#">Support Program</a>
-            <a href="#">Notice</a>
+            <a href="/tests">Multiple Test</a>
+            <a href="/support">Support Program</a>
+            <a href="/notice">Notice</a>
             <a href="/aboutus">About Us</a>
             <a href="/contact">Contact Us</a>
         </div>
