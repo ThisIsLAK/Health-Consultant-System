@@ -1,7 +1,7 @@
 import React from "react";
 import "./AboutUs.css";
-import Footer from "../components/homepage/Footer";
-import Navbar from "../components/homepage/Navbar";
+import Footer from "../../components/homepage/Footer";
+import Navbar from "../../components/homepage/Navbar";
 
 const AboutUs = () => (
     <div>

@@ -5,10 +5,10 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-import Homepage from './pages/student/Homepage';
-import UserProfile from './pages/student/UserProfile';
-import ContactUs from './pages/student/ContactUs';
-import AboutUs from './pages/student/AboutUs';
+import Homepage from './pages/student/Homepage/Homepage';
+import UserProfile from './pages/student/UserProfile/UserProfile';
+import ContactUs from './pages/student/ContactUs/ContactUs';
+import AboutUs from './pages/student/AboutUs/AboutUs';
 import LoginSignup from './pages/login/LoginSignup';
 
 import CustomerList from './pages/manager/CustomerList/CustomerList';
@@ -16,6 +16,11 @@ import PsychologistList from './pages/manager/PsychologistList/PsychologistList'
 import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
 import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
+
+import TestsPage from './pages/student/TestListPage/TestsPage';
+import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
+import NoticePage from './pages/student/Notice/NoticePage';
+
 
 
 function App() {
@@ -29,6 +34,9 @@ function App() {
         <Route path='/profile' element={<UserProfile />} />
         <Route path='/contact' element={<ContactUs />} />
         <Route path='/aboutus' element={<AboutUs />} />
+        <Route path='/tests' element={<TestsPage />} />
+        <Route path='/support' element={<SupportProgram/>} />
+        <Route path='/notice' element={<NoticePage/>}/>
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<CustomerList/>}/>
