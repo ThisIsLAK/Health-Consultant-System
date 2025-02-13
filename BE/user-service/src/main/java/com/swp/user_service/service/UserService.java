@@ -24,7 +24,7 @@ public class UserService {
 
         if(userRepository.existsByEmail(request.getEmail()))
             throw new RuntimeException("Email is existed");
-        log.info("Testing gitignore");
+        log.info("Testing gitignor");
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
