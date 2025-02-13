@@ -5,11 +5,18 @@ const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     // Thông tin bệnh nhân mẫu
-    const patientInfo = {
-        name: "Nguyen Van A",
-        age: 28,
-        id: "PAT-123456"
-    };
+    if (response.status === 200) {
+        const userData = response.data; // Assuming the API returns user-related data
+        const patientInfo = {
+            name: userData.name,
+            age: userData.age,
+            id: userData.id,
+        };
+
+        console.log("Updated Patient Info:", patientInfo);
+    } else {
+        console.error("Login failed:", response.message);
+    }
 
     return (
         <nav className="navbar-container">
