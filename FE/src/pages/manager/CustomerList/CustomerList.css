@@ -1,0 +1,41 @@
+#main{
+    margin-top: 60px;
+    padding: 20px 30px;
+    transition: all 0.3s;
+    background-color: #EEEFF4;
+    min-height: 100vh;
+}
+
+.status-active {
+    color: green;
+    font-weight: bold;
+}
+
+.status-banned {
+    color: red;
+    font-weight: bold;
+}
+
+.custom-link {
+    color: black;
+    text-decoration: none;
+}
+
+.custom-button {
+    color: black;
+    text-decoration: none;
+}
+
+.custom-link:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+.custom-button:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+.three-dots {
+    color: black;
+}
