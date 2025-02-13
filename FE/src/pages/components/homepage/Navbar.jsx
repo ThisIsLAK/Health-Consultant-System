@@ -12,8 +12,8 @@ const Navbar = () => (
             <a href="/contact">Contact Us</a>
         </div>
         <div className="navbar-actions">
-            <button className="btn-signin">Sign In</button>
-            <button className="btn-get-started">Get Started</button>
+            <a href="/login"><button className="btn-signin">Sign In</button></a>
+            <a href="/login"><button className="btn-get-started">Get Started</button></a>
         </div>
     </nav>
 );
