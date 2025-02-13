@@ -19,8 +19,12 @@ export default class ApiService {
 
 
     static async loginUser(loginDetails) {
-        const response = await axios.post(`${this.BASE_URL}/auth/login`, loginDetails)
-        return response.data;
+        const response = await axios.post(`${this.BASE_URL}/identity/users/login`, loginDetails)
+        // return response.data;
+        return {
+            status: 200,
+            data: response.data,
+          };
     }
 
     static async getLoggedInUserInfo() {
