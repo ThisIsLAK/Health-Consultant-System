@@ -27,7 +27,7 @@ const Navbar = () => {
                     <div className="patient-info">
                         <span>👤 {patientInfo.name}</span>
                         <span>🆔 {patientInfo.id}</span>
-                        <a href="/login"><button className="btn-get-started" onClick={() => setIsLoggedIn(false)}>Sign outout</button></a>
+                        <a href="/login"><button className="btn-get-started" onClick={() => setIsLoggedIn(false)}>Sign out</button></a>
                     </div>
                 ) : (
                     <>
