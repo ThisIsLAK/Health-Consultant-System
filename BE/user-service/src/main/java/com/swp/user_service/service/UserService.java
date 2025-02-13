@@ -6,6 +6,8 @@ import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.UserLoginResponse;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.List;
 
 @Service
 public class UserService {
+    private static final Logger log = LogManager.getLogger(UserService.class);
     @Autowired
     private UserRepository userRepository ;
 
@@ -21,7 +24,7 @@ public class UserService {
 
         if(userRepository.existsByEmail(request.getEmail()))
             throw new RuntimeException("Email is existed");
-
+        log.info("Testing gitignore");
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
