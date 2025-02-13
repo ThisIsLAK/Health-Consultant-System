@@ -1,10 +1,13 @@
 package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.UserCreationRequest;
+import com.swp.user_service.dto.request.UserLoginRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
+import com.swp.user_service.dto.response.UserLoginResponse;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +21,14 @@ public class UserController {
 
     @PostMapping
     User createUser(@RequestBody UserCreationRequest request){
+
         return userService.createUser(request);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponse> loginUser(@RequestBody UserLoginRequest request) {
+        UserLoginResponse response = userService.login(request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping

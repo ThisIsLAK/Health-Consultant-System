@@ -2,7 +2,7 @@ package com.swp.user_service.dto.request;
 
 public class UserUpdateRequest {
 
-    private String password;
+    private String password ;
 
     public String getPassword() {
         return password;
