@@ -16,6 +16,7 @@ import PsychologistList from './pages/manager/PsychologistList/PsychologistList'
 import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
 import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
+import ManagerDashboard from './pages/manager/ManagerDashboard/ManagerDashboard';
 
 import TestsPage from './pages/student/TestListPage/TestsPage';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
@@ -44,6 +45,7 @@ function App() {
         <Route path='/adminlist' element={<AdminList/>}/>
         <Route path='/apphistory' element={<AppointmentHistory/>}/>
         <Route path='/applist' element={<AppointmentList/>}/>
+        <Route path='/managerdashboard' element={<ManagerDashboard/>}/>
       </Routes>
     </BrowserRouter>
   );

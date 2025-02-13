@@ -42,9 +42,7 @@ const LoginSignup = () => {
         setMessage("User Successfully Loged in");
         localStorage.setItem('token', response.token);
         localStorage.setItem('role', response.role);
-        setTimeout(() => {
-          navigate("/")
-        }, 4000)
+        navigate("/")
       }
     } catch (error) {
       setMessage(error.response?.data.message || error.message || "Unable to log in user");
