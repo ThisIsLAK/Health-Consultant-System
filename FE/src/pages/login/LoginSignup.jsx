@@ -145,15 +145,15 @@ const LoginSignup = () => {
         <div className="overlay">
           {/* Overlay Left (For Returning Users) */}
           <div className="overlay-panel overlay-left">
-            <h1 className="loginsignup-h1">Welcome Back!</h1>
-            <p>To keep connected with us please login with your personal info</p>
+            <h1 className="loginsignup-h1">Welcome!</h1>
+            <p className="loginsignup-p">To keep connected with us please login with your personal info</p>
             <button onClick={handleToggle}>Sign In</button>
           </div>
 
           {/* Overlay Right (For New Users) */}
           <div className="overlay-panel overlay-right">
             <h1 className="loginsignup-h1">Hello, Friend!</h1>
-            <p>Enter your personal details and start your journey with us</p>
+            <p className="loginsignup-p">Enter your personal details and start your journey with us</p>
             <button onClick={handleToggle}>Sign Up</button>
           </div>
         </div>

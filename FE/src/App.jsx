@@ -17,11 +17,14 @@ import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
 import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
 import ManagerDashboard from './pages/manager/ManagerDashboard/ManagerDashboard';
+import AppointmentDetail from './pages/manager/AppointmentDetail/AppointmentDetail';
 
 import TestsPage from './pages/student/TestListPage/TestsPage';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
 import NoticePage from './pages/student/Notice/NoticePage';
-
+import CustomerDetail from './pages/manager/CustomerDetail/CustomerDetail';
+import PsychologistDetail from './pages/manager/PsychologistDetail/PsychologistDetail';
+import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
 
 
 function App() {
@@ -46,6 +49,10 @@ function App() {
         <Route path='/apphistory' element={<AppointmentHistory/>}/>
         <Route path='/applist' element={<AppointmentList/>}/>
         <Route path='/managerdashboard' element={<ManagerDashboard/>}/>
+        <Route path='/appdetails' element={<AppointmentDetail/>}/>
+        <Route path='/userdetails' element={<CustomerDetail/>}/>
+        <Route path='/psychologistdetails' element={<PsychologistDetail/>}/>
+        <Route path='/admindetails' element={<AdminDetail/>}/>
       </Routes>
     </BrowserRouter>
   );

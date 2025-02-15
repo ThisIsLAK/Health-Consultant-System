@@ -4,8 +4,11 @@ import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import { Pagination, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerList = () => {
+  const navigate = useNavigate();
+
   const itemsPerPage = 12;
   const mockPsychologists = [
     { id: 1, name: 'Dr. James Smith', email: 'jsmith@example.com', status: true },
@@ -84,6 +87,7 @@ const CustomerList = () => {
                     </td>
                     <td className="d-flex align-items-center">
                       <FaEye
+                        onClick={() => navigate('/psychologistdetails')}
                         className="custom-icon me-3 text-dark"
                         style={{ cursor: 'pointer' }}
                         title="View Detail"

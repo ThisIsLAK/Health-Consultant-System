@@ -5,6 +5,7 @@ import { Pagination, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
 import PsychologistModal from '../../../component/manager/PsychologistModal';
+import RemoveAppointmentModal from '../AddtionalSections/RemoveAppointmentModal/RemoveAppointmentModal';
 
 const AppointmentList = () => {
     const itemsPerPage = 12;
@@ -23,14 +24,14 @@ const AppointmentList = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [appointments, setAppointments] = useState(mockAppointments);
+    const [showRemoveModal, setShowRemoveModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
     const indexOfLastAppointment = currentPage * itemsPerPage;
     const indexOfFirstAppointment = indexOfLastAppointment - itemsPerPage;
     const currentAppointments = appointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(appointments.length / itemsPerPage);
-
-    const [showModal, setShowModal] = useState(false);
-    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
     const handleAssignPsychologist = (appointment) => {
         setSelectedAppointment(appointment);
@@ -40,6 +41,19 @@ const AppointmentList = () => {
     const handleConfirmAssign = (psychologistId) => {
         console.log(`Assigned Psychologist ${psychologistId} to Appointment ${selectedAppointment.id}`);
         setShowModal(false);
+    };
+
+    const handleRemoveAppointment = (appointment) => {
+        setSelectedAppointment(appointment);
+        setShowRemoveModal(true);
+    };
+
+    const handleConfirmRemove = (reason) => {
+        console.log(`Removing appointment ${selectedAppointment.id} with reason: ${reason}`);
+        // Remove the appointment from the list
+        setAppointments(appointments.filter(app => app.id !== selectedAppointment.id));
+        setShowRemoveModal(false);
+        setSelectedAppointment(null);
     };
 
     return (
@@ -117,6 +131,12 @@ const AppointmentList = () => {
                         show={showModal}
                         handleClose={() => setShowModal(false)}
                         handleAssign={handleConfirmAssign}
+                    />
+
+                    <RemoveAppointmentModal
+                        show={showRemoveModal}
+                        handleClose={() => setShowRemoveModal(false)}
+                        handleRemove={handleConfirmRemove}
                     />
                 </div>
             </main>

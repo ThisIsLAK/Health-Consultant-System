@@ -1,0 +1,58 @@
+/* RemoveAdminModal.css */
+.remove-modal-body {
+    text-align: center;
+    padding: 24px;
+}
+
+.remove-modal-title {
+    margin-bottom: 16px;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.remove-modal-subtitle {
+    color: #6c757d;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.remove-modal-textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    background-color: #f8f9fa;
+    border: none;
+    border-radius: 4px;
+    resize: vertical;
+    font-size: 14px;
+}
+
+.remove-modal-textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 76, 81, 0.2);
+}
+
+.remove-modal-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF4C51;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.remove-modal-button:hover {
+    background-color: #ff3337;
+}
+
+.remove-modal-button.unban-button {
+    background-color: #28a745;
+}
+
+.remove-modal-button.unban-button:hover {
+    background-color: #218838;
+}
