@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import { Pagination, InputGroup, FormControl } from 'react-bootstrap';
@@ -27,6 +28,9 @@ const AppointmentHistory = () => {
     const indexOfFirstAppointment = indexOfLastAppointment - itemsPerPage;
     const currentAppointments = appointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(appointments.length / itemsPerPage);
+
+    const navigate = useNavigate();
+
 
     return (
         <div>
@@ -68,7 +72,7 @@ const AppointmentHistory = () => {
                                             <span className="badge bg-success">{appointment.status}</span>
                                         </td>
                                         <td>
-                                            <FaEye className="custom-icon text-dark" style={{ cursor: 'pointer' }} title="View Detail" />
+                                            <FaEye onClick={() => navigate('/appdetails')} className="custom-icon text-dark" style={{ cursor: 'pointer' }} title="View Detail" />
                                         </td>
                                     </tr>
                                 ))}

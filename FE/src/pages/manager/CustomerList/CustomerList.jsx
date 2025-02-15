@@ -5,6 +5,7 @@ import { Pagination, InputGroup, FormControl, Dropdown } from 'react-bootstrap';
 import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
 import './CustomerList.css';
+import { useNavigate } from 'react-router-dom';
 
 
 const CustomerList = () => {
@@ -38,6 +39,8 @@ const CustomerList = () => {
   const indexOfFirstPatient = indexOfLastPatient - itemsPerPage;
   const currentPatients = patients.slice(indexOfFirstPatient, indexOfLastPatient);
   const totalPages = Math.ceil(patients.length / itemsPerPage);
+
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -84,7 +87,7 @@ const CustomerList = () => {
                     </span>
                   </td>
                   <td className="d-flex align-items-center">
-                    <FaEye className="custom-icon me-3 text-dark" style={{ cursor: 'pointer' }} title="View Detail" />
+                    <FaEye onClick={() => navigate('/userdetails')} className="custom-icon me-3 text-dark" style={{ cursor: 'pointer' }} title="View Detail" />
                     <Dropdown align="end">
                       <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
                         &#8942;

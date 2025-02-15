@@ -5,6 +5,8 @@ import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import { Pagination, InputGroup, FormControl, Dropdown, Button } from 'react-bootstrap';
 import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
+import RemoveAdminModal from '../AddtionalSections/RemoveAdminModal/RemoveAdminModal';
+import { toast } from 'react-toastify';
 
 const AdminList = () => {
   const itemsPerPage = 10;
@@ -18,19 +20,26 @@ const AdminList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [admins, setAdmins] = useState(mockAdmin);
+  const [selectedAdmin, setSelectedAdmin] = useState(null);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [modalAction, setModalAction] = useState('ban'); // 'ban' or 'unban'
 
-  const handleStatusToggle = (admin) => {
-    const updatedAdmins = admins.map((a) =>
-      a.id === admin.id ? { ...a, status: !a.status } : a
+  const handleStatusAction = (reason) => {
+    const updatedAdmins = admins.map((admin) =>
+      admin.id === selectedAdmin.id
+        ? { ...admin, status: !admin.status }
+        : admin
     );
     setAdmins(updatedAdmins);
-    toast.success(`${admin.status ? 'Marked Unavailable' : 'Marked Available'} successfully!`);
+    setShowStatusModal(false);
+    setSelectedAdmin(null);
+    toast.success(`Admin ${modalAction === 'ban' ? 'banned' : 'unbanned'} successfully!`);
   };
 
-  const handleDeleteAdmin = (admin) => {
-    const updatedAdmins = admins.filter((a) => a.id !== admin.id);
-    setAdmins(updatedAdmins);
-    toast.success('Admin deleted successfully!');
+  const handleStatusClick = (admin) => {
+    setSelectedAdmin(admin);
+    setModalAction(admin.status ? 'ban' : 'unban');
+    setShowStatusModal(true);
   };
 
   return (
@@ -39,17 +48,16 @@ const AdminList = () => {
       <ManagerSidebar />
 
       <main id="main" className="main">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <PageTitle page="Admin List" />
-        <Button
-          variant="primary"
-          onClick={() => navigate('')}
-          className="add-staff-button"
-          style={{ textTransform: 'none' }}
-        >
-          Add an Admin
-        </Button>
-      </div>
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <PageTitle page="Admin List" />
+          <Button
+            onClick={() => navigate('/addadmin')}
+            className="add-staff-button"
+            style={{ textTransform: 'none', backgroundColor: '#6c63ff' }}
+          >
+            Add an Admin
+          </Button>
+        </div>
 
         <div className="user-table-container">
           <InputGroup className="mb-3">
@@ -80,11 +88,12 @@ const AdminList = () => {
                     <td>{admin.email}</td>
                     <td>
                       <span className={`badge bg-${admin.status ? 'success' : 'danger'}`}>
-                        {admin.status ? 'Available' : 'Unavailable'}
+                        {admin.status ? 'Working' : 'Banned'}
                       </span>
                     </td>
                     <td className="d-flex align-items-center">
                       <FaEye
+                        onClick={() => navigate('/admindetails')}
                         className="custom-icon me-3 text-dark"
                         style={{ cursor: 'pointer' }}
                         title="View Detail"
@@ -97,14 +106,16 @@ const AdminList = () => {
                           &#8942;
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
-                          <Dropdown.Item onClick={() => handleStatusToggle(admin)}>
-                            {admin.status ? 'Mark Unavailable' : 'Mark Available'}
+                          <Dropdown.Item
+                            onClick={() => navigate('/editadmin')}
+                          >
+                            Edit Profile
                           </Dropdown.Item>
                           <Dropdown.Item
-                            onClick={() => handleDeleteAdmin(admin)}
                             className="text-danger"
+                            onClick={() => handleStatusClick(admin)}
                           >
-                            Delete
+                            {admin.status ? 'Ban Admin' : 'Unban Admin'}
                           </Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -118,6 +129,13 @@ const AdminList = () => {
           <Pagination className="justify-content-center">
             <Pagination.Item active>{1}</Pagination.Item>
           </Pagination>
+
+          <RemoveAdminModal
+            show={showStatusModal}
+            handleClose={() => setShowStatusModal(false)}
+            handleAction={handleStatusAction}
+            actionType={modalAction}
+          />
         </div>
       </main>
     </div>
