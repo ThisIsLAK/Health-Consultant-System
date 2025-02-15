@@ -10,6 +10,10 @@ import UserProfile from './pages/student/UserProfile/UserProfile';
 import ContactUs from './pages/student/ContactUs/ContactUs';
 import AboutUs from './pages/student/AboutUs/AboutUs';
 import LoginSignup from './pages/login/LoginSignup';
+import TestsPage from './pages/student/TestListPage/TestsPage';
+import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
+import NoticePage from './pages/student/Notice/NoticePage';
+import UserInfo from './pages/student/UserInfo/UserInfo';
 
 import CustomerList from './pages/manager/CustomerList/CustomerList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
@@ -18,14 +22,11 @@ import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHi
 import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
 import ManagerDashboard from './pages/manager/ManagerDashboard/ManagerDashboard';
 import AppointmentDetail from './pages/manager/AppointmentDetail/AppointmentDetail';
-
-import TestsPage from './pages/student/TestListPage/TestsPage';
-import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
-import NoticePage from './pages/student/Notice/NoticePage';
 import CustomerDetail from './pages/manager/CustomerDetail/CustomerDetail';
 import PsychologistDetail from './pages/manager/PsychologistDetail/PsychologistDetail';
 import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
-
+import AdminAdd from './pages/manager/AdminAdd/AdminAdd';
+import AdminEdit from './pages/manager/AdminEdit/AdminEdit';
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
         <Route path='/tests' element={<TestsPage />} />
         <Route path='/support' element={<SupportProgram/>} />
         <Route path='/notice' element={<NoticePage/>}/>
+        <Route path='/info' element={<UserInfo/>}/>
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<CustomerList/>}/>
@@ -53,6 +55,9 @@ function App() {
         <Route path='/userdetails' element={<CustomerDetail/>}/>
         <Route path='/psychologistdetails' element={<PsychologistDetail/>}/>
         <Route path='/admindetails' element={<AdminDetail/>}/>
+        <Route path='/addadmin' element={<AdminAdd/>}/>
+        <Route path='/editadmin' element={<AdminEdit/>}/>
+
       </Routes>
     </BrowserRouter>
   );
