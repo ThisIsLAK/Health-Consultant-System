@@ -17,6 +17,7 @@ import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHi
 import TestsPage from './pages/student/TestListPage/TestsPage';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
 import NoticePage from './pages/student/Notice/NoticePage';
+import UserInfo from './pages/student/UserInfo/UserInfo';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
         <Route path='/tests' element={<TestsPage />} />
         <Route path='/support' element={<SupportProgram/>} />
         <Route path='/notice' element={<NoticePage/>}/>
+        <Route path='/info' element={<UserInfo/>}/>
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<CustomerList/>}/>
