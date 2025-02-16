@@ -5,6 +5,8 @@ import com.swp.user_service.dto.request.UserLoginRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.UserLoginResponse;
 import com.swp.user_service.entity.User;
+import com.swp.user_service.exception.AppException;
+import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,9 +24,12 @@ public class UserService {
     public User createUser(UserCreationRequest request){
         User user = new User();
 
+        if(userRepository.existsByName(request.getName()))
+            throw new AppException(ErrorCode.USER_EXIST);
+
         if(userRepository.existsByEmail(request.getEmail()))
-            throw new RuntimeException("Email is existed");
-        log.info("Testing gitignor");
+            throw new AppException(ErrorCode.EMAIL_EXIST);
+
         user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
