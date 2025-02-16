@@ -13,21 +13,60 @@ export default class ApiService {
 
     /**AUTh && USERS API */
     static async registerUser(registration) {
-        const response = await axios.post(`${this.BASE_URL}/identity/users`, registration)
-        return response.data;
+        try {
+            const response = await axios.post(`${this.BASE_URL}/identity/users`, registration);
+            if (response && response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response",
+                };
+            }
+        } catch (error) {
+            return {
+                status: 400,
+                message: error.response?.data.message || error.message || "Unable to register user",
+            };
+        }
     }
 
-
     static async loginUser(loginDetails) {
-        const response = await axios.post(`${this.BASE_URL}/auth/login`, loginDetails)
-        return response.data;
+        try {
+            const response = await axios.post(`${this.BASE_URL}/identity/users/login`, loginDetails);
+            if (response && response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response",
+                };
+            }
+        } catch (error) {
+            return {
+                status: 400,
+                message: error.response?.data.message || error.message || "Login failed",
+            };
+        }
     }
 
     static async getLoggedInUserInfo() {
-        const response = await axios.get(`${this.BASE_URL}/user/my-info`, {
-            headers: this.getHeader()
-        });
-        return response.data;
+        try {
+            const response = await axios.get(`${this.BASE_URL}/user/my-info`, {
+                headers: this.getHeader()
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                status: 400,
+                message: error.response?.data.message || error.message || "Unable to fetch user info",
+            };
+        }
     }
-
 }

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../service/ApiService";
+import Swal from "sweetalert2";
 
 const LoginSignup = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
@@ -39,15 +40,18 @@ const LoginSignup = () => {
     try {
       const response = await ApiService.loginUser(signinData);
       if (response.status === 200) {
-        setMessage("User Successfully Loged in");
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('role', response.role);
-        setTimeout(() => {
-          navigate("/")
-        }, 4000)
+        setMessage("User Successfully Logged in");
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.role);
+        localStorage.setItem('name', response.data.name); // Store user's name
+        localStorage.setItem('email', response.data.email); // Store user's email
+        Swal.fire("Success", "Login Successfully", "success");
+        navigate("/")
+      } else {
+        Swal.fire("Error", response.message, "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "Unable to log in user");
+      Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
   }
 
@@ -56,13 +60,13 @@ const LoginSignup = () => {
     try {
       const response = await ApiService.registerUser(signupData);
       if (response.status === 200) {
-        setMessage("User Successfully Registered");
-        setTimeout(() => {
-          navigate("/login")
-        }, 4000)
+        Swal.fire("Success", "User Successfully Registered, Now Please Sign In", "success");
+        navigate("/login")
+      } else {
+        Swal.fire("Error", response.message, "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "unable to register a user");
+      Swal.fire("Error", error.message || "Unable to register user", "error");
     }
   }
 
@@ -148,15 +152,15 @@ const LoginSignup = () => {
         <div className="overlay">
           {/* Overlay Left (For Returning Users) */}
           <div className="overlay-panel overlay-left">
-            <h1 className="loginsignup-h1">Welcome Back!</h1>
-            <p>To keep connected with us please login with your personal info</p>
+            <h1 className="loginsignup-h1">Welcome!</h1>
+            <p className="loginsignup-p">To keep connected with us please login with your personal info</p>
             <button onClick={handleToggle}>Sign In</button>
           </div>
 
           {/* Overlay Right (For New Users) */}
           <div className="overlay-panel overlay-right">
             <h1 className="loginsignup-h1">Hello, Friend!</h1>
-            <p>Enter your personal details and start your journey with us</p>
+            <p className="loginsignup-p">Enter your personal details and start your journey with us</p>
             <button onClick={handleToggle}>Sign Up</button>
           </div>
         </div>

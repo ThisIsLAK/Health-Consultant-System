@@ -8,10 +8,7 @@ const ManagerHeader = () => {
 
   return (
     <header id='header' className='header fixed-top d-flex align-items-center'>
-        <div className='d-flex align-items-center justify-content-between'>
-            <a href="/" className='logo d-flex align-items-center'>
-                <img src='/assets/company.png' alt="" />
-            </a>
+        <div className='d-flex align-items-center justify-content-between'>           
             <i className='bi bi-list toggle-sidebar-btn' onClick={handleToggleSidebar}>
             </i>        
         </div>
