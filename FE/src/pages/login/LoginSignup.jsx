@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../service/ApiService";
+import Swal from "sweetalert2";
 
 const LoginSignup = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
@@ -39,14 +40,18 @@ const LoginSignup = () => {
     try {
       const response = await ApiService.loginUser(signinData);
       if (response.status === 200) {
-        setMessage("User Successfully Loged in");
-        localStorage.setItem('token', response.token);
-
-        localStorage.setItem('role', response.role);
+        setMessage("User Successfully Logged in");
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.role);
+        localStorage.setItem('name', response.data.name); // Store user's name
+        localStorage.setItem('email', response.data.email); // Store user's email
+        Swal.fire("Success", "Login Successfully", "success");
         navigate("/")
+      } else {
+        Swal.fire("Error", response.message, "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "Unable to log in user");
+      Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
   }
 
@@ -55,11 +60,13 @@ const LoginSignup = () => {
     try {
       const response = await ApiService.registerUser(signupData);
       if (response.status === 200) {
-        setMessage("User Successfully Registered");
-          navigate("/login")
+        Swal.fire("Success", "User Successfully Registered, Now Please Sign In", "success");
+        navigate("/login")
+      } else {
+        Swal.fire("Error", response.message, "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "unable to register a user");
+      Swal.fire("Error", error.message || "Unable to register user", "error");
     }
   }
 
