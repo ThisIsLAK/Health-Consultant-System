@@ -5,34 +5,11 @@ const Navbar = () => {
     // Trạng thái đăng nhập
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-<<<<<<< HEAD
-    // Thông tin bệnh nhân mẫu
-    if (response.status === 200) {
-        const userData = response.data; // Assuming the API returns user-related data
-        const patientInfo = {
-            name: userData.name,
-            age: userData.age,
-            id: userData.id,
-        };
-
-        console.log("Updated Patient Info:", patientInfo);
-    } else {
-        console.error("Login failed:", response.message);
-    }
-=======
-    // Mock thông tin người dùng
-    const patientInfo = {
-        name: "NguyenVanA@gmail.com",
-        id: "PAT-123456",
-        avatar: "https://i.pravatar.cc/40", // Ảnh đại diện giả
-    };
-
     // Xử lý đăng xuất
     const handleSignOut = () => {
         setIsLoggedIn(false);
         window.location.href = "/login"; // Chuyển hướng về trang login
     };
->>>>>>> Khoa
 
     return (
         <nav className="navbar-container">
@@ -47,13 +24,6 @@ const Navbar = () => {
             </div>
             <div className="navbar-actions">
                 {isLoggedIn ? (
-<<<<<<< HEAD
-                    <div className="patient-info">
-                        <span>👤 {patientInfo.name}</span>
-                        <span>🆔 {patientInfo.id}</span>
-                        <a href="/login"><button className="btn-get-started" onClick={() => setIsLoggedIn(false)}>Sign out</button></a>
-                    </div>
-=======
                     <Menu as="div" className="relative inline-block">
                         <Menu.Button>
                             <img src={patientInfo.avatar} alt="User Avatar" className="avatar" />
@@ -87,8 +57,7 @@ const Navbar = () => {
                             </div>
                         </Menu.Items>
                     </Menu>
->>>>>>> Khoa
-                ) : (
+                                    ) : (
                     <>
                         <button className="btn-signin" onClick={() => (window.location.href = "/login")}>
                             Sign In
