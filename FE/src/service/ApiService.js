@@ -56,17 +56,17 @@ export default class ApiService {
         }
     }
 
-    static async getLoggedInUserInfo() {
-        try {
-            const response = await axios.get(`${this.BASE_URL}/user/my-info`, {
-                headers: this.getHeader()
-            });
-            return response.data;
-        } catch (error) {
-            return {
-                status: 400,
-                message: error.response?.data.message || error.message || "Unable to fetch user info",
-            };
-        }
-    }
+    // static async getLoggedInUserInfo() {
+    //     try {
+    //         const response = await axios.get(`${this.BASE_URL}/user/my-info`, {
+    //             headers: this.getHeader()
+    //         });
+    //         return response.data;
+    //     } catch (error) {
+    //         return {
+    //             status: 400,
+    //             message: error.response?.data.message || error.message || "Unable to fetch user info",
+    //         };
+    //     }
+    // }
 }

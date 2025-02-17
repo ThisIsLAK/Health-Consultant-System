@@ -24,3 +24,12 @@
 .sidebar-info ul li:hover {
     background: #6366F1;
 }
+
+.sidebar-info a {
+    color: white;
+    text-decoration: none;
+}
+
+.status{
+    margin-bottom: 20px;
+}
