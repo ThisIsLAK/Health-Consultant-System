@@ -6,7 +6,9 @@ public enum ErrorCode {
     EMAIL_EXIST(1002, "Email existed"),
     USERNAME_INVALID(1003,"Username must be at least 3 characters"),
     EMAIL_INVALID(1004, "Email must be end with .@gmail.com"),
-    PASSWORD_INVALID(1005, "Password must be at least 8 characters")
+    PASSWORD_INVALID(1005, "Password must be at least 8 characters"),
+    EMAIL_NOT_EXIST(1006, "User is not exist"),
+    UNAUTHENTICATED(1007, "Unauthenticated")
     ;
 
     ErrorCode(int code, String message) {

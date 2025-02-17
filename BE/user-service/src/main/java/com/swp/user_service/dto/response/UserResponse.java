@@ -1,4 +1,5 @@
-package com.swp.user_service.dto.request;
+package com.swp.user_service.dto.response;
+
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,7 +9,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateRequest {
+public class UserResponse {
 
-    String password ;
+    String id;
+    String name;
+    String email;
+    String password;
 }
