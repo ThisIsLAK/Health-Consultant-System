@@ -1,38 +1,45 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu } from "@headlessui/react";
+import { useNavigate } from "react-router-dom";
+import ApiService from "../../../service/ApiService";
 
 const Navbar = () => {
-    // Trạng thái đăng nhập
+    const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userInfo, setUserInfo] = useState({ name: "", avatar: "", id: "" });
 
-<<<<<<< HEAD
-    // Thông tin bệnh nhân mẫu
-    if (response.status === 200) {
-        const userData = response.data; // Assuming the API returns user-related data
-        const patientInfo = {
-            name: userData.name,
-            age: userData.age,
-            id: userData.id,
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            setIsLoggedIn(false);
+            return;
+        }
+
+        // Gọi API để lấy thông tin user
+        const fetchUserInfo = async () => {
+            const response = await ApiService.getLoggedInUserInfo();
+
+            if (response && response.status !== 400) {
+                setUserInfo({
+                    name: response.name || "User",
+                    avatar: response.avatar || "https://i.pravatar.cc/40", // Avatar mặc định
+                    id: response.id || "N/A",
+                });
+                setIsLoggedIn(true);
+            } else {
+                handleSignOut(); // Nếu lỗi, tự động đăng xuất
+            }
         };
 
-        console.log("Updated Patient Info:", patientInfo);
-    } else {
-        console.error("Login failed:", response.message);
-    }
-=======
-    // Mock thông tin người dùng
-    const patientInfo = {
-        name: "NguyenVanA@gmail.com",
-        id: "PAT-123456",
-        avatar: "https://i.pravatar.cc/40", // Ảnh đại diện giả
-    };
+        fetchUserInfo();
+    }, []);
 
-    // Xử lý đăng xuất
     const handleSignOut = () => {
+        localStorage.clear();
         setIsLoggedIn(false);
-        window.location.href = "/login"; // Chuyển hướng về trang login
+        navigate("/login");
     };
->>>>>>> Khoa
 
     return (
         <nav className="navbar-container">
@@ -47,30 +54,23 @@ const Navbar = () => {
             </div>
             <div className="navbar-actions">
                 {isLoggedIn ? (
-<<<<<<< HEAD
-                    <div className="patient-info">
-                        <span>👤 {patientInfo.name}</span>
-                        <span>🆔 {patientInfo.id}</span>
-                        <a href="/login"><button className="btn-get-started" onClick={() => setIsLoggedIn(false)}>Sign out</button></a>
-                    </div>
-=======
                     <Menu as="div" className="relative inline-block">
                         <Menu.Button>
-                            <img src={patientInfo.avatar} alt="User Avatar" className="avatar" />
+                            <img src={userInfo.avatar} alt="User Avatar" className="avatar" />
                         </Menu.Button>
                         <Menu.Items className="dropdown-menu">
                             <div className="dropdown-content">
                                 <Menu.Item>
                                     {({ active }) => (
                                         <span className={active ? "dropdown-item active" : "dropdown-item"}>
-                                            👤 {patientInfo.name}
+                                            👤 {userInfo.name}
                                         </span>
                                     )}
                                 </Menu.Item>
                                 <Menu.Item>
                                     {({ active }) => (
                                         <span className={active ? "dropdown-item active" : "dropdown-item"}>
-                                            🆔 {patientInfo.id}
+                                            🆔 {userInfo.id}
                                         </span>
                                     )}
                                 </Menu.Item>
@@ -87,13 +87,14 @@ const Navbar = () => {
                             </div>
                         </Menu.Items>
                     </Menu>
->>>>>>> Khoa
                 ) : (
                     <>
-                        <button className="btn-signin" onClick={() => (window.location.href = "/login")}>
+                        <button className="btn-signin" onClick={() => navigate("/login")}>
                             Sign In
                         </button>
-                        <button className="btn-get-started">Get Started</button>
+                        <button className="btn-get-started" onClick={() => navigate("/signup")}>
+                            Get Started
+                        </button>
                     </>
                 )}
             </div>

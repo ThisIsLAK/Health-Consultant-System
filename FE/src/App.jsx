@@ -6,7 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
 import Homepage from './pages/student/Homepage/Homepage';
-import UserProfile from './pages/student/UserProfile/UserProfile';
+import UserProfile from './pages/student/EditProfile/EditProfile';
 import ContactUs from './pages/student/ContactUs/ContactUs';
 import AboutUs from './pages/student/AboutUs/AboutUs';
 import LoginSignup from './pages/login/LoginSignup';
@@ -27,6 +27,7 @@ import PsychologistDetail from './pages/manager/PsychologistDetail/PsychologistD
 import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
 import AdminAdd from './pages/manager/AdminAdd/AdminAdd';
 import AdminEdit from './pages/manager/AdminEdit/AdminEdit';
+import EditProfile from './pages/student/EditProfile/EditProfile';
 
 function App() {
   return (
@@ -43,6 +44,8 @@ function App() {
         <Route path='/support' element={<SupportProgram/>} />
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/info' element={<UserInfo/>}/>
+        <Route path='/setting' element={<EditProfile/>}/>
+
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<CustomerList/>}/>
