@@ -2,7 +2,119 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2ed32b20-7f4b-4eff-bf3d-78975f93b74a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/Health_Consultant.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/Health_Consultant.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/material_theme_project_new.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/material_theme_project_new.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/BE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BE.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/UserServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/UserServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/PysController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/PysController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistCreationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistCreationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/PyschologistUpdateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserCreationRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserLoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserLoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserUpdateRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/request/UserUpdateRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/response/UserLoginResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/dto/response/UserLoginResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/entity/Pyschologist.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/entity/Pyschologist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/exception/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/exception/GlobalExceptionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/repository/PysRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/repository/PysRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/repository/UserRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/service/PysService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/service/PysService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/resources/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/test/java/com/swp/user_service/UserServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/test/java/com/swp/user_service/UserServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/test/java/swp/user_service/UserServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/test/java/swp/user_service/UserServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/target/classes/application.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/classes/application.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/.vite/deps/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/.vite/deps/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/App.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/ManagerHeader.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/ManagerHeader.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/ManagerHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/ManagerHeader.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/ManagerSidebar.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/ManagerSidebar.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/ManagerSidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/ManagerSidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/PageTitle.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/PageTitle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/PageTitle.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/PageTitle.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/component/manager/PsychologistModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/component/manager/PsychologistModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/main.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/ContactForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/ContactForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Hero.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Hero.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/HowItWorks.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/HowItWorks.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/homepage/SuccessMetrics.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/homepage/SuccessMetrics.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/login/LoginSignup.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/login/LoginSignup.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/login/LoginSignup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/login/LoginSignup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Card/Card.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Card/Card.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Card/Card.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Card/Card.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RecentAppointment/RecentAppointment.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RecentAppointment/RecentAppointment.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RecentAppointmentsTable/RecentAppointmentsTable.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RecentAppointmentsTable/RecentAppointmentsTable.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAdminModal/RemoveAdminModal.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAdminModal/RemoveAdminModal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAdminModal/RemoveAdminModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAdminModal/RemoveAdminModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAppointmentModal/RemoveAppointmentModal.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAppointmentModal/RemoveAppointmentModal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAppointmentModal/RemoveAppointmentModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/RemoveAppointmentModal/RemoveAppointmentModal.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Report/Report.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/Report/Report.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/ReportCharts/ReportCharts.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AddtionalSections/ReportCharts/ReportCharts.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AdminAdd/AdminAdd.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AdminAdd/AdminAdd.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AdminAdd/AdminAdd.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AdminAdd/AdminAdd.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AdminDetail/AdminDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AdminDetail/AdminDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AdminEdit/AdminEdit.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AdminEdit/AdminEdit.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AdminList/AdminList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AdminList/AdminList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentDetail/AppointmentDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentDetail/AppointmentDetail.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentDetail/AppointmentDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentDetail/AppointmentDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentHistory/AppointmentHistory.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentHistory/AppointmentHistory.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentList/AppointmentList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/AppointmentList/AppointmentList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerDetail/CustomerDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerDetail/CustomerDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerList/CustomerList.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerList/CustomerList.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerList/CustomerList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/CustomerList/CustomerList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/ManagerDashboard/ManagerDashboard.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/ManagerDashboard/ManagerDashboard.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/ManagerDashboard/ManagerDashboard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/ManagerDashboard/ManagerDashboard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/PsychologistDetail/PsychologistDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/PsychologistDetail/PsychologistDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/manager/PsychologistList/PsychologistList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/manager/PsychologistList/PsychologistList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/AboutUs/AboutUs.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/AboutUs/AboutUs.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/AboutUs/AboutUs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/AboutUs/AboutUs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs/ContactUs.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs/ContactUs.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs/ContactUs.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/ContactUs/ContactUs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/Homepage/Homepage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/Homepage/Homepage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/Homepage/Homepage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/Homepage/Homepage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/Notice/NoticePage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/Notice/NoticePage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/Notice/NoticePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/Notice/NoticePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/SuppportProgram/SupportProgram.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/SuppportProgram/SupportProgram.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/SuppportProgram/SupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/SuppportProgram/SupportProgram.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/TestListPage/TestsPage.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/TestListPage/TestsPage.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/TestListPage/TestsPage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/TestListPage/TestsPage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/Sidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/UserInfo.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/UserInfo.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/UserInfo.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/UserInfo/UserInfo.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/UserProfile/UserProfile.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/UserProfile/UserProfile.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/UserProfile/UserProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/UserProfile/UserProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/service/ApiService.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/vite.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/vite.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,11 +137,21 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Duong",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/SEMESTER 7/SWP391"
+    "last_opened_file_path": "D:/ALL_CODING_PROJECT/Folder SWP/New SWP391/BE",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-b114ca120d71-intellij.indexing.shared.core-IU-242.20224.419" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-IU-242.20224.419" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -38,7 +160,11 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1739279742487</updated>
+      <workItem from="1739674150061" duration="106000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
 </project>
