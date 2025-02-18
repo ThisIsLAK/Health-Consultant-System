@@ -4,6 +4,8 @@ import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.entity.User;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -40,7 +42,10 @@ public class UserMapperImpl implements UserMapper {
         userResponse.id( user.getId() );
         userResponse.name( user.getName() );
         userResponse.email( user.getEmail() );
-        userResponse.password( user.getPassword() );
+        Set<String> set = user.getRole();
+        if ( set != null ) {
+            userResponse.role( new LinkedHashSet<String>( set ) );
+        }
 
         return userResponse.build();
     }
