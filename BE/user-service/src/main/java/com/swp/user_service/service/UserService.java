@@ -1,28 +1,39 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.UserCreationRequest;
-import com.swp.user_service.dto.request.UserLoginRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
-import com.swp.user_service.dto.response.UserLoginResponse;
+import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.entity.User;
+import com.swp.user_service.enums.Role;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
+import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.UserRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserService {
-    private static final Logger log = LogManager.getLogger(UserService.class);
-    @Autowired
-    private UserRepository userRepository ;
 
-    public User createUser(UserCreationRequest request){
-        User user = new User();
+    UserRepository userRepository ;
+    UserMapper userMapper;
+    PasswordEncoder passwordEncoder;
+
+    public UserResponse createUser(UserCreationRequest request){
 
         if(userRepository.existsByName(request.getName()))
             throw new AppException(ErrorCode.USER_EXIST);
@@ -30,46 +41,53 @@ public class UserService {
         if(userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        return userRepository.save(user);
+        HashSet<String> role = new HashSet<>();
+        role.add(Role.STUDENT.name());
+        user.setRole(role);
+
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    public UserLoginResponse login(UserLoginRequest request) {
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid email or password"));
+    public UserResponse getMyInfo(){
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
 
-        if (!user.getPassword().equals(request.getPassword())) {
-            throw new RuntimeException("Invalid email or password");
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        return userMapper.toUserResponse(user);
+    }
+
+    public UserResponse updateUser(String userId, UserUpdateRequest request){
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        userMapper.updateUser(user, request);
+
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
         }
 
-        // Generate a mock token (you can replace this with JWT or similar)
-        String token = generateToken(user.getId(), user.getEmail());
-
-        return new UserLoginResponse(token, user.getName(), user.getEmail());
+        return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    private String generateToken(String userId, String email) {
-        return "token_" + userId + "_" + System.currentTimeMillis();
+    //Kiem tra truoc luc goi ham. Neu la role ADMIN thi moi goi duoc ham
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<UserResponse> getUsers(){
+        log.info("In method get users");
+
+        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
-    public User updateUser(String userId, UserUpdateRequest request){
-        User user = getUser(userId);
+    @PostAuthorize("returnObject.email == authentication.name")
+    public UserResponse getUser(String userId){
+        log.info("In method get user by Id");
 
-        user.setPassword(request.getPassword());
-
-        return userRepository.save(user);
-    }
-
-    public List<User> getUsers(){
-        return userRepository.findAll();
-    }
-
-    public User getUser(String userId){
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return userMapper.toUserResponse(userRepository.findById(userId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST)));
     }
 
     public void deleteUser(String userId){
