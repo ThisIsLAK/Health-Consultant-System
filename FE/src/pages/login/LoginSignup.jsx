@@ -38,22 +38,21 @@ const LoginSignup = () => {
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
-      const response = await ApiService.loginUser(signinData);
-      if (response.status === 200) {
-        setMessage("User Successfully Logged in");
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', response.data.role);
-        localStorage.setItem('name', response.data.name); // Store user's name
-        localStorage.setItem('email', response.data.email); // Store user's email
-        Swal.fire("Success", "Login Successfully", "success");
-        navigate("/")
-      } else {
-        Swal.fire("Error", response.message, "error");
-      }
+        const response = await ApiService.loginUser(signinData);
+        console.log("API Response:", response); // Debug API response
+
+        if (response.status === 200) {
+            localStorage.setItem('token', response.data.token);
+            await Swal.fire("Success", "Login Successfully", "success");
+            setTimeout(() => navigate("/"), 500);
+        } else {
+            Swal.fire("Error", response.message, "error");
+        }
     } catch (error) {
-      Swal.fire("Error", error.message || "Unable to log in user", "error");
+        Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
-  }
+};
+
 
   const handleSignup = async (e) => {
     e.preventDefault();

@@ -5,9 +5,9 @@ const Sidebar = () => {
         <div className="sidebar-info">
             <h2>User Information</h2>
             <ul>
-                <li>Profile</li>
+                <a href='/info'><li>Profile</li></a>
                 <li>Appointments</li>
-                <a href='/setting'><li>Settings</li></a>
+                <a href='/editprofile'><li>Settings</li></a>
                 <li>Logout</li>
             </ul>
         </div>

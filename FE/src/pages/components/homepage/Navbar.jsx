@@ -16,19 +16,18 @@ const Navbar = () => {
             return;
         }
 
-        // Gọi API để lấy thông tin user
         const fetchUserInfo = async () => {
             const response = await ApiService.getLoggedInUserInfo();
 
-            if (response && response.status !== 400) {
+            if (response.status === 200) {
                 setUserInfo({
-                    name: response.name || "User",
-                    avatar: response.avatar || "https://i.pravatar.cc/40", // Avatar mặc định
-                    id: response.id || "N/A",
+                    name: response.data.name || "User",
+                    // avatar: response.data.avatar || "https://i.pravatar.cc/40",
+                    // id: response.data.id || "N/A",
                 });
                 setIsLoggedIn(true);
             } else {
-                handleSignOut(); // Nếu lỗi, tự động đăng xuất
+                handleSignOut(); // Tự động đăng xuất nếu lỗi
             }
         };
 
@@ -40,6 +39,19 @@ const Navbar = () => {
         setIsLoggedIn(false);
         navigate("/login");
     };
+
+    const handleCheckAuth = (path) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            alert("Bạn chưa đăng nhập. Vui lòng đăng nhập trước.");
+            navigate("/login");
+            return;
+        }
+
+        navigate(path);
+    };
+
 
     return (
         <nav className="navbar-container">
@@ -89,12 +101,13 @@ const Navbar = () => {
                     </Menu>
                 ) : (
                     <>
-                        <button className="btn-signin" onClick={() => navigate("/login")}>
+                        <button className="btn-signin" onClick={() => handleCheckAuth("/login")}>
                             Sign In
                         </button>
-                        <button className="btn-get-started" onClick={() => navigate("/signup")}>
+                        <button className="btn-get-started" onClick={() => handleCheckAuth("/support")}>
                             Get Started
                         </button>
+
                     </>
                 )}
             </div>

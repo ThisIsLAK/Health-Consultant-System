@@ -46,7 +46,7 @@ function App() {
         <Route path='/support' element={<SupportProgram/>} />
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/info' element={<UserInfo/>}/>
-        <Route path='/setting' element={<EditProfile/>}/>
+        <Route path='/editprofile' element={<EditProfile/>}/>
 
 
         {/* Manager Routes */}
