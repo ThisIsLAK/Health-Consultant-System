@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
-import { useNavigate } from 'react-router-dom';
-import './AdminAdd.css';
 
-const AdminAdd = () => {
-    const navigate = useNavigate();
-
+const ManagerAccount = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [managerData, setManagerData] = useState({
+        username: 'manager123',
+        password: 'password123',
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john.doe@example.com',
+        phone: '123-456-7890'
+    });
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -20,19 +24,23 @@ const AdminAdd = () => {
             <ManagerSidebar />
 
             <main id='main' className='main'>
-                <PageTitle page="Add an Admin" />
-                
+                <PageTitle page="Your Account" />
+
                 <div className="add-form-container">
                     <form className="admin-form">
                         <div className="form-row">
                             <div className="form-group">
                                 <label>Username</label>
-                                <input type="text" />
+                                <input type="text" value={managerData.username} readOnly />
                             </div>
                             <div className="form-group">
                                 <label>Password</label>
                                 <div className="form-group">
-                                    <input type="password" />
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        value={managerData.password}
+                                        readOnly
+                                    />
                                     <button
                                         type="button"
                                         className="eye-button"
@@ -47,42 +55,23 @@ const AdminAdd = () => {
                         <div className="form-row">
                             <div className="form-group">
                                 <label>First Name</label>
-                                <input type="text" />
+                                <input type="text" value={managerData.firstName} readOnly />
                             </div>
                             <div className="form-group">
                                 <label>Last Name</label>
-                                <input type="text" />
+                                <input type="text" value={managerData.lastName} readOnly />
                             </div>
                         </div>
 
                         <div className="form-row">
                             <div className="form-group">
                                 <label>Email</label>
-                                <input type="email" />
+                                <input type="email" value={managerData.email} readOnly />
                             </div>
                             <div className="form-group">
                                 <label>Phone Number</label>
-                                <input type="tel" />
+                                <input type="tel" value={managerData.phone} readOnly />
                             </div>
-                        </div>
-
-                        <div className="form-group photo-upload">
-                            <label>Photo</label>
-                            <div className="photo-container">
-                                <div className="photo-placeholder">
-                                    <i className="fas fa-camera"></i>
-                                </div>
-                                <button type="button" className="add-photo-btn">+</button>
-                            </div>
-                        </div>
-
-                        <div className="button-group">
-                            <button type="button" className="btn-return" onClick={() => navigate('/adminlist')}>
-                                Return to List
-                            </button>
-                            <button type="submit" className="btn-add" onClick={() => navigate('/adminlist')}>
-                                Add Profile
-                            </button>
                         </div>
                     </form>
                 </div>
@@ -91,4 +80,4 @@ const AdminAdd = () => {
     );
 };
 
-export default AdminAdd;
+export default ManagerAccount;

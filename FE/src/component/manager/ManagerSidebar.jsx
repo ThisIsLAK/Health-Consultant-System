@@ -76,7 +76,7 @@ const ManagerSidebar = () => {
             className='nav-content collapse'  // Matching CSS for collapse content
             data-bs-parent='#sidebar-nav'>
             <li>
-              <a href="/manager/manageraccount">
+              <a href="/manageraccount">
                 <i className='bi bi-person'></i>
                 <span>Your Account</span>
               </a>

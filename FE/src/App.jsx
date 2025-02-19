@@ -14,6 +14,7 @@ import TestsPage from './pages/student/TestListPage/TestsPage';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
 import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
+import EditProfile from './pages/student/EditProfile/EditProfile';
 
 import CustomerList from './pages/manager/CustomerList/CustomerList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
@@ -27,7 +28,8 @@ import PsychologistDetail from './pages/manager/PsychologistDetail/PsychologistD
 import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
 import AdminAdd from './pages/manager/AdminAdd/AdminAdd';
 import AdminEdit from './pages/manager/AdminEdit/AdminEdit';
-import EditProfile from './pages/student/EditProfile/EditProfile';
+
+import ManagerAccount from './pages/manager/ManagerAccount/ManagerAccount'
 
 function App() {
   return (
@@ -60,6 +62,7 @@ function App() {
         <Route path='/admindetails' element={<AdminDetail/>}/>
         <Route path='/addadmin' element={<AdminAdd/>}/>
         <Route path='/editadmin' element={<AdminEdit/>}/>
+        <Route path='/manageraccount' element={<ManagerAccount/>}/>
 
       </Routes>
     </BrowserRouter>
