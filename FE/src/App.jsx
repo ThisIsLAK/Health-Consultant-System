@@ -5,6 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+/* Student Routes */
 import Homepage from './pages/student/Homepage/Homepage';
 import UserProfile from './pages/student/EditProfile/EditProfile';
 import ContactUs from './pages/student/ContactUs/ContactUs';
@@ -16,6 +17,7 @@ import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 
+/* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
 import AdminList from './pages/manager/AdminList/AdminList';
@@ -28,8 +30,13 @@ import PsychologistDetail from './pages/manager/PsychologistDetail/PsychologistD
 import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
 import AdminAdd from './pages/manager/AdminAdd/AdminAdd';
 import AdminEdit from './pages/manager/AdminEdit/AdminEdit';
-
 import ManagerAccount from './pages/manager/ManagerAccount/ManagerAccount'
+
+/* Psychologist Routes */
+import UserList from './pages/psychologist/UserList/UserList';
+import UserDetail from './pages/psychologist/UserDetail/UserDetail';
+import PsyAppointmentList from './pages/psychologist/PsyAppointmentList/PsyAppointmentList';
+
 
 function App() {
   return (
@@ -63,6 +70,11 @@ function App() {
         <Route path='/addadmin' element={<AdminAdd/>}/>
         <Route path='/editadmin' element={<AdminEdit/>}/>
         <Route path='/manageraccount' element={<ManagerAccount/>}/>
+
+        {/* Psychologist Routes */}
+        <Route path='/patientlist' element={<UserList/>}/>
+        <Route path='/patientdetail' element={<UserDetail/>}/>
+        <Route path='/psyapplist' element={<PsyAppointmentList/>}/>
 
       </Routes>
     </BrowserRouter>
