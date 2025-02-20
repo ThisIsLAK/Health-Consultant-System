@@ -93,13 +93,16 @@ public class AuthenticationService {
         }
     }
 
-    private String buildScope(User user){
+    private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if(!CollectionUtils.isEmpty(user.getRole()))
-            user.getRole().forEach(stringJoiner::add);
+
+        if (user.getRole() != null) {
+            stringJoiner.add(user.getRole().getRoleName());
+        }
 
         return stringJoiner.toString();
     }
+
 
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException {
         var token = request.getToken();

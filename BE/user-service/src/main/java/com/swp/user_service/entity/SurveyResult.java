@@ -4,23 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 //@Entity
+////@Table(name = "SurveyResult")
 //@Data
 //@Builder
 //@NoArgsConstructor
 //@AllArgsConstructor
 //@FieldDefaults(level = AccessLevel.PRIVATE)
-//public class User {
-//
+//public class SurveyResult {
 //    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    String id;
-//    String name;
-//    String email;
-//    String password;
-//    Role role;
+//    String resultId;
+//    String surveyId;
+//    String userId;
+//    String result;
 //}
 
 @Entity
@@ -29,17 +25,15 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class SurveyResult {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-
-    String name;
-    String email;
-    String password;
+    String resultId;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    Role role;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    String surveyId;
+    String result;
 }
