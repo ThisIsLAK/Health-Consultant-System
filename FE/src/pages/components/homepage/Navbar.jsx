@@ -71,19 +71,7 @@ const Navbar = () => {
         navigate("/login");
     };
 
-    const handleCheckAuth = (path) => {
-        const token = localStorage.getItem("token");
-
-        if (!token) {
-            alert("Bạn chưa đăng nhập. Vui lòng đăng nhập trước.");
-            navigate("/login");
-            return;
-        }
-
-        navigate(path);
-    };
-
-
+ 
     return (
         <nav className="navbar-container">
             <div className="navbar-brand">FPT Support</div>
@@ -94,7 +82,7 @@ const Navbar = () => {
                 <a href="/notice">Notice</a>
                 <a href="/aboutus">About Us</a>
                 <a href="/contact">Contact Us</a>
-                <button className="btn-signin" onClick={() => handleSignOut()} />
+                {/* <button className="btn-signin" onClick={() => handleSignOut()} /> */}
             </div>
             <div className="navbar-actions">
                 <UserMenu />

@@ -83,7 +83,8 @@ const LoginSignup = () => {
 
         localStorage.setItem('token', token);
         localStorage.setItem('role', response.data.result.role || "user");
-
+        
+        await Swal.fire("Success", "Login Successfully", "success");
         setTimeout(() => navigate("/"), 500);
       } else {
         Swal.fire("Error", response.message || "Login failed", "error");
