@@ -28,6 +28,7 @@ import AdminDetail from './pages/manager/AdminDetail/AdminDetail';
 import AdminAdd from './pages/manager/AdminAdd/AdminAdd';
 import AdminEdit from './pages/manager/AdminEdit/AdminEdit';
 import EditProfile from './pages/student/EditProfile/EditProfile';
+import BookingForm from './pages/student/PickDate/BookingForm';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/info' element={<UserInfo/>}/>
         <Route path='/editprofile' element={<EditProfile/>}/>
+        <Route path='/booking' element={<BookingForm/>}/>
 
 
         {/* Manager Routes */}
