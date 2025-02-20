@@ -16,7 +16,6 @@ import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
 import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
-import EditProfile from './pages/student/EditProfile/EditProfile';
 import BookingForm from './pages/student/PickDate/BookingForm';
 
 /* Manager Routes */
