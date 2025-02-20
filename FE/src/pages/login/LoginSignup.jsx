@@ -35,23 +35,65 @@ const LoginSignup = () => {
     });
   };
 
+  // const handleSignin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //       const response = await ApiService.loginUser(signinData);
+  //       console.log("API Response:", response); // Debug API response
+
+  //       if (response.status === 200) {
+  //           localStorage.setItem('token', response.data.token);
+  //           // await Swal.fire("Success", "Login Successfully", "success");
+  //           setTimeout(() => navigate("/"), 500);
+  //       } else {
+  //           Swal.fire("Error", response.message, "error");
+  //       }
+  //   } catch (error) {
+  //       Swal.fire("Error", error.message || "Unable to log in user", "error");
+  //   }
+
+  // const handleSignin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await ApiService.loginUser(signinData);
+  //     console.log("API Response:", response); // Debug API response
+
+  //     if (response.status === 200 && response.data.token) {
+  //       console.log("Saving token:", response.data.token);
+  //       localStorage.setItem('token', response.data.token);
+  //       localStorage.setItem('role', response.data.role || "user");
+
+  //       setTimeout(() => navigate("/"), 500);
+  //     } else {
+  //       Swal.fire("Error", response.message || "Login failed", "error");
+  //     }
+  //   } catch (error) {
+  //     Swal.fire("Error", error.message || "Unable to log in user", "error");
+  //   }
+  // };
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
-        const response = await ApiService.loginUser(signinData);
-        console.log("API Response:", response); // Debug API response
+      const response = await ApiService.loginUser(signinData);
+      console.log("API Response:", response); // Debug API response
 
-        if (response.status === 200) {
-            localStorage.setItem('token', response.data.token);
-            await Swal.fire("Success", "Login Successfully", "success");
-            setTimeout(() => navigate("/"), 500);
-        } else {
-            Swal.fire("Error", response.message, "error");
-        }
+      if (response.status === 200 && response.data.result.token) { // Lấy token từ đúng vị trí
+        const token = response.data.result.token;
+        console.log("Saving token:", token); // Kiểm tra xem token có chính xác không
+
+        localStorage.setItem('token', token);
+        localStorage.setItem('role', response.data.result.role || "user");
+        
+        await Swal.fire("Success", "Login Successfully", "success");
+        setTimeout(() => navigate("/"), 500);
+      } else {
+        Swal.fire("Error", response.message || "Login failed", "error");
+      }
     } catch (error) {
-        Swal.fire("Error", error.message || "Unable to log in user", "error");
+      Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
-};
+  };
+
 
 
   const handleSignup = async (e) => {

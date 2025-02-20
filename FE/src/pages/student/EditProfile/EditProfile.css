@@ -135,7 +135,7 @@ form textarea {
 form input:focus,
 form textarea:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #6200ea;
   box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
@@ -144,11 +144,15 @@ form textarea:focus {
   text-align: center;
 }
 
+<<<<<<< HEAD
 /* button {
   background-color: #3498db;
+=======
+.submit-btn {
+  background-color: #6200ea;
+>>>>>>> Khoa
   color: white;
-  padding: 10px 20px;
-  font-size: 16px;
+  padding: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -156,5 +160,10 @@ form textarea:focus {
 }
 
 button:hover {
+<<<<<<< HEAD
   background-color: #2980b9;
 } */
+=======
+  background-color: #4b00b4;
+}
+>>>>>>> Khoa

@@ -328,3 +328,10 @@ body {
     justify-content: center;  
   }
   
+  /* UserMenu */
+  #dropdown-basic.btn-success {
+    background-color: white !important; /* Màu theo Tailwind */
+  }
+  #dropdown-basic.btn-success:hover {
+    background-color: #5c5ee0 !important; /* Màu theo Tailwind */
+  }

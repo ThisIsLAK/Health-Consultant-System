@@ -16,6 +16,8 @@ import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
 import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
+import EditProfile from './pages/student/EditProfile/EditProfile';
+import BookingForm from './pages/student/PickDate/BookingForm';
 
 /* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
@@ -37,7 +39,6 @@ import UserList from './pages/psychologist/UserList/UserList';
 import UserDetail from './pages/psychologist/UserDetail/UserDetail';
 import PsyAppointmentList from './pages/psychologist/PsyAppointmentList/PsyAppointmentList';
 
-
 function App() {
   return (
     <BrowserRouter>
@@ -54,6 +55,7 @@ function App() {
         <Route path='/notice' element={<NoticePage/>}/>
         <Route path='/info' element={<UserInfo/>}/>
         <Route path='/editprofile' element={<EditProfile/>}/>
+        <Route path='/booking' element={<BookingForm/>}/>
 
 
         {/* Manager Routes */}
