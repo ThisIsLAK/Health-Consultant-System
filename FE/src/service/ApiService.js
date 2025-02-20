@@ -14,23 +14,25 @@ export default class ApiService {
     /**AUTh && USERS API */
     static async registerUser(registration) {
         const response = await axios.post(`${this.BASE_URL}/identity/users`, registration)
-        if (response && response.data) {
-            return {
-                status: 200,
-                data: response.data,
-            };
-        } else {
-            return {
-                status: 400,
-                message: "Invalid response",
-            };
-        }
+        // if (response && response.data) {
+        //     return {
+        //         status: 200,
+        //         data: response.data,
+        //     };
+        // } else {
+        //     return {
+        //         status: 400,
+        //         message: "Invalid response",
+        //     };
+        // }
+
+        return response.data;
     }
 
 
     static async loginUser(loginDetails) {
         try {
-            const response = await axios.post(`${this.BASE_URL}/identity/users/login`, loginDetails);
+            const response = await axios.post(`${this.BASE_URL}/identity/auth/token`, loginDetails);
             if (response && response.data) {
                 return {
                     status: 200,

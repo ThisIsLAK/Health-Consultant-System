@@ -1,7 +1,8 @@
 package com.swp.user_service.configuration;
 
 import com.swp.user_service.entity.User;
-import com.swp.user_service.enums.Role;
+import com.swp.user_service.entity.Role;
+import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -24,21 +25,25 @@ public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepository){
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
-            if(userRepository.findByEmail("admin@gmail.com").isEmpty()){
-                var role = new HashSet<String>();
-                role.add(Role.ADMIN.name());
+            if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
+
+                // Lấy Role ADMIN từ database
+                Role adminRole = roleRepository.findByRoleName("ADMIN")
+                        .orElseThrow(() ->  new RuntimeException("Role ADMIN not found!"));
+
                 User user = User.builder()
                         .name("admin")
                         .email("admin@gmail.com")
                         .password(passwordEncoder.encode("admin123"))
-                        .role(role)
+                        .role(adminRole)  // Gán Role entity
                         .build();
 
                 userRepository.save(user);
-                log.warn("admin has been created with default password admin123, please change it");
+                log.warn("Admin has been created with default password admin123, please change it");
             }
         };
     }
+
 }

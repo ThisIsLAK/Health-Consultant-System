@@ -4,10 +4,11 @@ import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.entity.User;
-import com.swp.user_service.enums.Role;
+import com.swp.user_service.entity.Role;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.UserMapper;
+import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -32,20 +33,22 @@ public class UserService {
     UserRepository userRepository ;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    RoleRepository roleRepository;
 
-    public UserResponse createUser(UserCreationRequest request){
+    public UserResponse createUser(UserCreationRequest request) {
 
-        if(userRepository.existsByName(request.getName()))
+        if (userRepository.existsByName(request.getName()))
             throw new AppException(ErrorCode.USER_EXIST);
 
-        if(userRepository.existsByEmail(request.getEmail()))
+        if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> role = new HashSet<>();
-        role.add(Role.STUDENT.name());
+        Role role = roleRepository.findByRoleName("STUDENT")
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
         user.setRole(role);
 
         return userMapper.toUserResponse(userRepository.save(user));

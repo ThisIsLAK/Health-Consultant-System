@@ -1,10 +1,14 @@
 package com.swp.user_service.controller;
 
-import com.swp.user_service.dto.request.PyschologistCreationRequest;
+import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.request.PyschologistUpdateRequest;
-import com.swp.user_service.entity.Pyschologist;
-import com.swp.user_service.service.PysService;
+import com.swp.user_service.dto.response.ApiResponse;
+import com.swp.user_service.dto.response.PsychologistResponse;
+import com.swp.user_service.entity.Psychologist;
+import com.swp.user_service.service.PsyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,31 +17,22 @@ import java.util.List;
 @RequestMapping("/pyschologists")
 public class PysController {
     @Autowired
-    private PysService pysService;
+    private PsyService pysService;
 
     @PostMapping
-    public Pyschologist createPyschologist(@RequestBody PyschologistCreationRequest request) {
-        return pysService.createPyschologist(request);
-    }
+    public ResponseEntity<ApiResponse<PsychologistResponse>> createPsychologist(
+            @RequestBody @Valid PsychologistCreationRequest request) {
 
-    @GetMapping
-    public List<Pyschologist> getPyschologists() {
-        return pysService.getPyschologists();
-    }
+        PsychologistResponse response = pysService.createPsychologist(request);
 
-    @GetMapping("/{pysId}")
-    public Pyschologist getPyschologist(@PathVariable String pysId) {
-        return pysService.getPyschologist(pysId);
-    }
-
-    @PutMapping("/{pysId}")
-    public Pyschologist updatePyschologist(@PathVariable String pysId, @RequestBody PyschologistUpdateRequest request) {
-        return pysService.updatePyschologist(pysId, request);
+        return ResponseEntity.ok(ApiResponse.<PsychologistResponse>builder()
+                .result(response)
+                .build());
     }
 
     @DeleteMapping("/{pysId}")
     public String deletePyschologist(@PathVariable String pysId) {
-        pysService.deletePyschologist(pysId);
+        pysService.deletePsychologist(pysId);
         return "Pyschologist has been deleted";
     }
 }
