@@ -2,33 +2,30 @@ import React, { useState } from 'react';
 import PsychologistHeader from '../../../component/psychologist/PsychologistHeader';
 import PsychologistSidebar from '../../../component/psychologist/PsychologistSidebar';
 import PageTitle from '../../../component/psychologist/PageTitle';
-import { Search, Phone, Mail, Link, FileText, Trash, Edit, ChevronLeft, ChevronRight } from 'lucide-react';
-import './PsyAppointmentList.css';
+import { Phone, Mail, Link, FileText, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-const PsyAppointmentList = () => {
+const PsyAppHistory = () => {
     const navigate = useNavigate()
 
     const [selectedStatus, setSelectedStatus] = useState('all');
 
     // Function to handle editing appointment
-    const handleEdit = (appointmentId) => {
-        // Pass the appointment data through navigation state
-        const appointmentToEdit = appointments.find(app => app.id === appointmentId);
-        navigate('/therapynote', { state: { appointment: appointmentToEdit } });
+    const handleViewDetail = (appointmentId) => {
+        const selectedAppointment = appointments.find(app => app.id === appointmentId);
+        navigate('/psyappdetail', { state: { appointment: selectedAppointment } });
     };
 
     const statuses = [
         { id: 'all', label: 'All' },
-        { id: 'waiting', label: 'waiting' },
         { id: 'completed', label: 'completed' },
     ];
 
     const appointments = [
-        { id: 1, time: '13:00', period: 'AM', duration: '1 hour', name: 'Johnson Sema', status: 'waiting', type: 'Regular Checkup', phone: '12345678919', email: 'khoa@gmail.com', link: 'https://meet.google.com/xyz-abcd-ntr', notes: 'Follow-up on previous session' },
+        { id: 1, time: '13:00', period: 'AM', duration: '1 hour', name: 'Johnson Sema', status: 'completed', type: 'Regular Checkup', phone: '12345678919', email: 'khoa@gmail.com', link: 'https://meet.google.com/xyz-abcd-ntr', notes: 'Follow-up on previous session' },
         { id: 2, time: '14:00', period: 'PM', duration: '30 mins', name: 'Emma Watson', status: 'completed', type: 'Therapy Session', phone: '9876543210', email: 'emma@gmail.com', link: 'https://meet.google.com/abc-defg-hij', notes: 'New patient consultation' },
         { id: 3, time: '15:00', period: 'PM', duration: '45 mins', name: 'David Smith', status: 'completed', type: 'Mental Health Check', phone: '1112223334', email: 'david@gmail.com', link: 'https://meet.google.com/xyz-1234-567', notes: 'Final evaluation' },
-        { id: 4, time: '16:00', period: 'AM', duration: '40 mins', name: 'John Doe', status: 'waiting', type: 'Regular Checkup', phone: '12345678919', email: 'john@gmail.com', link: 'https://meet.google.com/xyz-1234-567', notes: 'Follow-up on previous session' }
+        { id: 4, time: '16:00', period: 'AM', duration: '40 mins', name: 'John Doe', status: 'completed', type: 'Regular Checkup', phone: '12345678919', email: 'john@gmail.com', link: 'https://meet.google.com/xyz-1234-567', notes: 'Follow-up on previous session' }
     ];
 
     const currentDate = new Date().toLocaleDateString('en-US', {
@@ -114,12 +111,8 @@ const PsyAppointmentList = () => {
                             </div>
                         </div>
                         <div className="actions">
-                            <button className="action-btn edit">
-                                <Edit
-                                    onClick={() => handleEdit(app.id)}
-                                    className="icon"
-                                    size={16}
-                                />
+                            <button className="action-btn edit" onClick={() => handleViewDetail(app.id)}>
+                                <Eye className="icon" size={16} />
                             </button>
                         </div>
                     </div>
@@ -129,4 +122,4 @@ const PsyAppointmentList = () => {
     );
 }
 
-export default PsyAppointmentList;
+export default PsyAppHistory;

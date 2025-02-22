@@ -106,6 +106,7 @@
     background-color: rgb(217, 218, 221);
     border-radius: 12px;
     padding: 20px;
+    margin-top: 20px;
     gap: 20px;
     position: relative;
 }
@@ -164,10 +165,23 @@
 }
 
 .status.waiting {
-    background-color: #1a237e;
+    background-color: #0056b3;
+    /* Xanh biển đậm */
     color: white;
-    margin-top: 20px;
 }
+
+.status.completed {
+    background-color: #28a745;
+    /* Xanh lá */
+    color: white;
+}
+
+.status.cancelled {
+    background-color: #dc3545;
+    /* Đỏ */
+    color: white;
+}
+
 
 .appointment-type {
     color: #666;

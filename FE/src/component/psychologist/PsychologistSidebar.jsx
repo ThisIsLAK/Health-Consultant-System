@@ -7,13 +7,6 @@ const PsychologistSidebar = () => {
       <ul className='sidebar-nav' id='sidebar-nav'>
 
         <li className='nav-item'>
-          <a href="/patientlist" className='nav-link'>
-            <i className='bi bi-grid'></i>
-            <span>Patient List</span>
-          </a>
-        </li>
-
-        <li className='nav-item'>
           <a href="/psyapplist" className='nav-link'>
             <i className='bi bi-calendar-check'></i>
             <span>Appointments</span>
@@ -21,7 +14,14 @@ const PsychologistSidebar = () => {
         </li>
 
         <li className='nav-item'>
-          <a href="" className='nav-link'>
+          <a href="/patientlist" className='nav-link'>
+            <i className='bi bi-grid'></i>
+            <span>Patient List</span>
+          </a>
+        </li>
+
+        <li className='nav-item'>
+          <a href="/psyapphistory" className='nav-link'>
             <i className='bi bi-clock-history'></i>
             <span>Appointment History</span>
           </a>

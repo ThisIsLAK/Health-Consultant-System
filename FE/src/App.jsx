@@ -37,6 +37,9 @@ import ManagerAccount from './pages/manager/ManagerAccount/ManagerAccount'
 import UserList from './pages/psychologist/UserList/UserList';
 import UserDetail from './pages/psychologist/UserDetail/UserDetail';
 import PsyAppointmentList from './pages/psychologist/PsyAppointmentList/PsyAppointmentList';
+import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
+import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
+import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 
 function App() {
   return (
@@ -76,6 +79,9 @@ function App() {
         <Route path='/patientlist' element={<UserList/>}/>
         <Route path='/patientdetail' element={<UserDetail/>}/>
         <Route path='/psyapplist' element={<PsyAppointmentList/>}/>
+        <Route path='/therapynote' element={<TherapyNote/>}/>
+        <Route path='/psyapphistory' element={<PsyAppHistory/>}/>
+        <Route path='/psyappdetail' element={<PsyAppDetail/>}/>
 
       </Routes>
     </BrowserRouter>
