@@ -106,7 +106,7 @@
 }
 
 /* Form Fields */
-form {
+.profile-form {
   max-width: 500px;
   margin: 0 auto;
 }
@@ -144,13 +144,8 @@ form textarea:focus {
   text-align: center;
 }
 
-<<<<<<< HEAD
-/* button {
+button {
   background-color: #3498db;
-=======
-.submit-btn {
-  background-color: #6200ea;
->>>>>>> Khoa
   color: white;
   padding: 10px;
   border: none;
@@ -160,10 +155,5 @@ form textarea:focus {
 }
 
 button:hover {
-<<<<<<< HEAD
   background-color: #2980b9;
-} */
-=======
-  background-color: #4b00b4;
 }
->>>>>>> Khoa

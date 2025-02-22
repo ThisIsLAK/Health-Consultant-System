@@ -42,7 +42,7 @@ const PsychologistSidebar = () => {
             className='nav-content collapse'  // Matching CSS for collapse content
             data-bs-parent='#sidebar-nav'>
             <li>
-              <a href="">
+              <a href="/psyaccount">
                 <i className='bi bi-person'></i>
                 <span>Your Account</span>
               </a>

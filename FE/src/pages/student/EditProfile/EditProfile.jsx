@@ -85,7 +85,7 @@ const EditProfile = () => {
                 <input type="file" id="avatar" className="hidden" accept="image/*" onChange={handleImageChange} />
               </div>
 
-              <form onSubmit={handleSubmit}>
+              <form className="profile-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label>Tên</label>
                   <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="input-field" />

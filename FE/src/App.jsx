@@ -40,6 +40,7 @@ import PsyAppointmentList from './pages/psychologist/PsyAppointmentList/PsyAppoi
 import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
 import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
+import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
 
 function App() {
   return (
@@ -82,6 +83,7 @@ function App() {
         <Route path='/therapynote' element={<TherapyNote/>}/>
         <Route path='/psyapphistory' element={<PsyAppHistory/>}/>
         <Route path='/psyappdetail' element={<PsyAppDetail/>}/>
+        <Route path='/psyaccount' element={<PsychologistAccount/>}/>
 
       </Routes>
     </BrowserRouter>
