@@ -42,6 +42,11 @@ import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
 
+// Admin Routes
+import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
+import AdminUserList from './pages/components/admin/UserList/AdminUserList';
+import ManageSurvey from './pages/components/admin/ManagingSurvey/ManageSurvey';
+
 function App() {
   return (
     <BrowserRouter>
@@ -85,6 +90,10 @@ function App() {
         <Route path='/psyappdetail' element={<PsyAppDetail/>}/>
         <Route path='/psyaccount' element={<PsychologistAccount/>}/>
 
+        {/* Admin Routes */}
+        <Route path='/adminaccount' element={<AdminAccount/>}/>
+        <Route path='/adminuserlist' element={<AdminUserList/>}/>
+        <Route path='/managesurvey' element={<ManageSurvey/>}/>
       </Routes>
     </BrowserRouter>
   );
