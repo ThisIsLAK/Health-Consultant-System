@@ -45,7 +45,7 @@ import PsychologistAccount from './pages/psychologist/PsychologistAccount/Psycho
 // Admin Routes
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
 import AdminUserList from './pages/components/admin/UserList/AdminUserList';
-import ManageSurvey from './pages/components/admin/ManagingSurvey/ManageSurvey';
+import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
 
 function App() {
   return (
@@ -93,7 +93,7 @@ function App() {
         {/* Admin Routes */}
         <Route path='/adminaccount' element={<AdminAccount/>}/>
         <Route path='/adminuserlist' element={<AdminUserList/>}/>
-        <Route path='/managesurvey' element={<ManageSurvey/>}/>
+        <Route path='/editsurvey' element={<EditSurvey/>}/>
       </Routes>
     </BrowserRouter>
   );
