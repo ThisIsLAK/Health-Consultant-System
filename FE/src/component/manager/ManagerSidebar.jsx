@@ -13,13 +13,6 @@ const ManagerSidebar = () => {
         </li>
 
         <li className='nav-item'>
-          <a href="/applist" className='nav-link'>
-            <i className='bi bi-calendar-check'></i>
-            <span>Appointments</span>
-          </a>
-        </li>
-
-        <li className='nav-item'>
           <a href="/apphistory" className='nav-link'>
             <i className='bi bi-clock-history'></i>
             <span>Appointment History</span>

@@ -1,19 +1,19 @@
-.logo{
+.logo {
     line-height: 1;
 }
 
 @media (min-width: 1200px) {
-    .logo{
+    .logo {
         width: 200px;
     }
 }
 
-.logo img{
+.logo img {
     max-height: 26px;
     margin-right: 50px;
 }
 
-.header{
+.header {
     transition: all 0.5s;
     z-index: 997;
     height: 60px;
@@ -22,18 +22,18 @@
     padding-left: 30px;
 }
 
-.header .toggle-sidebar-btn{
+.header .toggle-sidebar-btn {
     font-size: 32px;
     cursor: pointer;
     color: #000;
 }
 
-.header .search-bar{
+.header .search-bar {
     padding: 0 20px;
 }
 
-@media (max-width: 1199px){
-    .header .search-bar{
+@media (max-width: 1199px) {
+    .header .search-bar {
         position: fixed;
         top: 50px;
         left: 0;
@@ -47,18 +47,18 @@
         opacity: 0;
     }
 
-    .header .search-bar-show{
+    .header .search-bar-show {
         top: 60px;
         visibility: visible;
         opacity: 1;
     }
 }
 
-.header .search-form{
+.header .search-form {
     width: 100%;
 }
 
-.header .search-form input{
+.header .search-form input {
     border: 0;
     font-size: 14px;
     color: #012970;
@@ -69,19 +69,19 @@
 }
 
 .header .search-form input:focus,
-.header .search-form input:hover{
+.header .search-form input:hover {
     outline: none;
     box-shadow: 0 0 10px 0 rgba(1, 41, 112, 0.15);
-    border: 1px solid rgba(1, 41, 112, 0.3); 
+    border: 1px solid rgba(1, 41, 112, 0.3);
 }
 
-.header .search-form button{
+.header .search-form button {
     border: 0;
     padding: 0;
     margin-left: -30px;
     background: none;
 }
 
-.header .search-form button i{
+.header .search-form button i {
     color: #012970;
 }
