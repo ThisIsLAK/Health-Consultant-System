@@ -42,4 +42,12 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     Role role;
+
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }

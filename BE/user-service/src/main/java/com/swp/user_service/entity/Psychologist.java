@@ -75,6 +75,15 @@ public class Psychologist {
     private String password;
     private String specialization;
 
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
+
+
 //    @ManyToOne
 //    @JoinColumn(name = "role_id", nullable = false)
 //    Role role;

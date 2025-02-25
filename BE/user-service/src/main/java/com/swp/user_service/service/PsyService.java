@@ -1,23 +1,20 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
+import com.swp.user_service.dto.request.PsychologistUpdateRequest;
 import com.swp.user_service.dto.response.PsychologistResponse;
 import com.swp.user_service.entity.Psychologist;
-import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.PsychologistMapper;
-import com.swp.user_service.repository.PysRepository;
+import com.swp.user_service.repository.PsyRepository;
 import com.swp.user_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class PsyService {
 
-    PysRepository psychologistRepository;
+    PsyRepository psychologistRepository;
     UserRepository userRepository;
     PsychologistMapper psychologistMapper;
     PasswordEncoder passwordEncoder;
@@ -48,6 +45,24 @@ public class PsyService {
 
         return psychologistMapper.toPsychologistResponse(psychologist);
     }
+    public PsychologistResponse updatePsy(String psyId, PsychologistUpdateRequest request) {
+        // Tìm psychologist theo ID, nếu không tồn tại thì ném lỗi
+        Psychologist psychologist = psychologistRepository.findById(psyId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        // Cập nhật các trường có trong request nếu không null
+        if (request.getSpecialization() != null && !request.getSpecialization().isEmpty()) {
+            psychologist.setSpecialization(request.getSpecialization());
+        }
+
+        // Lưu psychologist sau khi cập nhật
+        Psychologist updatedPsychologist = psychologistRepository.save(psychologist);
+
+        // Chuyển entity thành response và trả về
+        return psychologistMapper.toPsychologistResponse(updatedPsychologist);
+    }
+
+
 
 //    public PsychologistResponse updatePsychologist(String psychologistId, PsychologistUpdateRequest request) {
 //        Psychologist psychologist = psychologistRepository.findById(psychologistId)

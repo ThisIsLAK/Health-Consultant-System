@@ -24,6 +24,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
@@ -35,6 +36,13 @@ public class Role {
     private String roleName;
 
     private String description;
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 
 //    @OneToMany(mappedBy = "role")
 //    private List<User> users;

@@ -51,4 +51,5 @@ public class MentalHealthController {
                 .result(mentalHealthService.bookAppointment(authentication.getName(), request))
                 .build();
     }
+
 }

@@ -1,20 +1,18 @@
 package com.swp.user_service.dto.response;
 
-
-import com.swp.user_service.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
+public class AdminResponse {
     String id;
     String name;
     String email;
-    Role role;
+    String password;
+    UserResponse user;
+    PsychologistResponse psychologist;
 }

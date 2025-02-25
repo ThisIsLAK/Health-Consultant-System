@@ -13,13 +13,13 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentResponse {
     String appointmentId;
-    String counselorId;
     Date appointmentDate;
+    String timeSlot;
     public static AppointmentResponse fromEntity(Appointment appointment) {
         return AppointmentResponse.builder()
                 .appointmentId(appointment.getAppointmentId())
-                .appointmentId(appointment.getAppointmentId())
                 .appointmentDate(appointment.getAppointmentDate())
+                .timeSlot(appointment.getTimeSlot())
                 .build();
     }
 }

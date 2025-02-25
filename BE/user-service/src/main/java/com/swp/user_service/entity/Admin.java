@@ -1,19 +1,23 @@
-package com.swp.user_service.dto.request;
+package com.swp.user_service.entity;
 
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PsychologistCreationRequest {
+public class Admin {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
     private String name;
     private String email;
     private String password;
-    private String specialization;
 
     private Boolean active;
     @PrePersist

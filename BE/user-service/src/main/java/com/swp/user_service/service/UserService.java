@@ -10,6 +10,7 @@ import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -77,13 +78,7 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    //Kiem tra truoc luc goi ham. Neu la role ADMIN thi moi goi duoc ham
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<UserResponse> getUsers(){
-        log.info("In method get users");
 
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
-    }
 
     @PostAuthorize("returnObject.email == authentication.name")
     public UserResponse getUser(String userId){
@@ -93,7 +88,5 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST)));
     }
 
-    public void deleteUser(String userId){
-        userRepository.deleteById(userId);
-    }
+
 }

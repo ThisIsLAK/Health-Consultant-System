@@ -54,4 +54,11 @@ public class Program {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> participants;
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }

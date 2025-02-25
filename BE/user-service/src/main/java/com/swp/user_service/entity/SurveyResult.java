@@ -36,4 +36,11 @@ public class SurveyResult {
 
     String surveyId;
     String result;
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }
