@@ -8,8 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SurveyResultResponse {
-    String surveyId;
+public class UserAnswerResponse {
+    String answerId;
+    String questionId;
+    String optionId;
     String userId;
-    int score;
 }
