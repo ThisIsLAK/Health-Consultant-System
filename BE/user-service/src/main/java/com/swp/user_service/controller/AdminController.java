@@ -1,5 +1,8 @@
 package com.swp.user_service.controller;
 
+import com.swp.user_service.dto.request.ResetPasswordRequest;
+import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
+import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.service.AdminService;
@@ -24,25 +27,37 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-
-//    @PutMapping("/{userId}")
-//    public ResponseEntity<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
-//        return ResponseEntity.ok(adminService.updateUser(userId, request));
-//    }
-
     @DeleteMapping("/{userId}")
     ApiResponse<String> deleteUser(@PathVariable String userId) {
-
-        log.info("UserController - deleteUser is called for user ID: {}", userId);         //testloi
-
         adminService.deleteUser(userId);
-        return ApiResponse.<String>builder().result("User has been deleted").build();
+        return ApiResponse.<String>builder().result("User has been deleted with ID:"+ " " + userId).build();
     }
 
     @GetMapping("/getAllUser")
     ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()
                 .result(adminService.getUsers())
+                .build();
+    }
+
+    @GetMapping("/{email}")
+    ApiResponse<UserResponse> getUserByEmail(@PathVariable("email") String email) {
+        return ApiResponse.<UserResponse>builder()
+                .result(adminService.getUserByEmail(email))
+                .build();
+    }
+
+    @PutMapping("/resetUserPassword/{email}")
+    ApiResponse<UserResponse> resetUserPassword(@PathVariable String email, @RequestBody ResetPasswordRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(adminService.resetUserPassword(email, request))
+                .build();
+    }
+
+    @PutMapping("/updateUser/{email}")
+    ApiResponse<UserResponse> updateUserByAdmin(@PathVariable String email, @RequestBody UserUpdateByAdminRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(adminService.updateUserByAdmin(email, request))
                 .build();
     }
 }

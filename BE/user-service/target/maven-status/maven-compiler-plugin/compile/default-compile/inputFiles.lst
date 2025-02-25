@@ -22,7 +22,6 @@ D:\SWP\BE\user-service\src\main\java\com\swp\user_service\repository\ProgramRepo
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\AdminRequest.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\PsychologistUpdateRequest.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\service\MentalHealthService.java
-D:\SWP\BE\user-service\src\main\java\com\swp\user_service\enums\Role.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\controller\PsyController.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\response\PsychologistResponse.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\UserCreationRequest.java
@@ -40,6 +39,8 @@ D:\SWP\BE\user-service\src\main\java\com\swp\user_service\controller\Authenticat
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\repository\AppointmentRepository.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\repository\MentalHealthRepository.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\service\PsyService.java
+D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\ResetPasswordRequest.java
+D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\UserUpdateByAdminRequest.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\response\SurveyResultResponse.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\entity\Role.java
 D:\SWP\BE\user-service\src\main\java\com\swp\user_service\dto\request\PsychologistCreationRequest.java
