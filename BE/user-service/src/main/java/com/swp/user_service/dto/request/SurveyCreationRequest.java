@@ -1,4 +1,4 @@
-package com.swp.user_service.dto.response;
+package com.swp.user_service.dto.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SurveyResultResponse {
-    String surveyId;
-    String userId;
-    int score;
+public class SurveyCreationRequest {
+    String title;
+    String description;
 }

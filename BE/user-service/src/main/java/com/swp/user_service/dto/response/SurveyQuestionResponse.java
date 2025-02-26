@@ -3,13 +3,16 @@ package com.swp.user_service.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SurveyResultResponse {
+public class SurveyQuestionResponse {
+    String questionId;
     String surveyId;
-    String userId;
-    int score;
+    String questionText;
+    List<SurveyAnswerOptionResponse> answerOptions;
 }
