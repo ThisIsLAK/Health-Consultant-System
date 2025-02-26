@@ -38,8 +38,8 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
 
-        if (userRepository.existsByName(request.getName()))
-            throw new AppException(ErrorCode.USER_EXIST);
+//        if (userRepository.existsByName(request.getName()))
+//            throw new AppException(ErrorCode.USER_EXIST);
 
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);

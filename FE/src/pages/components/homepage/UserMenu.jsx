@@ -9,31 +9,46 @@ const UserMenu = () => {
     const [userInfo, setUserInfo] = useState({ name: "", avatar: "" });
 
     useEffect(() => {
+        // Check authentication status on component mount and token changes
+        checkAuthStatus();
+        
+        // Add event listener for storage changes (for cross-tab login/logout)
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'token') {
+                checkAuthStatus();
+            }
+        });
+        
+        return () => {
+            window.removeEventListener('storage', () => {});
+        };
+    }, []);
+    
+    // Function to check authentication status
+    const checkAuthStatus = async () => {
         const token = localStorage.getItem("token");
-
+        
         if (!token) {
             setIsLoggedIn(false);
             return;
         }
-
-        const fetchUserInfo = async () => {
-            const response = await ApiService.getLoggedInUserInfo();
-            if (response.status === 200) {
-                setUserInfo({
-                    name: response.data.name || "Jude Bellingham",
-                    avatar: response.data.avatar || "https://i.pravatar.cc/40",
-                });
-                setIsLoggedIn(true);
-            } else {
-                handleSignOut();
-            }
-        };
-
-        fetchUserInfo();
-    }, []);
+        
+        try {
+            const userData = await ApiService.getLoggedInUserInfo();
+            setUserInfo({
+                name: userData.name || "Jude Bellingham",
+                avatar: userData.avatar || "https://i.pravatar.cc/40",
+            });
+            setIsLoggedIn(true);
+        } catch (error) {
+            console.error("Failed to fetch user info:", error);
+            // Don't automatically sign out on error as the API might be temporarily unavailable
+            // Instead, keep the current state
+        }
+    };
 
     const handleSignOut = () => {
-        localStorage.clear();
+        localStorage.removeItem("token");
         setIsLoggedIn(false);
         navigate("/login");
     };
@@ -50,12 +65,10 @@ const UserMenu = () => {
         navigate(path);
     };
 
-
-
     if (!isLoggedIn) {
         return (
             <>
-                <button className="btn-signin" onClick={() => handleCheckAuth()}>Sign In</button>
+                <button className="btn-signin" onClick={() => navigate("/login")}>Sign In</button>
                 <button className="btn-get-started" onClick={() => navigate("/support")}>Get Started</button>
             </>
         );
