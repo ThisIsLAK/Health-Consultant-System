@@ -5,6 +5,7 @@ com\swp\user_service\dto\request\PsychologistCreationRequest$PsychologistCreatio
 com\swp\user_service\dto\request\UserUpdateRequest$UserUpdateRequestBuilder.class
 com\swp\user_service\exception\GlobalExceptionHandler.class
 com\swp\user_service\repository\MentalHealthRepository.class
+com\swp\user_service\dto\request\UserUpdateByAdminRequest$UserUpdateByAdminRequestBuilder.class
 com\swp\user_service\dto\request\AppointmentRequest.class
 com\swp\user_service\entity\Admin$AdminBuilder.class
 com\swp\user_service\controller\AdminController.class
@@ -18,6 +19,7 @@ com\swp\user_service\repository\PsyRepository.class
 com\swp\user_service\mapper\UserMapperImpl.class
 com\swp\user_service\dto\response\UserResponse$UserResponseBuilder.class
 com\swp\user_service\dto\response\AdminResponse$AdminResponseBuilder.class
+com\swp\user_service\mapper\AdminMapperImpl.class
 com\swp\user_service\dto\request\PsychologistUpdateRequest.class
 com\swp\user_service\dto\response\ProgramResponse$ProgramResponseBuilder.class
 com\swp\user_service\dto\response\AuthenticationResponse.class
@@ -45,7 +47,6 @@ com\swp\user_service\entity\Role.class
 com\swp\user_service\dto\request\PsychologistCreationRequest.class
 com\swp\user_service\mapper\AdminMapper.class
 com\swp\user_service\dto\response\IntrospectResponse$IntrospectResponseBuilder.class
-com\swp\user_service\enums\Role.class
 com\swp\user_service\controller\UserController.class
 com\swp\user_service\dto\response\SurveyResultResponse$SurveyResultResponseBuilder.class
 com\swp\user_service\dto\request\IntrospectRequest$IntrospectRequestBuilder.class
@@ -61,12 +62,15 @@ com\swp\user_service\dto\response\PsychologistResponse.class
 com\swp\user_service\entity\SurveyResult.class
 com\swp\user_service\entity\Appointment$AppointmentBuilder.class
 com\swp\user_service\entity\Program$ProgramBuilder.class
+com\swp\user_service\dto\request\ResetPasswordRequest.class
 com\swp\user_service\dto\request\UserCreationRequest$UserCreationRequestBuilder.class
 com\swp\user_service\dto\response\UserResponse.class
 com\swp\user_service\dto\request\IntrospectRequest.class
 com\swp\user_service\dto\request\UserUpdateRequest.class
 com\swp\user_service\dto\request\AuthenticationRequest$AuthenticationRequestBuilder.class
+com\swp\user_service\dto\request\ResetPasswordRequest$ResetPasswordRequestBuilder.class
 com\swp\user_service\service\AuthenticationService.class
+com\swp\user_service\dto\request\UserUpdateByAdminRequest.class
 com\swp\user_service\configuration\ApplicationInitConfig.class
 com\swp\user_service\dto\response\AppointmentResponse.class
 com\swp\user_service\dto\request\AdminRequest$AdminRequestBuilder.class

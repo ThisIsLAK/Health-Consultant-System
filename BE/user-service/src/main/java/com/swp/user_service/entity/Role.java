@@ -36,6 +36,7 @@ public class Role {
     private String roleName;
 
     private String description;
+
     private Boolean active;
     @PrePersist
     protected void onCreate() {

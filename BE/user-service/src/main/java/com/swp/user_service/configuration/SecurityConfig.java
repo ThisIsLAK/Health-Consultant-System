@@ -1,6 +1,5 @@
 package com.swp.user_service.configuration;
 
-import com.swp.user_service.enums.Role;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
