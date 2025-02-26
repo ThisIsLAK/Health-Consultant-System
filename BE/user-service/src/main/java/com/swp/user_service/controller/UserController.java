@@ -34,7 +34,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
         return ApiResponse.<UserResponse>builder()

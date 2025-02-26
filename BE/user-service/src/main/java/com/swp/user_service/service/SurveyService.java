@@ -3,9 +3,11 @@ package com.swp.user_service.service;
 import com.swp.user_service.dto.request.SurveyCreationRequest;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.entity.Survey;
+import com.swp.user_service.entity.UserAnswer;
 import com.swp.user_service.mapper.SurveyMapper;
 import com.swp.user_service.mapper.SurveyQuestionMapper;
 import com.swp.user_service.repository.SurveyRepository;
+import com.swp.user_service.repository.UserAnswerRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,4 +49,11 @@ public class SurveyService {
         return null;
     }
 
+
+    @Autowired
+    private UserAnswerRepository userAnswerRepository;
+
+    public List<UserAnswer> getUserSurveyResults(String userId) {
+        return userAnswerRepository.findUserAnswersByUserId(userId);
+    }
 }

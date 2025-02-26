@@ -62,28 +62,6 @@ public class PsyService {
         return psychologistMapper.toPsychologistResponse(updatedPsychologist);
     }
 
-
-
-//    public PsychologistResponse updatePsychologist(String psychologistId, PsychologistUpdateRequest request) {
-//        Psychologist psychologist = psychologistRepository.findById(psychologistId)
-//                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-//
-//        psychologistMapper.updatePsychologist(psychologist, request);
-//
-//        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
-//            psychologist.setPassword(passwordEncoder.encode(request.getPassword()));
-//        }
-//
-//        return psychologistMapper.toPsychologistResponse(psychologistRepository.save(psychologist));
-//    }
-//
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public List<PsychologistResponse> getAllPsychologists() {
-//        return psychologistRepository.findAll().stream()
-//                .map(psychologistMapper::toPsychologistResponse)
-//                .toList();
-//    }
-
     public void deletePsychologist(String psychologistId) {
         psychologistRepository.deleteById(psychologistId);
     }

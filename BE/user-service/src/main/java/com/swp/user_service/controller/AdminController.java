@@ -1,12 +1,14 @@
 package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.ResetPasswordRequest;
+import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.service.AdminService;
 import com.swp.user_service.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -58,6 +60,13 @@ public class AdminController {
     ApiResponse<UserResponse> updateUserByAdmin(@PathVariable String email, @RequestBody UserUpdateByAdminRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(adminService.updateUserByAdmin(email, request))
+                .build();
+    }
+
+    @PostMapping("/createUserByAdmin")
+    ApiResponse<UserResponse> createUserByAdmin(@RequestBody @Valid UserCreationRequest request) {
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.createUser(request))
                 .build();
     }
 }
