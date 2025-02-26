@@ -25,6 +25,7 @@ public class UserMapperImpl implements UserMapper {
         user.name( request.getName() );
         user.email( request.getEmail() );
         user.password( request.getPassword() );
+        user.active( request.getActive() );
 
         return user.build();
     }
@@ -51,6 +52,8 @@ public class UserMapperImpl implements UserMapper {
             return;
         }
 
+        user.setName( request.getName() );
+        user.setEmail( request.getEmail() );
         user.setPassword( request.getPassword() );
     }
 }

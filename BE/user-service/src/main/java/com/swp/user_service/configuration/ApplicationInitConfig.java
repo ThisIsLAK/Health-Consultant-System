@@ -8,13 +8,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
+import java.util.List;
+
+
 
 @Configuration
 @RequiredArgsConstructor
@@ -27,6 +28,18 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
+            if (roleRepository.count() == 0 ) {
+                // Lấy Role ADMIN từ database
+                List<Role> roles = List.of(
+                        new Role("1", "ADMIN","admin",true ),
+                        new Role("2", "STUDENT","student",true ),
+                        new Role("3", "MANAGER","manager",true ),
+                        new Role("4", "PSYCHOLOGIST","psychologist",true ),
+                        new Role("5", "PARENT","parent",true)
+                );
+                roleRepository.saveAll(roles);
+                log.warn("All roles have been created");
+            }
             if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
 
                 // Lấy Role ADMIN từ database
@@ -45,5 +58,4 @@ public class ApplicationInitConfig {
             }
         };
     }
-
 }

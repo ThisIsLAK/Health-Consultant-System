@@ -23,6 +23,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class UserController {
+
     UserService userService;
 
     @PostMapping
@@ -32,18 +33,7 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping
-    ApiResponse<List<UserResponse>> getUsers() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        log.info("Name: {}", authentication.getName());
-        authentication.getAuthorities().forEach(grantedAuthority ->
-                log.info(grantedAuthority.getAuthority()));
-
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getUsers())
-                .build();
-    }
 
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
@@ -57,12 +47,6 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
                 .build();
-    }
-
-    @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable String userId) {
-        userService.deleteUser(userId);
-        return ApiResponse.<String>builder().result("User has been deleted").build();
     }
 
     @PutMapping("/{userId}")
