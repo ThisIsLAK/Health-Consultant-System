@@ -1,6 +1,5 @@
 package com.swp.user_service.entity;
 
-import com.swp.user_service.dto.response.SurveyQuestionResponse;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

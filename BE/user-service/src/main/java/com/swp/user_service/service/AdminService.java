@@ -1,9 +1,10 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.ResetPasswordRequest;
+import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
-import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.entity.Role;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
@@ -11,7 +12,6 @@ import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -33,6 +33,7 @@ public class AdminService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
+
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(String userId) {
@@ -56,7 +57,7 @@ public class AdminService {
 
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse getUserByEmail(String email) {
         log.info("In method get user by Id");
         return userMapper.toUserResponse(userRepository.findByEmail(email)
@@ -64,7 +65,7 @@ public class AdminService {
     }
 
     //cap lai mat khau cho user
-
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse resetUserPassword(String email, ResetPasswordRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -74,12 +75,11 @@ public class AdminService {
     }
 
     //cap nhat thong tin user
-
+    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUserByAdmin(String email, UserUpdateByAdminRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Kiểm tra và cập nhật từng trường nếu request không null
         if (request.getName() != null && !request.getName().trim().isEmpty()) {
             user.setName(request.getName());
         }
@@ -95,4 +95,27 @@ public class AdminService {
 
         return userMapper.toUserResponse(userRepository.save(user));
     }
+
+//    //tao tk cho moi user
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse createUserByAdmin(UserCreationRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail()))
+            throw new AppException(ErrorCode.EMAIL_EXIST);
+
+        String roleId = request.getRoleId() != null ? request.getRoleId() : "STUDENT"; // Mặc định là STUDENT nếu không có role được thêm vào trong lúc tạo
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        User user = userMapper.toUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        user.setRole(role);
+        try {
+            return userMapper.toUserResponse(userRepository.save(user));
+        }catch (Exception e) {
+                throw new AppException(ErrorCode.USER_CREATION_FAILED);
+            }
+    }
+
 }

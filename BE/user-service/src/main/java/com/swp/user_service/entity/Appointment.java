@@ -5,29 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import java.util.Date;
 
-//@Entity
-////@Table(name = "appointments")
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@FieldDefaults(level = AccessLevel.PRIVATE)
-//public class Appointment {
-//
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.UUID)
-//    String appointmentId;
-//
-//    @Column(nullable = false)
-//    String counselorId;
-//
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @Column(nullable = false)
-//    Date appointmentDate;
-//
-//    @Column(nullable = false)
-//    String timeSlot;
-//}
 @Entity
 @Data
 @Builder

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -63,10 +64,15 @@ public class AdminController {
                 .build();
     }
 
+
     @PostMapping("/createUserByAdmin")
-    ApiResponse<UserResponse> createUserByAdmin(@RequestBody @Valid UserCreationRequest request) {
-        return ApiResponse.<UserResponse>builder()
-                .result(userService.createUser(request))
-                .build();
+    public ResponseEntity<ApiResponse<UserResponse>> createUserByAdmin(
+            @RequestBody @Valid UserCreationRequest request) {
+
+        UserResponse userResponse = adminService.createUserByAdmin(request);
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .result(userResponse)
+                .message("User created successfully")
+                .build());
     }
 }
