@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/.idea/New SWP391.iml" filepath="$PROJECT_DIR$/.idea/New SWP391.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/.idea/swp123.iml" filepath="$PROJECT_DIR$/.idea/swp123.iml" />
+>>>>>>> Duong
     </modules>
   </component>
 </project>

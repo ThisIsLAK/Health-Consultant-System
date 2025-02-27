@@ -1,17 +1,20 @@
 package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.ResetPasswordRequest;
+import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.service.AdminService;
 import com.swp.user_service.service.UserService;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,5 +62,17 @@ public class AdminController {
         return ApiResponse.<UserResponse>builder()
                 .result(adminService.updateUserByAdmin(email, request))
                 .build();
+    }
+
+
+    @PostMapping("/createUserByAdmin")
+    public ResponseEntity<ApiResponse<UserResponse>> createUserByAdmin(
+            @RequestBody @Valid UserCreationRequest request) {
+
+        UserResponse userResponse = adminService.createUserByAdmin(request);
+        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+                .result(userResponse)
+                .message("User created successfully")
+                .build());
     }
 }

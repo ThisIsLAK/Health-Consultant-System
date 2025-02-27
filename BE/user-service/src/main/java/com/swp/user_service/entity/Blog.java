@@ -2,20 +2,21 @@ package com.swp.user_service.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Psychologist {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class Blog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
-    private String name;
-    private String email;
-    private String password;
-    private String specialization;
+    String id;
+    String blogCode;
+    String description;
 
     private Boolean active;
     @PrePersist
@@ -24,10 +25,4 @@ public class Psychologist {
             active = true;
         }
     }
-
-
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", nullable = false)
-//    Role role;
 }
-
