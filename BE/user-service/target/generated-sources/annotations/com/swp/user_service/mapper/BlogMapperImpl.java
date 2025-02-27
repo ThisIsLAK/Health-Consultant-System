@@ -22,6 +22,7 @@ public class BlogMapperImpl implements BlogMapper {
         Blog.BlogBuilder blog = Blog.builder();
 
         blog.blogCode( request.getBlogCode() );
+        blog.title( request.getTitle() );
         blog.description( request.getDescription() );
 
         return blog.build();
@@ -37,6 +38,7 @@ public class BlogMapperImpl implements BlogMapper {
 
         blogResponse.id( blog.getId() );
         blogResponse.blogCode( blog.getBlogCode() );
+        blogResponse.title( blog.getTitle() );
         blogResponse.description( blog.getDescription() );
 
         return blogResponse.build();

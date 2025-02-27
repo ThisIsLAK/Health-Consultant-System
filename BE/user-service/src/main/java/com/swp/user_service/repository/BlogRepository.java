@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface BlogRepository extends JpaRepository<Blog, String> {
     boolean existsByBlogCode(String blogCode);
-
     Optional<Blog> findByBlogCode(String blogCode);
 }

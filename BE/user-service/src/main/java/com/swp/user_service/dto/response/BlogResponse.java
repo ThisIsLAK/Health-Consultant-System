@@ -11,5 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class BlogResponse {
     String id;
     String blogCode;
+    String title;
     String description;
 }
