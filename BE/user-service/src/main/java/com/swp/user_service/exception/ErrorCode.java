@@ -14,6 +14,7 @@ public enum ErrorCode {
     PROGRAM_NOT_EXIST(1010, "Program is not exist"),
     PERMISSION_ERROR(1011, "You don't have permission to do this"),
     USER_CREATION_FAILED(1012, "User creation failed"),
+    BLOGCODE_EXIST(1013, "Blog code is existed")
     ;
 
     ErrorCode(int code, String message) {
