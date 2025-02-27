@@ -4,19 +4,17 @@ import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.UserResponse;
-import com.swp.user_service.entity.User;
 import com.swp.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:5173")
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -32,7 +30,6 @@ public class UserController {
                 .result(userService.createUser(request))
                 .build();
     }
-
 
 
     @GetMapping("/myInfo")

@@ -1,5 +1,6 @@
 package com.swp.user_service.dto.request;
 
+import com.swp.user_service.entity.Role;
 import jakarta.persistence.PrePersist;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -26,6 +27,8 @@ public class UserCreationRequest {
 
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
+
+    private String roleId;
 
     private Boolean active;
     @PrePersist
