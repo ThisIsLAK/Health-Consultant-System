@@ -35,65 +35,104 @@ const LoginSignup = () => {
     });
   };
 
-  // const handleSignin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //       const response = await ApiService.loginUser(signinData);
-  //       console.log("API Response:", response); // Debug API response
-
-  //       if (response.status === 200) {
-  //           localStorage.setItem('token', response.data.token);
-  //           // await Swal.fire("Success", "Login Successfully", "success");
-  //           setTimeout(() => navigate("/"), 500);
-  //       } else {
-  //           Swal.fire("Error", response.message, "error");
-  //       }
-  //   } catch (error) {
-  //       Swal.fire("Error", error.message || "Unable to log in user", "error");
-  //   }
-
-  // const handleSignin = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await ApiService.loginUser(signinData);
-  //     console.log("API Response:", response); // Debug API response
-
-  //     if (response.status === 200 && response.data.token) {
-  //       console.log("Saving token:", response.data.token);
-  //       localStorage.setItem('token', response.data.token);
-  //       localStorage.setItem('role', response.data.role || "user");
-
-  //       setTimeout(() => navigate("/"), 500);
-  //     } else {
-  //       Swal.fire("Error", response.message || "Login failed", "error");
-  //     }
-  //   } catch (error) {
-  //     Swal.fire("Error", error.message || "Unable to log in user", "error");
-  //   }
-  // };
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
+      console.log("Login attempt with:", signinData);
+
       const response = await ApiService.loginUser(signinData);
-      console.log("API Response:", response); // Debug API response
+      console.log("API Response:", response);
 
-      if (response.status === 200 && response.data.result.token) { // Lấy token từ đúng vị trí
+      // Check if we have a valid response with token
+      if (response.status === 200 && response.data && response.data.result) {
+        // Store the token first
         const token = response.data.result.token;
-        console.log("Saving token:", token); // Kiểm tra xem token có chính xác không
-
         localStorage.setItem('token', token);
-        localStorage.setItem('role', response.data.result.role || "user");
-        
-        await Swal.fire("Success", "Login Successfully", "success");
-        setTimeout(() => navigate("/"), 500);
+        console.log("Token stored successfully");
+
+        // Now fetch user info to get accurate role information
+        try {
+          console.log("Fetching user info to get role...");
+          const userInfoResponse = await ApiService.getLoggedInUserInfo();
+          console.log("User Info Response:", userInfoResponse);
+
+          if (userInfoResponse.status === 200 && userInfoResponse.data.result) {
+            // Extract role from user info
+            const userData = userInfoResponse.data.result;
+            console.log("User data:", userData);
+
+            let role = "USER"; // Default role
+
+            if (userData.role) {
+              const roleData = userData.role;
+              console.log("Role data from user info:", roleData);
+
+              // Update role mappings to match your system's IDs
+              if (roleData.roleName === "ADMIN" || roleData.roleId === "1") {
+                role = "ADMIN";
+              } 
+              else if (roleData.roleName === "STUDENT" || roleData.roleId === "2") {
+                role = "USER"; // Map students to USER role for frontend purposes
+              }
+              else if (roleData.roleName === "PSYCHOLOGIST" || roleData.roleId === "4") {
+                role = "PSYCHOLOGIST";
+              }
+              else if (roleData.roleName === "MANAGER" || roleData.roleId === "3") {
+                role = "MANAGER";
+              }
+              else if (roleData.roleName === "PARENT" || roleData.roleId === "5") {
+                role = "USER"; // Map parents to USER role as well (they use same UI)
+              }
+              else {
+                role = "USER"; // Default role
+              }
+            }
+
+            console.log("Final role assignment:", role);
+            localStorage.setItem('userRole', role);
+
+            // Success message
+            await Swal.fire({
+              title: "Success",
+              text: `Login successful! You are logged in as: ${role}`,
+              icon: "success"
+            });
+
+            // Redirect based on role
+            switch (role) {
+              case "ADMIN":
+                navigate('/adminuserlist');
+                break;
+              case "STUDENT":
+                navigate('/');
+                break;
+              case "PSYCHOLOGIST":
+                navigate('/psyapplist');
+                break;
+              case "MANAGER":
+                navigate('/managerdashboard');
+                break;
+              default:
+                navigate('/');
+            }
+          } else {
+            console.error("Failed to get user info");
+            Swal.fire("Warning", "Logged in, but couldn't retrieve role information", "warning");
+            navigate('/');
+          }
+        } catch (userInfoError) {
+          console.error("Error fetching user info:", userInfoError);
+          Swal.fire("Warning", "Logged in, but role detection failed", "warning");
+          navigate('/');
+        }
       } else {
         Swal.fire("Error", response.message || "Login failed", "error");
       }
     } catch (error) {
+      console.error("Login error:", error);
       Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
   };
-
 
 
   const handleSignup = async (e) => {
