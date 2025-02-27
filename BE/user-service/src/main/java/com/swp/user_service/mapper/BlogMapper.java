@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface BlogMapper {
-    @Mapping(target = "id", ignore = true) // ID sẽ tự sinh
-    @Mapping(target = "active", ignore = true) // active sẽ được set mặc định
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "active", ignore = true)
     Blog toBlog(BlogRequest request);
     BlogResponse toBlogResponse(Blog blog);
 }
