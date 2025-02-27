@@ -1,0 +1,172 @@
+.confirmation-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: white;
+}
+
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.confirmation-header h1 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+}
+
+.booking-steps {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.step {
+  padding: 0.8rem 1.5rem;
+  background-color: #f1f1f1;
+  margin: 0 0.5rem;
+  border-radius: 4px;
+  font-weight: 500;
+  color: #7f8c8d;
+}
+
+.step.active {
+  background-color: #3498db;
+  color: white;
+}
+
+.confirmation-content {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.booking-summary {
+  margin-bottom: 2rem;
+}
+
+.booking-summary h2 {
+  font-size: 1.6rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1rem 0;
+}
+
+.summary-item .label {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.summary-item .value {
+  color: #34495e;
+}
+
+.confirmation-notes {
+  background-color: #f1faff;
+  border-left: 4px solid #3498db;
+  padding: 1.5rem;
+  margin: 2rem 0;
+}
+
+.confirmation-notes h3 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.confirmation-notes ul {
+  margin-left: 1.5rem;
+}
+
+.confirmation-notes li {
+  margin-bottom: 0.5rem;
+  color: #34495e;
+  line-height: 1.5;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.back-button {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #3498db;
+  border-radius: 4px;
+  background-color: transparent;
+  color: #3498db;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.back-button:hover {
+  background-color: #f1faff;
+}
+
+.confirm-button {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #27ae60;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+}
+
+.confirm-button:hover {
+  background-color: #219653;
+}
+
+.confirm-button:disabled {
+  background-color: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.success-message {
+  text-align: center;
+  padding: 3rem 2rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.success-icon {
+  background-color: #27ae60;
+  color: white;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  margin: 0 auto 2rem;
+}
+
+.success-message h2 {
+  font-size: 2rem;
+  color: #27ae60;
+  margin-bottom: 1rem;
+}
+
+.success-message p {
+  color: #34495e;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.success-message p:last-child {
+  margin-top: 2rem;
+  font-style: italic;
+  color: #7f8c8d;
+}

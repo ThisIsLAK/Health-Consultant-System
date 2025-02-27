@@ -1,0 +1,99 @@
+.test-detail-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.test-detail-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.test-detail-header h1 {
+    color: #2a5885;
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.test-description {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.test-detail-content {
+    display: flex;
+    justify-content: center;
+}
+
+.test-info-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.test-info-card h2 {
+    color: #2a5885;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.test-meta {
+    display: flex;
+    margin: 25px 0;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 6px;
+}
+
+.meta-item {
+    margin-right: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.meta-value {
+    font-size: 1.1rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.instructions {
+    margin: 25px 0;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.instructions h3 {
+    color: #2a5885;
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.start-test-btn {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 14px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s;
+}
+
+.start-test-btn:hover {
+    background-color: #45a049;
+}

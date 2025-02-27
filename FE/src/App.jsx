@@ -19,6 +19,10 @@ import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 import BookingForm from './pages/student/PickDate/BookingForm';
+import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
+import BookingPage from './pages/student/Booking/BookingPage';
+import BookingConfirmation from './pages/student/Booking/BookingConfirmation';
+
 
 /* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
@@ -49,6 +53,7 @@ import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
 import AdminUserList from './pages/components/admin/UserList/AdminUserList';
 import AdminUserDetail from './pages/components/admin/UserDetail/AdminUserDetail';
 import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
+import SchedulePage from './pages/student/Schedule/SchedulePage';
 
 function App() {
   return (
@@ -63,11 +68,16 @@ function App() {
         <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} />} />
         <Route path='/tests' element={<ProtectedRoute element={<TestsPage />} allowedRoles={['USER']} />} />
         <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} />} />
+        <Route path="/support/:programId" element={<ProgramDetail />} allowedRoles={['USER']} />
         <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} />} />
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} />} />
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
         <Route path='/booking' element={<ProtectedRoute element={<BookingForm />} allowedRoles={['USER']} />} />
         <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
+        <Route path="/booking/:programId" element={<BookingPage />} allowedRoles={['USER']} />
+        <Route path="/booking-confirmation" element={<BookingConfirmation />} allowedRoles={['USER']}/>
+        <Route path="/schedule" element={<SchedulePage />} allowedRoles={['USER']}/>
+
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<ProtectedRoute element={<CustomerList />} allowedRoles={['MANAGER']} />} />

@@ -1,12 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import "./SupportProgram.css";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 
 const programs = [
-    { title: "One-on-One Counseling", description: "Schedule a session with a professional psychologist.", link: "#" },
-    { title: "Group Support", description: "Join support groups to discuss mental health topics.", link: "#" },
-    { title: "Self-Help Resources", description: "Access blogs, e-books, and mindfulness exercises.", link: "#" },
+    { 
+        id: "one-on-one-counseling",
+        title: "One-on-One Counseling", 
+        description: "Schedule a session with a professional psychologist."
+    },
+    { 
+        id: "group-support",
+        title: "Group Support", 
+        description: "Join support groups to discuss mental health topics."
+    },
+    { 
+        id: "self-help-resources",
+        title: "Self-Help Resources", 
+        description: "Access blogs, e-books, and mindfulness exercises."
+    },
 ];
 
 const SupportProgram = () => (
@@ -20,11 +33,16 @@ const SupportProgram = () => (
             <div className="support-content">
                 <h2>Our Support Services</h2>
                 <div className="program-grid">
-                    {programs.map((program, index) => (
-                        <a key={index} href={program.link} className="program-card">
+                    {programs.map((program) => (
+                        <Link 
+                            key={program.id} 
+                            to={`/support/${program.id}`} 
+                            className="program-card"
+                        >
                             <h3>{program.title}</h3>
                             <p>{program.description}</p>
-                        </a>
+                            <span className="learn-more">Learn More →</span>
+                        </Link>
                     ))}
                 </div>
             </div>
