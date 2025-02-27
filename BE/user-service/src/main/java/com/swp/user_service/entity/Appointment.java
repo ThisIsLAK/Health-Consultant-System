@@ -45,11 +45,19 @@ public class Appointment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "psychologist_id", nullable = false)
+    @JoinColumn(name = "psychologist_id")
     private Psychologist psychologist;
 
     @Temporal(TemporalType.TIMESTAMP)
     Date appointmentDate;
 
     String timeSlot;
+
+    private Boolean active;
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }

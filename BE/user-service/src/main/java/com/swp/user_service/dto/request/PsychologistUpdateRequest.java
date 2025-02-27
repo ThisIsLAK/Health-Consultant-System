@@ -1,6 +1,6 @@
 package com.swp.user_service.dto.request;
 
-public class PyschologistUpdateRequest {
+public class PsychologistUpdateRequest {
     private String specialization;
 
     public String getSpecialization() {

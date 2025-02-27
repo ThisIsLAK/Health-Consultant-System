@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 @Repository
-public interface PysRepository extends JpaRepository<Psychologist, String>{
+public interface PsyRepository extends JpaRepository<Psychologist, String>{
 
     boolean existsByName(String name);
 

@@ -1,38 +1,43 @@
 package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
-import com.swp.user_service.dto.request.PyschologistUpdateRequest;
+import com.swp.user_service.dto.request.PsychologistUpdateRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.PsychologistResponse;
-import com.swp.user_service.entity.Psychologist;
+import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.service.PsyService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/pyschologists")
-public class PysController {
+@RequestMapping("/psychologists")
+public class PsyController {
     @Autowired
-    private PsyService pysService;
+    private PsyService psyService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<PsychologistResponse>> createPsychologist(
             @RequestBody @Valid PsychologistCreationRequest request) {
 
-        PsychologistResponse response = pysService.createPsychologist(request);
+        PsychologistResponse response = psyService.createPsychologist(request);
 
         return ResponseEntity.ok(ApiResponse.<PsychologistResponse>builder()
                 .result(response)
                 .build());
     }
 
-    @DeleteMapping("/{pysId}")
-    public String deletePyschologist(@PathVariable String pysId) {
-        pysService.deletePsychologist(pysId);
+    @DeleteMapping("/{psyId}")
+    public String deletePyschologist(@PathVariable String psyId) {
+        psyService.deletePsychologist(psyId);
         return "Pyschologist has been deleted";
     }
+    @PutMapping("/{psyId}")
+    ApiResponse<PsychologistResponse> updatePsy(@PathVariable String psyId, @RequestBody PsychologistUpdateRequest request) {
+        return ApiResponse.<PsychologistResponse>builder()
+                .result(psyService.updatePsy(psyId, request))
+                .build();
+    }
+
 }

@@ -11,7 +11,8 @@ public enum ErrorCode {
     USER_NOT_EXIST(1007, "User not found"),
     UNAUTHENTICATED(1008, "Unauthenticated"),
     ROLE_NOT_FOUND(1009, "Role not found"),
-    PROGRAM_NOT_EXIST(1010, "Program is not exist")
+    PROGRAM_NOT_EXIST(1010, "Program is not exist"),
+    PERMISSION_ERROR(1011, "You don't have permission to do this")
     ;
 
     ErrorCode(int code, String message) {

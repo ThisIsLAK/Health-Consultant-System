@@ -25,6 +25,7 @@ public class PsychologistMapperImpl implements PsychologistMapper {
         psychologist.setEmail( request.getEmail() );
         psychologist.setPassword( request.getPassword() );
         psychologist.setSpecialization( request.getSpecialization() );
+        psychologist.setActive( request.getActive() );
 
         return psychologist;
     }
