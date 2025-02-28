@@ -1,0 +1,149 @@
+/* AddBlog.css */
+
+.main {
+    margin-left: 250px;
+    padding: 20px;
+    transition: margin-left 0.3s;
+    background-color: #f5f7fa;
+    min-height: calc(100vh - 60px);
+}
+
+.add-form-container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+.admin-form {
+    width: 100%;
+}
+
+.form-row {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.form-group label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #333;
+    font-size: 14px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    padding: 12px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: #4d84e2;
+    box-shadow: 0 0 0 2px rgba(77, 132, 226, 0.1);
+    outline: none;
+    background-color: #fff;
+}
+
+.form-group input[type="file"] {
+    padding: 10px 0;
+    font-size: 14px;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button {
+    background-color: #4d84e2;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #3a6fc7;
+}
+
+.btn {
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #4d84e2;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #3a6fc7;
+    box-shadow: 0 4px 10px rgba(77, 132, 226, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .main {
+        margin-left: 200px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .add-form-container {
+        padding: 15px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Custom styling for textarea */
+textarea {
+    resize: vertical;
+    min-height: 150px;
+}
+
+/* Add a subtle transition effect for inputs */
+input,
+textarea,
+button {
+    transition: all 0.3s ease;
+}
+
+/* Style for the form when submitting */
+.admin-form.submitting {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+/* Optional: Fancy placeholder styling */
+::placeholder {
+    color: #aaa;
+    font-style: italic;
+}

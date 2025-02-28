@@ -45,6 +45,10 @@ import PsychologistAccount from './pages/psychologist/PsychologistAccount/Psycho
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
 import AdminUserList from './pages/components/admin/UserList/AdminUserList';
 import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
+import AdminSurvey from './pages/components/admin/AdminSurvey/AdminSurvey';
+import AddBlog from './pages/components/admin/AddBlog/AddBlog';
+import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
+import EditBlog from './pages/components/admin/EditBlog/EditBlog';
 
 function App() {
   return (
@@ -91,7 +95,12 @@ function App() {
         {/* Admin Routes */}
         <Route path='/adminaccount' element={<AdminAccount/>}/>
         <Route path='/adminuserlist' element={<AdminUserList/>}/>
+        <Route path='/adminsurvey' element={<AdminSurvey/>}/>
         <Route path='/editsurvey' element={<EditSurvey/>}/>
+        <Route path='/adminblog' element={<AdminBlog/>}/>
+        <Route path='/addblog' element={<AddBlog/>}/>
+        <Route path='/editblog' element={<EditBlog/>}/>
+
       </Routes>
     </BrowserRouter>
   );

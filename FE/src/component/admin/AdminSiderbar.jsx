@@ -14,6 +14,13 @@ const AdminSidebar = () => {
         </li>
 
         <li className='nav-item'>
+          <a href="/adminsurvey" className='nav-link'>
+            <i className='bi bi-calendar-check'></i>
+            <span>Survey</span>
+          </a>
+        </li>
+
+        <li className='nav-item'>
           <a href="/#" className='nav-link'>
             <i className='bi bi-calendar-check'></i>
             <span>Appointments</span>
@@ -21,9 +28,9 @@ const AdminSidebar = () => {
         </li>
 
         <li className='nav-item'>
-          <a href="/#" className='nav-link'>
+          <a href="/adminblog" className='nav-link'>
             <i className='bi bi-grid'></i>
-            <span>Patient List</span>
+            <span>Blogs</span>
           </a>
         </li>
 
