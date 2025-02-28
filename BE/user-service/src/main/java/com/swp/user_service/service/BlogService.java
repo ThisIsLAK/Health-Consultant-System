@@ -43,6 +43,7 @@ public class BlogService {
         Optional<Blog> existingBlog = blogRepository.findByBlogCode(blogCode);
         if (existingBlog.isPresent()) {
             Blog blog = existingBlog.get();
+            blog.setTitle(request.getTitle());
             blog.setDescription(request.getDescription());
             Blog updatedBlog = blogRepository.save(blog);
             return blogMapper.toBlogResponse(updatedBlog);
@@ -58,7 +59,7 @@ public class BlogService {
             Blog blog = blogOptional.get();
             blog.setActive(false);
             blogRepository.save(blog);
-            log.info(blog + "has been deleted");
+            log.info(blog + " has been deactivated");
         } else {
             throw new EntityNotFoundException("Blog not found with Blog Code: " + blogCode);
         }

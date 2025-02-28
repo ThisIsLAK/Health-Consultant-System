@@ -15,7 +15,9 @@ public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
+
     String blogCode;
+    String title;
     String description;
 
     private Boolean active;
