@@ -29,6 +29,7 @@ import CustomerList from './pages/manager/CustomerList/CustomerList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
 import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
+import AppointmentList from './pages/manager/AppointmentList/AppointmentList';
 import ManagerDashboard from './pages/manager/ManagerDashboard/ManagerDashboard';
 import AppointmentDetail from './pages/manager/AppointmentDetail/AppointmentDetail';
 import CustomerDetail from './pages/manager/CustomerDetail/CustomerDetail';
