@@ -2,7 +2,9 @@ package com.swp.user_service.mapper;
 
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.response.PsychologistResponse;
+import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.entity.Psychologist;
+import com.swp.user_service.entity.User;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -38,11 +40,26 @@ public class PsychologistMapperImpl implements PsychologistMapper {
 
         PsychologistResponse.PsychologistResponseBuilder psychologistResponse = PsychologistResponse.builder();
 
-        psychologistResponse.id( psychologist.getId() );
         psychologistResponse.name( psychologist.getName() );
         psychologistResponse.email( psychologist.getEmail() );
         psychologistResponse.specialization( psychologist.getSpecialization() );
+        psychologistResponse.user( userToUserResponse( psychologist.getUser() ) );
 
         return psychologistResponse.build();
+    }
+
+    protected UserResponse userToUserResponse(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserResponse.UserResponseBuilder userResponse = UserResponse.builder();
+
+        userResponse.id( user.getId() );
+        userResponse.name( user.getName() );
+        userResponse.email( user.getEmail() );
+        userResponse.role( user.getRole() );
+
+        return userResponse.build();
     }
 }
