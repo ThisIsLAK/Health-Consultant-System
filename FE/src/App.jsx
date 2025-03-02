@@ -115,7 +115,7 @@ function App() {
         <Route path='/adminsurvey' element={<ProtectedRoute element={<AdminSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
-        <Route path='/editblog' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />}/>
+        <Route path='/editblog/:blogCode' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />}/>
         
       </Routes>
     </BrowserRouter>

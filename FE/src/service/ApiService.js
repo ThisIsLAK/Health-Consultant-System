@@ -13,8 +13,20 @@ export default class ApiService {
 
     /**AUTh && USERS API */
     static async registerUser(registration) {
-        const response = await axios.post(`${this.BASE_URL}/identity/users`, registration)
-        return response.data;
+        try {
+            const response = await axios.post(`${this.BASE_URL}/identity/users`, registration);
+            return {
+                status: response.status,
+                data: response.data,
+                message: "Registration successful"
+            };
+        } catch (error) {
+            console.error("Registration error:", error);
+            return {
+                status: error.response?.status || 500,
+                message: error.response?.data?.message || "Registration failed"
+            };
+        }
     }
 
     // Make sure the roleId mapping is correct
@@ -414,4 +426,220 @@ export default class ApiService {
             };
         }
     }
+
+    /**
+     * Create a new blog post
+     * @param {Object} blogData - The blog data containing title, content, etc.
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async createBlog(blogData) {
+        try {
+            if (!blogData.title || !blogData.description || !blogData.blogCode) {
+                throw new Error("Blog title, description, and code are required");
+            }
+            
+            console.log("Creating new blog with data:", blogData);
+            
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/api/blogs`,  // Updated endpoint to match backend
+                blogData,
+                { headers: this.getHeader() }
+            );
+            
+            console.log("Create blog response:", response.data);
+            
+            // Handle response format
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blog created successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error creating blog:", error);
+            
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create blog"
+            };
+        }
+    }
+
+    /**
+     * Get all blogs
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllBlogs() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/api/blogs`,
+                { headers: this.getHeader() }
+            );
+            
+            console.log("Fetched blogs:", response.data);
+            
+            // Handle response format
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blogs fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+            
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blogs"
+            };
+        }
+    }
+
+    /**
+     * Update a blog post
+     * @param {string} blogCode - The blog code to update
+     * @param {Object} blogData - The updated blog data
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async updateBlog(blogCode, blogData) {
+        try {
+            if (!blogCode) {
+                throw new Error("Blog code is required for update");
+            }
+            
+            console.log("Updating blog with code:", blogCode);
+            console.log("Update data:", blogData);
+            
+            const response = await axios.put(
+                `${this.BASE_URL}/identity/api/blogs/${blogCode}`,
+                blogData,
+                { headers: this.getHeader() }
+            );
+            
+            console.log("Update blog response:", response.data);
+            
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blog updated successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error updating blog:", error);
+            
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to update blog"
+            };
+        }
+    }
+
+    /**
+     * Get blog by code
+     * @param {string} blogCode - The blog code to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getBlogByCode(blogCode) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/api/blogs/${blogCode}`,
+                { headers: this.getHeader() }
+            );
+            
+            console.log("Fetched blog:", response.data);
+            
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blog fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching blog:", error);
+            
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blog"
+            };
+        }
+    }
+
+    /**
+     * Toggle blog visibility
+     * @param {string} blogCode - The blog code to toggle
+     * @param {boolean} hide - True to hide (active=2), false to show (active=1)
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async toggleBlogVisibility(blogCode, hide) {
+        try {
+            if (!blogCode) {
+                throw new Error("Blog code is required");
+            }
+    
+            // Fetch current blog data
+            const getBlogResponse = await this.getBlogByCode(blogCode);
+            if (getBlogResponse.status !== 200) {
+                throw new Error("Failed to fetch blog data");
+            }
+    
+            const currentBlogData = getBlogResponse.data;
+            const newActiveStatus = !hide; // Toggle boolean value
+    
+            console.log(`Toggling blog visibility: ${blogCode} -> active = ${newActiveStatus}`);
+    
+            // Update the blog
+            const response = await this.updateBlog(blogCode, {
+                ...currentBlogData,
+                active: newActiveStatus
+            });
+    
+            console.log("Toggle visibility response:", response.data);
+    
+            if (response.status === 200) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: `Blog ${hide ? 'hidden' : 'shown'} successfully`
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: response.message || "Failed to toggle visibility"
+                };
+            }
+        } catch (error) {
+            console.error("Error toggling blog visibility:", error);
+    
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to toggle blog visibility"
+            };
+        }
+    }
+    
+    
 }

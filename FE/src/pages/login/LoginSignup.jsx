@@ -138,15 +138,19 @@ const LoginSignup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
+      console.log("Signup attempt with:", signupData); // Thêm log
       const response = await ApiService.registerUser(signupData);
-      if (response.status === 200) {
+      console.log("API Response:", response); // Thêm log
+      
+      if (response && response.status === 200) {
         Swal.fire("Success", "User Successfully Registered, Now Please Sign In", "success");
-        navigate("/login")
+        setIsRightPanelActive(false); // Chuyển về tab đăng nhập
       } else {
-        Swal.fire("Error", response.message, "error");
+        Swal.fire("Error", response?.message || "Unable to register user", "error");
       }
     } catch (error) {
-      Swal.fire("Error", error.message || "Unable to register user", "error");
+      console.error("Signup error:", error);
+      Swal.fire("Error", error?.message || "Unable to register user", "error");
     }
   }
 
