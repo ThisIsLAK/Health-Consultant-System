@@ -19,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -69,6 +72,12 @@ public class PsyService {
 
         // Chuyển entity thành response và trả về
         return psychologistMapper.toPsychologistResponse(updatedPsychologist);
+    }
+    public List<UserResponse> getAllPsychologists() {
+        List<User> psychologists = userRepository.findByRole_RoleName("PSYCHOLOGIST");
+        return psychologists.stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
     }
 
     public void deletePsychologist(String psychologistId) {

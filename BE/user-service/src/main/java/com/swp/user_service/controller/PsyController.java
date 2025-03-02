@@ -58,6 +58,14 @@ public class PsyController {
     return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/allpsy")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllPsychologists() {
+        List<UserResponse> psychologists = psyService.getAllPsychologists();
+        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
+                .result(psychologists)
+                .build());
+    }
+
     //program===========================================================================================================
     @GetMapping("/allsupportprograms")
     public ApiResponse<List<SupportProgramResponse>> getAllSupportPrograms() {
