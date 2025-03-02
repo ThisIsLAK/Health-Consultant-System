@@ -1,22 +1,21 @@
 package com.swp.user_service.controller;
 
-import com.swp.user_service.dto.request.AppointmentRequest;
-import com.swp.user_service.dto.request.UserCreationRequest;
-import com.swp.user_service.dto.request.UserUpdateRequest;
-import com.swp.user_service.dto.response.ApiResponse;
-import com.swp.user_service.dto.response.AppointmentResponse;
+import com.swp.user_service.dto.request.*;
+import com.swp.user_service.dto.response.*;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
 import com.swp.user_service.service.AppointmentService;
-import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.service.SupportProgramService;
+import com.swp.user_service.service.UserAnswerService;
 import com.swp.user_service.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +36,10 @@ public class UserController {
 
     UserRepository userRepository;
 
+    SupportProgramService supportProgramService;
+
+    UserAnswerService userAnswerService;
+
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -52,14 +55,14 @@ public class UserController {
                 .build();
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/finduserbyid/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))
                 .build();
     }
 
-    @PutMapping("/{userId}")
+    @PutMapping("/updateuser/{userId}")
     ApiResponse<UserResponse> updateUser(@PathVariable String userId, @RequestBody UserUpdateRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
@@ -98,5 +101,32 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
                 .result(appointments)
                 .build());
+    }
+
+    @GetMapping("/allsupportprograms")
+    public ApiResponse<List<SupportProgramResponse>> getAllSupportPrograms() {
+        return ApiResponse.<List<SupportProgramResponse>>builder()
+                .result(supportProgramService.getAllSupportPrograms())
+                .build();
+    }
+
+    @GetMapping("/findsupportprogrambycode/{programCode}")
+    public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
+        return ApiResponse.<SupportProgramResponse>builder()
+                .result(supportProgramService.findByProgramCode(programCode))
+                .build();
+    }
+
+    @PostMapping("/signupprogram")
+    public ApiResponse<SupportProgramResponse> signupForProgram(@RequestBody @Valid SupportProgramSignupRequest request) {
+        return ApiResponse.<SupportProgramResponse>builder()
+                .result(supportProgramService.signupForProgram(request, request.getEmail()))
+                .build();
+    }
+
+    @PostMapping("/submituseranswer")
+    public ResponseEntity<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
+        UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
+        return ResponseEntity.ok(answer);
     }
 }

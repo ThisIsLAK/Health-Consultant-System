@@ -22,7 +22,11 @@ public enum ErrorCode {
     SUPPORT_PROGRAM_EXIST(1017,"This support program code is exist"),
     SUPPORT_PROGRAM_NOT_EXIST(1018, "This support program is not exist"),
     USER_SIGNUP_ALREADY(1019, "User had been signup this program before"),
-    APPOINTMENT_NOT_EXIST(1020, "Appointment is not exist");
+    APPOINTMENT_NOT_EXIST(1020, "Appointment is not exist"),
+    NAME_REQUIRED(1021, "Name is required"),
+
+    ;   //<<====chu y dau (;)===========================================================================================
+
 
     ErrorCode(int code, String message) {
         this.code = code;
