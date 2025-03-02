@@ -39,6 +39,8 @@ public class UserController {
 
     SurveyService surveyService;
 
+    BlogService blogService;
+
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
@@ -133,5 +135,17 @@ public class UserController {
     public ResponseEntity<SurveyResponse> getSurvey(@PathVariable String surveyId) {
         SurveyResponse survey = surveyService.getSurvey(surveyId);
         return ResponseEntity.ok(survey);
+    }
+
+    @GetMapping("/getblogbycode/{blogCode}")
+    public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
+        BlogResponse blog = blogService.getBlogByBlogCode(blogCode);
+        return ResponseEntity.ok(blog);
+    }
+
+    @GetMapping("/getallblogs")
+    public ResponseEntity<List<BlogResponse>> getAllBlogs() {
+        List<BlogResponse> blogs = blogService.getAllBlogs();
+        return ResponseEntity.ok(blogs);
     }
 }

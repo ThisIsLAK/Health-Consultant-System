@@ -30,5 +30,4 @@ public class SurveyQuestionController {
         SurveyQuestionResponse question = surveyQuestionService.getSurveyQuestion(questionId);
         return ResponseEntity.ok(question);
     }
-
 }
