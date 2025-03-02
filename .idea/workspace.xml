@@ -5,19 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae08766-d695-4a22-9899-e8191617828e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AdminMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AdminMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/PsychologistMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/PsychologistMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyAnswerOptionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyAnswerOptionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserAnswerMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserAnswerMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/BE/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/AddSupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/AddSupportProgram.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/AdminSupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/AdminSupportProgram.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/EditSupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/EditSupportProgram.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/SupportProgram.css" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/SupportProgram.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/ViewSupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportProgram/ViewSupportProgram.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FE/src/pages/components/admin/SupportPrograms/ProgramDetail.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/ProgramDetail.css" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/ProgramDetail.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/ProgramDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/ProgramDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/SupportProgram.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/pages/student/SuppportProgram/SupportProgram.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FE/src/services/SupportProgramService.js" beforeDir="false" afterPath="$PROJECT_DIR$/FE/src/services/SupportProgramService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -39,26 +31,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.user-service [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.user-service [install].executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.UserServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Khoa&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.user-service [clean].executor": "Run",
+    "Maven.user-service [install].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.UserServiceApplication.executor": "Run",
+    "git-widget-placeholder": "Khoa",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="UserServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
       <module name="user-service" />
@@ -98,6 +90,7 @@
       <workItem from="1740635870247" duration="2747000" />
       <workItem from="1740911980403" duration="5939000" />
       <workItem from="1740921629689" duration="1080000" />
+      <workItem from="1740926535933" duration="2979000" />
     </task>
     <servers />
   </component>
