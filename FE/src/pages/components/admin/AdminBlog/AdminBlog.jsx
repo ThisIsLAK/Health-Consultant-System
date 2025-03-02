@@ -13,6 +13,8 @@ const AdminBlog = () => {
     const [error, setError] = useState(null);
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
     const [selectedBlog, setSelectedBlog] = useState(null);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [blogToDelete, setBlogToDelete] = useState(null);
 
     useEffect(() => {
         fetchBlogs();
@@ -47,33 +49,23 @@ const AdminBlog = () => {
         navigate(`/editblog/${blogCode}`);
     };
 
-    const handleToggleVisibility = async (blog) => {
-        setSelectedBlog(blog);
-        setShowConfirmDialog(true);
+    const handleDeleteBlog = (blog) => {
+        setBlogToDelete(blog);
+        setShowDeleteDialog(true);
     };
 
-    const confirmToggleVisibility = async () => {
+    const confirmDeleteBlog = async () => {
         try {
-            const newActiveStatus = !selectedBlog.active; // Toggle boolean
-
-            const response = await ApiService.toggleBlogVisibility(
-                selectedBlog.blogCode, 
-                !newActiveStatus // Backend expects `true` for hidden, `false` for visible
-            );
-
+            const response = await ApiService.deleteBlog(blogToDelete.blogCode);
             if (response.status === 200) {
-                // Update blog list with new boolean status
-                setBlogs(blogs.map(blog => 
-                    blog.blogCode === selectedBlog.blogCode 
-                        ? { ...blog, active: newActiveStatus }
-                        : blog
-                ));
-                setShowConfirmDialog(false);
+                // Remove the deleted blog from the state
+                setBlogs(blogs.filter(blog => blog.blogCode !== blogToDelete.blogCode));
+                setShowDeleteDialog(false);
             } else {
                 setError(response.message);
             }
         } catch (err) {
-            setError('Failed to toggle blog visibility');
+            setError('Failed to delete blog');
             console.error('Error:', err);
         }
     };
@@ -119,10 +111,10 @@ const AdminBlog = () => {
                                             Chỉnh sửa
                                         </button>
                                         <button
-                                            className={`visibility-btn ${!blog.active ? 'show-btn' : 'hide-btn'}`}
-                                            onClick={() => handleToggleVisibility(blog)}
+                                            className="delete-btn"
+                                            onClick={() => handleDeleteBlog(blog)}
                                         >
-                                            {!blog.active ? 'Bỏ ẩn' : 'Ẩn blog'}
+                                            Xóa blog
                                         </button>
                                     </div>
                                 </div>
@@ -135,18 +127,14 @@ const AdminBlog = () => {
                     )}
                 </div>
 
-                {showConfirmDialog && (
+                {showDeleteDialog && (
                     <div className="confirm-dialog-overlay">
                         <div className="confirm-dialog">
-                            <h3>Xác nhận</h3>
-                            <p>
-                                {!selectedBlog.active 
-                                    ? 'Bạn có chắc chắn muốn bỏ ẩn blog này?' 
-                                    : 'Bạn có chắc chắn muốn ẩn blog này?'}
-                            </p>
+                            <h3>Xác nhận xóa</h3>
+                            <p>Bạn có chắc chắn muốn xóa blog này?</p>
                             <div className="confirm-dialog-actions">
-                                <button onClick={confirmToggleVisibility}>Có</button>
-                                <button onClick={() => setShowConfirmDialog(false)}>Không</button>
+                                <button onClick={confirmDeleteBlog}>Có</button>
+                                <button onClick={() => setShowDeleteDialog(false)}>Không</button>
                             </div>
                         </div>
                     </div>

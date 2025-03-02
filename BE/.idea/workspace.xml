@@ -5,27 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9aceaf73-1c00-4d1c-a5df-bf719baafb1f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/BE.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/BE.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AdminMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AdminMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AppointmentMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/AppointmentMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/BlogMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/BlogMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/PsychologistMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/PsychologistMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyAnswerOptionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyAnswerOptionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyQuestionMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/SurveyQuestionMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserAnswerMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserAnswerMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserMapperImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/generated-sources/annotations/com/swp/user_service/mapper/UserMapperImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/surefire-reports/TEST-com.swp.user_service.UserServiceApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/surefire-reports/TEST-com.swp.user_service.UserServiceApplicationTests.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/surefire-reports/TEST-swp.user_service.UserServiceApplicationTests.xml" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/surefire-reports/TEST-swp.user_service.UserServiceApplicationTests.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/surefire-reports/com.swp.user_service.UserServiceApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/surefire-reports/com.swp.user_service.UserServiceApplicationTests.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user-service/target/surefire-reports/swp.user_service.UserServiceApplicationTests.txt" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/target/surefire-reports/swp.user_service.UserServiceApplicationTests.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminBlog/AdminBlog.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminBlog/AdminBlog.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminBlog/AdminBlog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminBlog/AdminBlog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/service/ApiService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +79,7 @@
       <workItem from="1740633075165" duration="945000" />
       <workItem from="1740636646545" duration="3251000" />
       <workItem from="1740880214210" duration="831000" />
-      <workItem from="1740881171614" duration="7345000" />
+      <workItem from="1740881171614" duration="15019000" />
     </task>
     <servers />
   </component>

@@ -34,9 +34,9 @@ export default class ApiService {
         try {
             console.log("Sending login request with:", loginDetails);
             const response = await axios.post(`${this.BASE_URL}/identity/auth/token`, loginDetails);
-            
+
             console.log("Raw login response:", response);
-            
+
             if (response && response.data) {
                 return {
                     status: 200,
@@ -50,7 +50,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Login request failed:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Login failed"
@@ -62,13 +62,13 @@ export default class ApiService {
         try {
             console.log("Fetching user info with token:", localStorage.getItem("token"));
             console.log("Headers:", this.getHeader());
-            
+
             const response = await axios.get(`${this.BASE_URL}/identity/users/myInfo`, {
                 headers: this.getHeader()
             });
-            
+
             console.log("Raw user info response:", response);
-            
+
             if (response.data) {
                 console.log("User info data:", response.data);
                 return {
@@ -83,38 +83,38 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching user info:", error);
-            
+
             if (error.response) {
                 console.error("Error status:", error.response.status);
                 console.error("Error data:", error.response.data);
             }
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch user info"
             };
         }
     }
-    
+
     static async updateUserProfile(userData) {
         try {
             if (!userData.id) {
                 throw new Error("User ID is required for profile update");
             }
-            
+
             // Log the request details for debugging
             console.log("Update user data:", userData);
             console.log("Updating user with ID:", userData.id);
-            
+
             // Using the userId from userData.id for the endpoint
             const response = await axios.put(
-                `${this.BASE_URL}/identity/users/${userData.id}`, 
-                userData, 
+                `${this.BASE_URL}/identity/users/${userData.id}`,
+                userData,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Update response:", response);
-            
+
             return {
                 status: 200,
                 data: response.data,
@@ -122,13 +122,13 @@ export default class ApiService {
             };
         } catch (error) {
             console.error("Error updating user profile:", error);
-            
+
             // Log detailed error information
             if (error.response) {
                 console.error("Error response data:", error.response.data);
                 console.error("Error status:", error.response.status);
             }
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to update profile"
@@ -145,22 +145,22 @@ export default class ApiService {
     static isAuthenticated() {
         return !!localStorage.getItem("token");
     }
-    
+
     // Helper method to check if user is admin
     static isAdmin() {
         const role = this.getUserRole();
         console.log("Checking if admin. Current role:", role);
         return role === 'ADMIN';
     }
-    
+
     static isPsychologist() {
         return this.getUserRole() === 'PSYCHOLOGIST';
     }
-    
+
     static isManager() {
         return this.getUserRole() === 'MANAGER';
     }
-    
+
     static isStudent() {
         const role = this.getUserRole();
         // Both students and parents use the USER interface
@@ -184,8 +184,8 @@ export default class ApiService {
     static checkRoleAndRedirectPath() {
         const role = this.getUserRole();
         let redirectPath = '/';
-        
-        switch(role) {
+
+        switch (role) {
             case 'ADMIN':
                 redirectPath = '/adminuserlist';
                 break;
@@ -198,13 +198,13 @@ export default class ApiService {
             default:
                 redirectPath = '/';
         }
-        
+
         console.log({
             storedToken: localStorage.getItem('token') ? "Token exists" : "No token",
             storedRole: role,
             redirectPath: redirectPath
         });
-        
+
         return {
             role: role,
             redirectPath: redirectPath
@@ -219,9 +219,9 @@ export default class ApiService {
             const response = await axios.get(`${this.BASE_URL}/identity/admin/getAllUser`, {
                 headers: this.getHeader()
             });
-            
+
             console.log("Fetched users:", response.data);
-            
+
             // Check if response follows the {code, message, result} format
             if (response.data && response.data.result !== undefined) {
                 return {
@@ -236,14 +236,14 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching all users:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch users"
             };
         }
     }
-    
+
     /**
      * Get a user by ID
      */
@@ -252,9 +252,9 @@ export default class ApiService {
             const response = await axios.get(`${this.BASE_URL}/identity/admin/getUser/${userId}`, {
                 headers: this.getHeader()
             });
-            
+
             console.log("Fetched user details:", response.data);
-            
+
             // Check if response follows the {code, message, result} format
             if (response.data && response.data.result !== undefined) {
                 return {
@@ -269,14 +269,14 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching user details:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch user details"
             };
         }
     }
-    
+
     /**
      * Update a user by ID
      */
@@ -284,20 +284,20 @@ export default class ApiService {
         try {
             // Using email instead of userId for the endpoint
             const userEmail = userData.email;
-            
+
             if (!userEmail) {
                 throw new Error("User email is required for update");
             }
-            
+
             console.log("Updating user with email:", userEmail);
             console.log("Update data:", userData);
-            
+
             const response = await axios.put(`${this.BASE_URL}/identity/admin/updateUser/${userEmail}`, userData, {
                 headers: this.getHeader()
             });
-            
+
             console.log("Update user response:", response.data);
-            
+
             // Check if response follows the {code, message, result} format
             if (response.data && response.data.result !== undefined) {
                 return {
@@ -314,14 +314,14 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error updating user:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to update user"
             };
         }
     }
-    
+
     /**
      * Get a user by email
      */
@@ -331,9 +331,9 @@ export default class ApiService {
             const response = await axios.get(`${this.BASE_URL}/identity/admin/${encodeURIComponent(email)}`, {
                 headers: this.getHeader()
             });
-            
+
             console.log("Fetched user details:", response.data);
-            
+
             // Handle response format with code, message, result structure
             if (response.data && typeof response.data === 'object') {
                 if (response.data.code !== undefined && response.data.result !== undefined) {
@@ -355,14 +355,14 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching user details:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch user details"
             };
         }
     }
-    
+
     /**
      * Update a user by email
      */
@@ -371,24 +371,24 @@ export default class ApiService {
             if (!email) {
                 throw new Error("User email is required for update");
             }
-            
+
             console.log("Updating user with email:", email);
             console.log("Update data:", userData);
-            
+
             // Ensure we're sending the correct active status
             const dataToSend = {
                 ...userData,
                 active: userData.active === true // ensure it's a boolean
             };
-            
+
             const response = await axios.put(
-                `${this.BASE_URL}/identity/admin/updateUser/${encodeURIComponent(email)}`, 
-                dataToSend, 
+                `${this.BASE_URL}/identity/admin/updateUser/${encodeURIComponent(email)}`,
+                dataToSend,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Update user response:", response.data);
-            
+
             // Handle response format with code, message, result structure
             if (response.data && typeof response.data === 'object') {
                 if (response.data.code !== undefined) {
@@ -419,7 +419,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error updating user:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to update user"
@@ -437,17 +437,17 @@ export default class ApiService {
             if (!blogData.title || !blogData.description || !blogData.blogCode) {
                 throw new Error("Blog title, description, and code are required");
             }
-            
+
             console.log("Creating new blog with data:", blogData);
-            
+
             const response = await axios.post(
                 `${this.BASE_URL}/identity/api/blogs`,  // Updated endpoint to match backend
                 blogData,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Create blog response:", response.data);
-            
+
             // Handle response format
             if (response.data) {
                 return {
@@ -463,7 +463,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error creating blog:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to create blog"
@@ -481,9 +481,9 @@ export default class ApiService {
                 `${this.BASE_URL}/identity/api/blogs`,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Fetched blogs:", response.data);
-            
+
             // Handle response format
             if (response.data) {
                 return {
@@ -499,7 +499,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching blogs:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch blogs"
@@ -518,18 +518,18 @@ export default class ApiService {
             if (!blogCode) {
                 throw new Error("Blog code is required for update");
             }
-            
+
             console.log("Updating blog with code:", blogCode);
             console.log("Update data:", blogData);
-            
+
             const response = await axios.put(
                 `${this.BASE_URL}/identity/api/blogs/${blogCode}`,
                 blogData,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Update blog response:", response.data);
-            
+
             if (response.data) {
                 return {
                     status: 200,
@@ -544,7 +544,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error updating blog:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to update blog"
@@ -563,9 +563,9 @@ export default class ApiService {
                 `${this.BASE_URL}/identity/api/blogs/${blogCode}`,
                 { headers: this.getHeader() }
             );
-            
+
             console.log("Fetched blog:", response.data);
-            
+
             if (response.data) {
                 return {
                     status: 200,
@@ -580,7 +580,7 @@ export default class ApiService {
             }
         } catch (error) {
             console.error("Error fetching blog:", error);
-            
+
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch blog"
@@ -589,57 +589,200 @@ export default class ApiService {
     }
 
     /**
-     * Toggle blog visibility
-     * @param {string} blogCode - The blog code to toggle
-     * @param {boolean} hide - True to hide (active=2), false to show (active=1)
-     * @returns {Promise<Object>} Response object with status and data/message
+     * Delete a blog
+     * @param {string} blogCode - The blog code to delete
+     * @returns {Promise<Object>} Response object with status and message
      */
-    static async toggleBlogVisibility(blogCode, hide) {
+    static async deleteBlog(blogCode) {
         try {
             if (!blogCode) {
                 throw new Error("Blog code is required");
             }
-    
-            // Fetch current blog data
-            const getBlogResponse = await this.getBlogByCode(blogCode);
-            if (getBlogResponse.status !== 200) {
-                throw new Error("Failed to fetch blog data");
+
+            console.log("Deleting blog with code:", blogCode);
+
+            const response = await axios.delete(
+                `${this.BASE_URL}/identity/api/blogs/${blogCode}`,
+                { headers: this.getHeader() }
+            );
+
+            return {
+                status: 200,
+                message: "Blog deleted successfully"
+            };
+        } catch (error) {
+            console.error("Error deleting blog:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to delete blog"
+            };
+        }
+    }
+
+    /**
+     * Create a new survey
+     * @param {Object} surveyData - The survey data containing title and description
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async createSurvey(surveyData) {
+        try {
+            if (!surveyData.title || !surveyData.description) {
+                throw new Error("Survey title and description are required");
             }
-    
-            const currentBlogData = getBlogResponse.data;
-            const newActiveStatus = !hide; // Toggle boolean value
-    
-            console.log(`Toggling blog visibility: ${blogCode} -> active = ${newActiveStatus}`);
-    
-            // Update the blog
-            const response = await this.updateBlog(blogCode, {
-                ...currentBlogData,
-                active: newActiveStatus
-            });
-    
-            console.log("Toggle visibility response:", response.data);
-    
-            if (response.status === 200) {
+
+            console.log("Creating new survey with data:", surveyData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/api/surveys`,
+                surveyData,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create survey response:", response.data);
+
+            if (response.data) {
                 return {
                     status: 200,
                     data: response.data,
-                    message: `Blog ${hide ? 'hidden' : 'shown'} successfully`
+                    message: "Survey created successfully"
                 };
             } else {
                 return {
                     status: 400,
-                    message: response.message || "Failed to toggle visibility"
+                    message: "Invalid response format"
                 };
             }
         } catch (error) {
-            console.error("Error toggling blog visibility:", error);
-    
+            console.error("Error creating survey:", error);
+
             return {
                 status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to toggle blog visibility"
+                message: error.response?.data?.message || error.message || "Failed to create survey"
             };
         }
     }
-    
-    
+
+    /**
+     * Get a survey by ID
+     * @param {string} surveyId - The ID of the survey to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getSurveyById(surveyId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/api/surveys/${surveyId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched survey:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Survey fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching survey:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey"
+            };
+        }
+    }
+
+    /**
+ * Create a new survey question
+ * @param {Object} questionData - The question data containing surveyId, questionText, and answerOptions
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async createSurveyQuestion(questionData) {
+        try {
+
+            console.log("🛠️ Debugging questionData:", questionData);
+            if (!questionData.surveyId || !questionData.questionText || !questionData.answerOptions) {
+                throw new Error("Survey ID, question text, and answer options are required");
+            }
+
+            console.log("Creating new survey question with data:", questionData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/api/survey-questions`,
+                {
+                    surveyId: questionData.surveyId,
+                    questionText: questionData.questionText,
+                    answerOptions: questionData.answerOptions
+                },
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create survey question response:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Survey question created successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error creating survey question:", error);
+            console.log("Survey questions before sending:", survey.questions);
+
+            return {
+                
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create survey question"
+            };
+        }
+    }
+
+    /**
+     * Get a survey question by ID
+     * @param {string} questionId - The ID of the question to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getSurveyQuestionById(questionId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/api/survey-questions/${questionId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched survey question:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Survey question fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching survey question:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey question"
+            };
+        }
+    }
 }
