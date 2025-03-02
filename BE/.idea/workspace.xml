@@ -7,7 +7,6 @@
     <list default="true" id="9aceaf73-1c00-4d1c-a5df-bf719baafb1f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminSurvey/AdminSurvey.css" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminSurvey/AdminSurvey.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminSurvey/AdminSurvey.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/admin/AdminSurvey/AdminSurvey.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/service/ApiService.js" afterDir="false" />
     </list>

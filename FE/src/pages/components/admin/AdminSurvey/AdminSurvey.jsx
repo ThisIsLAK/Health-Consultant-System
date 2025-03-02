@@ -36,29 +36,80 @@ const AdminSurvey = () => {
         navigate('/editsurvey');
     };
 
-    const handleDeleteClick = (id) => {
-        setDeleteConfirm({ show: true, id: id });
+    const handleDeleteClick = (surveyId) => {
+        if (!surveyId) {
+            console.error("Lỗi: Không có ID hợp lệ!");
+            return;
+        }
+        console.log("Survey ID được chọn để xóa:", surveyId); // Debug ID
+        setDeleteConfirm({ show: true, id: surveyId });
     };
 
     const handleDeleteCancel = () => {
         setDeleteConfirm({ show: false, id: null });
     };
 
+    // const handleDeleteConfirm = async () => {
+    //     try {
+    //         setLoading(true);
+    //         const response = await ApiService.deleteSurvey(deleteConfirm.id);
+    //         if (response.status === 200) {
+    //             // Cập nhật lại danh sách survey sau khi xóa thành công
+    //             fetchSurveys();
+    //             setDeleteConfirm({ show: false, id: null });
+    //         } else {
+    //             setError(response.message);
+    //             setLoading(false);
+    //         }
+    //     } catch (err) {
+    //         setError('Failed to delete survey');
+    //         setLoading(false);
+    //     }
+    // };
+
+    // const handleDeleteConfirm = async () => {
+    //     if (!deleteConfirm.id) return; // Kiểm tra ID có hợp lệ không
+    //     try {
+    //         setLoading(true);
+    //         const response = await ApiService.deleteSurvey(deleteConfirm.id); // Truyền đúng ID
+    //         if (response.status === 200) {
+    //             fetchSurveys(); // Cập nhật danh sách sau khi xóa
+    //         } else {
+    //             setError(response.message);
+    //         }
+    //     } catch (err) {
+    //         setError('Failed to delete survey');
+    //     } finally {
+    //         setLoading(false);
+    //         setDeleteConfirm({ show: false, id: null }); // Reset trạng thái
+    //     }
+    // };
+
     const handleDeleteConfirm = async () => {
+        console.log("ID cần xóa:", deleteConfirm.id); // Debug ID
+
+        if (!deleteConfirm.id) {
+            console.error("Không có ID để xóa!");
+            return;
+        }
+
         try {
             setLoading(true);
-            const response = await ApiService.deleteSurvey(deleteConfirm.id);
+            const response = await ApiService.deleteSurvey(deleteConfirm.id); // Gọi API
+            console.log("Kết quả API:", response); // Debug response
+
             if (response.status === 200) {
-                // Cập nhật lại danh sách survey sau khi xóa thành công
-                fetchSurveys();
-                setDeleteConfirm({ show: false, id: null });
+                console.log("Xóa thành công!");
+                fetchSurveys(); // Cập nhật danh sách khảo sát
             } else {
                 setError(response.message);
-                setLoading(false);
             }
         } catch (err) {
+            console.error("Lỗi khi xóa:", err);
             setError('Failed to delete survey');
+        } finally {
             setLoading(false);
+            setDeleteConfirm({ show: false, id: null }); // Reset trạng thái
         }
     };
 
@@ -100,27 +151,30 @@ const AdminSurvey = () => {
                     )}
 
                     <div className="survey-list">
-                        {surveys.map(survey => (
-                            <div className="survey-card" key={survey.id}>
-                                <div className="survey-card-content">
-                                    <h2 className="survey-name">{survey.title}</h2>
-                                    <p className="survey-description">{survey.description}</p>                                  
-                                    <div className="survey-status">
-                                        <span className={`status-badge ${survey.status?.toLowerCase()}`}>
-                                            {survey.status || 'Draft'}
-                                        </span>
+                        {surveys.map((survey, index) => {
+                            console.log(`Survey ${index}:`, survey); // Debug từng survey
+                            return (
+                                <div className="survey-card" key={survey.surveyId}>
+                                    <div className="survey-card-content">
+                                        <h2 className="survey-name">{survey.title}</h2>
+                                        <p className="survey-description">{survey.description}</p>
+                                        <div className="survey-status">
+                                            <span className={`status-badge ${survey.status?.toLowerCase()}`}>
+                                                {survey.status || 'Draft'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="survey-card-actions">
+                                        <button
+                                            className="delete-button"
+                                            onClick={() => handleDeleteClick(survey.surveyId)}
+                                        >
+                                            Xóa
+                                        </button>
                                     </div>
                                 </div>
-                                <div className="survey-card-actions">
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => handleDeleteClick(survey.id)}
-                                    >
-                                        Xóa
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </main>

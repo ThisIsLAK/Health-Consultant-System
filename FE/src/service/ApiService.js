@@ -546,10 +546,10 @@ export default class ApiService {
                 `${this.BASE_URL}/identity/admin/getblogbycode/${blogCode}`,
                 { headers: this.getHeader() }
             );
-    
+
             console.log("Raw blog response:", response);  // Debug log
             console.log("Fetched blog data:", response.data);
-    
+
             if (response.data) {
                 return {
                     status: 200,
@@ -806,6 +806,39 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch surveys"
+            };
+        }
+    }
+
+    /**
+ * Delete a survey by ID
+ * @param {string} surveyId - The survey ID to delete
+ * @returns {Promise<Object>} Response object with status and message
+ */
+    static async deleteSurvey(surveyId) {
+        try {
+            if (!surveyId) {
+                throw new Error("Survey ID is required");
+            }
+
+            console.log("Deleting survey with ID:", surveyId);
+
+            const response = await axios.delete(
+                `${this.BASE_URL}/identity/admin/delete-survey-by-surveyid/${surveyId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Delete survey response:", response.data);
+
+            return {
+                status: 200,
+                message: "Survey deleted successfully"
+            };
+        } catch (error) {
+            console.error("Error deleting survey:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to delete survey"
             };
         }
     }
