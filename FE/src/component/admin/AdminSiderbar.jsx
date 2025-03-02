@@ -7,7 +7,6 @@ const AdminSidebar = () => {
   return (
     <aside id='sidebar' className='sidebar'>
       <ul className='sidebar-nav' id='sidebar-nav'>
-        <li className='nav-heading'>User Management</li>
         <li className='nav-item'>
           <NavLink to="/adminuserlist" className='nav-link'>
             <FaUsers className="nav-icon" />
@@ -21,21 +20,19 @@ const AdminSidebar = () => {
           </NavLink>
         </li>
 
-        <li className='nav-heading'>Support Programs</li>
         <li className='nav-item'>
-          <NavLink to="/admin-support-programs" className='nav-link'>
+          <NavLink to="/adminsupport" className='nav-link'>
             <FaListAlt className="nav-icon" />
             <span>All Programs</span>
           </NavLink>
         </li>
         <li className='nav-item'>
-          <NavLink to="/admin-create-program" className='nav-link'>
+          <NavLink to="/addsupport" className='nav-link'>
             <FaRegHandshake className="nav-icon" />
             <span>Create Program</span>
           </NavLink>
         </li>
 
-        <li className='nav-heading'>Content Management</li>
         <li className='nav-item'>
           <NavLink to="/adminblog" className='nav-link'>
             <FaBlog className="nav-icon" />

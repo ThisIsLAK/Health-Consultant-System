@@ -55,11 +55,6 @@ import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
 import EditBlog from './pages/components/admin/EditBlog/EditBlog';
 import AdminCreateUser from './pages/components/admin/CreateUser/AdminCreateUser';
 
-// Support Programs Admin Routes
-import SupportProgramList from './pages/components/admin/SupportPrograms/SupportProgramList';
-import CreateSupportProgram from './pages/components/admin/SupportPrograms/CreateSupportProgram';
-import EditSupportProgram from './pages/components/admin/SupportPrograms/EditSupportProgram';
-
 function App() {
   return (
     <BrowserRouter>
@@ -115,11 +110,6 @@ function App() {
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/editblog/:blogId' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />} />
         
-        {/* Support Programs Routes */}
-        <Route path='/admin-support-programs' element={<ProtectedRoute element={<SupportProgramList />} allowedRoles={['ADMIN']} />} />
-        <Route path='/admin-create-program' element={<ProtectedRoute element={<CreateSupportProgram />} allowedRoles={['ADMIN']} />} />
-        <Route path='/admin-program-detail/:programCode' element={<ProtectedRoute element={<ProgramDetail />} allowedRoles={['ADMIN']} />} />
-        <Route path='/admin-edit-program/:programCode' element={<ProtectedRoute element={<EditSupportProgram />} allowedRoles={['ADMIN']} />} />
       </Routes>
     </BrowserRouter>
   );
