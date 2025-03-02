@@ -6,10 +6,7 @@ import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
-import com.swp.user_service.service.AppointmentService;
-import com.swp.user_service.service.SupportProgramService;
-import com.swp.user_service.service.UserAnswerService;
-import com.swp.user_service.service.UserService;
+import com.swp.user_service.service.*;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -39,6 +36,10 @@ public class UserController {
     SupportProgramService supportProgramService;
 
     UserAnswerService userAnswerService;
+
+    SurveyService surveyService;
+
+    BlogService blogService;
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
@@ -128,5 +129,23 @@ public class UserController {
     public ResponseEntity<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
         UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
         return ResponseEntity.ok(answer);
+    }
+
+    @GetMapping("/takesurvey/{surveyId}")
+    public ResponseEntity<SurveyResponse> getSurvey(@PathVariable String surveyId) {
+        SurveyResponse survey = surveyService.getSurvey(surveyId);
+        return ResponseEntity.ok(survey);
+    }
+
+    @GetMapping("/getblogbycode/{blogCode}")
+    public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
+        BlogResponse blog = blogService.getBlogByBlogCode(blogCode);
+        return ResponseEntity.ok(blog);
+    }
+
+    @GetMapping("/getallblogs")
+    public ResponseEntity<List<BlogResponse>> getAllBlogs() {
+        List<BlogResponse> blogs = blogService.getAllBlogs();
+        return ResponseEntity.ok(blogs);
     }
 }
