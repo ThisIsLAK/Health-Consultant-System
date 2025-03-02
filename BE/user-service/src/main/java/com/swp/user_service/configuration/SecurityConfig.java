@@ -43,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/manager/**").hasAnyRole("MANAGER","ADMIN")
                         .requestMatchers("/psychologists/**").hasAnyRole("MANAGER", "ADMIN", "PSYCHOLOGIST")
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated());
 
         httpSecurity.oauth2ResourceServer(oauth2
@@ -96,7 +97,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
-
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/v3/api-docs/**",
+            "/v3/api-docs.yaml",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
+    };
 }
 
 

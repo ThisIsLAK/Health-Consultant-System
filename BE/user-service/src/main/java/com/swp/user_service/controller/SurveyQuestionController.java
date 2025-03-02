@@ -23,7 +23,7 @@ public class SurveyQuestionController {
         SurveyQuestionResponse question = surveyQuestionService.createSurveyQuestion(request);
         return ResponseEntity.ok(question);
     }
-
+ 
     @GetMapping("/{questionId}")
     public ResponseEntity<SurveyQuestionResponse> getSurveyQuestion(@PathVariable String questionId) {
         SurveyQuestionResponse question = surveyQuestionService.getSurveyQuestion(questionId);
