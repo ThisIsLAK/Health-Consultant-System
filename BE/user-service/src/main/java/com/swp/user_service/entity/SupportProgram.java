@@ -13,25 +13,28 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Program {
+public class SupportProgram {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String programId;
 
+    String programCode;
     String programName;
     String description;
     LocalDate startDate;
     LocalDate endDate;
     Integer registeredUsers;
+
     @ManyToMany
     @JoinTable(
             name = "program_participation",
             joinColumns = @JoinColumn(name = "program_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> participants;
-    private Boolean active;
+    List<User> participants;
+    Boolean active;
+
     @PrePersist
     protected void onCreate() {
         if (active == null) {

@@ -1,6 +1,7 @@
 package com.swp.user_service.mapper;
 
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyQuestionResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.entity.Survey;
@@ -16,6 +17,8 @@ public interface SurveyMapper {
 
     @Mapping(source = "questions", target = "questions")
     SurveyResponse toSurveyResponse(Survey survey);
+
+    AllSurveyResponse toAllSurveyResponse(Survey survey);
 
     List<SurveyQuestionResponse> mapQuestions(List<SurveyQuestion> questions);
 }

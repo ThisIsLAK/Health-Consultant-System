@@ -1,6 +1,7 @@
 package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.service.SurveyService;
 import lombok.AccessLevel;
@@ -9,6 +10,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/surveys")
@@ -22,6 +25,12 @@ public class SurveyController {
     public ResponseEntity<SurveyResponse> createSurvey(@RequestBody SurveyCreationRequest request) {
         SurveyResponse survey = surveyService.createSurvey(request);
         return ResponseEntity.ok(survey);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AllSurveyResponse>> getAllSurveys() {
+        List<AllSurveyResponse> surveys = surveyService.getAllSurveys();
+        return ResponseEntity.ok(surveys);
     }
 
     @GetMapping("/{surveyId}")
