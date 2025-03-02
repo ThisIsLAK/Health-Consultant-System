@@ -11,7 +11,7 @@ public interface SurveyQuestionMapper {
     @Mapping(source = "surveyId", target = "survey.surveyId")
     SurveyQuestion toSurveyQuestion(SurveyQuestionCreationRequest request);
 
-    @Mapping(source = "survey.surveyId", target = "surveyId")
+//    @Mapping(source = "survey.surveyId", target = "surveyId")
     SurveyQuestionResponse toSurveyQuestionResponse(SurveyQuestion question);
 }
 

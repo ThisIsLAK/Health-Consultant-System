@@ -42,7 +42,6 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
 
         SurveyQuestionResponse.SurveyQuestionResponseBuilder surveyQuestionResponse = SurveyQuestionResponse.builder();
 
-        surveyQuestionResponse.surveyId( questionSurveySurveyId( question ) );
         surveyQuestionResponse.questionId( question.getQuestionId() );
         surveyQuestionResponse.questionText( question.getQuestionText() );
         surveyQuestionResponse.answerOptions( surveyAnswerOptionListToSurveyAnswerOptionResponseList( question.getAnswerOptions() ) );
@@ -86,21 +85,6 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         }
 
         return list1;
-    }
-
-    private String questionSurveySurveyId(SurveyQuestion surveyQuestion) {
-        if ( surveyQuestion == null ) {
-            return null;
-        }
-        Survey survey = surveyQuestion.getSurvey();
-        if ( survey == null ) {
-            return null;
-        }
-        String surveyId = survey.getSurveyId();
-        if ( surveyId == null ) {
-            return null;
-        }
-        return surveyId;
     }
 
     protected SurveyAnswerOptionResponse surveyAnswerOptionToSurveyAnswerOptionResponse(SurveyAnswerOption surveyAnswerOption) {
