@@ -2,14 +2,10 @@ package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.request.PsychologistUpdateRequest;
-import com.swp.user_service.dto.response.ApiResponse;
-import com.swp.user_service.dto.response.PsychologistResponse;
-import com.swp.user_service.dto.response.UserAnswerResponse;
-import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.dto.request.SubmitUserAnswerRequest;
+import com.swp.user_service.dto.response.*;
 import com.swp.user_service.entity.UserAnswer;
-import com.swp.user_service.service.PsyService;
-import com.swp.user_service.service.SurveyService;
-import com.swp.user_service.service.UserService;
+import com.swp.user_service.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +22,13 @@ public class PsyController {
     private SurveyService surveyService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SupportProgramService supportProgramService;
+    @Autowired
+    private UserAnswerService userAnswerService;
 
-    @PostMapping
+
+    @PostMapping("/create")
     public ResponseEntity<ApiResponse<PsychologistResponse>> createPsychologist(
             @RequestBody @Valid PsychologistCreationRequest request) {
 
@@ -38,27 +39,42 @@ public class PsyController {
                 .build());
     }
 
-    @DeleteMapping("/{psyId}")
+    @DeleteMapping("/deletepsy/{psyId}")
     public String deletePyschologist(@PathVariable String psyId) {
         psyService.deletePsychologist(psyId);
         return "Pyschologist has been deleted";
     }
 
-    @PutMapping("/{psyId}")
+    @PutMapping("/updatepsy/{psyId}")
     ApiResponse<PsychologistResponse> updatePsy(@PathVariable String psyId, @RequestBody PsychologistUpdateRequest request) {
         return ApiResponse.<PsychologistResponse>builder()
                 .result(psyService.updatePsy(psyId, request))
                 .build();
     }
 
-    @GetMapping("/results/{userId}")
-    public ResponseEntity<List<UserAnswer>> getUserSurveyResults(@PathVariable String userId) {
-        return ResponseEntity.ok(surveyService.getUserSurveyResults(userId));
-    }
-
-    @GetMapping("/{id}")
+    @GetMapping("/findpsybyid/{id}")
     public ResponseEntity<UserResponse> getPsychologistById(@PathVariable String id) {
     UserResponse response = psyService.getPsychologistById(id);
     return ResponseEntity.ok(response);
-}
+    }
+
+    //program===========================================================================================================
+    @GetMapping("/allsupportprograms")
+    public ApiResponse<List<SupportProgramResponse>> getAllSupportPrograms() {
+        return ApiResponse.<List<SupportProgramResponse>>builder()
+                .result(supportProgramService.getAllSupportPrograms())
+                .build();
+    }
+
+    //answer - //survey ================================================================================================
+    @GetMapping("/result")
+    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
+        SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/surveyresultsbyid/{userId}")
+    public ResponseEntity<List<UserAnswer>> getUserSurveyResults(@PathVariable String userId) {
+        return ResponseEntity.ok(surveyService.getUserSurveyResults(userId));
+    }
 }
