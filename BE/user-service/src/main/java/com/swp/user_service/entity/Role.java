@@ -29,7 +29,4 @@ public class Role {
             active = true;
         }
     }
-
-//    @OneToMany(mappedBy = "role")
-//    private List<User> users;
 }

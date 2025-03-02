@@ -106,6 +106,10 @@ public class AdminService {
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
+        if (request.getName() == null || request.getName().trim().isEmpty()) {
+            throw new AppException(ErrorCode.NAME_REQUIRED);
+        }
+
         String roleId = request.getRoleId() != null ? request.getRoleId() : "STUDENT"; // Mặc định là STUDENT nếu không có role được thêm vào trong lúc tạo
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
@@ -114,15 +118,10 @@ public class AdminService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         user.setRole(role);
-//        try {
-//            return userMapper.toUserResponse(userRepository.save(user));
-//        }catch (Exception e) {
-//                throw new AppException(ErrorCode.USER_CREATION_FAILED);
-//            }
         try {
             User savedUser = userRepository.save(user);
 
-            // If the role is PSYCHOLOGIST, create an entry in the psychologist table
+            // if the role is PSYCHOLOGIST, create an entry in the psychologist table (this is for create appointment)
             if ("PSYCHOLOGIST".equals(role.getRoleName())) {
                 Psychologist psychologist = new Psychologist();
                 psychologist.setUser(savedUser);
