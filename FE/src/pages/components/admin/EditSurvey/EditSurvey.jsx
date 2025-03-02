@@ -126,26 +126,6 @@ const EditSurvey = () => {
               required 
             />
           </div>
-          {/* <div className="form-group">
-            <label>Ngày bắt đầu:</label>
-            <input 
-              type="date" 
-              name="startDate" 
-              value={survey.startDate} 
-              onChange={handleInputChange} 
-              required 
-            />
-          </div>
-          <div className="form-group">
-            <label>Ngày kết thúc:</label>
-            <input 
-              type="date" 
-              name="endDate" 
-              value={survey.endDate} 
-              onChange={handleInputChange} 
-              required 
-            />
-          </div> */}
 
           <h3>Các câu hỏi</h3>
           {survey.questions.map((question, qIndex) => (

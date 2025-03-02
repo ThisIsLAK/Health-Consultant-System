@@ -64,7 +64,7 @@ const AdminBlog = () => {
 
             <main id='main' className='main'>
                 <div className="blog-header">
-                    <PageTitle page="Quản lý bài viết" />
+                    <PageTitle page="Blog List" />
                     <button
                         className="add-blog-btn"
                         onClick={() => navigate('/addblog')}

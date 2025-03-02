@@ -613,31 +613,50 @@ export default class ApiService {
             console.log("Creating new survey with data:", surveyData);
 
             const response = await axios.post(
-                `${this.BASE_URL}/identity/api/surveys`,
+                `${this.BASE_URL}/identity/admin/createsurvey`,
                 surveyData,
                 { headers: this.getHeader() }
             );
 
             console.log("Create survey response:", response.data);
 
-            if (response.data) {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey created successfully"
-                };
-            } else {
-                return {
-                    status: 400,
-                    message: "Invalid response format"
-                };
-            }
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey created successfully"
+            };
         } catch (error) {
             console.error("Error creating survey:", error);
-
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to create survey"
+            };
+        }
+    }
+
+    /**
+     * Get all surveys
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllSurveys() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/allsurveys`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched surveys:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Surveys fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching surveys:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch surveys"
             };
         }
     }
@@ -650,27 +669,19 @@ export default class ApiService {
     static async getSurveyById(surveyId) {
         try {
             const response = await axios.get(
-                `${this.BASE_URL}/identity/api/surveys/${surveyId}`,
+                `${this.BASE_URL}/identity/admin/findsurveybyid/${surveyId}`,
                 { headers: this.getHeader() }
             );
 
             console.log("Fetched survey:", response.data);
 
-            if (response.data) {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey fetched successfully"
-                };
-            } else {
-                return {
-                    status: 400,
-                    message: "Invalid response format"
-                };
-            }
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey fetched successfully"
+            };
         } catch (error) {
             console.error("Error fetching survey:", error);
-
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch survey"
@@ -694,7 +705,7 @@ export default class ApiService {
             console.log("Creating new survey question with data:", questionData);
 
             const response = await axios.post(
-                `${this.BASE_URL}/identity/api/survey-questions`,
+                `${this.BASE_URL}/identity/admin/createsurveyquestion`,
                 {
                     surveyId: questionData.surveyId,
                     questionText: questionData.questionText,
@@ -737,7 +748,7 @@ export default class ApiService {
     static async getSurveyQuestionById(questionId) {
         try {
             const response = await axios.get(
-                `${this.BASE_URL}/identity/api/survey-questions/${questionId}`,
+                `${this.BASE_URL}/identity/admin/findsurveyquestionbyid/${questionId}`,
                 { headers: this.getHeader() }
             );
 
@@ -772,7 +783,7 @@ export default class ApiService {
     static async getAllSurveys() {
         try {
             const response = await axios.get(
-                `${this.BASE_URL}/identity/api/surveys`,
+                `${this.BASE_URL}/identity/admin/allsurveys`,
                 { headers: this.getHeader() }
             );
 
