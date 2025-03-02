@@ -2,6 +2,8 @@ package com.swp.user_service.mapper;
 
 import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.entity.Appointment;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
@@ -25,5 +27,19 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         appointmentResponse.timeSlot( appointment.getTimeSlot() );
 
         return appointmentResponse.build();
+    }
+
+    @Override
+    public List<AppointmentResponse> toAppointmentResponses(List<Appointment> appointments) {
+        if ( appointments == null ) {
+            return null;
+        }
+
+        List<AppointmentResponse> list = new ArrayList<AppointmentResponse>( appointments.size() );
+        for ( Appointment appointment : appointments ) {
+            list.add( toAppointmentResponse( appointment ) );
+        }
+
+        return list;
     }
 }

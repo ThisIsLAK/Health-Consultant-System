@@ -12,6 +12,7 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentResponse {
+//    String userId;
     String appointmentId;
     Date appointmentDate;
     String timeSlot;

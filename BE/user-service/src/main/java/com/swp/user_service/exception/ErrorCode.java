@@ -18,7 +18,8 @@ public enum ErrorCode {
     INVALID_SLOT(1014, "Time slot must be one of: 8h-10h, 10h-12h, 13h-15h, 15h-17h"),
     PYSOCHOLOGIST_NOT_ACTIVE(1015, "Psychologist is not active "),
     SLOT_IS_BOOKING(1016, "This time slot is already booked"),
-    NOT_PSYCHOLOGIST(1016, "This is not a psychologist")
+    NOT_PSYCHOLOGIST(1016, "This is not a psychologist"),
+    APPOINTMENT_NOT_EXIST(1017, "Appointment is not exist")
 
     ;
 

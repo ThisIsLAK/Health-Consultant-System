@@ -2,11 +2,9 @@ package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.request.PsychologistUpdateRequest;
-import com.swp.user_service.dto.response.ApiResponse;
-import com.swp.user_service.dto.response.PsychologistResponse;
-import com.swp.user_service.dto.response.UserAnswerResponse;
-import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.dto.response.*;
 import com.swp.user_service.entity.UserAnswer;
+import com.swp.user_service.service.AppointmentService;
 import com.swp.user_service.service.PsyService;
 import com.swp.user_service.service.SurveyService;
 import com.swp.user_service.service.UserService;
@@ -26,6 +24,8 @@ public class PsyController {
     private SurveyService surveyService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<PsychologistResponse>> createPsychologist(
@@ -60,5 +60,19 @@ public class PsyController {
     public ResponseEntity<UserResponse> getPsychologistById(@PathVariable String id) {
     UserResponse response = psyService.getPsychologistById(id);
     return ResponseEntity.ok(response);
-}
+    }
+
+    @GetMapping("/appointmentview/{psychologistId}")
+    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getPsychologistAppointments(
+            @PathVariable String psychologistId) {
+        List<AppointmentResponse> appointments = appointmentService.getPsychologistAppointments(psychologistId);
+
+        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+                .result(appointments)
+                .build());
+    }
+
+
+
+
 }
