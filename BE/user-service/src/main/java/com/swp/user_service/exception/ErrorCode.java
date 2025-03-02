@@ -18,8 +18,10 @@ public enum ErrorCode {
     INVALID_SLOT(1014, "Time slot must be one of: 8h-10h, 10h-12h, 13h-15h, 15h-17h"),
     PYSOCHOLOGIST_NOT_ACTIVE(1015, "Psychologist is not active "),
     SLOT_IS_BOOKING(1016, "This time slot is already booked"),
-    NOT_PSYCHOLOGIST(1016, "This is not a psychologist")
-
+    NOT_PSYCHOLOGIST(1016, "This is not a psychologist"),
+    SUPPORT_PROGRAM_EXIST(1017,"This support program code is exist"),
+    SUPPORT_PROGRAM_NOT_EXIST(1018, "This support program is not exist"),
+    USER_SIGNUP_ALREADY(1019, "User had been signup this program before")
     ;
 
     ErrorCode(int code, String message) {

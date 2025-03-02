@@ -2,10 +2,7 @@ package com.swp.user_service.dto.request;
 
 import com.swp.user_service.entity.Role;
 import jakarta.persistence.PrePersist;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -16,15 +13,18 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserCreationRequest {
 
-    @Size(min = 3, message = "USERNAME_INVALID")
+    @NotNull
+    @Size(min = 2, message = "USERNAME_INVALID")
     String name;
 
+    @NotNull
     @Pattern(
             regexp = "^[A-Za-z0-9_]+@gmail.com",
             message = "EMAIL_INVALID"
     )
     String email;
 
+    @NotNull
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
 
