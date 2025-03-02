@@ -1,50 +1,58 @@
 import React from 'react';
-import "./AdminSidebar.css";
+import { NavLink } from 'react-router-dom';
+import { FaUsers, FaBlog, FaChartBar, FaPlusCircle, FaListAlt, FaRegHandshake } from 'react-icons/fa';
+import './AdminSidebar.css';
 
 const AdminSidebar = () => {
   return (
     <aside id='sidebar' className='sidebar'>
       <ul className='sidebar-nav' id='sidebar-nav'>
-
-      <li className='nav-item'>
-          <a href="/#" className='nav-link'>
-            <i className='bi bi-calendar-check'></i>
+        <li className='nav-heading'>User Management</li>
+        <li className='nav-item'>
+          <NavLink to="/adminuserlist" className='nav-link'>
+            <FaUsers className="nav-icon" />
             <span>User List</span>
-          </a>
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink to="/createuser" className='nav-link'>
+            <FaPlusCircle className="nav-icon" />
+            <span>Create User</span>
+          </NavLink>
         </li>
 
+        <li className='nav-heading'>Support Programs</li>
         <li className='nav-item'>
-          <a href="/adminsurvey" className='nav-link'>
-            <i className='bi bi-calendar-check'></i>
-            <span>Survey</span>
-          </a>
+          <NavLink to="/admin-support-programs" className='nav-link'>
+            <FaListAlt className="nav-icon" />
+            <span>All Programs</span>
+          </NavLink>
+        </li>
+        <li className='nav-item'>
+          <NavLink to="/admin-create-program" className='nav-link'>
+            <FaRegHandshake className="nav-icon" />
+            <span>Create Program</span>
+          </NavLink>
         </li>
 
+        <li className='nav-heading'>Content Management</li>
         <li className='nav-item'>
-          <a href="/#" className='nav-link'>
-            <i className='bi bi-calendar-check'></i>
-            <span>Appointments</span>
-          </a>
+          <NavLink to="/adminblog" className='nav-link'>
+            <FaBlog className="nav-icon" />
+            <span>Blog Management</span>
+          </NavLink>
         </li>
-
         <li className='nav-item'>
-          <a href="/adminblog" className='nav-link'>
-            <i className='bi bi-grid'></i>
-            <span>Blogs</span>
-          </a>
-        </li>
-
-        <li className='nav-item'>
-          <a href="/#" className='nav-link'>
-            <i className='bi bi-clock-history'></i>
-            <span>Appointment History</span>
-          </a>
+          <NavLink to="/adminsurvey" className='nav-link'>
+            <FaChartBar className="nav-icon" />
+            <span>Survey Management</span>
+          </NavLink>
         </li>
 
         <li className='nav-item'>
           <a
             href="#"
-            className='nav-link collapsed'  // Matching CSS for collapsed style
+            className='nav-link collapsed'
             data-bs-target="#settings-nav"
             data-bs-toggle="collapse">
             <i className='bi bi-gear'></i>
@@ -53,7 +61,7 @@ const AdminSidebar = () => {
           </a>
           <ul
             id='settings-nav'
-            className='nav-content collapse'  // Matching CSS for collapse content
+            className='nav-content collapse'
             data-bs-parent='#sidebar-nav'>
             <li>
               <a href="/adminaccount">

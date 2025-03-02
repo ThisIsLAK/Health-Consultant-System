@@ -13,8 +13,20 @@ export default class ApiService {
 
     /**AUTh && USERS API */
     static async registerUser(registration) {
-        const response = await axios.post(`${this.BASE_URL}/identity/users`, registration)
-        return response.data;
+        try {
+            const response = await axios.post(`${this.BASE_URL}/identity/users`, registration);
+            return {
+                status: response.status,
+                data: response.data,
+                message: "Registration successful"
+            };
+        } catch (error) {
+            console.error("Registration error:", error);
+            return {
+                status: error.response?.status || 500,
+                message: error.response?.data?.message || "Registration failed"
+            };
+        }
     }
 
     // Make sure the roleId mapping is correct
@@ -411,84 +423,6 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to update user"
-            };
-        }
-    }
-    
-    /**
-     * Create a new user (Admin only)
-     * @param {Object} userData - User data including name, email, password, roleId
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async createUserByAdmin(userData) {
-        try {
-            if (!userData.name || !userData.email || !userData.password || !userData.roleId) {
-                throw new Error("Required fields missing: name, email, password, roleId");
-            }
-            
-            console.log("Creating user with data:", {
-                name: userData.name,
-                email: userData.email,
-                roleId: userData.roleId,
-                password: '[REDACTED]', // Don't log the actual password
-            });
-            
-            // Use the correct endpoint path
-            const response = await axios.post(
-                `${this.BASE_URL}/identity/admin/createUserByAdmin`,
-                userData,
-                { headers: this.getHeader() }
-            );
-            
-            console.log("Create user response:", response.data);
-            
-            if (response.data) {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "User created successfully"
-                };
-            } else {
-                return {
-                    status: 400,
-                    message: "Invalid response format"
-                };
-            }
-        } catch (error) {
-            console.error("Error creating user:", error);
-            
-            // Handle specific error cases
-            if (error.response?.status === 409) {
-                return {
-                    status: 409,
-                    message: "Email already exists"
-                };
-            }
-            
-            if (error.response?.data?.code === 'EMAIL_EXIST') {
-                return {
-                    status: 409,
-                    message: "Email already exists"
-                };
-            }
-            
-            if (error.response?.data?.code === 'ROLE_NOT_FOUND') {
-                return {
-                    status: 400,
-                    message: "Invalid role selected"
-                };
-            }
-            
-            if (error.response?.data?.code === 'USER_CREATION_FAILED') {
-                return {
-                    status: 500,
-                    message: "Failed to create user due to a server error"
-                };
-            }
-            
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to create user"
             };
         }
     }
