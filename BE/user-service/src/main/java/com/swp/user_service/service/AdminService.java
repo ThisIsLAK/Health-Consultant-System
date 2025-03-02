@@ -4,11 +4,13 @@ import com.swp.user_service.dto.request.ResetPasswordRequest;
 import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
 import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.entity.Psychologist;
 import com.swp.user_service.entity.Role;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.UserMapper;
+import com.swp.user_service.repository.PsyRepository;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -33,6 +35,7 @@ public class AdminService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
+    PsyRepository psyRepository;
 
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -111,11 +114,25 @@ public class AdminService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         user.setRole(role);
+//        try {
+//            return userMapper.toUserResponse(userRepository.save(user));
+//        }catch (Exception e) {
+//                throw new AppException(ErrorCode.USER_CREATION_FAILED);
+//            }
         try {
-            return userMapper.toUserResponse(userRepository.save(user));
-        }catch (Exception e) {
-                throw new AppException(ErrorCode.USER_CREATION_FAILED);
+            User savedUser = userRepository.save(user);
+
+            // If the role is PSYCHOLOGIST, create an entry in the psychologist table
+            if ("PSYCHOLOGIST".equals(role.getRoleName())) {
+                Psychologist psychologist = new Psychologist();
+                psychologist.setUser(savedUser);
+                psyRepository.save(psychologist);
             }
+
+            return userMapper.toUserResponse(savedUser);
+        } catch (Exception e) {
+            throw new AppException(ErrorCode.USER_CREATION_FAILED);
+        }
     }
 
 }

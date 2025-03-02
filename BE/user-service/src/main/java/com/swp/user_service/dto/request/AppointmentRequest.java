@@ -15,13 +15,18 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentRequest {
     @NotBlank
+    String userId;
+
+    @NotBlank
+    String psychologistId;
+
     String appointmentId;
 
     @NotNull
-    Date appointmentDate; // Đổi từ @NotBlank -> @NotNull vì Date không phải String
+    Date appointmentDate;
 
     @NotBlank
-    String timeSlot; // Thêm timeSlot để khớp với entity
+    String timeSlot;
 
     private Boolean active;
     @PrePersist

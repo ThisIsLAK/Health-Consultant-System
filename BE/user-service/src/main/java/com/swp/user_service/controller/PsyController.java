@@ -24,6 +24,8 @@ public class PsyController {
     private PsyService psyService;
     @Autowired
     private SurveyService surveyService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping
     public ResponseEntity<ApiResponse<PsychologistResponse>> createPsychologist(
@@ -53,4 +55,10 @@ public class PsyController {
     public ResponseEntity<List<UserAnswer>> getUserSurveyResults(@PathVariable String userId) {
         return ResponseEntity.ok(surveyService.getUserSurveyResults(userId));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponse> getPsychologistById(@PathVariable String id) {
+    UserResponse response = psyService.getPsychologistById(id);
+    return ResponseEntity.ok(response);
+}
 }

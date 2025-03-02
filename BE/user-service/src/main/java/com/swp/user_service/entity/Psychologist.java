@@ -8,9 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Psychologist {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @Column(name = "psy_id", length = 50)
+    private String psyId;
 
     private String name;
     private String email;
@@ -24,10 +26,9 @@ public class Psychologist {
             active = true;
         }
     }
+    @OneToOne
+    @JoinColumn(name = "psy_id", referencedColumnName = "user_id")
+    private User user;
 
-
-//    @ManyToOne
-//    @JoinColumn(name = "role_id", nullable = false)
-//    Role role;
 }
 

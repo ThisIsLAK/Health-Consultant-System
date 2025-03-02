@@ -3,10 +3,13 @@ package com.swp.user_service.service;
 import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.request.PsychologistUpdateRequest;
 import com.swp.user_service.dto.response.PsychologistResponse;
+import com.swp.user_service.dto.response.UserResponse;
 import com.swp.user_service.entity.Psychologist;
+import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.PsychologistMapper;
+import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.PsyRepository;
 import com.swp.user_service.repository.UserRepository;
 import lombok.AccessLevel;
@@ -26,6 +29,7 @@ public class PsyService {
     UserRepository userRepository;
     PsychologistMapper psychologistMapper;
     PasswordEncoder passwordEncoder;
+    UserMapper userMapper;
 
     public PsychologistResponse createPsychologist(PsychologistCreationRequest request) {
         if (psychologistRepository.existsByEmail(request.getEmail())) {
@@ -39,11 +43,16 @@ public class PsyService {
         return psychologistMapper.toPsychologistResponse(psychologistRepository.save(psychologist));
     }
 
-    public PsychologistResponse getPsychologistById(String id) {
-        Psychologist psychologist = psychologistRepository.findById(id)
+    public UserResponse getPsychologistById(String id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
-        return psychologistMapper.toPsychologistResponse(psychologist);
+        // Kiểm tra user có đúng role không (để tránh lấy nhầm user)
+        if (!"PSYCHOLOGIST".equals(user.getRole().getRoleName())) {
+            throw new AppException(ErrorCode.NOT_PSYCHOLOGIST);
+        }
+
+        return userMapper.toUserResponse(user);
     }
     public PsychologistResponse updatePsy(String psyId, PsychologistUpdateRequest request) {
         // Tìm psychologist theo ID, nếu không tồn tại thì ném lỗi

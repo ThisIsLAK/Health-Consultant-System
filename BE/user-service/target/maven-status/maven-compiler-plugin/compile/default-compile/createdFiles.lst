@@ -1,4 +1,8 @@
 com\swp\user_service\configuration\SecurityConfig.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\mapper\BlogMapperImpl.class
+>>>>>>> Nam
 com\swp\user_service\entity\Psychologist.class
 com\swp\user_service\mapper\SurveyAnswerOptionMapperImpl.class
 com\swp\user_service\dto\request\PsychologistCreationRequest$PsychologistCreationRequestBuilder.class
@@ -14,31 +18,56 @@ com\swp\user_service\dto\response\AuthenticationResponse$AuthenticationResponseB
 com\swp\user_service\dto\response\SurveyQuestionResponse.class
 com\swp\user_service\entity\Appointment.class
 com\swp\user_service\dto\request\ProgramRegistrationRequest$ProgramRegistrationRequestBuilder.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\service\ManagerService.class
+>>>>>>> Nam
 com\swp\user_service\dto\request\SurveyQuestionCreationRequest.class
 com\swp\user_service\mapper\SurveyQuestionMapperImpl.class
 com\swp\user_service\mapper\UserMapperImpl.class
 com\swp\user_service\dto\response\AdminResponse$AdminResponseBuilder.class
 com\swp\user_service\mapper\AdminMapperImpl.class
 com\swp\user_service\dto\request\PsychologistUpdateRequest.class
+com\swp\user_service\entity\Blog$BlogBuilder.class
 com\swp\user_service\dto\response\ProgramResponse$ProgramResponseBuilder.class
+com\swp\user_service\entity\Blog.class
 com\swp\user_service\dto\response\AuthenticationResponse.class
 com\swp\user_service\service\PsyService.class
 com\swp\user_service\mapper\SurveyAnswerOptionMapper.class
 com\swp\user_service\entity\User$UserBuilder.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\dto\response\BlogResponse.class
+>>>>>>> Nam
 com\swp\user_service\dto\response\PsychologistResponse$PsychologistResponseBuilder.class
 com\swp\user_service\dto\response\UserAnswerResponse$UserAnswerResponseBuilder.class
 com\swp\user_service\mapper\SurveyMapperImpl.class
 com\swp\user_service\service\UserAnswerService.class
+<<<<<<< HEAD
 com\swp\user_service\service\SurveyQuestionService.class
 com\swp\user_service\dto\response\ProgramResponse.class
 com\swp\user_service\dto\request\SurveyQuestionCreationRequest$SurveyQuestionCreationRequestBuilder.class
 com\swp\user_service\dto\response\SurveyQuestionResponse$SurveyQuestionResponseBuilder.class
 com\swp\user_service\dto\response\AppointmentResponse$AppointmentResponseBuilder.class
+=======
+com\swp\user_service\dto\response\BlogResponse$BlogResponseBuilder.class
+com\swp\user_service\service\SurveyQuestionService.class
+com\swp\user_service\dto\response\ProgramResponse.class
+com\swp\user_service\service\AppointmentService.class
+com\swp\user_service\dto\request\SurveyQuestionCreationRequest$SurveyQuestionCreationRequestBuilder.class
+com\swp\user_service\dto\response\SurveyQuestionResponse$SurveyQuestionResponseBuilder.class
+com\swp\user_service\dto\response\AppointmentResponse$AppointmentResponseBuilder.class
+com\swp\user_service\controller\BlogController.class
+>>>>>>> Nam
 com\swp\user_service\dto\request\PsychologistCreationRequest.class
 com\swp\user_service\mapper\AdminMapper.class
 com\swp\user_service\service\SurveyService.class
 com\swp\user_service\dto\request\SurveyCreationRequest.class
 com\swp\user_service\dto\response\SurveyResultResponse$SurveyResultResponseBuilder.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\repository\BlogRepository.class
+>>>>>>> Nam
 com\swp\user_service\dto\response\SurveyResponse$SurveyResponseBuilder.class
 com\swp\user_service\dto\response\AdminResponse.class
 com\swp\user_service\mapper\UserMapper.class
@@ -52,10 +81,20 @@ com\swp\user_service\entity\SurveyAnswerOption$SurveyAnswerOptionBuilder.class
 com\swp\user_service\dto\request\IntrospectRequest.class
 com\swp\user_service\dto\request\AuthenticationRequest$AuthenticationRequestBuilder.class
 com\swp\user_service\configuration\ApplicationInitConfig.class
+<<<<<<< HEAD
 com\swp\user_service\dto\response\ApiResponse$ApiResponseBuilder.class
 com\swp\user_service\mapper\PsychologistMapperImpl.class
 com\swp\user_service\service\UserService.class
 com\swp\user_service\dto\response\UserAnswerResponse.class
+=======
+com\swp\user_service\controller\ManagerController.class
+com\swp\user_service\dto\response\ApiResponse$ApiResponseBuilder.class
+com\swp\user_service\mapper\PsychologistMapperImpl.class
+com\swp\user_service\service\UserService.class
+com\swp\user_service\service\BlogService.class
+com\swp\user_service\dto\response\UserAnswerResponse.class
+com\swp\user_service\dto\request\BlogRequest$BlogRequestBuilder.class
+>>>>>>> Nam
 com\swp\user_service\repository\RoleRepository.class
 com\swp\user_service\repository\SurveyRepository.class
 com\swp\user_service\dto\request\ProgramRegistrationRequest.class
@@ -69,6 +108,10 @@ com\swp\user_service\dto\request\SubmitUserAnswerRequest$SubmitUserAnswerRequest
 com\swp\user_service\dto\request\SurveyAnswerOptionRequest.class
 com\swp\user_service\entity\SurveyQuestion$SurveyQuestionBuilder.class
 com\swp\user_service\entity\Survey$SurveyBuilder.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\controller\AppointmentController.class
+>>>>>>> Nam
 com\swp\user_service\dto\response\IntrospectResponse.class
 com\swp\user_service\repository\PsyRepository.class
 com\swp\user_service\dto\response\UserResponse$UserResponseBuilder.class
@@ -86,14 +129,25 @@ com\swp\user_service\entity\Program.class
 com\swp\user_service\controller\SurveyController.class
 com\swp\user_service\repository\AdminRepository.class
 com\swp\user_service\repository\UserRepository.class
+<<<<<<< HEAD
 com\swp\user_service\repository\ProgramRepository.class
 com\swp\user_service\controller\PsyController.class
+=======
+com\swp\user_service\mapper\BlogMapper.class
+com\swp\user_service\repository\ProgramRepository.class
+com\swp\user_service\controller\PsyController.class
+com\swp\user_service\dto\request\BlogRequest.class
+>>>>>>> Nam
 com\swp\user_service\mapper\PsychologistMapper.class
 com\swp\user_service\controller\UserAnswerController.class
 com\swp\user_service\entity\Role.class
 com\swp\user_service\repository\SurveyAnswerOptionRepository.class
 com\swp\user_service\entity\UserAnswer.class
 com\swp\user_service\dto\response\IntrospectResponse$IntrospectResponseBuilder.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\mapper\AppointmentMapper.class
+>>>>>>> Nam
 com\swp\user_service\controller\UserController.class
 com\swp\user_service\dto\request\IntrospectRequest$IntrospectRequestBuilder.class
 com\swp\user_service\repository\AppointmentRepository.class
@@ -115,4 +169,8 @@ com\swp\user_service\dto\request\UserUpdateByAdminRequest.class
 com\swp\user_service\dto\response\AppointmentResponse.class
 com\swp\user_service\dto\request\AdminRequest$AdminRequestBuilder.class
 com\swp\user_service\entity\SurveyAnswerOption.class
+<<<<<<< HEAD
+=======
+com\swp\user_service\mapper\AppointmentMapperImpl.class
+>>>>>>> Nam
 com\swp\user_service\service\AdminService.class

@@ -22,7 +22,7 @@ public class Appointment {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "psychologist_id")
+    @JoinColumn(name = "psy_id")
     private Psychologist psychologist;
 
     @Temporal(TemporalType.TIMESTAMP)

@@ -14,7 +14,12 @@ public enum ErrorCode {
     PROGRAM_NOT_EXIST(1010, "Program is not exist"),
     PERMISSION_ERROR(1011, "You don't have permission to do this"),
     USER_CREATION_FAILED(1012, "User creation failed"),
-    BLOGCODE_EXIST(1013, "Blog code is existed")
+    BLOGCODE_EXIST(1013, "Blog code is existed"),
+    INVALID_SLOT(1014, "Time slot must be one of: 8h-10h, 10h-12h, 13h-15h, 15h-17h"),
+    PYSOCHOLOGIST_NOT_ACTIVE(1015, "Psychologist is not active "),
+    SLOT_IS_BOOKING(1016, "This time slot is already booked"),
+    NOT_PSYCHOLOGIST(1016, "This is not a psychologist")
+
     ;
 
     ErrorCode(int code, String message) {
