@@ -61,4 +61,13 @@ public class SurveyService {
     public List<UserAnswer> getUserSurveyResults(String userId) {
         return userAnswerRepository.findUserAnswersByUserId(userId);
     }
+
+    public void deleteSurveyById(String surveyId) {
+        if (surveyRepository.existsById(surveyId)) {
+            surveyRepository.deleteById(surveyId);
+        } else {
+            throw new RuntimeException("Survey not found with ID: " + surveyId);
+        }
+    }
+
 }
