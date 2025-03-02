@@ -55,6 +55,12 @@ public class SupportProgramService {
                 .collect(Collectors.toList());
     }
 
+    public List<SupportProgramResponse> getAllActiveSupportPrograms() {
+        return supportProgramRepository.findByActiveTrue().stream()
+                .map(supportProgramMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     public SupportProgramResponse updateSupportProgram(String programCode, SupportProgramRequest request) {
         SupportProgram existingProgram = supportProgramRepository.findByProgramCode(programCode)
