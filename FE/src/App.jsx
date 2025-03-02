@@ -54,6 +54,10 @@ import AddBlog from './pages/components/admin/AddBlog/AddBlog';
 import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
 import EditBlog from './pages/components/admin/EditBlog/EditBlog';
 import AdminCreateUser from './pages/components/admin/CreateUser/AdminCreateUser';
+import AddSupportProgram from './pages/components/admin/SupportProgram/AddSupportProgram';
+import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
+import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
+import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
 
 function App() {
   return (
@@ -109,6 +113,10 @@ function App() {
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/editblog/:blogId' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />} />
+        <Route path='/adminsupport' element={<ProtectedRoute element={<AdminSupportProgram />} allowedRoles={['ADMIN']} />} />
+        <Route path='/addsupport' element={<ProtectedRoute element={<AddSupportProgram />} allowedRoles={['ADMIN']} />} />
+        <Route path='/viewsupport/:programCode' element={<ProtectedRoute element={<ViewSupportProgram />} allowedRoles={['ADMIN']} />} />
+        <Route path='/editsupport/:programCode' element={<ProtectedRoute element={<EditSupportProgram />} allowedRoles={['ADMIN']} />} />
         
       </Routes>
     </BrowserRouter>
