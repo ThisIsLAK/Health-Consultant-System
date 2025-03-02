@@ -214,4 +214,13 @@ public class AdminController {
         SurveyQuestionResponse question = surveyQuestionService.getSurveyQuestion(questionId);
         return ResponseEntity.ok(question);
     }
+
+    @DeleteMapping("/delete-survey-by-surveyid/{surveyId}")
+    public ResponseEntity<ApiResponse<String>> deleteSurvey(@PathVariable String surveyId) {
+        surveyService.deleteSurveyById(surveyId);
+        return ResponseEntity.ok(ApiResponse.<String>builder()
+                .message("Survey deleted successfully with ID: " + surveyId)
+                .build());
+    }
+
 }

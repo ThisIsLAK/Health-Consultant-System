@@ -42,7 +42,6 @@ public class SupportProgramService {
         return supportProgramMapper.toResponse(supportProgram);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public SupportProgramResponse findByProgramCode(String programCode) {
         SupportProgram supportProgram = supportProgramRepository.findByProgramCode(programCode)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPORT_PROGRAM_NOT_EXIST));
@@ -50,9 +49,14 @@ public class SupportProgramService {
         return supportProgramMapper.toResponse(supportProgram);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public List<SupportProgramResponse> getAllSupportPrograms() {
         return supportProgramRepository.findAll().stream()
+                .map(supportProgramMapper::toResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<SupportProgramResponse> getAllActiveSupportPrograms() {
+        return supportProgramRepository.findByActiveTrue().stream()
                 .map(supportProgramMapper::toResponse)
                 .collect(Collectors.toList());
     }
