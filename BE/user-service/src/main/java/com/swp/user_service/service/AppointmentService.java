@@ -85,7 +85,8 @@ public class AppointmentService {
 
     public void cancelAppointment(String appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_EXIST));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
         appointment.setActive(false);
         appointmentRepository.save(appointment);
     }
@@ -102,10 +103,5 @@ public class AppointmentService {
                 .filter(appointment -> appointment.getUser().getId().equals(userId))
                 .map(appointmentMapper::toAppointmentResponse)
                 .collect(Collectors.toList());
-    }
-
-    public List<AppointmentResponse> getAllAppointments() {
-        List<Appointment> appointments = appointmentRepository.findAll();
-        return appointmentMapper.toAppointmentResponses(appointments);
     }
 }
