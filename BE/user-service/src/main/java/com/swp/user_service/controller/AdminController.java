@@ -110,6 +110,12 @@ public class AdminController {
                 .result(supportProgramService.getAllSupportPrograms())
                 .build();
     }
+    @GetMapping("/findprogrambycode/{programCode}")
+    public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
+        return ApiResponse.<SupportProgramResponse>builder()
+                .result(supportProgramService.findByProgramCode(programCode))
+                .build();
+    }
     //blog controller=================================================================================================
     @PostMapping("/createblog")
     public ResponseEntity<BlogResponse> createBlog(@RequestBody BlogRequest request) {

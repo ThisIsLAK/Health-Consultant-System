@@ -73,6 +73,12 @@ public class PsyController {
                 .result(supportProgramService.getAllSupportPrograms())
                 .build();
     }
+    @GetMapping("/findprogrambycode/{programCode}")
+    public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
+        return ApiResponse.<SupportProgramResponse>builder()
+                .result(supportProgramService.findByProgramCode(programCode))
+                .build();
+    }
 
     //answer - //survey ================================================================================================
     @GetMapping("/result")

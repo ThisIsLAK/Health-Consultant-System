@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class SurveyQuestionController {
+
     SurveyQuestionService surveyQuestionService;
 
     @PostMapping
@@ -29,5 +30,4 @@ public class SurveyQuestionController {
         SurveyQuestionResponse question = surveyQuestionService.getSurveyQuestion(questionId);
         return ResponseEntity.ok(question);
     }
-
 }
