@@ -7,7 +7,7 @@ import ApiService from '../../../../service/ApiService';
 
 const EditBlog = () => {
     const navigate = useNavigate();
-    const { blogCode } = useParams();
+    const { blogCode } = useParams();  // This gets the blogCode from URL
     const [blogData, setBlogData] = useState({
         title: '',
         blogCode: '',
@@ -17,16 +17,28 @@ const EditBlog = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetchBlog();
-    }, [blogCode]);
+        if (blogCode) {  // Only fetch if blogCode exists
+            fetchBlog();
+        } else {
+            setLoading(false);
+            setError('No blog code provided');
+        }
+    }, [blogCode]);  // Add blogCode as dependency
 
     const fetchBlog = async () => {
         try {
+            console.log("Fetching blog with code:", blogCode);  // Debug log
             const response = await ApiService.getBlogByCode(blogCode);
-            if (response.status === 200) {
-                setBlogData(response.data);
+            
+            if (response.status === 200 && response.data) {
+                console.log("Received blog data:", response.data);  // Debug log
+                setBlogData({
+                    title: response.data.title || '',
+                    blogCode: response.data.blogCode || blogCode,  // Use URL param as fallback
+                    description: response.data.description || ''
+                });
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to fetch blog details');
             }
         } catch (err) {
             setError('Failed to fetch blog details');

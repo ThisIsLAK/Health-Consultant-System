@@ -7,7 +7,6 @@ const Blog = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [activeCategory, setActiveCategory] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -16,11 +15,12 @@ const Blog = () => {
 
     const fetchBlogs = async () => {
         try {
+            setLoading(true);
             const response = await ApiService.getAllBlogs();
-            if (response.status === 200) {
+            if (response.status === 200 && response.data) {
                 setBlogs(response.data);
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to fetch blogs');
             }
         } catch (err) {
             setError('Failed to fetch blogs');
@@ -30,18 +30,19 @@ const Blog = () => {
         }
     };
 
-    // Filter blogs based on search term and category
+    // Filter blogs based on search term
     const filteredBlogs = blogs.filter(blog => {
         const searchTermLower = searchTerm.toLowerCase();
-        const matchesSearch =
-            blog.title.toLowerCase().includes(searchTermLower) ||
-            blog.blogCode.toLowerCase().includes(searchTermLower);
-        const matchesCategory = activeCategory === 'All' || blog.category === activeCategory;
-        return matchesSearch && matchesCategory;
+        return blog.title.toLowerCase().includes(searchTermLower) ||
+               blog.blogCode.toLowerCase().includes(searchTermLower);
     });
 
     if (loading) {
-        return <div>Loading blogs...</div>;
+        return <div className="loading-spinner">Loading blogs...</div>;
+    }
+
+    if (error) {
+        return <div className="error-message">{error}</div>;
     }
 
     return (
@@ -49,7 +50,7 @@ const Blog = () => {
             <Navbar />
             <div className="blog-container">
                 <div className="blog-content">
-                    {/* Categories and Search Section */}
+                    {/* Search Section */}
                     <div className="blog-filters">
                         <div className="search-container">
                             <div className="search-wrapper">
@@ -70,20 +71,21 @@ const Blog = () => {
                     </div>
 
                     {/* Blog Grid */}
-                    {error && <div className="error-message">{error}</div>}
-
                     <div className="blog-grid">
                         {filteredBlogs.length > 0 ? (
                             filteredBlogs.map(blog => (
-                                <div className="blog-card" key={blog.blogCode}>
+                                <div className="blog-card" key={blog.id || blog.blogCode}>
                                     <div className="blog-card-content">
                                         <h3 className="blog-title">{blog.title}</h3>
                                         <p className="blog-description">{blog.description}</p>
                                         <div className="blog-meta">
-                                            <span className="blog-code">Code: {blog.blogCode}</span>
-                                            <span className="blog-category">{blog.category}</span>
+                                            <span className="blog-code">Blog Code: {blog.blogCode}</span>
                                             <span className="blog-date">
-                                                {new Date(blog.createdDate).toLocaleDateString()}
+                                                {new Date(blog.createdAt || blog.createdDate).toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'long',
+                                                    day: 'numeric'
+                                                })}
                                             </span>
                                         </div>
                                         <div className="blog-actions">
@@ -99,7 +101,7 @@ const Blog = () => {
                             ))
                         ) : (
                             <div className="no-blogs-message">
-                                No blogs available for the selected category.
+                                No blogs found matching your search.
                             </div>
                         )}
                     </div>
