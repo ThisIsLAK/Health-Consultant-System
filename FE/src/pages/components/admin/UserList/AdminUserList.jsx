@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import AdminHeader from '../../../../component/admin/adminheader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-import { Pagination, InputGroup, FormControl, Dropdown, Spinner, Alert } from 'react-bootstrap';
-import { FaEye } from 'react-icons/fa';
+import { Pagination, InputGroup, FormControl, Dropdown, Spinner, Alert, Button } from 'react-bootstrap';
+import { FaEye, FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ApiService from '../../../../service/ApiService';
@@ -16,6 +16,7 @@ const AdminUserList = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUsers();
@@ -64,6 +65,11 @@ const AdminUserList = () => {
         toast.success('User deleted successfully!');
     };
 
+    // Handler for Add User button
+    const handleAddUserClick = () => {
+        navigate('/createuser');
+    };
+
     // Lọc users theo role và tìm kiếm - with safeguards
     const filteredUsers = Array.isArray(users) ? users.filter((u) => {
         if (!u) return false;
@@ -106,8 +112,6 @@ const AdminUserList = () => {
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
-
-    const navigate = useNavigate();
 
     // Helper function to get user's full name - with null handling
     const getUserName = (user) => {
@@ -159,27 +163,39 @@ const AdminUserList = () => {
 
                 <div className="user-table-container">
                     <div className="d-flex justify-content-between align-items-center mb-3">
-                        <InputGroup style={{ width: '60%' }}>
-                            <FormControl
-                                placeholder="Search by name, email or ID..."
-                                aria-label="Search"
-                                value={searchTerm}
-                                onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                            />
-                        </InputGroup>
-                        <Dropdown onSelect={(eventKey) => { setRoleFilter(eventKey); setCurrentPage(1); }}>
-                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                {roleFilter === 'All' ? 'Filter by Role' : 
-                                 roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
-                            </Dropdown.Toggle>
-                            <Dropdown.Menu>
-                                {roleFilterOptions.map(option => (
-                                    <Dropdown.Item key={option.key} eventKey={option.key}>
-                                        {option.label}
-                                    </Dropdown.Item>
-                                ))}
-                            </Dropdown.Menu>
-                        </Dropdown>
+                        <div className="d-flex align-items-center" style={{ width: '60%' }}>
+                            <InputGroup>
+                                <FormControl
+                                    placeholder="Search by name, email or ID..."
+                                    aria-label="Search"
+                                    value={searchTerm}
+                                    onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                                />
+                            </InputGroup>
+                        </div>
+                        <div className="d-flex align-items-center">
+                            <Button 
+                                variant="success" 
+                                onClick={handleAddUserClick} 
+                                className="me-2"
+                                title="Add New User"
+                            >
+                                <FaUserPlus /> Add User
+                            </Button>
+                            <Dropdown onSelect={(eventKey) => { setRoleFilter(eventKey); setCurrentPage(1); }}>
+                                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                    {roleFilter === 'All' ? 'Filter by Role' : 
+                                    roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    {roleFilterOptions.map(option => (
+                                        <Dropdown.Item key={option.key} eventKey={option.key}>
+                                            {option.label}
+                                        </Dropdown.Item>
+                                    ))}
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </div>
                     </div>
 
                     {loading ? (

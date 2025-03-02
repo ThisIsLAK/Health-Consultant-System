@@ -1,135 +1,130 @@
-import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import "./BookingConfirmation.css";
-import Navbar from "../../components/homepage/Navbar";
-import Footer from "../../components/homepage/Footer";
+import React from 'react';
+import { Container, Card, Row, Col, Button } from 'react-bootstrap';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FaCalendarCheck, FaClock, FaUser, FaUserMd, FaMapMarkerAlt } from 'react-icons/fa';
 
 const BookingConfirmation = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const appointment = location.state?.appointment;
 
-  // Get booking details from location state
-  const { 
-    program, 
-    date, 
-    slot, 
-    programId, 
-    isRescheduling, 
-    appointmentId 
-  } = location.state || {};
-
-  // If no booking details, redirect back to support page
-  if (!program || !date || !slot) {
-    navigate("/support");
-    return null;
+  // If no appointment data, redirect to booking page
+  if (!appointment) {
+    return (
+      <Container className="my-5 text-center">
+        <Card>
+          <Card.Body>
+            <Card.Title>No appointment data found</Card.Title>
+            <Card.Text>
+              Sorry, we couldn't find any information about your booking.
+            </Card.Text>
+            <Button variant="primary" onClick={() => navigate('/psychologists')}>
+              Book a new appointment
+            </Button>
+          </Card.Body>
+        </Card>
+      </Container>
+    );
   }
 
-  // Format date for display
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const handleConfirm = () => {
-    setIsSubmitting(true);
-    
-    // Simulate API call to create or reschedule booking
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      
-      // After 3 seconds, redirect to schedule page
-      setTimeout(() => {
-        navigate("/schedule");
-      }, 3000);
-    }, 1500);
+  // Format the date properly
+  const formatDate = (dateString) => {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
   return (
-    <div>
-      <Navbar />
-      <div className="confirmation-container">
-        <div className="confirmation-header">
-          <h1>{isRescheduling ? "Confirm Rescheduling" : "Confirm Your Booking"}</h1>
-        </div>
-
-        <div className="booking-steps">
-          <div className="step">1. Select Date & Time</div>
-          <div className="step active">2. Confirm Booking</div>
-        </div>
-
-        {isSuccess ? (
-          <div className="success-message">
-            <div className="success-icon">✓</div>
-            <h2>{isRescheduling ? "Appointment Rescheduled!" : "Booking Confirmed!"}</h2>
-            <p>
-              {isRescheduling 
-                ? "Your appointment has been successfully rescheduled. You will receive an updated confirmation email shortly."
-                : "Your appointment has been successfully booked. You will receive a confirmation email shortly."
-              }
-            </p>
-            <p>Redirecting to your schedule...</p>
-          </div>
-        ) : (
-          <div className="confirmation-content">
-            <div className="booking-summary">
-              <h2>Booking Summary</h2>
-              <div className="summary-item">
-                <span className="label">Program:</span>
-                <span className="value">{program.title}</span>
+    <Container className="my-5">
+      <Row className="justify-content-center">
+        <Col md={8}>
+          <Card className="shadow">
+            <Card.Header className="bg-success text-white text-center">
+              <h3 className="my-2">
+                <FaCalendarCheck className="me-2" />
+                Appointment Confirmed!
+              </h3>
+            </Card.Header>
+            <Card.Body className="p-4">
+              <div className="text-center mb-4">
+                <p className="lead">
+                  Your appointment has been successfully scheduled. We have sent the details to your email.
+                </p>
               </div>
-              <div className="summary-item">
-                <span className="label">Date:</span>
-                <span className="value">{formatDate(date)}</span>
-              </div>
-              <div className="summary-item">
-                <span className="label">Time Slot:</span>
-                <span className="value">{slot.time}</span>
-              </div>
-              {isRescheduling && (
-                <div className="rescheduling-note">
-                  <p>You are rescheduling an existing appointment. Your previous appointment will be canceled.</p>
-                </div>
-              )}
-            </div>
 
-            <div className="confirmation-notes">
-              <h3>Important Notes</h3>
-              <ul>
-                <li>Please arrive 10 minutes before your appointment time.</li>
-                <li>If you need to cancel, please do so at least 24 hours in advance.</li>
-                <li>You will receive a confirmation email with all details.</li>
-              </ul>
-            </div>
+              <Card className="mb-4">
+                <Card.Header as="h5">Appointment Details</Card.Header>
+                <Card.Body>
+                  <Row className="mb-3">
+                    <Col xs={1} className="text-center">
+                      <FaCalendarCheck className="text-success" size={24} />
+                    </Col>
+                    <Col>
+                      <strong>Date:</strong> {formatDate(appointment.date)}
+                    </Col>
+                  </Row>
 
-            <div className="confirmation-actions">
-              <button
-                className="back-button"
-                onClick={() => navigate(`/booking/${programId}`, { 
-                  state: isRescheduling ? { isRescheduling, appointmentId } : {} 
-                })}
-              >
-                Back
-              </button>
-              <button
-                className="confirm-button"
-                onClick={handleConfirm}
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Processing..." : isRescheduling ? "Confirm Reschedule" : "Confirm Booking"}
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-      <Footer />
-    </div>
+                  <Row className="mb-3">
+                    <Col xs={1} className="text-center">
+                      <FaClock className="text-success" size={24} />
+                    </Col>
+                    <Col>
+                      <strong>Time:</strong> {appointment.startTime}
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <Col xs={1} className="text-center">
+                      <FaUserMd className="text-success" size={24} />
+                    </Col>
+                    <Col>
+                      <strong>Psychologist:</strong> {appointment.psychologistName || 'Dr. ' + appointment.psychologistId}
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <Col xs={1} className="text-center">
+                      <FaUser className="text-success" size={24} />
+                    </Col>
+                    <Col>
+                      <strong>Patient:</strong> {appointment.userName || appointment.userId}
+                    </Col>
+                  </Row>
+
+                  <Row className="mb-3">
+                    <Col xs={1} className="text-center">
+                      <FaMapMarkerAlt className="text-success" size={24} />
+                    </Col>
+                    <Col>
+                      <strong>Duration:</strong> {appointment.duration} minutes
+                    </Col>
+                  </Row>
+
+                  {appointment.notes && (
+                    <Row className="mt-3">
+                      <Col>
+                        <Card.Subtitle>Notes</Card.Subtitle>
+                        <div className="border p-2 mt-1 rounded bg-light">
+                          {appointment.notes}
+                        </div>
+                      </Col>
+                    </Row>
+                  )}
+                </Card.Body>
+              </Card>
+
+              <div className="d-grid gap-2">
+                <Button variant="success" onClick={() => navigate('/schedule')}>
+                  View My Schedule
+                </Button>
+                <Button variant="outline-primary" onClick={() => navigate('/')}>
+                  Return to Home
+                </Button>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

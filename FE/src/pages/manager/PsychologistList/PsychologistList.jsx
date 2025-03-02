@@ -6,7 +6,7 @@ import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-const CustomerList = () => {
+const ManagerPsychologistList = () => {
   const navigate = useNavigate();
 
   const itemsPerPage = 12;
@@ -135,4 +135,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default ManagerPsychologistList;

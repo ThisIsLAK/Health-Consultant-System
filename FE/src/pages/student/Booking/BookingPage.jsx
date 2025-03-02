@@ -5,8 +5,10 @@ import "react-calendar/dist/Calendar.css";
 import "./BookingPage.css";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
+import { toast } from "react-toastify";
+import LoadingSpinner from "../../../components/common/LoadingSpinner";
 
-// Mock data for program details - in production this would come from an API
+// Program details - would ideally come from an API
 const programDetails = {
   "one-on-one-counseling": {
     title: "One-on-One Counseling",
@@ -22,12 +24,12 @@ const programDetails = {
   },
 };
 
-// Available time slots - each slot is 2 hours
+// Available time slots
 const timeSlots = [
-  { id: 1, time: "7:00 AM - 9:00 AM" },
-  { id: 2, time: "9:00 AM - 11:00 AM" },
-  { id: 3, time: "1:00 PM - 3:00 PM" },
-  { id: 4, time: "3:00 PM - 5:00 PM" },
+  { id: 1, time: "7:00 AM - 9:00 AM", startTime: "07:00:00", endTime: "09:00:00" },
+  { id: 2, time: "9:00 AM - 11:00 AM", startTime: "09:00:00", endTime: "11:00:00" },
+  { id: 3, time: "1:00 PM - 3:00 PM", startTime: "13:00:00", endTime: "15:00:00" },
+  { id: 4, time: "3:00 PM - 5:00 PM", startTime: "15:00:00", endTime: "17:00:00" },
 ];
 
 const BookingPage = () => {
@@ -39,6 +41,8 @@ const BookingPage = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [calendarView, setCalendarView] = useState('month');
   const [viewDate, setViewDate] = useState(new Date());
+  const [loading, setLoading] = useState(false);
+  const [selectedPsychologist, setSelectedPsychologist] = useState(location.state?.psychologistId || null);
   
   // Check if we're rescheduling an existing appointment
   const isRescheduling = location.state?.isRescheduling || false;
@@ -54,24 +58,30 @@ const BookingPage = () => {
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 21); // 3 weeks
 
-  // Simulate fetching available slots when date changes
+  // Fetch available slots when date changes
   useEffect(() => {
     if (selectedDate) {
-      // In a real application, this would be an API call to check availability
-      // For demo purposes, we'll simulate some random availability
-      const dayOfWeek = selectedDate.getDay();
+      setLoading(true);
       
-      // Simulate weekend availability (no slots on weekends)
-      if (dayOfWeek === 0 || dayOfWeek === 6) {
-        setAvailableSlots([]);
-        return;
-      }
+      // In a real app, fetch available slots from API based on selectedDate & psychologist
+      // For now, we'll use the mock functionality
+      setTimeout(() => {
+        const dayOfWeek = selectedDate.getDay();
       
-      // Randomly make some slots unavailable
-      const available = timeSlots.filter(() => Math.random() > 0.3);
-      setAvailableSlots(available);
+        // No slots on weekends
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          setAvailableSlots([]);
+          setLoading(false);
+          return;
+        }
+        
+        // Simulate some availability (in production, fetch from API)
+        const available = timeSlots.filter(() => Math.random() > 0.3);
+        setAvailableSlots(available);
+        setLoading(false);
+      }, 500);
     }
-  }, [selectedDate]);
+  }, [selectedDate, selectedPsychologist]);
 
   // Reset selected slot when date changes
   useEffect(() => {
@@ -88,17 +98,28 @@ const BookingPage = () => {
 
   const handleContinue = () => {
     if (selectedDate && selectedSlot) {
+      // Get the current user ID from localStorage or context
+      const userId = localStorage.getItem('userId') || 'user123'; // Default for demo
+
+      // Format date for API request - YYYY-MM-DD
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+
       // Navigate to confirmation page with booking details
       navigate("/booking-confirmation", { 
         state: { 
           program: program,
           date: selectedDate,
+          formattedDate: formattedDate,
           slot: selectedSlot,
           programId: programId,
           isRescheduling: isRescheduling,
-          appointmentId: appointmentId
+          appointmentId: appointmentId,
+          userId: userId,
+          psychologistId: selectedPsychologist || 'psychologist123' // Default for demo
         } 
       });
+    } else {
+      toast.error("Please select both a date and time slot");
     }
   };
 
@@ -205,7 +226,9 @@ const BookingPage = () => {
           <div className="timeslots-container">
             <h2>Available Time Slots for {formatDate(selectedDate)}</h2>
             
-            {availableSlots.length === 0 ? (
+            {loading ? (
+              <LoadingSpinner />
+            ) : availableSlots.length === 0 ? (
               <p className="no-slots-message">
                 {isWeekend(selectedDate) 
                   ? "No appointments available on weekends." 
@@ -228,7 +251,7 @@ const BookingPage = () => {
             <div className="booking-actions">
               <button 
                 className="back-button"
-                onClick={() => isRescheduling ? navigate("/schedule") : navigate(`/support/${programId}`)}
+                onClick={() => isRescheduling ? navigate("/appointments") : navigate(`/support/${programId}`)}
               >
                 Back
               </button>

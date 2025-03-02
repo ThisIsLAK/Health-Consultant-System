@@ -1,0 +1,201 @@
+.create-user-container {
+  padding-bottom: 2rem;
+}
+
+/* Adjusting for admin layout with header and sidebar */
+.create-user-card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  border: none;
+  margin: 2rem 1rem;
+  position: relative;
+  left: 300px; /* To account for sidebar width */
+  width: calc(100% - 340px); /* Adjust width to fit the remaining space */
+}
+
+/* Admin layout adjustments for smaller screens */
+@media (max-width: 991px) {
+  .create-user-card {
+    left: 0;
+    width: 100%;
+    margin: 1rem;
+  }
+}
+
+/* Ensuring content stays in the main area when sidebar is collapsed */
+body.toggle-sidebar .create-user-card {
+  left: 0;
+  width: calc(100% - 40px);
+}
+
+/* Card styling */
+.create-user-card .card-header {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  color: white;
+  border-radius: 8px 8px 0 0;
+  padding: 1rem;
+  font-weight: 500;
+}
+
+.create-user-card .card-body {
+  padding: 2rem;
+}
+
+/* Form element styling */
+.form-label {
+  font-weight: 500;
+  color: #495057;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.required-field::after {
+  content: " *";
+  color: #dc3545;
+}
+
+.specialty-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.specialty-check {
+  margin-bottom: 5px;
+}
+
+.specialty-check .form-check-input:checked {
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+.psychologist-card {
+  border-left: 4px solid #4e73df;
+  background-color: #f8f9fc;
+}
+
+.psychologist-card .card-header {
+  background-color: #f8f9fc;
+  color: #4e73df;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(78, 115, 223, 0.2);
+}
+
+.create-btn {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.create-btn:hover {
+  background-color: #2e59d9;
+  border-color: #2653d4;
+  transform: translateY(-2px);
+}
+
+.cancel-btn {
+  color: #5a5c69;
+  border-color: #ddd;
+  padding: 10px 20px;
+  font-weight: 500;
+}
+
+.cancel-btn:hover {
+  background-color: #eaecf4;
+  color: #3a3b45;
+}
+
+.form-buttons {
+  margin-top: 2rem;
+}
+
+/* Success message styling */
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 5px;
+}
+
+.success-message h4 {
+  margin-bottom: 1rem;
+  color: #155724;
+}
+
+.success-icon {
+  font-size: 3rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+/* Form section styling */
+.form-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+.form-section:last-of-type {
+  border-bottom: none;
+}
+
+.form-section-title {
+  font-weight: 600;
+  color: #4e73df;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+/* Form field hint styling */
+.field-hint {
+  color: #6c757d;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+/* Loading spinner styling */
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+}
+
+/* Error alert styling */
+.error-alert {
+  border-left: 5px solid #dc3545;
+}
+
+/* Ensuring proper placement within the main content area */
+main#main .create-user-card {
+  left: 0;
+  width: 100%;
+  margin: 0;
+}
+
+/* Adapting to admin layout if it's using NiceAdmin template */
+@media (min-width: 1200px) {
+  .main-content-with-sidebar {
+    margin-left: 300px;
+  }
+}
+
+/* Adjustment for sidebar toggle */
+.sidebar-nav-active .create-user-card {
+  left: 300px;
+  width: calc(100% - 340px);
+}
+
+.sidebar-nav-inactive .create-user-card {
+  left: 0;
+  width: calc(100% - 40px);
+}
