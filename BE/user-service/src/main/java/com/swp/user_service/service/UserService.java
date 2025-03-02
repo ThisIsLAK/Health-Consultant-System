@@ -2,12 +2,16 @@ package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateRequest;
+import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.entity.Appointment;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.entity.Role;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
+import com.swp.user_service.mapper.AppointmentMapper;
 import com.swp.user_service.mapper.UserMapper;
+import com.swp.user_service.repository.AppointmentRepository;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,11 +39,11 @@ public class UserService {
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
     RoleRepository roleRepository;
+    AppointmentMapper appointmentMapper;
+    AppointmentRepository appointmentRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
 
-//        if (userRepository.existsByName(request.getName()))
-//            throw new AppException(ErrorCode.USER_EXIST);
 
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
@@ -78,8 +82,6 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-
-
     @PostAuthorize("returnObject.email == authentication.name")
     public UserResponse getUser(String userId){
         log.info("In method get user by Id");
@@ -87,6 +89,9 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST)));
     }
-
+    public List<AppointmentResponse> getAppointmentHistory(String userId) {
+        List<Appointment> appointments = appointmentRepository.findByUser_Id(userId);
+        return appointmentMapper.toAppointmentResponses(appointments);
+    }
 
 }

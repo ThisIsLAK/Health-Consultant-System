@@ -1,6 +1,7 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.entity.Survey;
 import com.swp.user_service.entity.UserAnswer;
@@ -29,6 +30,7 @@ public class SurveyService {
     SurveyRepository surveyRepository;
     SurveyMapper surveyMapper;
     SurveyQuestionMapper surveyQuestionMapper;
+    UserAnswerRepository userAnswerRepository;
 
     public SurveyResponse createSurvey(SurveyCreationRequest request) {
         Survey survey = surveyMapper.toSurvey(request);
@@ -49,9 +51,12 @@ public class SurveyService {
         return null;
     }
 
-
-    @Autowired
-    private UserAnswerRepository userAnswerRepository;
+    public List<AllSurveyResponse> getAllSurveys() {
+        List<Survey> surveys = surveyRepository.findAll();
+        return surveys.stream()
+                .map(surveyMapper::toAllSurveyResponse)
+                .collect(Collectors.toList());
+    }
 
     public List<UserAnswer> getUserSurveyResults(String userId) {
         return userAnswerRepository.findUserAnswersByUserId(userId);

@@ -18,6 +18,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
 
+    // user
     @PostMapping
     public ResponseEntity<ApiResponse<AppointmentResponse>> bookAppointment(
             @RequestBody @Valid AppointmentRequest request) {
@@ -27,7 +28,7 @@ public class AppointmentController {
                 .result(response)
                 .build());
     }
-
+   // user
     @DeleteMapping("/{appointmentId}")
     public ResponseEntity<ApiResponse<Void>> cancelAppointment(
             @PathVariable String appointmentId) {
@@ -38,6 +39,8 @@ public class AppointmentController {
                 .build());
     }
 
+
+    //psychologist
     @GetMapping("/psychologist/{psychologistId}")
     public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getPsychologistAppointments(
             @PathVariable String psychologistId) {
@@ -47,7 +50,7 @@ public class AppointmentController {
                 .result(appointments)
                 .build());
     }
-
+    //user
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getUserAppointments(
             @PathVariable String userId) {
@@ -57,5 +60,4 @@ public class AppointmentController {
                 .result(appointments)
                 .build());
     }
-
 }

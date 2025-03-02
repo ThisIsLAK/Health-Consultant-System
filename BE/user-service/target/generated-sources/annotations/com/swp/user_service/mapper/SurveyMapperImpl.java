@@ -1,6 +1,7 @@
 package com.swp.user_service.mapper;
 
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyAnswerOptionResponse;
 import com.swp.user_service.dto.response.SurveyQuestionResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
@@ -48,6 +49,22 @@ public class SurveyMapperImpl implements SurveyMapper {
         surveyResponse.description( survey.getDescription() );
 
         return surveyResponse.build();
+    }
+
+    @Override
+    public AllSurveyResponse toAllSurveyResponse(Survey survey) {
+        if ( survey == null ) {
+            return null;
+        }
+
+        AllSurveyResponse.AllSurveyResponseBuilder allSurveyResponse = AllSurveyResponse.builder();
+
+        allSurveyResponse.surveyId( survey.getSurveyId() );
+        allSurveyResponse.title( survey.getTitle() );
+        allSurveyResponse.createdDate( survey.getCreatedDate() );
+        allSurveyResponse.description( survey.getDescription() );
+
+        return allSurveyResponse.build();
     }
 
     @Override

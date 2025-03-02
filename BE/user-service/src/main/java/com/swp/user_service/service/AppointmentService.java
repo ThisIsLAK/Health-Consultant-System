@@ -104,4 +104,9 @@ public class AppointmentService {
                 .map(appointmentMapper::toAppointmentResponse)
                 .collect(Collectors.toList());
     }
+    public List<AppointmentResponse> getAllAppointments() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        return appointmentMapper.toAppointmentResponses(appointments);
+    }
+
 }
