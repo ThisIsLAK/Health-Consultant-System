@@ -230,3 +230,154 @@
 .book-button:hover {
   background-color: #2980b9;
 }
+
+/* Program Detail Page Styles */
+
+.program-header {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+  color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+}
+
+.program-code {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.program-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.program-dates {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+}
+
+/* Content Section */
+.program-content {
+  margin-top: 2rem;
+}
+
+.program-description-card {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100%;
+}
+
+.program-description-card h3 {
+  color: #4e73df;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.program-description {
+  font-size: 1rem;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.program-info-card {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.program-info-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.program-info-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-icon {
+  color: #4e73df;
+  font-size: 1.25rem;
+  margin-right: 1rem;
+  margin-top: 0.25rem;
+}
+
+.program-info-item h4 {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.program-info-item p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+/* Register Button */
+.register-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+.register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #2e59d9;
+  border-color: #2653d4;
+}
+
+/* Modal Success Styling */
+.success-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background-color: #d4edda;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.success-icon {
+  font-size: 30px;
+  color: #28a745;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .program-title {
+    font-size: 1.75rem;
+  }
+  
+  .program-header {
+    padding: 1.5rem;
+  }
+  
+  .program-info-card {
+    margin-top: 1.5rem;
+  }
+}
