@@ -842,4 +842,66 @@ export default class ApiService {
             };
         }
     }
+
+    /**
+ * Creates a new user by admin
+ * @param {Object} userData - The user data containing email, password, name, role, etc.
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async createUserByAdmin(userData) {
+        try {
+            // Validate required fields
+            if (!userData.email || !userData.password || !userData.name) {
+                throw new Error("Required fields are missing");
+            }
+
+            console.log("Creating user with data:", userData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/admin/createUserByAdmin`,
+                userData,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create user response:", response.data);
+
+            // Handle different response formats
+            if (response.data) {
+                // If response has code property
+                if (response.data.code !== undefined) {
+                    if (response.data.code === 0 || response.data.code === 200 || response.data.code === 201) {
+                        return {
+                            status: 200,
+                            data: response.data.result || response.data,
+                            message: response.data.message || "User created successfully"
+                        };
+                    } else {
+                        return {
+                            status: 400,
+                            message: response.data.message || "Failed to create user"
+                        };
+                    }
+                } else {
+                    // Simple response format
+                    return {
+                        status: 200,
+                        data: response.data,
+                        message: "User created successfully"
+                    };
+                }
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error creating user:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create user"
+            };
+        }
+    }
 }

@@ -90,23 +90,23 @@ const generateTimeSlots = () => {
   return [
     {
       id: 0,
-      time: "8h-10h",
-      value: "08:00"
+      time: "7h-9h",
+      value: "7h-9h"  // Changed from "08:00" to match the expected string format
     },
     {
       id: 1,
       time: "10h-12h",
-      value: "10:00"
+      value: "10h-12h"  // Changed from "10:00" to match the expected string format
     },
     {
       id: 2,
       time: "13h-15h", 
-      value: "13:00"
+      value: "13h-15h"  // Changed from "13:00" to match the expected string format
     },
     {
       id: 3,
       time: "15h-17h",
-      value: "15:00"
+      value: "15h-17h"  // Changed from "15:00" to match the expected string format
     }
   ];
 };
@@ -249,17 +249,25 @@ const generateTimeSlots = () => {
       
       console.log("Using userId:", userId);
       
-      // Format the date for the API
+      // Create a copy of the selected date to avoid time zone issues
       const appointmentDate = new Date(selectedDate);
+      
+      // Set the time to noon (12:00) to avoid timezone issues
+      appointmentDate.setHours(12, 0, 0, 0);
+      
+      // Format the date for API - ISO string but preserve the selected date
       const formattedDate = appointmentDate.toISOString();
       
-      // Create payload EXACTLY matching the API requirements
+      console.log("Original selected date:", selectedDate);
+      console.log("Formatted date for API:", formattedDate);
+      
+      // Create payload with correct formats
       const appointmentData = {
         userId: userId,
         psychologistId: selectedPsychologist.id,
-        appointmentId: "", // Sending empty string as the backend will generate the ID
+        appointmentId: "", // Backend will generate this
         appointmentDate: formattedDate,
-        timeSlot: timeSlots[selectedSlot].value,
+        timeSlot: timeSlots[selectedSlot].value, // Using our string format "7h-9h" etc
         active: true
       };
       
