@@ -955,4 +955,31 @@ export default class ApiService {
         }
     }
 
+    /**
+     * Submit user answers for a survey
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async submitUserAnswer(userId, surveyId, answers) {
+        try {
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/users/submituseranswer`,
+                { userId, surveyId, answers },
+                { headers: this.getHeader() }
+            );
+    
+            console.log("Survey answer submitted:", response.data);
+            return {
+                status: 200,
+                data: response.data,
+                message: "Answers submitted successfully"
+            };
+        } catch (error) {
+            console.error("Error submitting answers:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to submit answers"
+            };
+        }
+    }
+    
 }

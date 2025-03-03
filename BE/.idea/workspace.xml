@@ -6,8 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9aceaf73-1c00-4d1c-a5df-bf719baafb1f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FE/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/Blog/Blog.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/Blog/Blog.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user-service/src/main/java/com/swp/user_service/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/components/admin/EditSurvey/EditSurvey.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/components/admin/EditSurvey/EditSurvey.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../FE/src/pages/student/SurveyTake/SurveyTake.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/pages/student/SurveyTake/SurveyTake.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../FE/src/service/ApiService.js" beforeDir="false" afterPath="$PROJECT_DIR$/../FE/src/service/ApiService.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,10 +85,25 @@
       <workItem from="1740924880006" duration="3821000" />
       <workItem from="1740966349393" duration="3552000" />
       <workItem from="1740981267614" duration="1708000" />
+      <workItem from="1740988866073" duration="457000" />
+      <workItem from="1740990341265" duration="136000" />
+      <workItem from="1740990496623" duration="613000" />
+      <workItem from="1741008968675" duration="2568000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

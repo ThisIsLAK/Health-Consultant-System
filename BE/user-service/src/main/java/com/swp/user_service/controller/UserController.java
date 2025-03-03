@@ -3,6 +3,7 @@ package com.swp.user_service.controller;
 import com.swp.user_service.dto.request.*;
 import com.swp.user_service.dto.response.*;
 import com.swp.user_service.entity.User;
+import com.swp.user_service.entity.UserAnswer;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
