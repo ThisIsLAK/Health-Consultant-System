@@ -842,4 +842,117 @@ export default class ApiService {
             };
         }
     }
+
+
+    /* User Services */
+    /**
+ * Get all blogs for users
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async getAllBlogsForUsers() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/getallblogs`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched blogs for users:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Blogs for users fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching blogs for users:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blogs for users"
+            };
+        }
+    }
+
+    /**
+ * Get a blog by blogCode for users
+ * @param {string} blogCode - The unique code of the blog
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async getBlogByBlogCode(blogCode) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/getblogbycode/${blogCode}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched blog:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Blog fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching blog:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blog"
+            };
+        }
+    }
+
+
+    /**
+ * Get all surveys for users
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async getAllSurveysForUsers() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/allsurveys`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched surveys for users:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Surveys for users fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching surveys for users:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch surveys for users"
+            };
+        }
+    }
+
+    /**
+     * Get a survey for users to take survey
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getSurveyByIdForUser(surveyId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/takesurvey/${surveyId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched survey:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching survey:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey"
+            };
+        }
+    }
+
 }

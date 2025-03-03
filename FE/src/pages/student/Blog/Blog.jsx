@@ -16,7 +16,7 @@ const Blog = () => {
     const fetchBlogs = async () => {
         try {
             setLoading(true);
-            const response = await ApiService.getAllBlogs();
+            const response = await ApiService.getAllBlogsForUsers();
             if (response.status === 200 && response.data) {
                 setBlogs(response.data);
             } else {

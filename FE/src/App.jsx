@@ -18,6 +18,7 @@ import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
+import SurveyList from './pages/student/SurveyList/SurveyList';
 
 
 /* Manager Routes */
@@ -58,6 +59,7 @@ import AddSupportProgram from './pages/components/admin/SupportProgram/AddSuppor
 import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
 import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
+import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 
 function App() {
   return (
@@ -77,8 +79,8 @@ function App() {
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
         <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
-
-
+        <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} />} />
+        <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} />} />
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<ProtectedRoute element={<CustomerList />} allowedRoles={['MANAGER']} />} />
@@ -117,7 +119,7 @@ function App() {
         <Route path='/addsupport' element={<ProtectedRoute element={<AddSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/viewsupport/:programCode' element={<ProtectedRoute element={<ViewSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/editsupport/:programCode' element={<ProtectedRoute element={<EditSupportProgram />} allowedRoles={['ADMIN']} />} />
-        
+
       </Routes>
     </BrowserRouter>
   );
