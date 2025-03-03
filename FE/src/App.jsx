@@ -20,6 +20,8 @@ import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
 import SurveyList from './pages/student/SurveyList/SurveyList';
 
+import PsychologistBooking from './pages/student/Booking/PsychologistBooking';
+import StudentAppointmentHistory from './pages/student/Appointments/AppointmentHistory';
 
 /* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
@@ -54,7 +56,7 @@ import AdminSurvey from './pages/components/admin/AdminSurvey/AdminSurvey';
 import AddBlog from './pages/components/admin/AddBlog/AddBlog';
 import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
 import EditBlog from './pages/components/admin/EditBlog/EditBlog';
-import AdminCreateUser from './pages/components/admin/CreateUser/AdminCreateUser';
+import AdminCreateUser from './pages/components/admin/createUser/AdminCreateUser';
 import AddSupportProgram from './pages/components/admin/SupportProgram/AddSupportProgram';
 import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
 import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
@@ -81,6 +83,9 @@ function App() {
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
         <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} />} />
         <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} />} />
+        <Route path='/booking' element={<ProtectedRoute element={<PsychologistBooking />} allowedRoles={['USER']} />} />
+        <Route path='/appointments' element={<ProtectedRoute element={<StudentAppointmentHistory />} allowedRoles={['USER']} />} />
+
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<ProtectedRoute element={<CustomerList />} allowedRoles={['MANAGER']} />} />

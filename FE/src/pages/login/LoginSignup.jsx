@@ -94,7 +94,7 @@ const LoginSignup = () => {
             // Success message
             await Swal.fire({
               title: "Success",
-              text: `Login successful! You are logged in as: ${role}`,
+              text: `Login successful!`,
               icon: "success"
             });
 

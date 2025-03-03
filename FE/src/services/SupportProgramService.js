@@ -51,21 +51,22 @@ class SupportProgramService {
   }
 
   // Get a support program by code
-  // async getSupportProgramByCode(programCode) {
-  //   try {
-  //     const GET_BY_CODE = `${API_URL}/${programCode}`;
-  //     const response = await axios.get(`${API_URL}/${programCode}`, getAuthHeaders());
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error fetching support program with code ${programCode}:`, error);
-  //     throw error;
-  //   }
-  // }
+  async getSupportProgramByCode(programCode) {
+    try {
+      const GET_BY_CODE = `${API_URL}/findprogrambycode`;
+      const response = await axios.get(`${GET_BY_CODE}/${programCode}`, getAuthHeaders());
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching support program with code ${programCode}:`, error);
+      throw error;
+    }
+  }
 
   // Update an existing support program
   async updateSupportProgram(programCode, programData) {
     try {
-      const response = await axios.put(`${API_URL}/${programCode}`, programData, getAuthHeaders());
+      const UPDATE_SP_URL = `${API_URL}/updateprogrambycode`;
+      const response = await axios.put(`${UPDATE_SP_URL}/${programCode}`, programData, getAuthHeaders());
       return response.data;
     } catch (error) {
       console.error(`Error updating support program with code ${programCode}:`, error);

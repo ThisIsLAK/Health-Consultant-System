@@ -71,7 +71,7 @@ public class AuthenticationService {
         //Thong tin co ban de build 1 token
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
-                .issuer("user.com")
+                .issuer(user.getId())
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
