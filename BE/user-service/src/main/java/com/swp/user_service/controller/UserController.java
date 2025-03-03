@@ -29,6 +29,8 @@ public class UserController {
 
     UserService userService;
 
+    PsyService psyService;
+
     AppointmentService appointmentService;
 
     UserRepository userRepository;
@@ -68,6 +70,14 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
+    }
+
+    @GetMapping("/allpsy")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllPsychologists() {
+        List<UserResponse> psychologists = psyService.getAllPsychologists();
+        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
+                .result(psychologists)
+                .build());
     }
 
     @PostMapping("/bookappointment")
