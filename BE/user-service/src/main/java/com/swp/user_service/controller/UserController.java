@@ -104,13 +104,13 @@ public class UserController {
                 .build());
     }
 
-    @GetMapping("/allsupportprograms")
-    public ApiResponse<List<SupportProgramResponse>> getAllSupportPrograms() {
+    @GetMapping("/active-support-programs")
+    public ApiResponse<List<SupportProgramResponse>> getAllActiveSupportPrograms() {
         return ApiResponse.<List<SupportProgramResponse>>builder()
-                .result(supportProgramService.getAllSupportPrograms())
+                .result(supportProgramService.getAllActiveSupportPrograms())
                 .build();
     }
-
+    
     @GetMapping("/findsupportprogrambycode/{programCode}")
     public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
         return ApiResponse.<SupportProgramResponse>builder()
@@ -129,6 +129,12 @@ public class UserController {
     public ResponseEntity<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
         UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
         return ResponseEntity.ok(answer);
+    }
+
+    @GetMapping("/allsurveys")
+    public ResponseEntity<List<AllSurveyResponse>> getAllSurveys() {
+        List<AllSurveyResponse> surveys = surveyService.getAllSurveys();
+        return ResponseEntity.ok(surveys);
     }
 
     @GetMapping("/takesurvey/{surveyId}")

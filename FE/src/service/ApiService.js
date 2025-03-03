@@ -426,4 +426,420 @@ export default class ApiService {
             };
         }
     }
+
+    /**
+     * Create a new blog post
+     * @param {Object} blogData - The blog data containing title, content, etc.
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async createBlog(blogData) {
+        try {
+            if (!blogData.title || !blogData.description || !blogData.blogCode) {
+                throw new Error("Blog title, description, and code are required");
+            }
+
+            console.log("Creating new blog with data:", blogData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/admin/createblog`,
+                blogData,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create blog response:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Blog created successfully"
+            };
+        } catch (error) {
+            console.error("Error creating blog:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create blog"
+            };
+        }
+    }
+
+    /**
+     * Get all blogs
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllBlogs() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/getallblogs`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched blogs:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Blogs fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching blogs:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blogs"
+            };
+        }
+    }
+
+    /**
+     * Update a blog post
+     * @param {string} blogCode - The blog code to update
+     * @param {Object} blogData - The updated blog data
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async updateBlog(blogCode, blogData) {
+        try {
+            if (!blogCode) {
+                throw new Error("Blog code is required for update");
+            }
+
+            console.log("Updating blog with code:", blogCode);
+            console.log("Update data:", blogData);
+
+            const response = await axios.put(
+                `${this.BASE_URL}/identity/admin/updateblogbycode/${blogCode}`,
+                blogData,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Update blog response:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blog updated successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error updating blog:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to update blog"
+            };
+        }
+    }
+
+    /**
+     * Get blog by code
+     * @param {string} blogCode - The blog code to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getBlogByCode(blogCode) {
+        try {
+            console.log("Requesting blog with code:", blogCode);  // Debug log
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/getblogbycode/${blogCode}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Raw blog response:", response);  // Debug log
+            console.log("Fetched blog data:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Blog fetched successfully"
+                };
+            } else {
+                throw new Error("No blog data received");
+            }
+        } catch (error) {
+            console.error("Error fetching blog:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch blog"
+            };
+        }
+    }
+
+    /**
+     * Delete a blog
+     * @param {string} blogCode - The blog code to delete
+     * @returns {Promise<Object>} Response object with status and message
+     */
+    static async deleteBlog(blogCode) {
+        try {
+            if (!blogCode) {
+                throw new Error("Blog code is required");
+            }
+
+            console.log("Deleting blog with code:", blogCode);
+
+            const response = await axios.delete(
+                `${this.BASE_URL}/identity/admin/deleteblogbycode/${blogCode}`,
+                { headers: this.getHeader() }
+            );
+
+            return {
+                status: 200,
+                message: "Blog deleted successfully"
+            };
+        } catch (error) {
+            console.error("Error deleting blog:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to delete blog"
+            };
+        }
+    }
+
+    /**
+     * Create a new survey
+     * @param {Object} surveyData - The survey data containing title and description
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async createSurvey(surveyData) {
+        try {
+            if (!surveyData.title || !surveyData.description) {
+                throw new Error("Survey title and description are required");
+            }
+
+            console.log("Creating new survey with data:", surveyData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/admin/createsurvey`,
+                surveyData,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create survey response:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey created successfully"
+            };
+        } catch (error) {
+            console.error("Error creating survey:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create survey"
+            };
+        }
+    }
+
+    /**
+     * Get all surveys
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllSurveys() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/allsurveys`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched surveys:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Surveys fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching surveys:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch surveys"
+            };
+        }
+    }
+
+    /**
+     * Get a survey by ID
+     * @param {string} surveyId - The ID of the survey to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getSurveyById(surveyId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/findsurveybyid/${surveyId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched survey:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching survey:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey"
+            };
+        }
+    }
+
+    /**
+ * Create a new survey question
+ * @param {Object} questionData - The question data containing surveyId, questionText, and answerOptions
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async createSurveyQuestion(questionData) {
+        try {
+
+            console.log("🛠️ Debugging questionData:", questionData);
+            if (!questionData.surveyId || !questionData.questionText || !questionData.answerOptions) {
+                throw new Error("Survey ID, question text, and answer options are required");
+            }
+
+            console.log("Creating new survey question with data:", questionData);
+
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/admin/createsurveyquestion`,
+                {
+                    surveyId: questionData.surveyId,
+                    questionText: questionData.questionText,
+                    answerOptions: questionData.answerOptions
+                },
+                { headers: this.getHeader() }
+            );
+
+            console.log("Create survey question response:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Survey question created successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error creating survey question:", error);
+            console.log("Survey questions before sending:", survey.questions);
+
+            return {
+
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to create survey question"
+            };
+        }
+    }
+
+    /**
+     * Get a survey question by ID
+     * @param {string} questionId - The ID of the question to fetch
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getSurveyQuestionById(questionId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/findsurveyquestionbyid/${questionId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched survey question:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Survey question fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching survey question:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey question"
+            };
+        }
+    }
+
+    /**
+     * Get all surveys
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllSurveys() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/allsurveys`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched surveys:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Surveys fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "Invalid response format"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching surveys:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch surveys"
+            };
+        }
+    }
+
+    /**
+ * Delete a survey by ID
+ * @param {string} surveyId - The survey ID to delete
+ * @returns {Promise<Object>} Response object with status and message
+ */
+    static async deleteSurvey(surveyId) {
+        try {
+            if (!surveyId) {
+                throw new Error("Survey ID is required");
+            }
+
+            console.log("Deleting survey with ID:", surveyId);
+
+            const response = await axios.delete(
+                `${this.BASE_URL}/identity/admin/delete-survey-by-surveyid/${surveyId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Delete survey response:", response.data);
+
+            return {
+                status: 200,
+                message: "Survey deleted successfully"
+            };
+        } catch (error) {
+            console.error("Error deleting survey:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to delete survey"
+            };
+        }
+    }
 }
