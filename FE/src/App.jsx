@@ -18,7 +18,7 @@ import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
-
+import PsychologistBooking from './pages/student/Booking/PsychologistBooking';
 
 /* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
@@ -77,7 +77,7 @@ function App() {
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
         <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
-
+        <Route path='/booking' element={<ProtectedRoute element={<PsychologistBooking />} allowedRoles={['USER']} />} />
 
 
         {/* Manager Routes */}

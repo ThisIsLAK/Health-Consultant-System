@@ -20,7 +20,7 @@ const SupportProgram = () => {
       const token = localStorage.getItem('token');
       
       // Make API call with authentication
-      const response = await axios.get('http://localhost:8080/identity/users/allsupportprograms', {
+      const response = await axios.get('http://localhost:8080/identity/users/active-support-programs', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -86,9 +86,9 @@ const SupportProgram = () => {
                     className="program-card"
                   >
                     <h3>{program.programName}</h3>
-                    <p>{program.description && program.description.length > 100 
+                    {/* <p>{program.description && program.description.length > 100 
                       ? `${program.description.substring(0, 100)}...` 
-                      : program.description}</p>
+                      : program.description}</p> */}
                     <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
                       <span>{formatDate(program.startDate)} - {formatDate(program.endDate)}</span>
                     </div>
