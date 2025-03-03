@@ -24,4 +24,13 @@ public class SurveyQuestion {
 
     @OneToMany(mappedBy = "surveyQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
     List<SurveyAnswerOption> answerOptions;
+
+    Boolean active;
+
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }

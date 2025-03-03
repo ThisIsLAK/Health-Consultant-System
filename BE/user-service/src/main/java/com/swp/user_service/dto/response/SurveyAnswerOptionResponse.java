@@ -12,4 +12,5 @@ public class SurveyAnswerOptionResponse {
     String optionId;
     String optionText;
     int score;
+    Boolean active;
 }

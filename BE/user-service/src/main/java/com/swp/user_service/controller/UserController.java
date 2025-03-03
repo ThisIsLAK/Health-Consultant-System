@@ -29,6 +29,8 @@ public class UserController {
 
     UserService userService;
 
+    PsyService psyService;
+
     AppointmentService appointmentService;
 
     UserRepository userRepository;
@@ -68,6 +70,14 @@ public class UserController {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
                 .build();
+    }
+
+    @GetMapping("/allpsy")
+    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllPsychologists() {
+        List<UserResponse> psychologists = psyService.getAllPsychologists();
+        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
+                .result(psychologists)
+                .build());
     }
 
     @PostMapping("/bookappointment")
@@ -138,10 +148,14 @@ public class UserController {
     }
 
     @GetMapping("/takesurvey/{surveyId}")
-    public ResponseEntity<SurveyResponse> getSurvey(@PathVariable String surveyId) {
+    ApiResponse<SurveyResponse> getSurvey(@PathVariable String surveyId) {
         SurveyResponse survey = surveyService.getSurvey(surveyId);
-        return ResponseEntity.ok(survey);
+        return ApiResponse.<SurveyResponse>builder()
+                .message("Survey retrieved successfully with ID: " + surveyId)
+                .result(survey)
+                .build();
     }
+
 
     @GetMapping("/getblogbycode/{blogCode}")
     public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {

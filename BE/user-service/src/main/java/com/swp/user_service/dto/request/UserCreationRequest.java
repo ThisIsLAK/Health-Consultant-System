@@ -28,9 +28,9 @@ public class UserCreationRequest {
     @Size(min = 8, message = "PASSWORD_INVALID")
     String password;
 
-    private String roleId;
+    String roleId;
 
-    private Boolean active;
+    Boolean active;
     @PrePersist
     protected void onCreate() {
         if (active == null) {

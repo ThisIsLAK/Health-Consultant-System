@@ -15,4 +15,5 @@ public class AllSurveyResponse {
     String title;
     Date createdDate;
     String description;
+    Boolean active;
 }

@@ -15,4 +15,5 @@ public class SurveyQuestionResponse {
 //    String surveyId;
     String questionText;
     List<SurveyAnswerOptionResponse> answerOptions;
+    Boolean active;
 }
