@@ -28,6 +28,7 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         SurveyQuestion.SurveyQuestionBuilder surveyQuestion = SurveyQuestion.builder();
 
         surveyQuestion.survey( surveyQuestionCreationRequestToSurvey( request ) );
+        surveyQuestion.active( request.getActive() );
         surveyQuestion.questionText( request.getQuestionText() );
         surveyQuestion.answerOptions( surveyAnswerOptionRequestListToSurveyAnswerOptionList( request.getAnswerOptions() ) );
 
@@ -45,6 +46,7 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         surveyQuestionResponse.questionId( question.getQuestionId() );
         surveyQuestionResponse.questionText( question.getQuestionText() );
         surveyQuestionResponse.answerOptions( surveyAnswerOptionListToSurveyAnswerOptionResponseList( question.getAnswerOptions() ) );
+        surveyQuestionResponse.active( question.getActive() );
 
         return surveyQuestionResponse.build();
     }
@@ -70,6 +72,7 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
 
         surveyAnswerOption.optionText( surveyAnswerOptionRequest.getOptionText() );
         surveyAnswerOption.score( surveyAnswerOptionRequest.getScore() );
+        surveyAnswerOption.active( surveyAnswerOptionRequest.getActive() );
 
         return surveyAnswerOption.build();
     }
@@ -97,6 +100,7 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         surveyAnswerOptionResponse.optionId( surveyAnswerOption.getOptionId() );
         surveyAnswerOptionResponse.optionText( surveyAnswerOption.getOptionText() );
         surveyAnswerOptionResponse.score( surveyAnswerOption.getScore() );
+        surveyAnswerOptionResponse.active( surveyAnswerOption.getActive() );
 
         return surveyAnswerOptionResponse.build();
     }

@@ -57,4 +57,37 @@ public class SurveyQuestionService {
         return surveyQuestionMapper.toSurveyQuestionResponse(question);
     }
 
+    public SurveyQuestionResponse updateSurveyQuestion(String questionId, SurveyQuestionCreationRequest request) {
+        SurveyQuestion existingQuestion = surveyQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Survey Question not found"));
+
+        existingQuestion.setQuestionText(request.getQuestionText());
+
+        // Tạo biến tạm final để sử dụng trong lambda
+        final SurveyQuestion finalQuestion = existingQuestion;
+
+        // Cập nhật danh sách đáp án
+        List<SurveyAnswerOption> answerOptions = request.getAnswerOptions().stream()
+                .map(optionRequest -> {
+                    SurveyAnswerOption option = surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest);
+                    option.setSurveyQuestion(finalQuestion);
+                    return option;
+                })
+                .collect(Collectors.toList());
+
+        existingQuestion.setAnswerOptions(answerOptions);
+
+        // Lưu cập nhật vào DB
+        existingQuestion = surveyQuestionRepository.save(existingQuestion);
+        return surveyQuestionMapper.toSurveyQuestionResponse(existingQuestion);
+    }
+
+
+    public void deleteSurveyQuestion(String questionId) {
+        SurveyQuestion existingQuestion = surveyQuestionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Survey Question not found"));
+
+        surveyQuestionRepository.delete(existingQuestion);
+    }
+
 }
