@@ -6,6 +6,21 @@ import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 import './PsychologistBooking.css';
 
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1]; // Get JWT payload
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error("Invalid token", e);
+    return null;
+  }
+};
+
 const PsychologistBooking = () => {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -18,7 +33,6 @@ const PsychologistBooking = () => {
   const [filteredPsychologists, setFilteredPsychologists] = useState([]);
   const [loading, setLoading] = useState(false);
   const [psychologists, setPsychologists] = useState([]);
-  const [appointmentNote, setAppointmentNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   // Fetch psychologists from the API
@@ -28,7 +42,7 @@ const PsychologistBooking = () => {
         setLoading(true);
         const token = localStorage.getItem('token');
         
-        const response = await axios.get('http://localhost:8080/identity/psychologists/allpsy', {
+        const response = await axios.get('http://localhost:8080/identity/users/allpsy', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -68,20 +82,34 @@ const PsychologistBooking = () => {
     }
   }, [searchQuery, psychologists]);
 
-  // Generate time slots (9AM to 5PM, 1-hour slots)
-  const generateTimeSlots = () => {
-    const slots = [];
-    for (let hour = 9; hour < 17; hour++) {
-      const startHour = hour.toString().padStart(2, '0');
-      const endHour = (hour + 1).toString().padStart(2, '0');
-      slots.push({
-        id: hour - 9,
-        time: `${startHour}:00 - ${endHour}:00`,
-        value: `${startHour}:00`
-      });
+  // Update the generateTimeSlots function to use the specific time slots you requested
+
+// Replace the current generateTimeSlots function with this:
+const generateTimeSlots = () => {
+  // Define the specific time slots as requested
+  return [
+    {
+      id: 0,
+      time: "8h-10h",
+      value: "08:00"
+    },
+    {
+      id: 1,
+      time: "10h-12h",
+      value: "10:00"
+    },
+    {
+      id: 2,
+      time: "13h-15h", 
+      value: "13:00"
+    },
+    {
+      id: 3,
+      time: "15h-17h",
+      value: "15:00"
     }
-    return slots;
-  };
+  ];
+};
 
   const timeSlots = generateTimeSlots();
 
@@ -178,7 +206,23 @@ const PsychologistBooking = () => {
     return key && bookings[key] && bookings[key][slotId];
   };
 
-  // Book the selected appointment
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded = parseJwt(token);
+      console.log("Decoded token:", decoded);
+      console.log("User ID (from issuer):", decoded.iss);
+      
+      // Store the userId in localStorage for easy access
+      if (decoded.iss) {
+        localStorage.setItem('userId', decoded.iss);
+      }
+    } else {
+      console.error("No token found in localStorage");
+    }
+  }, []);
+
+  // Book the selected appointment with exact field names matching the API
   const bookAppointment = async () => {
     if (!selectedDate || !selectedPsychologist || selectedSlot === null) {
       toast.error("Please select date, psychologist, and time slot");
@@ -188,24 +232,34 @@ const PsychologistBooking = () => {
     try {
       setSubmitting(true);
       const token = localStorage.getItem('token');
-      const userId = localStorage.getItem('userId');
       
-      if (!token || !userId) {
+      if (!token) {
         toast.error("You need to be logged in to book an appointment");
         return;
       }
+      
+      // Extract userId from token instead of using localStorage directly
+      const decoded = parseJwt(token);
+      const userId = decoded?.iss;
+      
+      if (!userId) {
+        toast.error("Could not determine user identity. Please log in again.");
+        return;
+      }
+      
+      console.log("Using userId:", userId);
       
       // Format the date for the API
       const appointmentDate = new Date(selectedDate);
       const formattedDate = appointmentDate.toISOString();
       
-      // Prepare the appointment data
+      // Create payload EXACTLY matching the API requirements
       const appointmentData = {
         userId: userId,
         psychologistId: selectedPsychologist.id,
+        appointmentId: "", // Sending empty string as the backend will generate the ID
         appointmentDate: formattedDate,
         timeSlot: timeSlots[selectedSlot].value,
-        notes: appointmentNote,
         active: true
       };
       
@@ -226,7 +280,7 @@ const PsychologistBooking = () => {
       console.log("Booking response:", response.data);
       
       // Check if booking was successful
-      if (response.data && response.data.code === 200) {
+      if (response.data && (response.data.code === 200 || response.data.code === 201)) {
         // Update local state to reflect booking
         const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
         const newBookings = { ...bookings };
@@ -239,9 +293,6 @@ const PsychologistBooking = () => {
         // Show success message
         toast.success("Appointment booked successfully!");
         setShowConfirmation(true);
-        
-        // Reset form
-        setAppointmentNote('');
         
         // Hide confirmation after delay
         setTimeout(() => {
@@ -384,21 +435,24 @@ const PsychologistBooking = () => {
                   
                   {selectedSlot !== null && (
                     <div className="booking-form">
-                      <h3>Additional Information</h3>
-                      <textarea
-                        placeholder="Notes for your appointment (optional)"
-                        value={appointmentNote}
-                        onChange={(e) => setAppointmentNote(e.target.value)}
-                        rows="3"
-                      ></textarea>
+                      <h3>Complete Booking</h3>
+                      <div className="booking-summary">
+                        <p><strong>Summary:</strong> Appointment with {selectedPsychologist.name}</p>
+                        <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
+                        <p><strong>Time:</strong> {timeSlots[selectedSlot].time}</p>
+                      </div>
                       
                       <button 
                         className="submit-btn"
                         onClick={bookAppointment}
                         disabled={submitting}
                       >
-                        {submitting ? 'Booking...' : 'Book Appointment'}
+                        {submitting ? 'Booking...' : 'Confirm Appointment'}
                       </button>
+                      
+                      <p className="booking-terms">
+                        By booking this appointment, you agree to our cancellation policy. You can cancel or reschedule up to 24 hours before your appointment.
+                      </p>
                     </div>
                   )}
                   
@@ -408,7 +462,14 @@ const PsychologistBooking = () => {
                         <i className="fas fa-check-circle"></i>
                       </div>
                       <h3>Appointment Booked!</h3>
-                      <p>Your appointment with {selectedPsychologist.name} on {formatDate(selectedDate)} at {timeSlots[selectedSlot].time} has been confirmed.</p>
+                      <div className="confirmation-details">
+                        <p><strong>Psychologist:</strong> {selectedPsychologist.name}</p>
+                        <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
+                        <p><strong>Time:</strong> {timeSlots[selectedSlot].time}</p>
+                      </div>
+                      <p className="confirmation-redirect">
+                        You will be redirected to your appointments page in a moment...
+                      </p>
                     </div>
                   )}
                 </>
