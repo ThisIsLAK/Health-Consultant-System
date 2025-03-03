@@ -1,6 +1,7 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.request.SurveyUpdateRequest;
 import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.entity.Survey;
@@ -14,11 +15,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,9 +35,11 @@ public class SurveyService {
     SurveyQuestionMapper surveyQuestionMapper;
     UserAnswerRepository userAnswerRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SurveyResponse createSurvey(SurveyCreationRequest request) {
         Survey survey = surveyMapper.toSurvey(request);
         survey.setCreatedDate(new Date());
+        survey.setActive(true);
         survey = surveyRepository.save(survey);
         return surveyMapper.toSurveyResponse(survey);
     }
@@ -62,12 +67,34 @@ public class SurveyService {
         return userAnswerRepository.findUserAnswersByUserId(userId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteSurveyById(String surveyId) {
-        if (surveyRepository.existsById(surveyId)) {
-            surveyRepository.deleteById(surveyId);
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isPresent()) {
+            Survey survey = surveyOptional.get();
+            survey.setActive(false); // Đánh dấu là không hoạt động thay vì xóa hẳn
+            surveyRepository.save(survey);
+            log.info("Survey with ID " + surveyId + " has been deleted.");
         } else {
             throw new RuntimeException("Survey not found with ID: " + surveyId);
         }
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public SurveyResponse updateSurvey(String surveyId, SurveyUpdateRequest request) {
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+        if (surveyOptional.isEmpty()) {
+            throw new RuntimeException("Survey not found with ID: " + surveyId);
+        }
+
+        Survey survey = surveyOptional.get();
+        survey.setTitle(request.getTitle());
+        survey.setDescription(request.getDescription());
+        survey.setActive(request.getActive());
+
+        Survey updatedSurvey = surveyRepository.save(survey);
+
+        return surveyMapper.toSurveyResponse(survey);
     }
 
 }

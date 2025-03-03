@@ -14,4 +14,5 @@ public class SurveyQuestionCreationRequest {
     String surveyId;
     String questionText;
     List<SurveyAnswerOptionRequest> answerOptions;
+    Boolean active;
 }

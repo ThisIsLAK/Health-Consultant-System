@@ -138,10 +138,14 @@ public class UserController {
     }
 
     @GetMapping("/takesurvey/{surveyId}")
-    public ResponseEntity<SurveyResponse> getSurvey(@PathVariable String surveyId) {
+    ApiResponse<SurveyResponse> getSurvey(@PathVariable String surveyId) {
         SurveyResponse survey = surveyService.getSurvey(surveyId);
-        return ResponseEntity.ok(survey);
+        return ApiResponse.<SurveyResponse>builder()
+                .message("Survey retrieved successfully with ID: " + surveyId)
+                .result(survey)
+                .build();
     }
+
 
     @GetMapping("/getblogbycode/{blogCode}")
     public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {

@@ -199,10 +199,14 @@ public class AdminController {
     }
 
     @GetMapping("/findsurveybyid/{surveyId}")
-    public ResponseEntity<SurveyResponse> getSurvey(@PathVariable String surveyId) {
+    ApiResponse<SurveyResponse> getSurvey(@PathVariable String surveyId) {
         SurveyResponse survey = surveyService.getSurvey(surveyId);
-        return ResponseEntity.ok(survey);
+        return ApiResponse.<SurveyResponse>builder()
+                .message("Survey retrieved successfully with ID: " + surveyId)
+                .result(survey)
+                .build();
     }
+
     @PostMapping("/createsurveyquestion")
     public ResponseEntity<SurveyQuestionResponse> createSurveyQuestion(@RequestBody SurveyQuestionCreationRequest request) {
         SurveyQuestionResponse question = surveyQuestionService.createSurveyQuestion(request);
@@ -216,11 +220,43 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete-survey-by-surveyid/{surveyId}")
-    public ResponseEntity<ApiResponse<String>> deleteSurvey(@PathVariable String surveyId) {
+    ApiResponse<String> deleteSurvey(@PathVariable String surveyId) {
         surveyService.deleteSurveyById(surveyId);
-        return ResponseEntity.ok(ApiResponse.<String>builder()
+        return ApiResponse.<String>builder()
                 .message("Survey deleted successfully with ID: " + surveyId)
+                .build();
+    }
+
+    @PutMapping("/update-survey/{surveyId}")
+    ApiResponse<SurveyResponse> updateSurvey(
+            @PathVariable String surveyId,
+            @RequestBody @Valid SurveyUpdateRequest request) {
+
+        SurveyResponse updatedSurvey = surveyService.updateSurvey(surveyId, request);
+        return (ApiResponse.<SurveyResponse>builder()
+                .message("Survey updated successfully with ID: " + surveyId)
+                .result(surveyService.updateSurvey(surveyId, request))
                 .build());
+    }
+
+    @PutMapping("/update-survey-question/{questionId}")
+    ApiResponse<SurveyQuestionResponse> updateSurveyQuestion(
+            @PathVariable String questionId,
+            @RequestBody @Valid SurveyQuestionCreationRequest request) {
+
+        SurveyQuestionResponse updatedQuestion = surveyQuestionService.updateSurveyQuestion(questionId, request);
+        return ApiResponse.<SurveyQuestionResponse>builder()
+                .message("Survey question updated successfully with ID: " + questionId)
+                .result(updatedQuestion)
+                .build();
+    }
+
+    @DeleteMapping("/delete-survey-question/{questionId}")
+    ApiResponse<String> deleteSurveyQuestion(@PathVariable String questionId) {
+        surveyQuestionService.deleteSurveyQuestion(questionId);
+        return ApiResponse.<String>builder()
+                .message("Survey question deleted successfully with ID: " + questionId)
+                .build();
     }
 
 }

@@ -1,6 +1,5 @@
 package com.swp.user_service.dto.request;
 
-import com.swp.user_service.entity.Role;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,10 +8,8 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserUpdateByAdminRequest {
-    String name;
-    String email;
-    String password;
+public class SurveyUpdateRequest {
+    String title;
+    String description;
     Boolean active;
-    Role role;
 }

@@ -17,4 +17,5 @@ public class SurveyResponse {
     Date createdDate;
     String description;
     List<SurveyQuestionResponse> questions;
+    Boolean active;
 }

@@ -13,6 +13,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface SurveyMapper {
+    @Mapping(target = "active", source = "active")
     Survey toSurvey(SurveyCreationRequest request);
 
     @Mapping(source = "questions", target = "questions")

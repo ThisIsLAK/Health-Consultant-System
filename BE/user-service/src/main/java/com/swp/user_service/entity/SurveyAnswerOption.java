@@ -21,4 +21,13 @@ public class SurveyAnswerOption {
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)
     SurveyQuestion surveyQuestion;
+
+    Boolean active;
+
+    @PrePersist
+    protected void onCreate() {
+        if (active == null) {
+            active = true;
+        }
+    }
 }

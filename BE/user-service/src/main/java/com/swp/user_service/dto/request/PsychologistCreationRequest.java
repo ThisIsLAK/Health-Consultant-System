@@ -10,12 +10,12 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PsychologistCreationRequest {
-    private String name;
-    private String email;
-    private String password;
-    private String specialization;
+    String name;
+    String email;
+    String password;
+    String specialization;
 
-    private Boolean active;
+    Boolean active;
     @PrePersist
     protected void onCreate() {
         if (active == null) {

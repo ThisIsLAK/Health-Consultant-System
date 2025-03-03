@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface SurveyQuestionMapper {
+    @Mapping(target = "active", source = "active")
     @Mapping(source = "surveyId", target = "survey.surveyId")
     SurveyQuestion toSurveyQuestion(SurveyQuestionCreationRequest request);
 
