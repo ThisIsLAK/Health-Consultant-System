@@ -14,10 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentRequest {
-    @NotBlank
+    @NotNull(message = "Psychologist ID is required")
     String userId;
 
-    @NotBlank
+    @NotNull(message = "Psychologist ID is required")
     String psychologistId;
 
     String appointmentId;
@@ -25,7 +25,7 @@ public class AppointmentRequest {
     @NotNull
     Date appointmentDate;
 
-    @NotBlank
+    @NotNull(message = "Time slot is required")
     String timeSlot;
 
     private Boolean active;

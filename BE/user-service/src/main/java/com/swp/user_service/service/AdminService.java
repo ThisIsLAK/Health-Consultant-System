@@ -4,7 +4,6 @@ import com.swp.user_service.dto.request.ResetPasswordRequest;
 import com.swp.user_service.dto.request.UserCreationRequest;
 import com.swp.user_service.dto.request.UserUpdateByAdminRequest;
 import com.swp.user_service.dto.response.UserResponse;
-import com.swp.user_service.entity.Psychologist;
 import com.swp.user_service.entity.Role;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
@@ -38,7 +37,7 @@ public class AdminService {
     PsyRepository psyRepository;
 
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public void deleteUser(String userId) {
 
             Optional<User> userOptional = userRepository.findById(userId);
@@ -53,14 +52,14 @@ public class AdminService {
     }
 
     //Kiem tra truoc luc goi ham. Neu la role ADMIN thi moi goi duoc ham
-    @PreAuthorize("hasRole('ADMIN')")
+
     public List<UserResponse> getUsers(){
 
         log.info("In method get users");
 
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
-    @PreAuthorize("hasRole('ADMIN')")
+
     public UserResponse getUserByEmail(String email) {
         log.info("In method get user by Id");
         return userMapper.toUserResponse(userRepository.findByEmail(email)
@@ -68,7 +67,7 @@ public class AdminService {
     }
 
     //cap lai mat khau cho user
-    @PreAuthorize("hasRole('ADMIN')")
+
     public UserResponse resetUserPassword(String email, ResetPasswordRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -78,7 +77,6 @@ public class AdminService {
     }
 
     //cap nhat thong tin user
-    @PreAuthorize("hasRole('ADMIN')")
     public UserResponse updateUserByAdmin(String email, UserUpdateByAdminRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -99,8 +97,8 @@ public class AdminService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-//    //tao tk cho moi user
-    @PreAuthorize("hasRole('ADMIN')")
+    //tao tk cho moi user
+
     public UserResponse createUserByAdmin(UserCreationRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail()))
@@ -110,7 +108,7 @@ public class AdminService {
             throw new AppException(ErrorCode.NAME_REQUIRED);
         }
 
-        String roleId = request.getRoleId() != null ? request.getRoleId() : "STUDENT"; // Mặc định là STUDENT nếu không có role được thêm vào trong lúc tạo
+        String roleId = request.getRoleId() != null ? request.getRoleId() : "2"; // Mặc định là STUDENT nếu không có role được thêm vào trong lúc tạo
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 
@@ -118,15 +116,10 @@ public class AdminService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         user.setRole(role);
-        try {
-            User savedUser = userRepository.save(user);
 
-            // if the role is PSYCHOLOGIST, create an entry in the psychologist table (this is for create appointment)
-            if ("PSYCHOLOGIST".equals(role.getRoleName())) {
-                Psychologist psychologist = new Psychologist();
-                psychologist.setUser(savedUser);
-                psyRepository.save(psychologist);
-            }
+        try {
+
+            User savedUser = userRepository.save(user);
 
             return userMapper.toUserResponse(savedUser);
         } catch (Exception e) {

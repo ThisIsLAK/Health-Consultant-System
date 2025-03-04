@@ -24,8 +24,12 @@ public enum ErrorCode {
     USER_SIGNUP_ALREADY(1019, "User had been signup this program before"),
     APPOINTMENT_NOT_EXIST(1020, "Appointment is not exist"),
     NAME_REQUIRED(1021, "Name is required"),
+    USER_ALREADY_BOOKED(1022,"You already have an appointment on this date."),
+    MAX_DAILY_SLOTS_REACHED(1023,"The psychologist is fully booked for the day."),
 
+    NO_APPOINTMENT_FOUND(1024,"No appointment history found" )
     ;   //<<====chu y dau (;)===========================================================================================
+
 
 
     ErrorCode(int code, String message) {

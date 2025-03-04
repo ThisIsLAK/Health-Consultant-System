@@ -28,7 +28,7 @@ public class BlogService {
     BlogRepository blogRepository;
     BlogMapper blogMapper;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public BlogResponse createBlog(BlogRequest request) {
         if (blogRepository.existsByBlogCode(request.getBlogCode()))
             throw new AppException(ErrorCode.BLOGCODE_EXIST);
@@ -38,7 +38,7 @@ public class BlogService {
         return blogMapper.toBlogResponse(createdBlog);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public BlogResponse updateBlog(String blogCode, BlogRequest request) {
         Optional<Blog> existingBlog = blogRepository.findByBlogCode(blogCode);
         if (existingBlog.isPresent()) {

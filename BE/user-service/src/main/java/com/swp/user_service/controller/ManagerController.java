@@ -6,6 +6,7 @@ import com.swp.user_service.service.AppointmentService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,15 +19,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ManagerController {
+
     AppointmentService appointmentService;
 
     @GetMapping("/allappointments")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getAllAppointments() {
-
+    public ApiResponse<List<AppointmentResponse>> getAllAppointments() {
         List<AppointmentResponse> appointments = appointmentService.getAllAppointments();
-
-        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+        return ApiResponse.<List<AppointmentResponse>>builder()
+                .message("All appointments retrieved successfully")
                 .result(appointments)
-                .build());
+                .build();
     }
 }

@@ -1,10 +1,7 @@
 package com.swp.user_service.service;
 
-import com.swp.user_service.dto.request.PsychologistCreationRequest;
 import com.swp.user_service.dto.request.PsychologistUpdateRequest;
-import com.swp.user_service.dto.response.PsychologistResponse;
 import com.swp.user_service.dto.response.UserResponse;
-import com.swp.user_service.entity.Psychologist;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
@@ -20,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,53 +32,47 @@ public class PsyService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
 
-    public PsychologistResponse createPsychologist(PsychologistCreationRequest request) {
-        if (psychologistRepository.existsByEmail(request.getEmail())) {
-            throw new AppException(ErrorCode.EMAIL_EXIST);
-        }
-
-        // Chuyển request thành entity
-        Psychologist psychologist = psychologistMapper.toPsychologist(request);
-        psychologist.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        return psychologistMapper.toPsychologistResponse(psychologistRepository.save(psychologist));
-    }
-
     public UserResponse getPsychologistById(String id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-
-        // Kiểm tra user có đúng role không (để tránh lấy nhầm user)
-        if (!"PSYCHOLOGIST".equals(user.getRole().getRoleName())) {
-            throw new AppException(ErrorCode.NOT_PSYCHOLOGIST);
-        }
+                .filter(u -> Objects.equals(u.getRole().getRoleId(), "4"))
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
 
         return userMapper.toUserResponse(user);
     }
-    public PsychologistResponse updatePsy(String psyId, PsychologistUpdateRequest request) {
-        // Tìm psychologist theo ID, nếu không tồn tại thì ném lỗi
-        Psychologist psychologist = psychologistRepository.findById(psyId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
-        // Cập nhật các trường có trong request nếu không null
-        if (request.getSpecialization() != null && !request.getSpecialization().isEmpty()) {
-            psychologist.setSpecialization(request.getSpecialization());
+    public UserResponse updatePsy(String id, PsychologistUpdateRequest request) {
+        // Tìm psychologist theo ID và đảm bảo roleId = 4
+        User psychologist = userRepository.findById(id)
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
+
+        // Cập nhật name nếu không null hoặc rỗng
+        if (request.getName() != null && !request.getName().isEmpty()) {
+            psychologist.setName(request.getName());
         }
 
-        // Lưu psychologist sau khi cập nhật
-        Psychologist updatedPsychologist = psychologistRepository.save(psychologist);
+        // Cập nhật email nếu không null hoặc rỗng
+        if (request.getEmail() != null && !request.getEmail().isEmpty()) {
+            psychologist.setEmail(request.getEmail());
+        }
 
-        // Chuyển entity thành response và trả về
-        return psychologistMapper.toPsychologistResponse(updatedPsychologist);
+        // Cập nhật password nếu không null hoặc rỗng (cần hash password nếu có)
+        if (request.getPassword() != null && !request.getPassword().isEmpty()) {
+            String hashedPassword = passwordEncoder.encode(request.getPassword()); // Cần inject PasswordEncoder
+            psychologist.setPassword(hashedPassword);
+        }
+
+        // Lưu lại thông tin psychologist sau khi cập nhật
+        User updatedPsychologist = userRepository.save(psychologist);
+
+        return userMapper.toUserResponse(updatedPsychologist);
     }
+
     public List<UserResponse> getAllPsychologists() {
-        List<User> psychologists = userRepository.findByRole_RoleName("PSYCHOLOGIST");
-        return psychologists.stream()
+        List<UserResponse> psychologists = userRepository.findAll().stream()
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
                 .map(userMapper::toUserResponse)
                 .collect(Collectors.toList());
-    }
-
-    public void deletePsychologist(String psychologistId) {
-        psychologistRepository.deleteById(psychologistId);
+        return psychologists;
     }
 }
