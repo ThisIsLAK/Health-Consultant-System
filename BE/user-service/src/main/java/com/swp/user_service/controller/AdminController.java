@@ -8,7 +8,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,25 +19,28 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AdminController {
-    @Autowired
-    private AdminService adminService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private SupportProgramService supportProgramService;
-    @Autowired
-    private BlogService blogService;
-    @Autowired
-    private AppointmentService appointmentService;
-    @Autowired
-    private SurveyService surveyService;
-    @Autowired
-    private SurveyQuestionService surveyQuestionService;
 
+    AdminService adminService;
+
+    UserService userService;
+
+    SupportProgramService supportProgramService;
+
+    BlogService blogService;
+
+    AppointmentService appointmentService;
+
+    SurveyService surveyService;
+
+    SurveyQuestionService surveyQuestionService;
+
+    /************************************************************
+     *                  USER CONTROLLER                         *
+     ************************************************************/
     @DeleteMapping("/deleteuserbyid/{userId}")
     ApiResponse<String> deleteUser(@PathVariable String userId) {
         adminService.deleteUser(userId);
-        return ApiResponse.<String>builder().result("User has been deleted with ID:"+ " " + userId).build();
+        return ApiResponse.<String>builder().result("User has been deleted with ID:" + " " + userId).build();
     }
 
     @GetMapping("/getAllUser")
@@ -69,19 +71,19 @@ public class AdminController {
                 .build();
     }
 
-
     @PostMapping("/createUserByAdmin")
-    public ResponseEntity<ApiResponse<UserResponse>> createUserByAdmin(
-            @RequestBody @Valid UserCreationRequest request) {
-
+    public ApiResponse<UserResponse> createUserByAdmin(@RequestBody @Valid UserCreationRequest request) {
         UserResponse userResponse = adminService.createUserByAdmin(request);
-        return ResponseEntity.ok(ApiResponse.<UserResponse>builder()
+        return ApiResponse.<UserResponse>builder()
                 .result(userResponse)
                 .message("User created successfully")
-                .build());
+                .build();
     }
 
-    //program controller=================================================================================================
+    /************************************************************
+     *                  SUPPORT PROGRAM CONTROLLER              *
+     ************************************************************/
+
     @PostMapping("/createsupportprogram")
     public ApiResponse<SupportProgramResponse> createSupportProgram(@RequestBody @Valid SupportProgramRequest request) {
         return ApiResponse.<SupportProgramResponse>builder()
@@ -110,96 +112,130 @@ public class AdminController {
                 .result(supportProgramService.getAllSupportPrograms())
                 .build();
     }
+
     @GetMapping("/findprogrambycode/{programCode}")
     public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
         return ApiResponse.<SupportProgramResponse>builder()
                 .result(supportProgramService.findByProgramCode(programCode))
                 .build();
     }
-    //blog controller=================================================================================================
+
+    /************************************************************
+     *                  BLOG CONTROLLER                         *
+     ************************************************************/
+
     @PostMapping("/createblog")
-    public ResponseEntity<BlogResponse> createBlog(@RequestBody BlogRequest request) {
+    public ApiResponse<BlogResponse> createBlog(@RequestBody BlogRequest request) {
         BlogResponse createdBlog = blogService.createBlog(request);
-        return ResponseEntity.ok(createdBlog);
+        return ApiResponse.<BlogResponse>builder()
+                .result(createdBlog)
+                .message("Blog created successfully")
+                .build();
     }
 
     @PutMapping("/updateblogbycode/{blogCode}")
-    public ResponseEntity<BlogResponse> updateBlog(@PathVariable String blogCode, @RequestBody BlogRequest request) {
+    public ApiResponse<BlogResponse> updateBlog(@PathVariable String blogCode, @RequestBody BlogRequest request) {
         BlogResponse updatedBlog = blogService.updateBlog(blogCode, request);
-        return ResponseEntity.ok(updatedBlog);
+        return ApiResponse.<BlogResponse>builder()
+                .result(updatedBlog)
+                .message("Blog updated successfully")
+                .build();
     }
 
     @DeleteMapping("/deleteblogbycode/{blogCode}")
-    public ResponseEntity<Void> deleteBlog(@PathVariable String blogCode) {
+    public ApiResponse<Void> deleteBlog(@PathVariable String blogCode) {
         blogService.deleteBlog(blogCode);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.<Void>builder()
+                .message("Blog deleted successfully")
+                .build();
     }
 
     @GetMapping("/getblogbycode/{blogCode}")
-    public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
+    public ApiResponse<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
         BlogResponse blog = blogService.getBlogByBlogCode(blogCode);
-        return ResponseEntity.ok(blog);
+        return ApiResponse.<BlogResponse>builder()
+                .result(blog)
+                .message("Blog retrieved successfully")
+                .build();
     }
 
     @GetMapping("/getallblogs")
-    public ResponseEntity<List<BlogResponse>> getAllBlogs() {
+    public ApiResponse<List<BlogResponse>> getAllBlogs() {
         List<BlogResponse> blogs = blogService.getAllBlogs();
-        return ResponseEntity.ok(blogs);
+        return ApiResponse.<List<BlogResponse>>builder()
+                .result(blogs)
+                .message("All blogs retrieved successfully")
+                .build();
     }
-    //appointment controller=================================================================================================
-    @DeleteMapping("/{appointmentId}")
-    public ResponseEntity<ApiResponse<Void>> cancelAppointment(
-            @PathVariable String appointmentId) {
+
+    /************************************************************
+     *                  APPOINTMENT CONTROLLER                  *
+     ************************************************************/
+
+    @DeleteMapping("/cancelappointment/{appointmentId}")
+    public ApiResponse<Void> cancelAppointment(@PathVariable String appointmentId) {
         appointmentService.cancelAppointment(appointmentId);
 
-        return ResponseEntity.ok(ApiResponse.<Void>builder()
+        return ApiResponse.<Void>builder()
                 .message("Appointment cancelled successfully")
-                .build());
+                .build();
     }
-    //psychologist
-    @GetMapping("/viewpsychologistapointmentlist/{psychologistId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getPsychologistAppointments(
-            @PathVariable String psychologistId) {
+
+    @GetMapping("/psyappointment/{psychologistId}")
+    public ApiResponse<List<AppointmentResponse>> getPsychologistAppointments(@PathVariable String psychologistId) {
+
         List<AppointmentResponse> appointments = appointmentService.getPsychologistAppointments(psychologistId);
 
-        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+        return ApiResponse.<List<AppointmentResponse>>builder()
                 .result(appointments)
-                .build());
+                .message("Psychologist appointments retrieved successfully")
+                .build();
     }
-    //user
-    @GetMapping("/viewuserappointmentlist/{userId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getUserAppointments(
-            @PathVariable String userId) {
-        List<AppointmentResponse> appointments = appointmentService.getUserAppointments(userId);
 
-        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+    @GetMapping("/viewuserappointmentlist/{id}")
+    public ApiResponse<List<AppointmentResponse>> getUserAppointments(@PathVariable String id) {
+        List<AppointmentResponse> appointments = appointmentService.getUserAppointments(id);
+
+        return ApiResponse.<List<AppointmentResponse>>builder()
                 .result(appointments)
-                .build());
+                .message("User appointments retrieved successfully")
+                .build();
     }
+
     @GetMapping("/allappointments")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getAllAppointments() {
-
+    public ApiResponse<List<AppointmentResponse>> getAllAppointments() {
         List<AppointmentResponse> appointments = appointmentService.getAllAppointments();
 
-        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+        return ApiResponse.<List<AppointmentResponse>>builder()
                 .result(appointments)
-                .build());
+                .message("All appointments retrieved successfully")
+                .build();
     }
-    //survey controller=================================================================================================
+
+    /************************************************************
+     *                  SURVEY CONTROLLER                       *
+     ************************************************************/
+
     @PostMapping("/createsurvey")
-    public ResponseEntity<SurveyResponse> createSurvey(@RequestBody SurveyCreationRequest request) {
+    public ApiResponse<SurveyResponse> createSurvey(@RequestBody SurveyCreationRequest request) {
         SurveyResponse survey = surveyService.createSurvey(request);
-        return ResponseEntity.ok(survey);
+        return ApiResponse.<SurveyResponse>builder()
+                .message("Survey created successfully")
+                .result(survey)
+                .build();
     }
 
     @GetMapping("/allsurveys")
-    public ResponseEntity<List<AllSurveyResponse>> getAllSurveys() {
+    public ApiResponse<List<AllSurveyResponse>> getAllSurveys() {
         List<AllSurveyResponse> surveys = surveyService.getAllSurveys();
-        return ResponseEntity.ok(surveys);
+        return ApiResponse.<List<AllSurveyResponse>>builder()
+                .message("All surveys retrieved successfully")
+                .result(surveys)
+                .build();
     }
 
     @GetMapping("/findsurveybyid/{surveyId}")
-    ApiResponse<SurveyResponse> getSurvey(@PathVariable String surveyId) {
+    public ApiResponse<SurveyResponse> getSurvey(@PathVariable String surveyId) {
         SurveyResponse survey = surveyService.getSurvey(surveyId);
         return ApiResponse.<SurveyResponse>builder()
                 .message("Survey retrieved successfully with ID: " + surveyId)
@@ -208,18 +244,24 @@ public class AdminController {
     }
 
     @PostMapping("/createsurveyquestion")
-    public ResponseEntity<SurveyQuestionResponse> createSurveyQuestion(@RequestBody SurveyQuestionCreationRequest request) {
+    public ApiResponse<SurveyQuestionResponse> createSurveyQuestion(@RequestBody SurveyQuestionCreationRequest request) {
         SurveyQuestionResponse question = surveyQuestionService.createSurveyQuestion(request);
-        return ResponseEntity.ok(question);
+        return ApiResponse.<SurveyQuestionResponse>builder()
+                .message("Survey question created successfully")
+                .result(question)
+                .build();
     }
 
     @GetMapping("/findsurveyquestionbyid/{questionId}")
-    public ResponseEntity<SurveyQuestionResponse> getSurveyQuestion(@PathVariable String questionId) {
+    public ApiResponse<SurveyQuestionResponse> getSurveyQuestion(@PathVariable String questionId) {
         SurveyQuestionResponse question = surveyQuestionService.getSurveyQuestion(questionId);
-        return ResponseEntity.ok(question);
+        return ApiResponse.<SurveyQuestionResponse>builder()
+                .message("Survey question retrieved successfully with ID: " + questionId)
+                .result(question)
+                .build();
     }
 
-    @DeleteMapping("/delete-survey-by-surveyid/{surveyId}")
+    @DeleteMapping("/deletesurveybysurveyid/{surveyId}")
     ApiResponse<String> deleteSurvey(@PathVariable String surveyId) {
         surveyService.deleteSurveyById(surveyId);
         return ApiResponse.<String>builder()
@@ -227,7 +269,7 @@ public class AdminController {
                 .build();
     }
 
-    @PutMapping("/update-survey/{surveyId}")
+    @PutMapping("/updatesurvey/{surveyId}")
     ApiResponse<SurveyResponse> updateSurvey(
             @PathVariable String surveyId,
             @RequestBody @Valid SurveyUpdateRequest request) {
@@ -239,7 +281,7 @@ public class AdminController {
                 .build());
     }
 
-    @PutMapping("/update-survey-question/{questionId}")
+    @PutMapping("/updatesurveyquestion/{questionId}")
     ApiResponse<SurveyQuestionResponse> updateSurveyQuestion(
             @PathVariable String questionId,
             @RequestBody @Valid SurveyQuestionCreationRequest request) {
@@ -251,12 +293,11 @@ public class AdminController {
                 .build();
     }
 
-    @DeleteMapping("/delete-survey-question/{questionId}")
+    @DeleteMapping("/deletesurveyquestion/{questionId}")
     ApiResponse<String> deleteSurveyQuestion(@PathVariable String questionId) {
         surveyQuestionService.deleteSurveyQuestion(questionId);
         return ApiResponse.<String>builder()
                 .message("Survey question deleted successfully with ID: " + questionId)
                 .build();
     }
-
 }

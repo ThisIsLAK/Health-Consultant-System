@@ -25,9 +25,6 @@ import java.util.List;
 public class UserAnswerService {
 
     UserAnswerRepository userAnswerRepository;
-//    SurveyRepository surveyRepository;
-//    SurveyQuestionRepository surveyQuestionRepository;
-//    SurveyAnswerOptionRepository surveyAnswerOptionRepository;
     UserAnswerMapper userAnswerMapper;
 
     public UserAnswerResponse submitUserAnswer(SubmitUserAnswerRequest request) {

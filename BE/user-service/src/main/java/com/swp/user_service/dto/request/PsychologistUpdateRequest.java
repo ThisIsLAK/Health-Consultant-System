@@ -1,13 +1,16 @@
 package com.swp.user_service.dto.request;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class PsychologistUpdateRequest {
-    private String specialization;
+   String name;
+   String email;
+   String password;
 
-    public String getSpecialization() {
-        return specialization;
-    }
-
-    public void setSpecialization(String specialization) {
-        this.specialization = specialization;
-    }
 }

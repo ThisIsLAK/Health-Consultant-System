@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -82,16 +83,23 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    @PostAuthorize("returnObject.email == authentication.name")
-    public UserResponse getUser(String userId){
-        log.info("In method get user by Id");
 
+    public UserResponse getUser(String userId){
         return userMapper.toUserResponse(userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST)));
     }
-    public List<AppointmentResponse> getAppointmentHistory(String userId) {
-        List<Appointment> appointments = appointmentRepository.findByUser_Id(userId);
-        return appointmentMapper.toAppointmentResponses(appointments);
-    }
 
+
+    public List<AppointmentResponse> getAppointmentHistory(String userId) {
+        List<Appointment> appointments = appointmentRepository.findAppointmentsByUserId(userId);
+
+        return appointments.stream().map(appointment -> {
+            AppointmentResponse response = new AppointmentResponse();
+            response.setAppointmentId(appointment.getAppointmentId());
+            response.setAppointmentDate(appointment.getAppointmentDate());
+            response.setTimeSlot(appointment.getTimeSlot());
+            response.setUserId(appointment.getUser().getId());
+            return response;
+        }).collect(Collectors.toList());
+    }
 }
