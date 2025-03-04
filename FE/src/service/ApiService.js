@@ -843,7 +843,7 @@ export default class ApiService {
         }
     }
 
-    
+
     /* User Services */
     /**
  * Get all blogs for users
@@ -900,7 +900,6 @@ export default class ApiService {
         }
     }
 
-
     /**
  * Get all surveys for users
  * @returns {Promise<Object>} Response object with status and data/message
@@ -956,32 +955,34 @@ export default class ApiService {
     }
 
     /**
-     * Submit user answers for a survey
+     * Submit user's answer for a survey question
+     * @param {Object} answerData - Object containing answerId, questionId, optionId, userId
      * @returns {Promise<Object>} Response object with status and data/message
      */
-    static async submitUserAnswer(userId, surveyId, answers) {
+    static async submitUserAnswer(answerData) {
         try {
             const response = await axios.post(
                 `${this.BASE_URL}/identity/users/submituseranswer`,
-                { userId, surveyId, answers },
+                answerData,
                 { headers: this.getHeader() }
             );
-    
-            console.log("Survey answer submitted:", response.data);
+
+            console.log("Submitted user answer:", response.data);
+
             return {
                 status: 200,
                 data: response.data,
-                message: "Answers submitted successfully"
+                message: "User answer submitted successfully"
             };
         } catch (error) {
-            console.error("Error submitting answers:", error);
+            console.error("Error submitting user answer:", error);
             return {
                 status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to submit answers"
+                message: error.response?.data?.message || error.message || "Failed to submit user answer"
             };
         }
     }
-    
+
     /**
  * Creates a new user by admin
  * @param {Object} userData - The user data containing email, password, name, role, etc.

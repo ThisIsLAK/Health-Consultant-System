@@ -53,16 +53,20 @@ const SurveyTake = () => {
         e.preventDefault();
 
         const answers = Object.keys(formData).map(questionId => ({
+            answerId: `${userId}-${surveyId}-${questionId}`, // 🔹 Tạo answerId duy nhất
             questionId: parseInt(questionId),
-            optionId: formData[questionId].optionId
+            optionId: formData[questionId].optionId,
+            userId: userId
         }));
 
         console.log("Submitting answers:", answers);
 
-        const response = await ApiService.submitUserAnswer(userId, surveyId, answers);
+        const response = await ApiService.submitUserAnswer({ answers });
         if (response.status === 200) {
+            console.log("Survey submitted successfully!", response.data);
             alert("Survey submitted successfully!");
         } else {
+            console.error("Failed to submit survey:", response.message);
             alert("Failed to submit survey: " + response.message);
         }
     };
