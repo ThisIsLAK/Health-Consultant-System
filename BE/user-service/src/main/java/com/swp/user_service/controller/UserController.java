@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -137,7 +138,7 @@ public class UserController {
                 .result(supportProgramService.getAllActiveSupportPrograms())
                 .build();
     }
-    
+
     @GetMapping("/findsupportprogrambycode/{programCode}")
     public ApiResponse<SupportProgramResponse> findBySupportProgramCode(@PathVariable String programCode) {
         return ApiResponse.<SupportProgramResponse>builder()
@@ -156,13 +157,16 @@ public class UserController {
      *                  SURVEY CONTROLLER                       *
      ************************************************************/
 
-    @PostMapping("/submituseranswer")
-    public ApiResponse<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
-        UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
-        return ApiResponse.<UserAnswerResponse>builder()
-                .result(answer)
-                .message("User answer submitted successfully")
-                .build();
+    @PostMapping("/submit-answers")
+    public ResponseEntity<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
+        List<UserAnswerResponse> responses = userAnswerService.submitUserAnswers(requests);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/survey-result")
+    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
+        SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/allsurveys")
