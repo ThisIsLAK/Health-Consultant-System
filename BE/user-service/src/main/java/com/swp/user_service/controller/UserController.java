@@ -136,10 +136,16 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/submituseranswer")
-    public ResponseEntity<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
-        UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
-        return ResponseEntity.ok(answer);
+    @PostMapping("/submit-answers")
+    public ResponseEntity<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
+        List<UserAnswerResponse> responses = userAnswerService.submitUserAnswers(requests);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/survey-result")
+    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
+        SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/allsurveys")
