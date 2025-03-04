@@ -34,21 +34,28 @@ public class UserAnswerService {
         List<UserAnswerResponse> responses = new ArrayList<>();
 
         for (SubmitUserAnswerRequest request : requests) {
-            // Kiểm tra xem người dùng đã trả lời câu hỏi này chưa
-            List<UserAnswer> existingAnswers = userAnswerRepository.findBySurveyQuestion_QuestionIdAndUser_Id(
-                    request.getQuestionId(), request.getUserId());
-            if (!existingAnswers.isEmpty()) {
-                throw new IllegalArgumentException("User has already answered question: " + request.getQuestionId());
+            try {
+                log.info("Processing request: {}", request);
+
+//                List<UserAnswer> existingAnswers = userAnswerRepository.findBySurveyQuestion_QuestionIdAndUser_Id(
+//                        request.getQuestionId(), request.getUserId());
+//                if (!existingAnswers.isEmpty()) {
+//                    throw new IllegalArgumentException("User has already answered question: " + request.getQuestionId());
+//                }
+
+                SurveyAnswerOption answerOption = surveyAnswerOptionRepository.findById(request.getOptionId())
+                        .orElseThrow(() -> new IllegalArgumentException("Invalid answer option ID: " + request.getOptionId()));
+
+                UserAnswer userAnswer = userAnswerMapper.toUserAnswer(request);
+                userAnswer.setSurveyAnswerOption(answerOption);
+                userAnswer = userAnswerRepository.save(userAnswer);
+                responses.add(userAnswerMapper.toUserAnswerResponse(userAnswer));
+
+                log.info("Successfully processed request: {}", request);
+            } catch (Exception e) {
+                log.error("Error processing request: {}", request, e);
+                throw new RuntimeException("Error submitting user answer", e);
             }
-
-            SurveyAnswerOption answerOption = surveyAnswerOptionRepository.findById(request.getOptionId())
-                    .orElseThrow(() -> new IllegalArgumentException("Invalid answer option ID: " + request.getOptionId()));
-
-            UserAnswer userAnswer = userAnswerMapper.toUserAnswer(request);
-            userAnswer.setSurveyAnswerOption(answerOption);
-
-            userAnswer = userAnswerRepository.save(userAnswer);
-            responses.add(userAnswerMapper.toUserAnswerResponse(userAnswer));
         }
 
         return responses;
