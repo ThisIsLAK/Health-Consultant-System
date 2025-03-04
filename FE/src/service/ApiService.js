@@ -961,13 +961,16 @@ export default class ApiService {
      */
     static async submitUserAnswer(answerData) {
         try {
-            const response = await axios.post(
-                `${this.BASE_URL}/identity/users/submituseranswer`,
-                answerData,
-                { headers: this.getHeader() }
-            );
+            console.log("Submitting answers:", answerData);
+            console.log("Headers:", this.getHeader());
 
-            console.log("Submitted user answer:", response.data);
+            const response = await axios.post(
+                `${this.BASE_URL}/identity/users/submit-answers`,
+                answerData.answers,  // Lấy trực tiếp mảng thay vì bọc trong { answers: [...] }
+                { headers: this.getHeader() }
+            );            
+
+            console.log("Submitted user answer:", response.data.result);
 
             return {
                 status: 200,

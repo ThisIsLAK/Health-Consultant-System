@@ -50,6 +50,9 @@ const LoginSignup = () => {
         localStorage.setItem('token', token);
         console.log("Token stored successfully");
 
+        console.log("User ID:", response.data.result.userId);
+        localStorage.setItem('userId', response.data.result.userId);
+
         // Now fetch user info to get accurate role information
         try {
           console.log("Fetching user info to get role...");
@@ -70,7 +73,7 @@ const LoginSignup = () => {
               // Update role mappings to match your system's IDs
               if (roleData.roleName === "ADMIN" || roleData.roleId === "1") {
                 role = "ADMIN";
-              } 
+              }
               else if (roleData.roleName === "STUDENT" || roleData.roleId === "2") {
                 role = "USER"; // Map students to USER role for frontend purposes
               }

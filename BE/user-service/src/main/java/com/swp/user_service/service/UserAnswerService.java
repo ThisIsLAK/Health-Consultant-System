@@ -26,6 +26,7 @@ public class UserAnswerService {
 
     UserAnswerRepository userAnswerRepository;
     UserAnswerMapper userAnswerMapper;
+    SurveyAnswerOptionRepository surveyAnswerOptionRepository;
 
     public UserAnswerResponse submitUserAnswer(SubmitUserAnswerRequest request) {
         // Check if the user has already answered this question

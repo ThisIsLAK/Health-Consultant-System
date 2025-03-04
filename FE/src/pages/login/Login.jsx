@@ -33,6 +33,9 @@ const Login = () => {
                 // Make sure we have the token in localStorage before redirecting
                 if (!localStorage.getItem('token') && response.data.token) {
                     localStorage.setItem('token', response.data.token);
+
+                    console.log("User ID:", response.data.result.id);
+                    localStorage.setItem('userId', response.data.result.id);  // Lưu userId
                 }
                 
                 // Important: Add a small delay to make sure token is stored

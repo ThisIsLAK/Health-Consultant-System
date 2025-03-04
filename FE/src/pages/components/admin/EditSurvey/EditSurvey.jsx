@@ -74,7 +74,7 @@ const EditSurvey = () => {
         throw new Error(surveyResponse.message);
       }
 
-      const surveyId = surveyResponse.data.surveyId;
+      const surveyId = surveyResponse.data.result.surveyId;
       for (const question of survey.questions) {
         const questionData = {
           surveyId,

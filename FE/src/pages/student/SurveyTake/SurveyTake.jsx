@@ -4,6 +4,7 @@ import ApiService from "../../../service/ApiService";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 import "./SurveyTake.css";
+import { v4 as uuidv4 } from 'uuid';
 
 const SurveyTake = () => {
     const { surveyId } = useParams();
@@ -11,7 +12,7 @@ const SurveyTake = () => {
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const userId = 1; // 🔹 Giả sử userId là 1 (bạn có thể lấy từ context hoặc auth)
+    const userId = localStorage.getItem("userId"); 
 
     useEffect(() => {
         const fetchSurvey = async () => {
@@ -49,19 +50,42 @@ const SurveyTake = () => {
         }));
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+
+    //     const answers = Object.keys(formData).map(questionId => ({
+    //         answerId: `${userId}-${surveyId}-${questionId}`, // 🔹 ID duy nhất dạng string
+    //         questionId: questionId.toString(),  // Ép kiểu về string
+    //         optionId: String(formData[questionId].optionId),  // Ép kiểu về string
+    //         userId: userId.toString()  // Ép kiểu về string
+    //     }));
+
+    //     console.log("Submitting answers:", JSON.stringify(answers, null, 2));
+
+    //     const response = await ApiService.submitUserAnswer({ answers });
+    //     if (response.status === 200) {
+    //         console.log("Survey submitted successfully!", response.data);
+    //         alert("Survey submitted successfully!");
+    //     } else {
+    //         console.error("Failed to submit survey:", response.message);
+    //         alert("Failed to submit survey: " + response.message);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const answers = Object.keys(formData).map(questionId => ({
-            answerId: `${userId}-${surveyId}-${questionId}`, // 🔹 Tạo answerId duy nhất
-            questionId: parseInt(questionId),
-            optionId: formData[questionId].optionId,
-            userId: userId
+            questionId: questionId,  // ✅ Giữ nguyên UUID của câu hỏi
+            optionId: formData[questionId].optionId,  // ✅ Giữ nguyên UUID của option
+            userId: userId  // ✅ Giữ nguyên UUID của user
         }));
 
-        console.log("Submitting answers:", answers);
+        console.log("Submitting answers:", JSON.stringify(answers, null, 2));
 
+        // 🛠 Gửi dưới dạng object chứa danh sách
         const response = await ApiService.submitUserAnswer({ answers });
+
         if (response.status === 200) {
             console.log("Survey submitted successfully!", response.data);
             alert("Survey submitted successfully!");
@@ -70,6 +94,7 @@ const SurveyTake = () => {
             alert("Failed to submit survey: " + response.message);
         }
     };
+
 
     if (loading) return <p>Loading survey...</p>;
     if (error) return <p>Error: {error}</p>;
