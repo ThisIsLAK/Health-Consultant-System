@@ -80,12 +80,7 @@ public class PsyController {
                 .build();
     }
 
-    //answer - //survey ================================================================================================
-    @GetMapping("/result")
-    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
-        SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
-        return ResponseEntity.ok(result);
-    }
+
 
     @GetMapping("/surveyresultsbyid/{userId}")
     public ResponseEntity<List<UserAnswer>> getUserSurveyResults(@PathVariable String userId) {
