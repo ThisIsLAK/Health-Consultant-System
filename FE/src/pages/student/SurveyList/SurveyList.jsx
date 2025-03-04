@@ -18,7 +18,7 @@ const SurveyList = () => {
         try {
             const response = await ApiService.getAllSurveysForUsers();
             if (response.status === 200) {
-                setSurveys(response.data);
+                setSurveys(response.data.result);
             } else {
                 setError(response.message);
             }

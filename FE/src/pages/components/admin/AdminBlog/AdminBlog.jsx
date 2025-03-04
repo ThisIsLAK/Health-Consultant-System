@@ -22,7 +22,7 @@ const AdminBlog = () => {
         try {
             const response = await ApiService.getAllBlogs();
             if (response.status === 200) {
-                setBlogs(response.data);
+                setBlogs(response.data.result);
             } else {
                 setError(response.message);
             }

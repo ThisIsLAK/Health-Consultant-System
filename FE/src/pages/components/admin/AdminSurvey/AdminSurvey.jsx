@@ -21,7 +21,7 @@ const AdminSurvey = () => {
         try {
             const response = await ApiService.getAllSurveys();
             if (response.status === 200) {
-                setSurveys(response.data);
+                setSurveys(response.data.result);
             } else {
                 setError(response.message);
             }
