@@ -1,5 +1,7 @@
 package com.swp.user_service.dto.response;
 
+import com.swp.user_service.entity.User;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import com.swp.user_service.entity.Appointment;
@@ -12,15 +14,10 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentResponse {
-//    String userId;
-    String appointmentId;
-    Date appointmentDate;
-    String timeSlot;
-    public static AppointmentResponse fromEntity(Appointment appointment) {
-        return AppointmentResponse.builder()
-                .appointmentId(appointment.getAppointmentId())
-                .appointmentDate(appointment.getAppointmentDate())
-                .timeSlot(appointment.getTimeSlot())
-                .build();
-    }
+    private String psychologistId;
+    private String appointmentId;
+    private String userId;
+    private Date appointmentDate;
+    private String timeSlot;
+
 }

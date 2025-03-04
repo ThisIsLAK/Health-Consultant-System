@@ -2,6 +2,7 @@ package com.swp.user_service.mapper;
 
 import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.entity.Appointment;
+import com.swp.user_service.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.processing.Generated;
@@ -22,6 +23,8 @@ public class AppointmentMapperImpl implements AppointmentMapper {
 
         AppointmentResponse.AppointmentResponseBuilder appointmentResponse = AppointmentResponse.builder();
 
+        appointmentResponse.userId( appointmentUserId( appointment ) );
+        appointmentResponse.psychologistId( appointment.getPsychologistId() );
         appointmentResponse.appointmentId( appointment.getAppointmentId() );
         appointmentResponse.appointmentDate( appointment.getAppointmentDate() );
         appointmentResponse.timeSlot( appointment.getTimeSlot() );
@@ -41,5 +44,20 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         }
 
         return list;
+    }
+
+    private String appointmentUserId(Appointment appointment) {
+        if ( appointment == null ) {
+            return null;
+        }
+        User user = appointment.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String id = user.getId();
+        if ( id == null ) {
+            return null;
+        }
+        return id;
     }
 }

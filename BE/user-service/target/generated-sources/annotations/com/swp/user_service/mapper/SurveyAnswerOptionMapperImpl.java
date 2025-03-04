@@ -22,6 +22,7 @@ public class SurveyAnswerOptionMapperImpl implements SurveyAnswerOptionMapper {
 
         surveyAnswerOption.optionText( request.getOptionText() );
         surveyAnswerOption.score( request.getScore() );
+        surveyAnswerOption.active( request.getActive() );
 
         return surveyAnswerOption.build();
     }

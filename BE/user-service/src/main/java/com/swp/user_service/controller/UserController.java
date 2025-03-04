@@ -2,7 +2,6 @@ package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.*;
 import com.swp.user_service.dto.response.*;
-import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
@@ -12,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,20 +26,19 @@ import java.util.List;
 public class UserController {
 
     UserService userService;
-
     PsyService psyService;
-
     AppointmentService appointmentService;
-
     UserRepository userRepository;
-
     SupportProgramService supportProgramService;
-
     UserAnswerService userAnswerService;
-
     SurveyService surveyService;
-
     BlogService blogService;
+
+
+
+    /************************************************************
+     *                  USER CONTROLLER                         *
+     ************************************************************/
 
     @PostMapping
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
@@ -49,7 +46,6 @@ public class UserController {
                 .result(userService.createUser(request))
                 .build();
     }
-
 
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
@@ -72,49 +68,71 @@ public class UserController {
                 .build();
     }
 
+    /************************************************************
+     *                  PSYCHOLOGIST CONTROLLER                 *
+     ************************************************************/
+
     @GetMapping("/allpsy")
-    public ResponseEntity<ApiResponse<List<UserResponse>>> getAllPsychologists() {
+    public ApiResponse<List<UserResponse>> getAllPsychologists() {
         List<UserResponse> psychologists = psyService.getAllPsychologists();
-        return ResponseEntity.ok(ApiResponse.<List<UserResponse>>builder()
+        return ApiResponse.<List<UserResponse>>builder()
                 .result(psychologists)
-                .build());
+                .message("List of all psychologists retrieved successfully")
+                .build();
     }
 
+    @GetMapping("/findpsybyid/{id}")
+    public ApiResponse<UserResponse> getPsychologistById(@PathVariable String id) {
+        return ApiResponse.<UserResponse>builder()
+                .result(psyService.getPsychologistById(id))
+                .build();
+    }
+
+    /************************************************************
+     *                  APPOINTMENT CONTROLLER                  *
+     ************************************************************/
+
     @PostMapping("/bookappointment")
-    public ResponseEntity<ApiResponse<AppointmentResponse>> bookAppointment(
-            @RequestBody @Valid AppointmentRequest request) {
+    public ApiResponse<AppointmentResponse> bookAppointment(@RequestBody @Valid AppointmentRequest request) {
         AppointmentResponse response = appointmentService.bookAppointment(request);
 
-        return ResponseEntity.ok(ApiResponse.<AppointmentResponse>builder()
+        return ApiResponse.<AppointmentResponse>builder()
                 .result(response)
-                .build());
+                .message("Appointment booked successfully")
+                .build();
     }
 
 
     @DeleteMapping("/cancelappointment/{appointmentId}")
-    public ResponseEntity<ApiResponse<Void>> cancelAppointment(
-            @PathVariable String appointmentId) {
+    public ApiResponse<Void> cancelAppointment(@PathVariable String appointmentId) {
         appointmentService.cancelAppointment(appointmentId);
 
-        return ResponseEntity.ok(ApiResponse.<Void>builder()
+        return ApiResponse.<Void>builder()
                 .message("Appointment cancelled successfully")
-                .build());
+                .build();
     }
 
     @GetMapping("/appointmenthistory/{userId}")
-    public ResponseEntity<ApiResponse<List<AppointmentResponse>>> getMyAppointments(@PathVariable("userId") String userId) {
+    public ApiResponse<List<AppointmentResponse>> getMyAppointments(@PathVariable("userId") String userId) {
+        // Kiểm tra xem người dùng có tồn tại không
+        if (!userRepository.existsById(userId)) {
+            throw new AppException(ErrorCode.USER_NOT_EXIST);
+        }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-
+        // Lấy lịch sử đặt lịch
         List<AppointmentResponse> appointments = userService.getAppointmentHistory(userId);
 
-        return ResponseEntity.ok(ApiResponse.<List<AppointmentResponse>>builder()
+        return ApiResponse.<List<AppointmentResponse>>builder()
                 .result(appointments)
-                .build());
+                .message("Appointment history retrieved successfully")
+                .build();
     }
 
-    @GetMapping("/active-support-programs")
+    /************************************************************
+     *                  SUPPORT PROGRAM CONTROLLER              *
+     ************************************************************/
+
+    @GetMapping("/allsupportprogramsactive")
     public ApiResponse<List<SupportProgramResponse>> getAllActiveSupportPrograms() {
         return ApiResponse.<List<SupportProgramResponse>>builder()
                 .result(supportProgramService.getAllActiveSupportPrograms())
@@ -135,6 +153,10 @@ public class UserController {
                 .build();
     }
 
+    /************************************************************
+     *                  SURVEY CONTROLLER                       *
+     ************************************************************/
+
     @PostMapping("/submit-answers")
     public ResponseEntity<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
         List<UserAnswerResponse> responses = userAnswerService.submitUserAnswers(requests);
@@ -148,9 +170,12 @@ public class UserController {
     }
 
     @GetMapping("/allsurveys")
-    public ResponseEntity<List<AllSurveyResponse>> getAllSurveys() {
+    public ApiResponse<List<AllSurveyResponse>> getAllSurveys() {
         List<AllSurveyResponse> surveys = surveyService.getAllSurveys();
-        return ResponseEntity.ok(surveys);
+        return ApiResponse.<List<AllSurveyResponse>>builder()
+                .result(surveys)
+                .message("List of all surveys retrieved successfully")
+                .build();
     }
 
     @GetMapping("/takesurvey/{surveyId}")
@@ -162,16 +187,25 @@ public class UserController {
                 .build();
     }
 
+    /************************************************************
+     *                  BLOG CONTROLLER                         *
+     ************************************************************/
 
     @GetMapping("/getblogbycode/{blogCode}")
-    public ResponseEntity<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
+    public ApiResponse<BlogResponse> getBlogByBlogCode(@PathVariable String blogCode) {
         BlogResponse blog = blogService.getBlogByBlogCode(blogCode);
-        return ResponseEntity.ok(blog);
+        return ApiResponse.<BlogResponse>builder()
+                .result(blog)
+                .message("Blog retrieved successfully")
+                .build();
     }
 
     @GetMapping("/getallblogs")
-    public ResponseEntity<List<BlogResponse>> getAllBlogs() {
+    public ApiResponse<List<BlogResponse>> getAllBlogs() {
         List<BlogResponse> blogs = blogService.getAllBlogs();
-        return ResponseEntity.ok(blogs);
+        return ApiResponse.<List<BlogResponse>>builder()
+                .result(blogs)
+                .message("List of all blogs retrieved successfully")
+                .build();
     }
 }

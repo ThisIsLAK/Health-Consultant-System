@@ -32,7 +32,7 @@ public class SupportProgramService {
     SupportProgramMapper supportProgramMapper;
     UserRepository userRepository;
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public SupportProgramResponse createSupportProgram(SupportProgramRequest request) {
         if (supportProgramRepository.existsByProgramCode(request.getProgramCode()))
             throw new AppException(ErrorCode.SUPPORT_PROGRAM_EXIST);
@@ -61,7 +61,7 @@ public class SupportProgramService {
                 .collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public SupportProgramResponse updateSupportProgram(String programCode, SupportProgramRequest request) {
         SupportProgram existingProgram = supportProgramRepository.findByProgramCode(programCode)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPORT_PROGRAM_NOT_EXIST));
@@ -70,7 +70,7 @@ public class SupportProgramService {
         return supportProgramMapper.toResponse(existingProgram);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+
     public void deleteSupportProgram(String programCode) {
         Optional<SupportProgram> supportProgramOptional = supportProgramRepository.findByProgramCode(programCode);
         if (supportProgramOptional.isPresent()) {
@@ -83,7 +83,7 @@ public class SupportProgramService {
         }
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+
     public SupportProgramResponse signupForProgram(SupportProgramSignupRequest request, String email) {
         SupportProgram supportProgram = supportProgramRepository.findByProgramCode(request.getProgramCode())
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPORT_PROGRAM_NOT_EXIST));

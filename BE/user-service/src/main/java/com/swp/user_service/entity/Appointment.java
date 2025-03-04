@@ -21,9 +21,7 @@ public class Appointment {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "psy_id")
-    private Psychologist psychologist;
+    String psychologistId;
 
     @Temporal(TemporalType.TIMESTAMP)
     Date appointmentDate;
