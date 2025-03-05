@@ -1,12 +1,15 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.PsychologistUpdateRequest;
+import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.dto.response.UserResponse;
+import com.swp.user_service.entity.Appointment;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.PsychologistMapper;
 import com.swp.user_service.mapper.UserMapper;
+import com.swp.user_service.repository.AppointmentRepository;
 import com.swp.user_service.repository.PsyRepository;
 import com.swp.user_service.repository.UserRepository;
 import lombok.AccessLevel;
@@ -31,6 +34,7 @@ public class PsyService {
     PsychologistMapper psychologistMapper;
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
+    AppointmentRepository appointmentRepository;
 
     public UserResponse getPsychologistById(String id) {
         User user = userRepository.findById(id)
@@ -74,5 +78,19 @@ public class PsyService {
                 .map(userMapper::toUserResponse)
                 .collect(Collectors.toList());
         return psychologists;
+    }
+
+    public List<AppointmentResponse> getAllActiveAppointments(String psychologistId) {
+        List<Appointment> appointments = appointmentRepository.findAllByPsychologistIdAndActive(psychologistId,true);
+
+        return appointments.stream().map(appointment -> {
+            AppointmentResponse response = new AppointmentResponse();
+            response.setPsychologistId(appointment.getPsychologistId());
+            response.setAppointmentId(appointment.getAppointmentId());
+            response.setAppointmentDate(appointment.getAppointmentDate());
+            response.setTimeSlot(appointment.getTimeSlot());
+            response.setUserId(appointment.getUser().getId());
+            return response;
+        }).collect(Collectors.toList());
     }
 }

@@ -22,14 +22,20 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     List<Appointment> findByUser_Id(String id);
 
     List<Appointment> findAll();
-    List<Appointment> findByUser(User user);
-
-    List<Appointment> findByPsychologistId(String psychologistId);
 
     @Query("SELECT a FROM Appointment a WHERE a.user.id = :userId")
     List<Appointment> findAppointmentsByUserId(@Param("userId") String userId);
 
     @Query("SELECT a FROM Appointment a WHERE a.psychologistId = :psychologistId")
     List<Appointment> findAppointmentsByPsychologistId(@Param("psychologistId") String psychologistId);
+
+    @Query("SELECT a FROM Appointment a WHERE a.user.id=:userId AND a.active = :active")
+    List<Appointment> findAllByUserIdAndActive(@Param("userId") String userId, @Param("active") Boolean active);
+
+    @Query("SELECT a FROM Appointment a WHERE a.psychologistId =:psychologistId AND a.active = :active")
+    List<Appointment> findAllByPsychologistIdAndActive(@Param("psychologistId") String psychologistId, @Param("active") Boolean active);
+
+    @Query("SELECT a FROM Appointment a WHERE a.active = true AND (a.user.id = :id OR a.psychologistId = :id)")
+    List<Appointment> findAllActiveAppointmentsByUserIdOrPsychologistId(@Param("id") String id);
 
 }

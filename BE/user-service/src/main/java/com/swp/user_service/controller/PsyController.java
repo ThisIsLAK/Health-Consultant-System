@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,9 +44,9 @@ public class PsyController {
                 .build();
     }
 
-    @GetMapping("/findpsybyid/{id}")
-    public ApiResponse<UserResponse> getPsychologistById(@PathVariable String id) {
-        User psychologist = userRepository.findById(id)
+    @GetMapping("/findpsybyid/{psychologistId}")
+    public ApiResponse<UserResponse> getPsychologistById(@PathVariable String psychologistId) {
+        User psychologist = userRepository.findById(psychologistId)
                 .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
 
@@ -102,6 +103,7 @@ public class PsyController {
 
     @DeleteMapping("/cancelappointment/{appointmentId}")
     public ApiResponse<Void> cancelAppointment(@PathVariable String appointmentId) {
+
         appointmentService.cancelAppointment(appointmentId);
 
         return ApiResponse.<Void>builder()
@@ -112,6 +114,10 @@ public class PsyController {
     @GetMapping("/psyappointment/{psychologistId}")
     public ApiResponse<List<AppointmentResponse>> getPsychologistAppointments(@PathVariable String psychologistId) {
 
+        User psychologist = userRepository.findById(psychologistId)
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
+
         List<AppointmentResponse> appointments = appointmentService.getPsychologistAppointments(psychologistId);
 
         return ApiResponse.<List<AppointmentResponse>>builder()
@@ -120,4 +126,18 @@ public class PsyController {
                 .build();
     }
 
+    @GetMapping("/allactiveappointments/{psychologistId}")
+    public ApiResponse<List<AppointmentResponse>> getAllActiveAppointments(@PathVariable String psychologistId) {
+
+        User psychologist = userRepository.findById(psychologistId)
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
+
+        List<AppointmentResponse> activeAppointments = psyService.getAllActiveAppointments(psychologistId);
+
+        return ApiResponse.<List<AppointmentResponse>>builder()
+                .result(activeAppointments)
+                .message("Active appointments retrieved successfully")
+                .build();
+    }
 }
