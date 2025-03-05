@@ -1,4 +1,9 @@
-.appointment-header {
+/* Add a namespace class to prevent conflicts with student styles */
+.psy-appointment-container {
+    /* Apply all existing styles within this namespace */
+}
+
+.psy-appointment-container .appointment-header {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
@@ -9,12 +14,12 @@
 }
 
 /* Search Bar Styles */
-.search-container {
+.psy-appointment-container .search-container {
     position: relative;
     width: 100%;
 }
 
-.search-icon {
+.psy-appointment-container .search-icon {
     position: absolute;
     left: 12px;
     top: 50%;
@@ -24,7 +29,7 @@
     color: #9ca3af;
 }
 
-.search-input {
+.psy-appointment-container .search-input {
     width: 100%;
     padding: 10px 40px;
     background-color: #d8dae0;
@@ -33,18 +38,18 @@
     font-size: 16px;
 }
 
-.search-input:focus {
+.psy-appointment-container .search-input:focus {
     outline: none;
     box-shadow: 0 0 0 2px #3b82f6;
 }
 
 /* Status Filter Buttons */
-.status-filters {
+.psy-appointment-container .status-filters {
     display: flex;
     gap: 8px;
 }
 
-.status-button {
+.psy-appointment-container .status-button {
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
@@ -56,24 +61,24 @@
     transition: all 0.2s ease;
 }
 
-.status-button:hover {
+.psy-appointment-container .status-button:hover {
     background-color: #d1d5db;
 }
 
-.status-button.active {
+.psy-appointment-container .status-button.active {
     background-color: #000;
     color: #fff;
 }
 
 /* Date Navigation */
-.date-navigation {
+.psy-appointment-container .date-navigation {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 16px;
 }
 
-.nav-button {
+.psy-appointment-container .nav-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,22 +91,22 @@
     color: #000;
 }
 
-.nav-button:hover {
+.psy-appointment-container .nav-button:hover {
     background-color: #dadde4;
 }
 
-.arrow-icon {
+.psy-appointment-container .arrow-icon {
     width: 20px;
     height: 20px;
 }
 
-.current-date {
+.psy-appointment-container .current-date {
     font-size: 18px;
     font-weight: 500;
     margin: 0;
 }
 
-.appointment-card {
+.psy-appointment-container .appointment-card {
     display: flex;
     background-color: rgb(217, 218, 221);
     border-radius: 12px;
@@ -111,90 +116,86 @@
     position: relative;
 }
 
-.time-section {
+.psy-appointment-container .time-section {
     display: flex;
     flex-direction: column;
     align-items: center;
     min-width: 80px;
 }
 
-.time {
+.psy-appointment-container .time {
     font-size: 24px;
     font-weight: 600;
     color: #000;
 }
 
-.period {
+.psy-appointment-container .period {
     font-size: 14px;
     color: #666;
     margin-top: -4px;
 }
 
-.duration {
+.psy-appointment-container .duration {
     font-size: 14px;
     color: #666;
     margin-top: 4px;
 }
 
-.details-section {
+.psy-appointment-container .details-section {
     flex: 1;
 }
 
-.app-header {
+.psy-appointment-container .app-header {
     margin-bottom: 16px;
 }
 
-.name-status {
+.psy-appointment-container .name-status {
     display: flex;
     align-items: center;
     gap: 12px;
     margin-bottom: 4px;
 }
 
-.patient-name {
+.psy-appointment-container .patient-name {
     font-size: 18px;
     font-weight: 600;
     margin: 0;
 }
 
-.status {
+.psy-appointment-container .status {
     padding: 4px 12px;
     border-radius: 4px;
     font-size: 12px;
     font-weight: 500;
 }
 
-.status.waiting {
+.psy-appointment-container .status.waiting {
     background-color: #0056b3;
-    /* Xanh biển đậm */
     color: white;
 }
 
-.status.completed {
+.psy-appointment-container .status.completed {
     background-color: #28a745;
-    /* Xanh lá */
     color: white;
 }
 
-.status.cancelled {
+.psy-appointment-container .status.cancelled {
     background-color: #dc3545;
-    /* Đỏ */
     color: white;
 }
 
-
-.appointment-type {
+.psy-appointment-container .appointment-type {
     color: #666;
     font-size: 14px;
 }
 
-.info-grid {
+.psy-appointment-container .info-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
 }
 
-.info-item {
+.psy-appointment-container .info-item {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -202,7 +203,7 @@
     font-size: 14px;
 }
 
-.info-item .icon {
+.psy-appointment-container .info-item .icon {
     width: 16px;
     height: 16px;
     display: flex;
@@ -210,13 +211,13 @@
     justify-content: center;
 }
 
-.actions {
+.psy-appointment-container .actions {
     display: flex;
     flex-direction: column;
     gap: 8px;
 }
 
-.action-btn {
+.psy-appointment-container .action-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -225,14 +226,14 @@
     transition: color 0.2s ease;
 }
 
-.action-btn:hover {
+.psy-appointment-container .action-btn:hover {
     color: #000;
 }
 
-.action-btn.delete:hover {
+.psy-appointment-container .action-btn.delete:hover {
     color: #dc2626;
 }
 
-.action-btn.edit:hover {
+.psy-appointment-container .action-btn.edit:hover {
     color: #2563eb;
 }

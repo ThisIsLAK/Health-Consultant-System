@@ -17,7 +17,7 @@ const Navbar = () => {
                     <a href="/notice" className="mx-2 text-gray-700 hover:text-blue-600">Notice</a>
                     <a href="/blog" className="mx-2 text-gray-700 hover:text-blue-600">Blog</a>
                     <a href="/aboutus" className="mx-2 text-gray-700 hover:text-blue-600">About Us</a>
-                    <a href="/contact" className="mx-2 text-gray-700 hover:text-blue-600">Contact Us</a>
+                    <a href="/booking" className="mx-2 text-gray-700 hover:text-blue-600">Booking Psychologist</a>
                 </div>
                 <div className="navbar-actions">
                     <UserMenu />

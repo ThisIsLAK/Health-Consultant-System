@@ -44,6 +44,8 @@ import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
 import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
+import PsyAppointments from './pages/psychologist/Appointments/PsyAppointments';
+
 
 // Admin Routes
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
@@ -104,6 +106,7 @@ function App() {
         <Route path='/psyapphistory' element={<ProtectedRoute element={<PsyAppHistory />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyaccount' element={<ProtectedRoute element={<PsychologistAccount />} allowedRoles={['PSYCHOLOGIST']} />} />
+        <Route path='/psyappointment' element={<ProtectedRoute element={<PsyAppointments />} allowedRoles={['PSYCHOLOGIST']} />} />
 
         {/* Admin Routes */}
         <Route path='/adminaccount' element={<ProtectedRoute element={<AdminAccount />} allowedRoles={['ADMIN']} />} />

@@ -96,10 +96,10 @@ const UserMenu = () => {
                     Profile
                 </Dropdown.Item>
                 <Dropdown.Item
-                    href="#/action-2"
+                    href="/appointments"
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-center"
                 >
-                    Schedule
+                    View Appointments
                 </Dropdown.Item>
                 <Dropdown.Item
                     onClick={() => handleSignOut()}

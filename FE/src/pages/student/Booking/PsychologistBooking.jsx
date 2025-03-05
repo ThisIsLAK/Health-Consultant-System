@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast, Toaster } from 'sonner'; // Replace react-toastify with sonner
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 import './PsychologistBooking.css';
@@ -298,7 +298,7 @@ const generateTimeSlots = () => {
         newBookings[bookingKey][selectedSlot] = "Booked";
         setBookings(newBookings);
         
-        // Show success message
+        // Show success message using sonner
         toast.success("Appointment booked successfully!");
         setShowConfirmation(true);
         
@@ -498,7 +498,8 @@ const generateTimeSlots = () => {
         </div>
       </div>
       <Footer />
-      <ToastContainer position="bottom-right" autoClose={3000} />
+      {/* Replace ToastContainer with Toaster */}
+      <Toaster position="bottom-right" richColors />
     </>
   );
 };

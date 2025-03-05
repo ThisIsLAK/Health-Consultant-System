@@ -49,81 +49,84 @@ const PsyAppointmentList = () => {
 
             <main id='main' className='main'>
                 <PageTitle page="Appointments" />
-                <div className="appointment-header">
-                    {/* Status Filter Buttons */}
-                    <div className="status-filters">
-                        {statuses.map(status => (
-                            <button
-                                key={status.id}
-                                className={`status-button ${selectedStatus === status.id ? 'active' : ''}`}
-                                onClick={() => setSelectedStatus(status.id)}
-                            >
-                                {status.label}
+                {/* Add the namespace container class to prevent CSS conflicts */}
+                <div className="psy-appointment-container">
+                    <div className="appointment-header">
+                        {/* Status Filter Buttons */}
+                        <div className="status-filters">
+                            {statuses.map(status => (
+                                <button
+                                    key={status.id}
+                                    className={`status-button ${selectedStatus === status.id ? 'active' : ''}`}
+                                    onClick={() => setSelectedStatus(status.id)}
+                                >
+                                    {status.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className="date-navigation">
+                            <button className="nav-button">
+                                <svg className="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
                             </button>
-                        ))}
+                            <h2 className="current-date">{currentDate}</h2>
+                            <button className="nav-button">
+                                <svg className="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
 
-                    <div className="date-navigation">
-                        <button className="nav-button">
-                            <svg className="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <h2 className="current-date">{currentDate}</h2>
-                        <button className="nav-button">
-                            <svg className="arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
+                    {/* Appointment List */}
+                    {filteredAppointments.map(app => (
+                        <div className="appointment-card" key={app.id}>
+                            <div className="time-section">
+                                <div className="time">{app.time}</div>
+                                <div className="period">{app.period}</div>
+                                <div className="duration">{app.duration}</div>
+                            </div>
+                            <div className="details-section">
+                                <div className="app-header">
+                                    <div className="name-status">
+                                        <h3 className="patient-name">{app.name}</h3>
+                                        <span className={`status ${app.status}`}>{app.status}</span>
+                                    </div>
+                                    <div className="appointment-type">{app.type}</div>
+                                </div>
+                                <div className="info-grid">
+                                    <div className="info-item">
+                                        <Phone className="icon" size={16} />
+                                        <span className="text">{app.phone}</span>
+                                    </div>
+                                    <div className="info-item">
+                                        <Mail className="icon" size={16} />
+                                        <span className="text">{app.email}</span>
+                                    </div>
+                                    <div className="info-item">
+                                        <Link className="icon" size={16} />
+                                        <span className="text">{app.link}</span>
+                                    </div>
+                                    <div className="info-item">
+                                        <FileText className="icon" size={16} />
+                                        <span className="text">{app.notes}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="actions">
+                                <button className="action-btn edit">
+                                    <Edit
+                                        onClick={() => handleEdit(app.id)}
+                                        className="icon"
+                                        size={16}
+                                    />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-
-                {/* Appointment List */}
-                {filteredAppointments.map(app => (
-                    <div className="appointment-card" key={app.id}>
-                        <div className="time-section">
-                            <div className="time">{app.time}</div>
-                            <div className="period">{app.period}</div>
-                            <div className="duration">{app.duration}</div>
-                        </div>
-                        <div className="details-section">
-                            <div className="app-header">
-                                <div className="name-status">
-                                    <h3 className="patient-name">{app.name}</h3>
-                                    <span className={`status ${app.status}`}>{app.status}</span>
-                                </div>
-                                <div className="appointment-type">{app.type}</div>
-                            </div>
-                            <div className="info-grid">
-                                <div className="info-item">
-                                    <Phone className="icon" size={16} />
-                                    <span className="text">{app.phone}</span>
-                                </div>
-                                <div className="info-item">
-                                    <Mail className="icon" size={16} />
-                                    <span className="text">{app.email}</span>
-                                </div>
-                                <div className="info-item">
-                                    <Link className="icon" size={16} />
-                                    <span className="text">{app.link}</span>
-                                </div>
-                                <div className="info-item">
-                                    <FileText className="icon" size={16} />
-                                    <span className="text">{app.notes}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="actions">
-                            <button className="action-btn edit">
-                                <Edit
-                                    onClick={() => handleEdit(app.id)}
-                                    className="icon"
-                                    size={16}
-                                />
-                            </button>
-                        </div>
-                    </div>
-                ))}
             </main>
         </div>
     );

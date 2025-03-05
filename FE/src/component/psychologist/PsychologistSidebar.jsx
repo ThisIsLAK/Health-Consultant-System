@@ -7,7 +7,7 @@ const PsychologistSidebar = () => {
       <ul className='sidebar-nav' id='sidebar-nav'>
 
         <li className='nav-item'>
-          <a href="/psyapplist" className='nav-link'>
+          <a href="/psyappointment" className='nav-link'>
             <i className='bi bi-calendar-check'></i>
             <span>Appointments</span>
           </a>
