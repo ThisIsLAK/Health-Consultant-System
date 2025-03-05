@@ -33,7 +33,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
         return <Navigate to="/adminuserlist" replace />;
       case 'PSYCHOLOGIST':
         console.log("Redirecting psychologist to their page");
-        return <Navigate to="/psyapplist" replace />;
+        return <Navigate to="/psyappointment" replace />;
       case 'MANAGER':
         console.log("Redirecting manager to dashboard");
         return <Navigate to="/managerdashboard" replace />;

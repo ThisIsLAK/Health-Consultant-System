@@ -39,7 +39,6 @@ import ManagerAccount from './pages/manager/ManagerAccount/ManagerAccount'
 /* Psychologist Routes */
 import UserList from './pages/psychologist/UserList/UserList';
 import UserDetail from './pages/psychologist/UserDetail/UserDetail';
-import PsyAppointmentList from './pages/psychologist/PsyAppointmentList/PsyAppointmentList';
 import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
 import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
@@ -61,6 +60,7 @@ import AddSupportProgram from './pages/components/admin/SupportProgram/AddSuppor
 import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
 import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
+import ManagingAppointment from './pages/components/admin/ManagingAppointment/ManagingAppointment';
 
 function App() {
   return (
@@ -101,7 +101,6 @@ function App() {
         {/* Psychologist Routes */}
         <Route path='/patientlist' element={<ProtectedRoute element={<UserList />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/patientdetail' element={<ProtectedRoute element={<UserDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
-        <Route path='/psyapplist' element={<ProtectedRoute element={<PsyAppointmentList />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/therapynote' element={<ProtectedRoute element={<TherapyNote />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyapphistory' element={<ProtectedRoute element={<PsyAppHistory />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
@@ -122,7 +121,8 @@ function App() {
         <Route path='/addsupport' element={<ProtectedRoute element={<AddSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/viewsupport/:programCode' element={<ProtectedRoute element={<ViewSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/editsupport/:programCode' element={<ProtectedRoute element={<EditSupportProgram />} allowedRoles={['ADMIN']} />} />
-        
+        <Route path='/manageappointments' element={<ProtectedRoute element={<ManagingAppointment />} allowedRoles={['ADMIN']} />} />
+
       </Routes>
     </BrowserRouter>
   );

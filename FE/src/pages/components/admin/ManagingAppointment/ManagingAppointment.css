@@ -1,0 +1,534 @@
+.admin-appointment-container {
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 50px auto;
+}
+
+/* Header Styles */
+.appointment-management-header {
+    margin-bottom: 2rem;
+}
+
+.appointment-management-header h1 {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: #1e293b;
+}
+
+.appointment-management-header p {
+    color: #64748b;
+    font-size: 0.95rem;
+}
+
+/* Controls Container */
+.controls-container {
+    background-color: #f8fafc;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* Psychologist Selector */
+.psychologist-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.psychologist-selector label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+}
+
+/* Dropdown Styles - Updated for better visibility */
+.dropdown-wrapper {
+    position: relative;
+    z-index: 1000; /* Ensure dropdown appears above other elements */
+}
+
+.psychologist-dropdown-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.psychologist-dropdown-btn:hover,
+.psychologist-dropdown-btn.active {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.dropdown-arrow {
+    transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 1000; /* Ensure visibility */
+    border: 1px solid #e2e8f0;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f9ff; /* Lighter blue on hover */
+}
+
+.dropdown-item.active {
+    background-color: #eff6ff;
+    border-left: 3px solid #3b82f6;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item.empty {
+    color: #94a3b8;
+    cursor: default;
+}
+
+.dropdown-item.empty:hover {
+    background-color: white;
+}
+
+.psy-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.25rem;
+}
+
+.psy-email {
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+/* Filter and Search */
+.filter-search-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.filter-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #64748b;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.filter-btn:hover {
+    background-color: #f1f5f9;
+}
+
+.filter-btn.active {
+    background-color: #eff6ff;
+    color: #3b82f6;
+    font-weight: 500;
+}
+
+.search-container {
+    position: relative;
+    flex-grow: 1;
+    max-width: 400px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #334155;
+    background-color: white;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+}
+
+/* Appointments Content */
+.appointments-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Loading State */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #3b82f6;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error State */
+.error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    color: #ef4444;
+    text-align: center;
+}
+
+.error-state p {
+    margin: 1rem 0;
+    max-width: 400px;
+}
+
+.retry-btn {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.retry-btn:hover {
+    background-color: #2563eb;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 1rem;
+    text-align: center;
+    color: #64748b;
+}
+
+.empty-state h3 {
+    margin: 1rem 0 0.5rem;
+    color: #475569;
+    font-weight: 500;
+}
+
+.empty-state p {
+    max-width: 400px;
+    color: #64748b;
+}
+
+/* Appointments Table */
+.appointments-table-container {
+    overflow-x: auto;
+    width: 100%;
+}
+
+.appointments-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.appointments-table th {
+    background-color: #f8fafc;
+    padding: 1rem;
+    text-align: left;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #475569;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.appointments-table td {
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #334155;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.appointments-table tr:hover td {
+    background-color: #f8fafc;
+}
+
+/* Table Cell Styles */
+.cell-icon {
+    margin-right: 0.5rem;
+    vertical-align: text-bottom;
+    color: #64748b;
+}
+
+.date-cell {
+    white-space: nowrap;
+}
+
+.time-slot-cell {
+    white-space: nowrap;
+}
+
+.appointment-id {
+    font-family: monospace;
+    background-color: #f1f5f9;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.actions-cell {
+    white-space: nowrap;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    padding: 0.375rem;
+    margin: 0 0.25rem;
+    border-radius: 4px;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.action-btn.view-user:hover {
+    color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+.action-btn.view-appointment:hover {
+    color: #10b981;
+    background-color: #ecfdf5;
+}
+
+/* Status Styles */
+tr.past td {
+    color: #64748b;
+}
+
+tr.upcoming td {
+    color: #334155;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .filter-search-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-container {
+        width: 100%;
+        max-width: none;
+    }
+    
+    .appointments-table th,
+    .appointments-table td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .cell-icon {
+        display: none;
+    }
+}
+
+/* New Simple Dropdown Styles */
+.psychologist-section {
+    margin-bottom: 1rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.section-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #334155;
+}
+
+.count-badge {
+    background-color: #e2e8f0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+.simple-dropdown-container {
+    position: relative;
+    width: 100%;
+}
+
+.simple-dropdown-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.simple-dropdown-button:hover {
+    border-color: #3b82f6;
+    background-color: #f8fafc;
+}
+
+.simple-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.25rem);
+    left: 0;
+    right: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    background-color: white;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    z-index: 50;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.simple-dropdown-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.simple-dropdown-item:hover {
+    background-color: #f8fafc;
+}
+
+.simple-dropdown-item.selected {
+    background-color: #f0f9ff;
+}
+
+.simple-dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.simple-dropdown-empty {
+    padding: 1rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.dropdown-item-content {
+    flex: 1;
+}
+
+.item-name {
+    font-weight: 500;
+    color: #334155;
+    margin-bottom: 0.25rem;
+}
+
+.item-email {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.selected-check {
+    color: #3b82f6;
+}
+
+/* Debug Information */
+.debug-info {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    background-color: #f1f5f9;
+    border-radius: 0.25rem;
+    color: #475569;
+}
+
+.debug-info summary {
+    cursor: pointer;
+    user-select: none;
+}
+
+.debug-info details {
+    padding: 0.5rem 0;
+}
