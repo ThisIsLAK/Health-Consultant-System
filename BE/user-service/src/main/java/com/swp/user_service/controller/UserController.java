@@ -2,6 +2,7 @@ package com.swp.user_service.controller;
 
 import com.swp.user_service.dto.request.*;
 import com.swp.user_service.dto.response.*;
+import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.UserRepository;
@@ -11,9 +12,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @CrossOrigin(origins = "http://localhost:5173")
@@ -127,6 +130,21 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/allactiveappointments/{userId}")
+    public ApiResponse<List<AppointmentResponse>> getAllActiveAppointments(@PathVariable String userId) {
+
+        User userchecker = userRepository.findById(userId)
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "2"))
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_USER));
+
+        List<AppointmentResponse> activeAppointments = userService.getAllActiveAppointments(userId);
+
+        return ApiResponse.<List<AppointmentResponse>>builder()
+                .result(activeAppointments)
+                .message("Active appointments retrieved successfully")
+                .build();
+    }
+
     /************************************************************
      *                  SUPPORT PROGRAM CONTROLLER              *
      ************************************************************/
@@ -156,13 +174,16 @@ public class UserController {
      *                  SURVEY CONTROLLER                       *
      ************************************************************/
 
-    @PostMapping("/submituseranswer")
-    public ApiResponse<UserAnswerResponse> submitUserAnswer(@RequestBody SubmitUserAnswerRequest request) {
-        UserAnswerResponse answer = userAnswerService.submitUserAnswer(request);
-        return ApiResponse.<UserAnswerResponse>builder()
-                .result(answer)
-                .message("User answer submitted successfully")
-                .build();
+    @PostMapping("/submit-answers")
+    public ResponseEntity<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
+        List<UserAnswerResponse> responses = userAnswerService.submitUserAnswers(requests);
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/survey-result")
+    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
+        SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/allsurveys")
