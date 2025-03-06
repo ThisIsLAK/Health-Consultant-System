@@ -34,6 +34,13 @@ const AdminSidebar = () => {
         </li>
 
         <li className='nav-item'>
+          <NavLink to="/manageappointments" className='nav-link'>
+            <FaPlusCircle className="nav-icon" />
+            <span>Appointment Management</span>
+          </NavLink>
+        </li>
+
+        <li className='nav-item'>
           <NavLink to="/adminblog" className='nav-link'>
             <FaBlog className="nav-icon" />
             <span>Blog Management</span>

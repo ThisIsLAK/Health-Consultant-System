@@ -102,4 +102,19 @@ public class UserService {
             return response;
         }).collect(Collectors.toList());
     }
+
+    public List<AppointmentResponse> getAllActiveAppointments(String userId) {
+
+        List<Appointment> appointments = appointmentRepository.findAllByUserIdAndActive(userId, true);
+
+        return appointments.stream().map(appointment -> {
+            AppointmentResponse response = new AppointmentResponse();
+            response.setPsychologistId(appointment.getPsychologistId());
+            response.setAppointmentId(appointment.getAppointmentId());
+            response.setAppointmentDate(appointment.getAppointmentDate());
+            response.setTimeSlot(appointment.getTimeSlot());
+            response.setUserId(appointment.getUser().getId());
+            return response;
+        }).collect(Collectors.toList());
+    }
 }

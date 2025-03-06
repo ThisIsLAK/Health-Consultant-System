@@ -110,7 +110,7 @@ const LoginSignup = () => {
                 navigate('/');
                 break;
               case "PSYCHOLOGIST":
-                navigate('/psyapplist');
+                navigate('/psyappointment');
                 break;
               case "MANAGER":
                 navigate('/managerdashboard');

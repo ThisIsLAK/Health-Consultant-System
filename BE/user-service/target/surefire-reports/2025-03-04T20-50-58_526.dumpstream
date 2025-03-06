@@ -1,0 +1,5 @@
+# Created at 2025-03-04T20:50:59.634
+Boot Manifest-JAR contains absolute paths in classpath 'D:\FPT\Health_Consultant_System\BE\user-service\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

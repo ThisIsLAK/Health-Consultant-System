@@ -27,7 +27,8 @@ public enum ErrorCode {
     USER_ALREADY_BOOKED(1022,"You already have an appointment on this date."),
     MAX_DAILY_SLOTS_REACHED(1023,"The psychologist is fully booked for the day."),
 
-    NO_APPOINTMENT_FOUND(1024,"No appointment history found" )
+    NO_APPOINTMENT_FOUND(1024,"No appointment history found" ),
+    NOT_USER(1025, "This is not a User")
     ;   //<<====chu y dau (;)===========================================================================================
 
 
