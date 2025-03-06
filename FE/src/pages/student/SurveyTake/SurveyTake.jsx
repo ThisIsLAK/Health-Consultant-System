@@ -4,7 +4,6 @@ import ApiService from "../../../service/ApiService";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 import "./SurveyTake.css";
-import { v4 as uuidv4 } from 'uuid';
 
 const SurveyTake = () => {
     const { surveyId } = useParams();
@@ -12,7 +11,8 @@ const SurveyTake = () => {
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const userId = localStorage.getItem("userId"); 
+    const [surveyResult, setSurveyResult] = useState(null); // Lưu kết quả điểm số
+    const userId = localStorage.getItem("userId");
 
     useEffect(() => {
         const fetchSurvey = async () => {
@@ -22,7 +22,7 @@ const SurveyTake = () => {
                     const surveyData = response.data.result;
                     setSurvey(surveyData);
 
-                    // Khởi tạo formData: mỗi câu hỏi sẽ có một optionId rỗng
+                    // Khởi tạo formData
                     const initialFormData = {};
                     surveyData.questions?.forEach(q => {
                         initialFormData[q.questionId] = { optionId: "", optionText: "" };
@@ -50,51 +50,43 @@ const SurveyTake = () => {
         }));
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-
-    //     const answers = Object.keys(formData).map(questionId => ({
-    //         answerId: `${userId}-${surveyId}-${questionId}`, // 🔹 ID duy nhất dạng string
-    //         questionId: questionId.toString(),  // Ép kiểu về string
-    //         optionId: String(formData[questionId].optionId),  // Ép kiểu về string
-    //         userId: userId.toString()  // Ép kiểu về string
-    //     }));
-
-    //     console.log("Submitting answers:", JSON.stringify(answers, null, 2));
-
-    //     const response = await ApiService.submitUserAnswer({ answers });
-    //     if (response.status === 200) {
-    //         console.log("Survey submitted successfully!", response.data);
-    //         alert("Survey submitted successfully!");
-    //     } else {
-    //         console.error("Failed to submit survey:", response.message);
-    //         alert("Failed to submit survey: " + response.message);
-    //     }
-    // };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const answers = Object.keys(formData).map(questionId => ({
-            questionId: questionId,  // ✅ Giữ nguyên UUID của câu hỏi
-            optionId: formData[questionId].optionId,  // ✅ Giữ nguyên UUID của option
-            userId: userId  // ✅ Giữ nguyên UUID của user
+            questionId: questionId,
+            optionId: formData[questionId].optionId,
+            userId: userId
         }));
 
         console.log("Submitting answers:", JSON.stringify(answers, null, 2));
 
-        // 🛠 Gửi dưới dạng object chứa danh sách
         const response = await ApiService.submitUserAnswer({ answers });
 
         if (response.status === 200) {
             console.log("Survey submitted successfully!", response.data);
             alert("Survey submitted successfully!");
+
+            // Gọi API lấy điểm sau khi submit
+            fetchSurveyResult();
         } else {
             console.error("Failed to submit survey:", response.message);
             alert("Failed to submit survey: " + response.message);
         }
     };
 
+    const fetchSurveyResult = async () => {
+        console.log("Fetching survey result for:", { surveyId, userId }); // Debugging
+
+        const response = await ApiService.getSurveyResult(surveyId, userId);
+
+        if (response.status === 200) {
+            console.log("Survey result:", response.data);
+            setSurveyResult(response.data);
+        } else {
+            console.error("Failed to fetch survey result:", response.message);
+        }
+    };
 
     if (loading) return <p>Loading survey...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -139,6 +131,14 @@ const SurveyTake = () => {
                             </button>
                         </div>
                     </form>
+
+                    {/* Hiển thị điểm sau khi submit */}
+                    {surveyResult && (
+                        <div className="survey-result-card">
+                            <h2>Survey Score</h2>
+                            <p>Total Score: {surveyResult.score}</p>
+                        </div>
+                    )}
                 </div>
             </div>
             <Footer />

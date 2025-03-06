@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './EditSurvey.css';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import ApiService from '../../../../service/ApiService';
 import { useNavigate } from 'react-router-dom';
 

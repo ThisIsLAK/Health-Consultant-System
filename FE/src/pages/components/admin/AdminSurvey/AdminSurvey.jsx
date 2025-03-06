@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import { useNavigate } from 'react-router-dom';
 import ApiService from '../../../../service/ApiService';
 import './AdminSurvey.css';

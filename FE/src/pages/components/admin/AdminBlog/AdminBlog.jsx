@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import ApiService from '../../../../service/ApiService';

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../../../../components/common/LoadingSpinner';
 import { FaUserPlus, FaCheck } from 'react-icons/fa';
 import './AdminCreateUser.css';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import PageTitle from '../../../../component/admin/PageTitle';
 import ApiService from '../../../../service/ApiService';

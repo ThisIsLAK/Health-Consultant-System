@@ -90,3 +90,23 @@
 .user-submit-button:hover {
     background-color: #16a34a;
 }
+
+.survey-result-card {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.survey-result-card h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.survey-result-card p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c3e50;
+}

@@ -5,7 +5,7 @@ import SupportProgramService from '../../../../services/SupportProgramService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import './SupportProgram.css';
 
 function EditSupportProgram() {

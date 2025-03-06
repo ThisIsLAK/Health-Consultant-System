@@ -968,7 +968,7 @@ export default class ApiService {
                 `${this.BASE_URL}/identity/users/submit-answers`,
                 answerData.answers,  // Lấy trực tiếp mảng thay vì bọc trong { answers: [...] }
                 { headers: this.getHeader() }
-            );            
+            );
 
             console.log("Submitted user answer:", response.data.result);
 
@@ -982,6 +982,38 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to submit user answer"
+            };
+        }
+    }
+
+    /**
+     * Get survey's score
+     * @param {string} surveyId - ID của survey
+     * @param {string} userId - ID của người dùng
+     * @returns {Promise<Object>} Response object với status và dữ liệu kết quả
+     */
+    static async getSurveyResult(surveyId, userId) {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/survey-result`,
+                {
+                    params: { surveyId, userId },
+                    headers: this.getHeader()
+                }
+            );
+
+            console.log("Survey result response:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Survey result fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching survey result:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch survey result"
             };
         }
     }
