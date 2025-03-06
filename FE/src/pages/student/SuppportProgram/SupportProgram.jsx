@@ -20,7 +20,7 @@ const SupportProgram = () => {
       const token = localStorage.getItem('token');
       
       // Make API call with authentication
-      const response = await axios.get('http://localhost:8080/identity/users/active-support-programs', {
+      const response = await axios.get('http://localhost:8080/identity/users/allsupportprogramsactive', {
         headers: {
           'Authorization': `Bearer ${token}`
         }

@@ -79,7 +79,7 @@ const ProgramDetail = () => {
       
       console.log("Registration response:", response.data);
       
-      if (response.data && response.data.code === 200) {
+      if (response.data && response.data.code === 1000) {
         setRegistrationStatus({ loading: false, error: null, success: true });
       } else {
         throw new Error(response.data.message || "Registration failed");

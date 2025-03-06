@@ -1044,7 +1044,7 @@ export default class ApiService {
             if (response.data) {
                 // If response has code property
                 if (response.data.code !== undefined) {
-                    if (response.data.code === 0 || response.data.code === 200 || response.data.code === 201) {
+                    if (response.data.code === 1000) {
                         return {
                             status: 200,
                             data: response.data.result || response.data,

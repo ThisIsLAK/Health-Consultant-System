@@ -57,7 +57,7 @@ const AdminCreateUser = () => {
         }
 
         if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long.');
+            setError('Password must be at least 8 characters long.');
             return false;
         }
 
@@ -187,7 +187,7 @@ const AdminCreateUser = () => {
                                                     placeholder="Create password"
                                                 />
                                                 <Form.Text className="text-muted">
-                                                    Must be at least 6 characters
+                                                    Must be at least 8 characters
                                                 </Form.Text>
                                             </Form.Group>
                                         </Col>

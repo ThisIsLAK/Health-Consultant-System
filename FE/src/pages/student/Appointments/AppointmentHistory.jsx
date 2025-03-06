@@ -128,7 +128,7 @@ const AppointmentHistory = () => {
       console.log('Cancel appointment response:', response.data);
 
       // Check if cancellation was successful
-      if (response.data && (response.data.code === 200 || response.data.code === 204)) {
+      if (response.data && response.data.code === 1000) {
         // Success - Update the local state to remove the cancelled appointment
         toast.success("Appointment cancelled successfully");
 

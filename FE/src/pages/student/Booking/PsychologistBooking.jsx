@@ -288,8 +288,8 @@ const generateTimeSlots = () => {
       console.log("Booking response:", response.data);
       
       // Check if booking was successful
-      if (response.data && (response.data.code === 200 || response.data.code === 201)) {
-        // Update local state to reflect booking
+      if (response.data && response.data.code === 1000) {
+        // Update local state to reflect booking        
         const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
         const newBookings = { ...bookings };
         if (!newBookings[bookingKey]) {
@@ -308,7 +308,7 @@ const generateTimeSlots = () => {
           navigate('/appointments'); // Navigate to appointments list
         }, 3000);
       } else {
-        toast.error(response.data?.message || "Failed to book appointment");
+        toast.success( "Failed to book appointment");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);
