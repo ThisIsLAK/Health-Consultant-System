@@ -93,6 +93,14 @@ public class AppointmentService {
         if (slotAlreadyBooked) {
             throw new AppException(ErrorCode.SLOT_IS_BOOKING);
         }
+
+        boolean userSlotAlreadyBooked = appointmentRepository.existsByUserIdAndAppointmentDateAndTimeSlot(
+                request.getUserId(), request.getAppointmentDate(), request.getTimeSlot()
+        );
+
+        if (userSlotAlreadyBooked) {
+            throw new AppException(ErrorCode.SLOT_IS_BOOKING);
+        }
     }
 
     public void cancelAppointment(String appointmentId) {

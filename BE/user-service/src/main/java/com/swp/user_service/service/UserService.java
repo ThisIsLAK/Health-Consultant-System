@@ -45,7 +45,6 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
 
-
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
