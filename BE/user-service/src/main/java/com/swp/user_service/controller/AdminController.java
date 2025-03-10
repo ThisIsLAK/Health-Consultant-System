@@ -50,6 +50,13 @@ public class AdminController {
                 .build();
     }
 
+    @GetMapping("/getAllActiveUser")
+    ApiResponse<List<UserResponse>> getAllUserByActive() {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(adminService.getAllUserByActive())
+                .build();
+    }
+
     @GetMapping("/finduserbyemail/{email}")
     ApiResponse<UserResponse> getUserByEmail(@PathVariable("email") String email) {
         return ApiResponse.<UserResponse>builder()
