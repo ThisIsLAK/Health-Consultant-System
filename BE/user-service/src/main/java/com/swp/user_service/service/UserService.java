@@ -98,6 +98,8 @@ public class UserService {
             response.setAppointmentDate(appointment.getAppointmentDate());
             response.setTimeSlot(appointment.getTimeSlot());
             response.setUserId(appointment.getUser().getId());
+            response.setActive(appointment.getActive());
+            response.setPsychologistId(appointment.getPsychologistId());
             return response;
         }).collect(Collectors.toList());
     }
