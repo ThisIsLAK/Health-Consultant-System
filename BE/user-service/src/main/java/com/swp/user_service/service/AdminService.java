@@ -127,4 +127,13 @@ public class AdminService {
         }
     }
 
+    public List<UserResponse> getAllUserByActive() {
+        List<User> activeUsers = userRepository.findAllByActive(true);
+        if (activeUsers.isEmpty()) {
+            throw new AppException(ErrorCode.USER_NOT_EXIST);
+        }
+        return activeUsers.stream()
+                .map(userMapper::toUserResponse)
+                .toList();
+    }
 }
