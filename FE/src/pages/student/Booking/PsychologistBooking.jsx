@@ -91,22 +91,22 @@ const generateTimeSlots = () => {
     {
       id: 0,
       time: "7h-9h",
-      value: "7h-9h"  // Changed from "08:00" to match the expected string format
+      value: "07:00"
     },
     {
       id: 1,
       time: "10h-12h",
-      value: "10h-12h"  // Changed from "10:00" to match the expected string format
+      value: "10:00"
     },
     {
       id: 2,
       time: "13h-15h", 
-      value: "13h-15h"  // Changed from "13:00" to match the expected string format
+      value: "13:00"
     },
     {
       id: 3,
       time: "15h-17h",
-      value: "15h-17h"  // Changed from "15:00" to match the expected string format
+      value: "15:00"
     }
   ];
 };
@@ -249,25 +249,17 @@ const generateTimeSlots = () => {
       
       console.log("Using userId:", userId);
       
-      // Create a copy of the selected date to avoid time zone issues
+      // Format the date for the API
       const appointmentDate = new Date(selectedDate);
-      
-      // Set the time to noon (12:00) to avoid timezone issues
-      appointmentDate.setHours(12, 0, 0, 0);
-      
-      // Format the date for API - ISO string but preserve the selected date
       const formattedDate = appointmentDate.toISOString();
       
-      console.log("Original selected date:", selectedDate);
-      console.log("Formatted date for API:", formattedDate);
-      
-      // Create payload with correct formats
+      // Create payload EXACTLY matching the API requirements
       const appointmentData = {
         userId: userId,
         psychologistId: selectedPsychologist.id,
-        appointmentId: "", // Backend will generate this
+        appointmentId: "", // Sending empty string as the backend will generate the ID
         appointmentDate: formattedDate,
-        timeSlot: timeSlots[selectedSlot].value, // Using our string format "7h-9h" etc
+        timeSlot: timeSlots[selectedSlot].value,
         active: true
       };
       
@@ -288,8 +280,8 @@ const generateTimeSlots = () => {
       console.log("Booking response:", response.data);
       
       // Check if booking was successful
-      if (response.data && response.data.code === 1000) {
-        // Update local state to reflect booking        
+      if (response.data && (response.data.code === 200 || response.data.code === 201)) {
+        // Update local state to reflect booking
         const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
         const newBookings = { ...bookings };
         if (!newBookings[bookingKey]) {
@@ -308,7 +300,7 @@ const generateTimeSlots = () => {
           navigate('/appointments'); // Navigate to appointments list
         }, 3000);
       } else {
-        toast.success( "Failed to book appointment");
+        toast.error(response.data?.message || "Failed to book appointment");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);
