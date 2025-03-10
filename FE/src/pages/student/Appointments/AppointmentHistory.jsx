@@ -12,6 +12,7 @@ const AppointmentHistory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('all'); // 'all', 'upcoming', 'past'
+  const [cancelling, setCancelling] = useState(false); // Track cancellation state
 
   useEffect(() => {
     fetchAppointments();
@@ -77,6 +78,49 @@ const AppointmentHistory = () => {
     } catch (error) {
       console.error('Time slot formatting error:', error);
       return timeSlot;
+    }
+  };
+
+  // Cancel appointment function
+  const cancelAppointment = async (appointmentId) => {
+    if (!window.confirm('Are you sure you want to cancel this appointment?')) {
+      return;
+    }
+    
+    try {
+      setCancelling(true);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        toast.error('Authentication information not found. Please log in again.');
+        setCancelling(false);
+        return;
+      }
+      
+      const response = await axios.delete(
+        `http://localhost:8080/identity/users/cancelappointment/${appointmentId}`, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
+      
+      console.log('Cancel appointment response:', response.data);
+      
+      if (response.data.code === 1000) {
+        toast.success('Appointment cancelled successfully');
+        // Refresh the appointment list
+        fetchAppointments();
+      } else {
+        toast.error(response.data.message || 'Failed to cancel appointment');
+      }
+      
+      setCancelling(false);
+    } catch (error) {
+      console.error('Error cancelling appointment:', error);
+      toast.error('Failed to cancel appointment. Please try again.');
+      setCancelling(false);
     }
   };
 
@@ -185,8 +229,13 @@ const AppointmentHistory = () => {
                       <button className="reschedule-btn">
                         <i className="fas fa-calendar-alt"></i> Reschedule
                       </button>
-                      <button className="cancel-btn">
-                        <i className="fas fa-times-circle"></i> Cancel
+                      <button 
+                        className="cancel-btn" 
+                        onClick={() => cancelAppointment(appointment.appointmentId)}
+                        disabled={cancelling}
+                      >
+                        <i className="fas fa-times-circle"></i> 
+                        {cancelling ? 'Cancelling...' : 'Cancel'}
                       </button>
                     </div>
                   )}
