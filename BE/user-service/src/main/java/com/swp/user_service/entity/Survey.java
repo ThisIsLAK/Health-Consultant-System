@@ -17,6 +17,7 @@ public class Survey {
     @GeneratedValue(strategy = GenerationType.UUID)
     String surveyId;
 
+    String surveyCode; //gad-7, phq-9, qrq-8
     String title;
     @Temporal(TemporalType.DATE)
     Date createdDate;

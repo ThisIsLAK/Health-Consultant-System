@@ -29,6 +29,7 @@ public class SurveyMapperImpl implements SurveyMapper {
         Survey.SurveyBuilder survey = Survey.builder();
 
         survey.active( request.getActive() );
+        survey.surveyCode( request.getSurveyCode() );
         survey.title( request.getTitle() );
         survey.description( request.getDescription() );
 
@@ -44,7 +45,7 @@ public class SurveyMapperImpl implements SurveyMapper {
         SurveyResponse.SurveyResponseBuilder surveyResponse = SurveyResponse.builder();
 
         surveyResponse.questions( mapQuestions( survey.getQuestions() ) );
-        surveyResponse.surveyId( survey.getSurveyId() );
+        surveyResponse.surveyCode( survey.getSurveyCode() );
         surveyResponse.title( survey.getTitle() );
         surveyResponse.createdDate( survey.getCreatedDate() );
         surveyResponse.description( survey.getDescription() );
