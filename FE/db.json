@@ -1,0 +1,17 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "username": "testuser@gmail.com",
+        "password": "password123",
+        "token": "mocked-jwt-token"
+      },
+      {
+        "id": 2,
+        "username": "admin",
+        "password": "admin123",
+        "token": "admin-token"
+      }
+    ]
+  }
+  

@@ -1,0 +1,46 @@
+.notes-textarea {
+    width: 100%;
+    /* Trải rộng toàn bộ container */
+    max-width: 100%;
+    /* Giới hạn chiều rộng tối đa */
+    min-height: 100px;
+    /* Tăng chiều cao */
+    padding: 10px;
+    border: 1px solid #ccc;
+    /* Viền nhẹ */
+    border-radius: 8px;
+    /* Bo góc nhẹ */
+    background-color: #f8f9fa;
+    /* Màu nền nhạt hơn */
+    font-size: 14px;
+    resize: vertical;
+    /* Cho phép thay đổi chiều cao */
+}
+
+.save-button-container {
+    display: flex;
+    justify-content: flex-end;
+    /* Đẩy về phía bên phải */
+    width: 100%;
+    /* Chiếm toàn bộ chiều rộng */
+    padding: 10px 20px;
+    /* Tăng padding để không sát mép quá */
+}
+
+.save-button {
+    background-color: #8489F6;
+    /* Màu xanh dương */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    /* Làm bo góc */
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s;
+}
+
+.save-button:hover {
+    background-color: #6970ed;
+    /* Màu xanh đậm hơn khi hover */
+}

@@ -33,8 +33,8 @@ const AdminAdd = () => {
                                 <label>Password</label>
                                 <div className="form-group">
                                     <input type="password" />
-                                    <button 
-                                        type="button" 
+                                    <button
+                                        type="button"
                                         className="eye-button"
                                         onClick={togglePasswordVisibility}
                                     >

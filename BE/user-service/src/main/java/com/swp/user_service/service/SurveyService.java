@@ -57,7 +57,7 @@ public class SurveyService {
     }
 
     public List<AllSurveyResponse> getAllSurveys() {
-        List<Survey> surveys = surveyRepository.findByActiveTrue();
+        List<Survey> surveys = surveyRepository.findAll();
         return surveys.stream()
                 .map(surveyMapper::toAllSurveyResponse)
                 .collect(Collectors.toList());

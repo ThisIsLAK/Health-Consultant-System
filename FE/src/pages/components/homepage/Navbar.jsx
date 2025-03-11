@@ -1,72 +1,29 @@
-import { useState } from "react";
-import { Menu } from "@headlessui/react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import UserMenu from "./UserMenu";
 
 const Navbar = () => {
-    // Trạng thái đăng nhập
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    // Xử lý đăng xuất
-    const handleSignOut = () => {
-        setIsLoggedIn(false);
-        window.location.href = "/login"; // Chuyển hướng về trang login
-    };
+    const navigate = useNavigate();
+    // We'll use UserMenu's built-in authentication logic instead of duplicating it here
 
     return (
-        <nav className="navbar-container">
-            <div className="navbar-brand">FPT Support</div>
-            <div className="navbar-links">
-                <a href="/">Home</a>
-                <a href="/tests">Multiple Test</a>
-                <a href="/support">Support Program</a>
-                <a href="/notice">Notice</a>
-                <a href="/aboutus">About Us</a>
-                <a href="/contact">Contact Us</a>
-            </div>
-            <div className="navbar-actions">
-                {isLoggedIn ? (
-                    <Menu as="div" className="relative inline-block">
-                        <Menu.Button>
-                            <img src={patientInfo.avatar} alt="User Avatar" className="avatar" />
-                        </Menu.Button>
-                        <Menu.Items className="dropdown-menu">
-                            <div className="dropdown-content">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <span className={active ? "dropdown-item active" : "dropdown-item"}>
-                                            👤 {patientInfo.name}
-                                        </span>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <span className={active ? "dropdown-item active" : "dropdown-item"}>
-                                            🆔 {patientInfo.id}
-                                        </span>
-                                    )}
-                                </Menu.Item>
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <button
-                                            className={active ? "btn-signout active" : "btn-signout"}
-                                            onClick={handleSignOut}
-                                        >
-                                            Sign out
-                                        </button>
-                                    )}
-                                </Menu.Item>
-                            </div>
-                        </Menu.Items>
-                    </Menu>
-                                    ) : (
-                    <>
-                        <button className="btn-signin" onClick={() => (window.location.href = "/login")}>
-                            Sign In
-                        </button>
-                        <button className="btn-get-started">Get Started</button>
-                    </>
-                )}
-            </div>
-        </nav>
+        <>
+            <nav className="navbar-container bg-white shadow-md py-4 px-6">
+                <div className="navbar-brand font-bold text-xl text-blue-600" onClick={() => navigate("/")}>FPT Support</div>
+                <div className="navbar-links">
+                    <a href="/" className="mx-2 text-gray-700 hover:text-blue-600">Home</a>
+                    <a href="/tests" className="mx-2 text-gray-700 hover:text-blue-600">Multiple Test</a>
+                    <a href="/support" className="mx-2 text-gray-700 hover:text-blue-600">Support Program</a>
+                    <a href="/notice" className="mx-2 text-gray-700 hover:text-blue-600">Notice</a>
+                    <a href="/blog" className="mx-2 text-gray-700 hover:text-blue-600">Blog</a>
+                    <a href="/aboutus" className="mx-2 text-gray-700 hover:text-blue-600">About Us</a>
+                    <a href="/booking" className="mx-2 text-gray-700 hover:text-blue-600">Booking Psychologist</a>
+                </div>
+                <div className="navbar-actions">
+                    <UserMenu />
+                </div>
+            </nav >
+        </>
     );
 };
 

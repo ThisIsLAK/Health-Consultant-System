@@ -1,12 +1,13 @@
 import React from 'react';
+import './Sidebar.css';
 const Sidebar = () => {
     return (
-        <div className="sidebar">
+        <div className="sidebar-info">
             <h2>User Information</h2>
             <ul>
-                <li>Profile</li>
+                <a href='/info'><li>Profile</li></a>
                 <li>Appointments</li>
-                <li>Settings</li>
+                <a href='/editprofile'><li>Settings</li></a>
                 <li>Logout</li>
             </ul>
         </div>

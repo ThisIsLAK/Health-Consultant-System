@@ -13,13 +13,6 @@ const ManagerSidebar = () => {
         </li>
 
         <li className='nav-item'>
-          <a href="/applist" className='nav-link'>
-            <i className='bi bi-calendar-check'></i>
-            <span>Appointments</span>
-          </a>
-        </li>
-
-        <li className='nav-item'>
           <a href="/apphistory" className='nav-link'>
             <i className='bi bi-clock-history'></i>
             <span>Appointment History</span>
@@ -76,7 +69,7 @@ const ManagerSidebar = () => {
             className='nav-content collapse'  // Matching CSS for collapse content
             data-bs-parent='#sidebar-nav'>
             <li>
-              <a href="/manager/manageraccount">
+              <a href="/manageraccount">
                 <i className='bi bi-person'></i>
                 <span>Your Account</span>
               </a>

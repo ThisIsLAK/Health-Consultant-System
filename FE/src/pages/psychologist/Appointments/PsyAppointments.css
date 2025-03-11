@@ -1,0 +1,466 @@
+.psy-appointments-container {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header Styles */
+.psy-appointments-container .appointments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Status Filter Styles */
+.psy-appointments-container .status-filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.psy-appointments-container .status-button {
+    background: #f3f4f6;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.psy-appointments-container .status-button:hover {
+    background: #e5e7eb;
+}
+
+.psy-appointments-container .status-button.active {
+    background: #2563eb;
+    color: white;
+}
+
+/* Date Navigation Styles */
+.psy-appointments-container .date-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.psy-appointments-container .date-display {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.psy-appointments-container .calendar-icon {
+    color: #4b5563;
+}
+
+.psy-appointments-container .current-date {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.psy-appointments-container .nav-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.psy-appointments-container .nav-button:hover {
+    background: #e5e7eb;
+}
+
+/* Content Area */
+.psy-appointments-container .appointments-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+/* Loading State */
+.psy-appointments-container .loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.psy-appointments-container .spinner {
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 3px solid #e5e7eb;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Error State */
+.psy-appointments-container .error-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.psy-appointments-container .error-message {
+    color: #ef4444;
+    margin: 1rem 0;
+}
+
+.psy-appointments-container .retry-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.psy-appointments-container .retry-btn:hover {
+    background: #1d4ed8;
+}
+
+/* Empty State */
+.psy-appointments-container .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+.psy-appointments-container .empty-state h3 {
+    margin: 1rem 0 0.5rem;
+    color: #555;
+    font-weight: 500;
+}
+
+/* Appointments List */
+.psy-appointments-container .appointments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Appointment Card */
+.psy-appointments-container .appointment-card {
+    display: flex;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    gap: 1.5rem;
+    position: relative;
+    border-left: 4px solid #2563eb; /* Default active color */
+}
+
+.psy-appointments-container .appointment-card:hover {
+    background-color: #f9f9f9;
+}
+
+.psy-appointments-container .appointment-card:last-child {
+    border-bottom: none;
+}
+
+/* Status Indicator */
+.psy-appointments-container .appointment-card.status-scheduled {
+    border-left-color: #2563eb;
+}
+
+.psy-appointments-container .appointment-card.status-completed {
+    border-left-color: #10b981;
+}
+
+.psy-appointments-container .appointment-card.status-cancelled {
+    border-left-color: #ef4444;
+}
+
+/* Time Section */
+.psy-appointments-container .time-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 5rem;
+    padding-right: 1rem;
+    border-right: 1px solid #e5e7eb;
+}
+
+.psy-appointments-container .time {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.psy-appointments-container .period {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: -0.25rem;
+}
+
+.psy-appointments-container .time-slot-tag {
+    margin-top: 0.5rem;
+    background: #f3f4f6;
+    color: #4b5563;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Details Section */
+.psy-appointments-container .details-section {
+    flex: 1;
+}
+
+.psy-appointments-container .app-header {
+    margin-bottom: 1rem;
+}
+
+.psy-appointments-container .name-status {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.psy-appointments-container .patient-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.psy-appointments-container .status {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.psy-appointments-container .status.scheduled {
+    background: #dbeafe;
+    color: #2563eb;
+}
+
+.psy-appointments-container .status.completed {
+    background: #d1fae5;
+    color: #10b981;
+}
+
+.psy-appointments-container .status.cancelled {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.psy-appointments-container .appointment-type {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    background-color: #f7f7f7;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+}
+
+/* Info Grid */
+.psy-appointments-container .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.psy-appointments-container .info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4b5563;
+    font-size: 0.875rem;
+}
+
+.psy-appointments-container .info-item .icon {
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.psy-appointments-container .text {
+    font-size: 0.9rem;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.psy-appointments-container .link-text {
+    color: #4a90e2;
+}
+
+.psy-appointments-container .notes-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+/* Actions */
+.psy-appointments-container .actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.75rem;
+    min-width: 120px;
+}
+
+.psy-appointments-container .action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.psy-appointments-container .action-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.psy-appointments-container .join-meeting {
+    background-color: #27ae60;
+    color: white;
+}
+
+.psy-appointments-container .join-meeting:hover:not(:disabled) {
+    background-color: #219653;
+}
+
+.psy-appointments-container .coming-soon {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(39, 174, 96, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
+}
+
+.psy-appointments-container .edit-notes {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.psy-appointments-container .edit-notes:hover {
+    background: #e5e7eb;
+}
+
+.psy-appointments-container .view-profile {
+    background: #2563eb;
+    color: white;
+}
+
+.psy-appointments-container .view-profile:hover {
+    background: #1d4ed8;
+}
+
+/* Status-specific card styles */
+.psy-appointments-container .status-completed {
+    background-color: rgba(39, 174, 96, 0.02);
+}
+
+.psy-appointments-container .status-cancelled {
+    background-color: rgba(231, 76, 60, 0.02);
+    opacity: 0.85;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .psy-appointments-container .appointments-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .psy-appointments-container .date-navigation {
+        justify-content: space-between;
+    }
+    
+    .psy-appointments-container .appointment-card {
+        flex-direction: column;
+    }
+    
+    .psy-appointments-container .time-section {
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+        padding-right: 0;
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
+        width: 100%;
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 1rem;
+    }
+    
+    .psy-appointments-container .info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .psy-appointments-container .actions {
+        flex-direction: row;
+        margin-top: 1rem;
+        width: 100%;
+    }
+    
+    .psy-appointments-container .action-btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 576px) {
+    .psy-appointments-container {
+        padding: 1rem;
+    }
+    
+    .psy-appointments-container .app-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .psy-appointments-container .action-btn {
+        width: 100%;
+    }
+}

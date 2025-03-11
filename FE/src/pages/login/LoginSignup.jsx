@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./LoginSignup.css";
 import { useNavigate } from "react-router-dom";
 import ApiService from "../../service/ApiService";
+import Swal from "sweetalert2";
 
 const LoginSignup = () => {
   const [isRightPanelActive, setIsRightPanelActive] = useState(false);
@@ -37,29 +38,118 @@ const LoginSignup = () => {
   const handleSignin = async (e) => {
     e.preventDefault();
     try {
-      const response = await ApiService.loginUser(signinData);
-      if (response.status === 200) {
-        setMessage("User Successfully Loged in");
-        localStorage.setItem('token', response.token);
+      console.log("Login attempt with:", signinData);
 
-        localStorage.setItem('role', response.role);
-        navigate("/")
+      const response = await ApiService.loginUser(signinData);
+      console.log("API Response:", response);
+
+      // Check if we have a valid response with token
+      if (response.status === 200 && response.data && response.data.result) {
+        // Store the token first
+        const token = response.data.result.token;
+        localStorage.setItem('token', token);
+        console.log("Token stored successfully");
+
+        console.log("User ID:", response.data.result.userId);
+        localStorage.setItem('userId', response.data.result.userId);
+
+        // Now fetch user info to get accurate role information
+        try {
+          console.log("Fetching user info to get role...");
+          const userInfoResponse = await ApiService.getLoggedInUserInfo();
+          console.log("User Info Response:", userInfoResponse);
+
+          if (userInfoResponse.status === 200 && userInfoResponse.data.result) {
+            // Extract role from user info
+            const userData = userInfoResponse.data.result;
+            console.log("User data:", userData);
+
+            let role = "USER"; // Default role
+
+            if (userData.role) {
+              const roleData = userData.role;
+              console.log("Role data from user info:", roleData);
+
+              // Update role mappings to match your system's IDs
+              if (roleData.roleName === "ADMIN" || roleData.roleId === "1") {
+                role = "ADMIN";
+              }
+              else if (roleData.roleName === "STUDENT" || roleData.roleId === "2") {
+                role = "USER"; // Map students to USER role for frontend purposes
+              }
+              else if (roleData.roleName === "PSYCHOLOGIST" || roleData.roleId === "4") {
+                role = "PSYCHOLOGIST";
+              }
+              else if (roleData.roleName === "MANAGER" || roleData.roleId === "3") {
+                role = "MANAGER";
+              }
+              else if (roleData.roleName === "PARENT" || roleData.roleId === "5") {
+                role = "USER"; // Map parents to USER role as well (they use same UI)
+              }
+              else {
+                role = "USER"; // Default role
+              }
+            }
+
+            console.log("Final role assignment:", role);
+            localStorage.setItem('userRole', role);
+
+            // Success message
+            await Swal.fire({
+              title: "Success",
+              text: `Login successful!`,
+              icon: "success"
+            });
+
+            // Redirect based on role
+            switch (role) {
+              case "ADMIN":
+                navigate('/adminuserlist');
+                break;
+              case "STUDENT":
+                navigate('/');
+                break;
+              case "PSYCHOLOGIST":
+                navigate('/psyappointment');
+                break;
+              case "MANAGER":
+                navigate('/managerdashboard');
+                break;
+              default:
+                navigate('/');
+            }
+          } else {
+            console.error("Failed to get user info");
+            Swal.fire("Warning", "Logged in, but couldn't retrieve role information", "warning");
+            navigate('/');
+          }
+        } catch (userInfoError) {
+          console.error("Error fetching user info:", userInfoError);
+          Swal.fire("Warning", "Logged in, but role detection failed", "warning");
+          navigate('/');
+        }
+      } else {
+        Swal.fire("Error", response.message || "Login failed", "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "Unable to log in user");
+      console.error("Login error:", error);
+      Swal.fire("Error", error.message || "Unable to log in user", "error");
     }
-  }
+  };
+
 
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
       const response = await ApiService.registerUser(signupData);
       if (response.status === 200) {
-        setMessage("User Successfully Registered");
-          navigate("/login")
+        Swal.fire("Success", "User Successfully Registered, Now Please Sign In", "success");
+        navigate("/login")
+      } else {
+        Swal.fire("Error", response.message, "error");
       }
     } catch (error) {
-      setMessage(error.response?.data.message || error.message || "unable to register a user");
+      Swal.fire("Error", error.message || "Unable to register user", "error");
     }
   }
 

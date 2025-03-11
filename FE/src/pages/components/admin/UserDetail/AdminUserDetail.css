@@ -1,0 +1,127 @@
+
+/* User Detail Container */
+.user-detail-container {
+    padding: 0.5rem;
+}
+
+/* User Profile Card */
+.user-profile-card {
+    border-radius: 10px;
+    border: none;
+    transition: all 0.3s;
+}
+
+.user-profile-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Avatar Circle */
+.avatar-circle {
+    width: 100px;
+    height: 100px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 0 auto;
+    transition: all 0.3s;
+}
+
+.avatar-circle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+}
+
+/* Status Badge */
+.user-status-badge {
+    font-size: 0.9rem;
+    border-radius: 20px;
+}
+
+/* Contact Info Card */
+.contact-info-card {
+    border-radius: 10px;
+    border: none;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+}
+
+/* User Details Card */
+.user-details-card {
+    border-radius: 10px;
+    border: none;
+    height: 100%;
+}
+
+/* Tab styling */
+.user-tabs {
+    border-bottom: none;
+}
+
+.user-tabs .nav-link {
+    color: #495057;
+    padding: 0.75rem 1rem;
+    font-weight: 500;
+}
+
+.user-tabs .nav-link.active {
+    color: #0d6efd;
+    border-color: #dee2e6 #dee2e6 #fff;
+    font-weight: 600;
+}
+
+/* User Edit Form */
+.user-edit-card {
+    border-radius: 10px;
+    border: none;
+}
+
+.user-edit-card .form-control:focus,
+.user-edit-card .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+/* System info */
+.system-info .icon-wrapper {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Button with icons */
+.btn-sm-icon {
+    display: flex;
+    align-items: center;
+}
+
+/* Table hover effect */
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .user-details-card {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .avatar-circle {
+        width: 80px;
+        height: 80px;
+        font-size: 2rem;
+    }
+}
