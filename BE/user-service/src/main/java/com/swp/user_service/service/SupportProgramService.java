@@ -43,7 +43,7 @@ public class SupportProgramService {
     }
 
     public SupportProgramResponse findByProgramCode(String programCode) {
-        SupportProgram supportProgram = supportProgramRepository.findByProgramCode(programCode)
+        SupportProgram supportProgram = supportProgramRepository.findByProgramCodeAndActiveTrue(programCode)
                 .orElseThrow(() -> new AppException(ErrorCode.SUPPORT_PROGRAM_NOT_EXIST));
 
         return supportProgramMapper.toResponse(supportProgram);
@@ -57,10 +57,15 @@ public class SupportProgramService {
 
     public List<SupportProgramResponse> getAllActiveSupportPrograms() {
         return supportProgramRepository.findByActiveTrue().stream()
-                .map(supportProgramMapper::toResponse)
+                .map(sp -> SupportProgramResponse.builder()
+                        .programCode(sp.getProgramCode())
+                        .programName(sp.getProgramName())
+                        .description(sp.getDescription())
+                        .startDate(sp.getStartDate())
+                        .endDate(sp.getEndDate())
+                        .build())
                 .collect(Collectors.toList());
     }
-
 
     public SupportProgramResponse updateSupportProgram(String programCode, SupportProgramRequest request) {
         SupportProgram existingProgram = supportProgramRepository.findByProgramCode(programCode)
@@ -110,6 +115,21 @@ public class SupportProgramService {
         }
 
         return supportProgramMapper.toResponse(supportProgram);
+    }
+
+    public SupportProgramResponse getSupportProgramDetails(String programCode) {
+        SupportProgram supportProgram = supportProgramRepository.findByProgramCode(programCode)
+                .filter(SupportProgram::getActive) // Chỉ lấy chương trình đang active
+                .orElseThrow(() -> new AppException(ErrorCode.SUPPORT_PROGRAM_NOT_EXIST));
+
+        // Chỉ trả về các trường được yêu cầu
+        return SupportProgramResponse.builder()
+                .programCode(supportProgram.getProgramCode())
+                .programName(supportProgram.getProgramName())
+                .description(supportProgram.getDescription())
+                .startDate(supportProgram.getStartDate())
+                .endDate(supportProgram.getEndDate())
+                .build();
     }
 
 }

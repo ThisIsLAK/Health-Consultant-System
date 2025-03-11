@@ -163,6 +163,15 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/supportprogram/{programCode}")
+    public ApiResponse<SupportProgramResponse> getSupportProgramDetails(@PathVariable String programCode) {
+        SupportProgramResponse response = supportProgramService.getSupportProgramDetails(programCode);
+        return ApiResponse.<SupportProgramResponse>builder()
+                .result(response)
+                .message("Support program details retrieved successfully")
+                .build();
+    }
+
     @PostMapping("/signupprogram")
     public ApiResponse<SupportProgramResponse> signupForProgram(@RequestBody @Valid SupportProgramSignupRequest request) {
         return ApiResponse.<SupportProgramResponse>builder()
@@ -225,4 +234,23 @@ public class UserController {
                 .message("List of all blogs retrieved successfully")
                 .build();
     }
+
+    @GetMapping("/getallactiveblogs")
+    public ApiResponse<List<BlogResponse>> getAllActiveBlogs() {
+        List<BlogResponse> blogs = blogService.getAllActiveBlogs();
+        return ApiResponse.<List<BlogResponse>>builder()
+                .result(blogs)
+                .message("List of all active blogs retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/blog/{blogCode}")
+    public ApiResponse<BlogResponse> getBlogDetails(@PathVariable String blogCode) {
+        BlogResponse blog = blogService.getBlogDetailsByCode(blogCode);
+        return ApiResponse.<BlogResponse>builder()
+                .result(blog)
+                .message("Blog details retrieved successfully")
+                .build();
+    }
+
 }

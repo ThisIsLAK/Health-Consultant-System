@@ -17,6 +17,7 @@ import java.util.Optional;
 public interface AppointmentRepository extends JpaRepository<Appointment, String> {
 
     boolean existsByPsychologistIdAndAppointmentDateAndTimeSlot(String psychologistId, Date appointmentDate, String timeSlot);
+    boolean existsByUserIdAndAppointmentDateAndTimeSlot(String userId, Date appointmentDate, String timeSlot);
 
     Optional<Appointment> findById(String id);
     List<Appointment> findByUser_Id(String id);
@@ -35,7 +36,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     @Query("SELECT a FROM Appointment a WHERE a.psychologistId =:psychologistId AND a.active = :active")
     List<Appointment> findAllByPsychologistIdAndActive(@Param("psychologistId") String psychologistId, @Param("active") Boolean active);
 
-    @Query("SELECT a FROM Appointment a WHERE a.active = true AND (a.user.id = :id OR a.psychologistId = :id)")
-    List<Appointment> findAllActiveAppointmentsByUserIdOrPsychologistId(@Param("id") String id);
+//    @Query("SELECT a FROM Appointment a WHERE a.active = true AND (a.user.id = :id OR a.psychologistId = :id)")
+//    List<Appointment> findAllActiveAppointmentsByUserIdOrPsychologistId(@Param("id") String id);
 
 }
