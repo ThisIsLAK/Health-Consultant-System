@@ -45,7 +45,6 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
 
-
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
@@ -99,6 +98,8 @@ public class UserService {
             response.setAppointmentDate(appointment.getAppointmentDate());
             response.setTimeSlot(appointment.getTimeSlot());
             response.setUserId(appointment.getUser().getId());
+            response.setActive(appointment.getActive());
+            response.setPsychologistId(appointment.getPsychologistId());
             return response;
         }).collect(Collectors.toList());
     }

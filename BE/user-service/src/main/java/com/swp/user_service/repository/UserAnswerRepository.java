@@ -1,5 +1,6 @@
 package com.swp.user_service.repository;
 
+import com.swp.user_service.entity.User;
 import com.swp.user_service.entity.UserAnswer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Repository
 public interface UserAnswerRepository extends JpaRepository<UserAnswer, String> {
@@ -21,4 +23,6 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, String> 
             "WHERE ua.user.id = :userId")
 
     List<UserAnswer> findUserAnswersByUserId(String userId);
+
+    User findByUserId(String userId);
 }

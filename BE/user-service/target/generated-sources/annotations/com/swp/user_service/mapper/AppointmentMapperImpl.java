@@ -28,6 +28,7 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         appointmentResponse.appointmentId( appointment.getAppointmentId() );
         appointmentResponse.appointmentDate( appointment.getAppointmentDate() );
         appointmentResponse.timeSlot( appointment.getTimeSlot() );
+        appointmentResponse.active( appointment.getActive() );
 
         return appointmentResponse.build();
     }

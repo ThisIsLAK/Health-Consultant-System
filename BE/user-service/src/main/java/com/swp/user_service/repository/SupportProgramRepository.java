@@ -14,5 +14,6 @@ public interface SupportProgramRepository extends JpaRepository<SupportProgram, 
     boolean existsByProgramCode(String programCode);
     void deleteByProgramCode(String programCode);
     List<SupportProgram> findByActiveTrue();
+    Optional<SupportProgram> findByProgramCodeAndActiveTrue(String programCode);
 
 }

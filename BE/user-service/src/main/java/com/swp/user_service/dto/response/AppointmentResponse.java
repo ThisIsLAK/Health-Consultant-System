@@ -19,5 +19,6 @@ public class AppointmentResponse {
     private String userId;
     private Date appointmentDate;
     private String timeSlot;
+    private Boolean active;
 
 }

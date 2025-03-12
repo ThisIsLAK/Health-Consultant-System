@@ -66,7 +66,7 @@ public class BlogService {
     }
 
     public BlogResponse getBlogByBlogCode(String blogCode) {
-        return blogRepository.findByBlogCode(blogCode)
+        return blogRepository.findByBlogCodeAndActiveTrue(blogCode) // Chỉ lấy blog đang active
                 .map(blogMapper::toBlogResponse)
                 .orElseThrow(() -> new RuntimeException("Blog not found"));
     }
@@ -76,4 +76,18 @@ public class BlogService {
                 .map(blogMapper::toBlogResponse)
                 .collect(Collectors.toList());
     }
+
+    public List<BlogResponse> getAllActiveBlogs() {
+        return blogRepository.findByActiveTrue().stream()
+                .map(blogMapper::toBlogResponse)
+                .collect(Collectors.toList());
+    }
+
+    public BlogResponse getBlogDetailsByCode(String blogCode) {
+        Blog blog = blogRepository.findByBlogCode(blogCode)
+                .orElseThrow(() -> new AppException(ErrorCode.BLOG_NOT_FOUND));
+
+        return blogMapper.toBlogResponse(blog);
+    }
+
 }
