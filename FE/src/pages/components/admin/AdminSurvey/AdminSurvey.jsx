@@ -19,14 +19,16 @@ const AdminSurvey = () => {
 
     const fetchSurveys = async () => {
         try {
+            setLoading(true);
             const response = await ApiService.getAllSurveys();
             if (response.status === 200) {
-                setSurveys(response.data.result);
+                setSurveys(response.data.result || []);
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to fetch surveys');
             }
         } catch (err) {
             setError('Failed to fetch surveys');
+            console.error('Error fetching surveys:', err);
         } finally {
             setLoading(false);
         }
@@ -49,47 +51,13 @@ const AdminSurvey = () => {
         setDeleteConfirm({ show: false, id: null });
     };
 
-    // const handleDeleteConfirm = async () => {
-    //     try {
-    //         setLoading(true);
-    //         const response = await ApiService.deleteSurvey(deleteConfirm.id);
-    //         if (response.status === 200) {
-    //             // Cập nhật lại danh sách survey sau khi xóa thành công
-    //             fetchSurveys();
-    //             setDeleteConfirm({ show: false, id: null });
-    //         } else {
-    //             setError(response.message);
-    //             setLoading(false);
-    //         }
-    //     } catch (err) {
-    //         setError('Failed to delete survey');
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const handleDeleteConfirm = async () => {
-    //     if (!deleteConfirm.id) return; // Kiểm tra ID có hợp lệ không
-    //     try {
-    //         setLoading(true);
-    //         const response = await ApiService.deleteSurvey(deleteConfirm.id); // Truyền đúng ID
-    //         if (response.status === 200) {
-    //             fetchSurveys(); // Cập nhật danh sách sau khi xóa
-    //         } else {
-    //             setError(response.message);
-    //         }
-    //     } catch (err) {
-    //         setError('Failed to delete survey');
-    //     } finally {
-    //         setLoading(false);
-    //         setDeleteConfirm({ show: false, id: null }); // Reset trạng thái
-    //     }
-    // };
-
     const handleDeleteConfirm = async () => {
         console.log("ID cần xóa:", deleteConfirm.id); // Debug ID
 
         if (!deleteConfirm.id) {
             console.error("Không có ID để xóa!");
+            setError('No valid survey ID to delete');
+            setDeleteConfirm({ show: false, id: null });
             return;
         }
 
@@ -100,16 +68,17 @@ const AdminSurvey = () => {
 
             if (response.status === 200) {
                 console.log("Xóa thành công!");
-                fetchSurveys(); // Cập nhật danh sách khảo sát
+                // Cập nhật danh sách sau khi xóa
+                setSurveys(surveys.filter(survey => survey.surveyId !== deleteConfirm.id));
+                setDeleteConfirm({ show: false, id: null });
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to delete survey');
             }
         } catch (err) {
             console.error("Lỗi khi xóa:", err);
-            setError('Failed to delete survey');
+            setError('Failed to delete survey due to an unexpected error');
         } finally {
             setLoading(false);
-            setDeleteConfirm({ show: false, id: null }); // Reset trạng thái
         }
     };
 
@@ -136,7 +105,6 @@ const AdminSurvey = () => {
                         </button>
                     </div>
 
-                    {/* Hiển thị thông báo xác nhận xóa */}
                     {deleteConfirm.show && (
                         <div className="delete-confirmation">
                             <div className="delete-confirmation-content">
@@ -156,10 +124,10 @@ const AdminSurvey = () => {
                             return (
                                 <div className="survey-card" key={survey.surveyId}>
                                     <div className="survey-card-content">
-                                        <h2 className="survey-name">{survey.title}</h2>
-                                        <p className="survey-description">{survey.description}</p>
+                                        <h2 className="survey-name">{survey.title || 'Untitled Survey'}</h2>
+                                        <p className="survey-description">{survey.description || 'No description'}</p>
                                         <div className="survey-status">
-                                            <span className={`status-badge ${survey.status?.toLowerCase()}`}>
+                                            <span className={`status-badge ${survey.status?.toLowerCase() || 'draft'}`}>
                                                 {survey.status || 'Draft'}
                                             </span>
                                         </div>

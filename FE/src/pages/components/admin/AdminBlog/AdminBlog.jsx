@@ -69,7 +69,7 @@ const AdminBlog = () => {
                         className="add-blog-btn"
                         onClick={() => navigate('/addblog')}
                     >
-                        + Thêm bài viết mới
+                        + Add new Blog
                     </button>
                 </div>
 
@@ -83,15 +83,14 @@ const AdminBlog = () => {
                                 <h3 className="blog-title">{blog.title}</h3>
                                 <p className="blog-description">{blog.description}</p>
                                 <div className="blog-meta">
-                                    <span>Mã blog: {blog.blogCode}</span>
-                                    <span>Ngày tạo: {formatDate(blog.createdAt)}</span>
+                                    <span>Blog Code: {blog.blogCode}</span>
                                 </div>
                                 <div className="blog-actions">
                                     <button
                                         className="edit-button"
                                         onClick={() => navigate(`/editblog/${blog.blogCode}`)}
                                     >
-                                        Chỉnh sửa
+                                        Edit Blog
                                     </button>
                                     <button
                                         className="delete-button"
@@ -100,7 +99,7 @@ const AdminBlog = () => {
                                             setShowDeleteDialog(true);
                                         }}
                                     >
-                                        Xóa
+                                        Remove
                                     </button>
                                 </div>
                             </div>
@@ -111,14 +110,14 @@ const AdminBlog = () => {
                 {showDeleteDialog && (
                     <div className="delete-dialog-overlay">
                         <div className="delete-dialog">
-                            <h3>Xác nhận xóa</h3>
-                            <p>Bạn có chắc chắn muốn xóa bài viết này?</p>
+                            <h3>Confirm Remove</h3>
+                            <p>Are you sure you want to remove this blog?</p>
                             <div className="dialog-actions">
                                 <button
                                     className="confirm-button"
                                     onClick={handleDeleteBlog}
                                 >
-                                    Xác nhận
+                                    Confirm
                                 </button>
                                 <button
                                     className="cancel-button"
@@ -127,7 +126,7 @@ const AdminBlog = () => {
                                         setBlogToDelete(null);
                                     }}
                                 >
-                                    Hủy
+                                    Cancel
                                 </button>
                             </div>
                         </div>
