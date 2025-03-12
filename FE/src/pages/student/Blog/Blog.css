@@ -64,12 +64,6 @@
   }
 }
 
-.nav-content {
-  display: flex;
-  justify-content: space-between;
-  height: 4rem;
-}
-
 .nav-logo-container {
   display: flex;
 }

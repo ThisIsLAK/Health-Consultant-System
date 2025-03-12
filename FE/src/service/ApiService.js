@@ -824,7 +824,7 @@ export default class ApiService {
             console.log("Deleting survey with ID:", surveyId);
 
             const response = await axios.delete(
-                `${this.BASE_URL}/identity/admin/delete-survey-by-surveyid/${surveyId}`,
+                `${this.BASE_URL}/identity/admin/deletesurveybysurveyid/${surveyId}`,
                 { headers: this.getHeader() }
             );
 
@@ -852,7 +852,7 @@ export default class ApiService {
     static async getAllBlogsForUsers() {
         try {
             const response = await axios.get(
-                `${this.BASE_URL}/identity/users/getallblogs`,
+                `${this.BASE_URL}/identity/users/getallactiveblogs`,
                 { headers: this.getHeader() }
             );
 

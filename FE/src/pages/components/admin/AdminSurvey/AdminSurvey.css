@@ -71,11 +71,6 @@
     font-weight: 600;
 }
 
-.published, .active {
-    background-color: #4caf50;
-    color: white;
-}
-
 .closed {
     background-color: #f44336;
     color: white;
