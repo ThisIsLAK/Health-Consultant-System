@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SurveyResponse {
-    String surveyId;
+    String surveyCode;
     String title;
     Date createdDate;
     String description;

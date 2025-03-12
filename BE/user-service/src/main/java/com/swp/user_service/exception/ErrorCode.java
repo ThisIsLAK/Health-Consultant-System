@@ -28,7 +28,8 @@ public enum ErrorCode {
     MAX_DAILY_SLOTS_REACHED(1023,"The psychologist is fully booked for the day."),
 
     NO_APPOINTMENT_FOUND(1024,"No appointment history found" ),
-    NOT_USER(1025, "This is not a User")
+    NOT_USER(1025, "This is not a User"),
+    BLOG_NOT_FOUND(1026, "Blog is not found")
     ;   //<<====chu y dau (;)===========================================================================================
 
 

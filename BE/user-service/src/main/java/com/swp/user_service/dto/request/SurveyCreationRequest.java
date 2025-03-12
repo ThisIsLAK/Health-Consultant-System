@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SurveyCreationRequest {
+    String surveyCode;
     String title;
     String description;
     Boolean active;
