@@ -166,15 +166,14 @@ public class AdminController {
                 .build();
     }
 
-    @GetMapping("/getallblogs")
-    public ApiResponse<List<BlogResponse>> getAllBlogs() {
-        List<BlogResponse> blogs = blogService.getAllBlogs();
+    @GetMapping("/getallactiveblogs")
+    public ApiResponse<List<BlogResponse>> getAllActiveBlogs() {
+        List<BlogResponse> blogs = blogService.getAllActiveBlogs();
         return ApiResponse.<List<BlogResponse>>builder()
                 .result(blogs)
-                .message("All blogs retrieved successfully")
+                .message("List of all active blogs retrieved successfully")
                 .build();
     }
-
     /************************************************************
      *                  APPOINTMENT CONTROLLER                  *
      ************************************************************/
