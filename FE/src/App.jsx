@@ -47,7 +47,7 @@ import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
 import PsyAppointments from './pages/psychologist/Appointments/PsyAppointments';
-
+import PsySupportProgram from './pages/psychologist/PsySupportProgram/PsySupportProgram';
 
 // Admin Routes
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
@@ -79,7 +79,7 @@ function App() {
         <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} />} />
         <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} />} />
         <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} />} />
-        <Route path="/support/:programId" element={<ProgramDetail />} allowedRoles={['USER']} />
+        <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} allowedRoles={['USER']} />} />
         <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} />} />
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} />} />
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
@@ -114,6 +114,7 @@ function App() {
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyaccount' element={<ProtectedRoute element={<PsychologistAccount />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappointment' element={<ProtectedRoute element={<PsyAppointments />} allowedRoles={['PSYCHOLOGIST']} />} />
+        <Route path='/psysupport' element={<ProtectedRoute element={<PsySupportProgram />} allowedRoles={['PSYCHOLOGIST']} />} /> 
 
         {/* Admin Routes */}
         <Route path='/adminaccount' element={<ProtectedRoute element={<AdminAccount />} allowedRoles={['ADMIN']} />} />

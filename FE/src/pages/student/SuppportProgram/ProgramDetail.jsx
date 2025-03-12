@@ -15,9 +15,34 @@ const ProgramDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [registrationStatus, setRegistrationStatus] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
   
-  // Fetch program details on component mount
+  // Fetch user info and program details on component mount
   useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        // Get token from localStorage
+        const token = localStorage.getItem('token');
+        
+        // Fetch user info to get the email
+        const response = await axios.get(`http://localhost:8080/identity/users/myInfo`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        console.log("User info response:", response.data);
+        
+        if (response.data && response.data.result) {
+          setUserEmail(response.data.result.email);
+        } else if (response.data && response.data.email) {
+          setUserEmail(response.data.email);
+        }
+      } catch (err) {
+        console.error('Error fetching user info:', err);
+      }
+    };
+    
     const fetchProgramDetails = async () => {
       if (!programCode) return;
       
@@ -26,8 +51,8 @@ const ProgramDetail = () => {
         // Get token from localStorage
         const token = localStorage.getItem('token');
         
-        // Make API call with authentication
-        const response = await axios.get(`http://localhost:8080/users/findsupportprogrambycode/${programCode}`, {
+        // Use the correct endpoint for fetching program details
+        const response = await axios.get(`http://localhost:8080/identity/users/findsupportprogrambycode/${programCode}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -35,9 +60,16 @@ const ProgramDetail = () => {
         
         console.log("Program details response:", response.data);
         
-        // Get the program from the response
-        if (response.data && response.data.result) {
-          setProgram(response.data.result);
+        // Get the program from the response - handle both response formats
+        if (response.data) {
+          if (response.data.result) {
+            setProgram(response.data.result);
+          } else if (response.data.code === 1000 && response.data.data) {
+            setProgram(response.data.data);
+          } else {
+            setProgram(response.data);
+          }
+          console.log("Processed program data:", response.data);
         } else {
           throw new Error('Invalid response format');
         }
@@ -49,7 +81,10 @@ const ProgramDetail = () => {
       }
     };
     
-    fetchProgramDetails();
+    fetchUserInfo();
+    if (programCode) {
+      fetchProgramDetails();
+    }
   }, [programCode]);
   
   // Format date for display
@@ -67,8 +102,17 @@ const ProgramDetail = () => {
       // Get token from localStorage
       const token = localStorage.getItem('token');
       
-      // Create registration request
-      const response = await axios.post(`http://localhost:8080/users/registersupportprogram`, 
+      if (!userEmail) {
+        throw new Error("User email is required for registration");
+      }
+      
+      // Create registration request with the correct endpoint and body
+      const response = await axios.post(
+        `http://localhost:8080/identity/users/signupprogram`, 
+        {
+          programCode: programCode,
+          email: userEmail // Use the email fetched from myInfo API
+        },
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -81,6 +125,11 @@ const ProgramDetail = () => {
       
       if (response.data && response.data.code === 1000) {
         setRegistrationStatus({ loading: false, error: null, success: true });
+        
+        // Update the program data to reflect the new registration
+        if (response.data.result) {
+          setProgram(response.data.result);
+        }
       } else {
         throw new Error(response.data.message || "Registration failed");
       }
@@ -140,22 +189,26 @@ const ProgramDetail = () => {
             ← Back to Programs
           </Button>
           
-          <h1 className="program-title">{program.programName}</h1>
-          <p className="program-code">Program Code: {program.programCode}</p>
+          <h1 className="program-title">{program?.programName || 'Program'}</h1>
+          <p className="program-code">Program Code: {program?.programCode || 'Unknown'}</p>
+          {/* Debug info section removed */}
         </div>
         
         <div className="program-body">
           <div className="program-section">
             <h3>Description</h3>
-            <p className="program-description">{program.description}</p>
+            <p className="program-description">{program?.description || 'No description available'}</p>
           </div>
           
           <div className="program-section">
             <h3>Program Timeline</h3>
             <div className="program-dates">
-              <p><strong>Start Date:</strong> {formatDate(program.startDate)}</p>
-              <p><strong>End Date:</strong> {formatDate(program.endDate)}</p>
-              <p><strong>Current Participants:</strong> {program.registeredUsers || 0}</p>
+              <p><strong>Start Date:</strong> {formatDate(program?.startDate)}</p>
+              <p><strong>End Date:</strong> {formatDate(program?.endDate)}</p>
+              {/* Only show participants if available in the data */}
+              {program?.registeredUsers !== null && program?.registeredUsers !== undefined && (
+                <p><strong>Current Participants:</strong> {program.registeredUsers}</p>
+              )}
             </div>
           </div>
           
@@ -179,7 +232,7 @@ const ProgramDetail = () => {
               size="lg" 
               className="register-button"
               onClick={handleRegister}
-              disabled={!program.active || (registrationStatus && (registrationStatus.loading || registrationStatus.success))}
+              disabled={registrationStatus && (registrationStatus.loading || registrationStatus.success)}
             >
               {registrationStatus && registrationStatus.loading ? (
                 <>
@@ -199,20 +252,7 @@ const ProgramDetail = () => {
                 "Register for Program"
               )}
             </Button>
-            
-            {!program.active && (
-              <p className="inactive-message">
-                This program is currently not active for registration
-              </p>
-            )}
           </div>
-          
-          {program.participants && program.participants.length > 0 && (
-            <div className="program-section">
-              <h3>Participants</h3>
-              <p>Total registered users: {program.registeredUsers || program.participants.length}</p>
-            </div>
-          )}
         </div>
       </div>
       <Footer />
