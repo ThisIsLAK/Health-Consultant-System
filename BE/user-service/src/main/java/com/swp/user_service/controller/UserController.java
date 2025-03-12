@@ -184,18 +184,24 @@ public class UserController {
      ************************************************************/
 
     @PostMapping("/submit-answers")
-    public ResponseEntity<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
+    public ApiResponse<List<UserAnswerResponse>> submitUserAnswers(@RequestBody List<SubmitUserAnswerRequest> requests) {
         List<UserAnswerResponse> responses = userAnswerService.submitUserAnswers(requests);
-        return ResponseEntity.ok(responses);
+        return ApiResponse.<List<UserAnswerResponse>>builder()
+                .result(responses)
+                .message("User answers submitted successfully")
+                .build();
     }
 
     @GetMapping("/survey-result")
-    public ResponseEntity<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
+    public ApiResponse<SurveyResultResponse> getSurveyResult(@RequestParam String surveyId, @RequestParam String userId) {
         SurveyResultResponse result = userAnswerService.getSurveyResult(surveyId, userId);
-        return ResponseEntity.ok(result);
+        return ApiResponse.<SurveyResultResponse>builder()
+                .result(result)
+                .message("Survey result retrieved successfully")
+                .build();
     }
 
-    @GetMapping("/allsurveys")
+    @GetMapping("/getallactivesurveys")
     public ApiResponse<List<AllSurveyResponse>> getAllSurveys() {
         List<AllSurveyResponse> surveys = surveyService.getAllSurveys();
         return ApiResponse.<List<AllSurveyResponse>>builder()
