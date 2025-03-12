@@ -19,6 +19,7 @@ import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
 import SurveyList from './pages/student/SurveyList/SurveyList';
+import BlogDetail from './pages/student/BlogDetail/BlogDetail';
 
 import PsychologistBooking from './pages/student/Booking/PsychologistBooking';
 import StudentAppointmentHistory from './pages/student/Appointments/AppointmentHistory';
@@ -64,6 +65,7 @@ import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupp
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
 import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 import ManagingAppointment from './pages/components/admin/ManagingAppointment/ManagingAppointment';
+import BlogDetailsPage from './pages/student/BlogDetail/BlogDetail';
 
 function App() {
   return (
@@ -82,6 +84,7 @@ function App() {
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} />} />
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
         <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
+        <Route path='/blog/:blogCode' element={<ProtectedRoute element={<BlogDetail />} allowedRoles={['USER']} />} />
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
         <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} />} />
         <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} />} />
