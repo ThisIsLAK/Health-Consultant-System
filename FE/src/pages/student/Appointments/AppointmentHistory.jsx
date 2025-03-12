@@ -308,9 +308,6 @@ const AppointmentHistory = () => {
                     
                     {isUpcoming(appointment.appointmentDate, appointment.active === true || appointment.active === 1) && (
                       <div className="appointment-actions">
-                        <button className="reschedule-btn">
-                          <i className="fas fa-calendar-alt"></i> Reschedule
-                        </button>
                         <button 
                           className="cancel-btn" 
                           onClick={() => cancelAppointment(appointment.appointmentId)}
@@ -383,3 +380,4 @@ const AppointmentHistory = () => {
 };
 
 export default AppointmentHistory;
+

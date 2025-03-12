@@ -1,3 +1,5 @@
+
+
 .appointment-history-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -298,7 +300,7 @@
   min-width: 36px;
   height: 36px;
   border: 1px solid #e0e0e0;
-  background-color: white;
+  background-color: #6200ea;
   border-radius: 6px;
   display: flex;
   align-items: center;
