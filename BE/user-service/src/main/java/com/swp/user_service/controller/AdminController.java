@@ -43,13 +43,6 @@ public class AdminController {
         return ApiResponse.<String>builder().result("User has been deleted with ID:" + " " + userId).build();
     }
 
-    @GetMapping("/getAllUser")
-    ApiResponse<List<UserResponse>> getUsers() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(adminService.getUsers())
-                .build();
-    }
-
     @GetMapping("/getAllActiveUser")
     ApiResponse<List<UserResponse>> getAllUserByActive() {
         return ApiResponse.<List<UserResponse>>builder()

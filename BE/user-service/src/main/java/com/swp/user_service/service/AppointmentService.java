@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class AppointmentService {
-    private static final List<String> VALID_TIME_SLOTS = Arrays.asList("7h-9h", "10h-12h", "13h-15h", "15h-17h");
+    private static final List<String> VALID_TIME_SLOTS = Arrays.asList("8h-10h", "10h-12h", "13h-15h", "15h-17h");
 
     AppointmentRepository appointmentRepository;
     UserRepository userRepository;
@@ -116,6 +116,7 @@ public class AppointmentService {
 
         return appointments.stream().map(appointment -> {
             AppointmentResponse response = new AppointmentResponse();
+            response.setActive(appointment.getActive());
             response.setAppointmentId(appointment.getAppointmentId());
             response.setAppointmentDate(appointment.getAppointmentDate());
             response.setTimeSlot(appointment.getTimeSlot());
