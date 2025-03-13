@@ -216,7 +216,7 @@ export default class ApiService {
      */
     static async getAllUsers() {
         try {
-            const response = await axios.get(`${this.BASE_URL}/identity/admin/getAllUser`, {
+            const response = await axios.get(`${this.BASE_URL}/identity/admin/getAllActiveUser`, {
                 headers: this.getHeader()
             });
 

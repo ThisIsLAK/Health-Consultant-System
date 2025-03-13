@@ -50,10 +50,12 @@ const PsychologistBooking = () => {
         
         console.log("Psychologists data:", response.data);
         
-        // Extract psychologists from response
+        // Extract psychologists from response and filter out inactive ones
         const psychologistsData = response.data.result || [];
-        setPsychologists(psychologistsData);
-        setFilteredPsychologists(psychologistsData);
+        const activePsychologists = psychologistsData.filter(psy => psy.active !== false);
+        
+        setPsychologists(activePsychologists);
+        setFilteredPsychologists(activePsychologists);
       } catch (error) {
         console.error("Error fetching psychologists:", error);
         toast.error("Failed to load psychologists. Please try again.");
@@ -90,23 +92,23 @@ const generateTimeSlots = () => {
   return [
     {
       id: 0,
-      time: "7h-9h",
-      value: "07:00"
+      time: "8h-10h",
+      value: "8h-10h"
     },
     {
       id: 1,
       time: "10h-12h",
-      value: "10:00"
+      value: "10h-12h"
     },
     {
       id: 2,
       time: "13h-15h", 
-      value: "13:00"
+      value: "13h-15h"
     },
     {
       id: 3,
       time: "15h-17h",
-      value: "15:00"
+      value: "15h-17h"
     }
   ];
 };
@@ -257,10 +259,8 @@ const generateTimeSlots = () => {
       const appointmentData = {
         userId: userId,
         psychologistId: selectedPsychologist.id,
-        appointmentId: "", // Sending empty string as the backend will generate the ID
         appointmentDate: formattedDate,
-        timeSlot: timeSlots[selectedSlot].value,
-        active: true
+        timeSlot: timeSlots[selectedSlot].value
       };
       
       console.log("Sending booking data:", appointmentData);
@@ -280,7 +280,7 @@ const generateTimeSlots = () => {
       console.log("Booking response:", response.data);
       
       // Check if booking was successful
-      if (response.data && (response.data.code === 200 || response.data.code === 201)) {
+      if (response.data && (response.data.code === 1000)) {
         // Update local state to reflect booking
         const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
         const newBookings = { ...bookings };
