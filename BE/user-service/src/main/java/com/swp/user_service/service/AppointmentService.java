@@ -116,6 +116,7 @@ public class AppointmentService {
 
         return appointments.stream().map(appointment -> {
             AppointmentResponse response = new AppointmentResponse();
+            response.setActive(appointment.getActive());
             response.setAppointmentId(appointment.getAppointmentId());
             response.setAppointmentDate(appointment.getAppointmentDate());
             response.setTimeSlot(appointment.getTimeSlot());
