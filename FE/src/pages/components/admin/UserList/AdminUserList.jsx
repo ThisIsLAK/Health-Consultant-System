@@ -127,7 +127,7 @@ const AdminUserList = () => {
         if (!user) return 'Unknown';
         if (!user.role) return 'Unknown';
         
-        // Check if role is an object with a roleName property
+        // Check if role matches the new schema
         if (typeof user.role === 'object' && user.role !== null) {
             return user.role.roleName || 'Unknown';
         }
@@ -139,8 +139,14 @@ const AdminUserList = () => {
     // Helper function to determine user status - with null handling
     const getUserStatus = (user) => {
         if (!user) return false;
-        return user.active !== undefined ? user.active : 
-               (user.status !== undefined ? user.status : true);
+        
+        // Check for active property in the new schema (active: 1 means active)
+        if (user.active !== undefined) {
+            return user.active === 1 || user.active === true;
+        }
+        
+        // Fallback to status for backward compatibility
+        return user.status !== undefined ? user.status : true;
     };
 
     // Map role filter options to match API data
@@ -221,7 +227,6 @@ const AdminUserList = () => {
                                             <th scope="col">User Name</th>
                                             <th scope="col">Email</th>
                                             <th scope="col">Role</th>
-                                            <th scope="col">Status</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -237,11 +242,6 @@ const AdminUserList = () => {
                                                     <td>{getUserName(user)}</td>
                                                     <td>{user.email || 'Unknown'}</td>
                                                     <td>{getUserRole(user)}</td>
-                                                    <td>
-                                                        <span className={`badge bg-${getUserStatus(user) ? 'success' : 'danger'}`}>
-                                                            {getUserStatus(user) ? 'Active' : 'Banned'}
-                                                        </span>
-                                                    </td>
                                                     <td className="d-flex align-items-center">
                                                         <FaEye
                                                             onClick={() => navigate(`/userdetail/${encodeURIComponent(user.email || '')}`)}

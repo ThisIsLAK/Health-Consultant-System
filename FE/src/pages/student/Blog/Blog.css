@@ -64,12 +64,6 @@
   }
 }
 
-.nav-content {
-  display: flex;
-  justify-content: space-between;
-  height: 4rem;
-}
-
 .nav-logo-container {
   display: flex;
 }
@@ -155,9 +149,9 @@
   margin: 0 auto;
 }
 
+
 .search-wrapper {
   position: relative;
-  margin-bottom: 2rem;
 }
 
 .search-input {
@@ -181,10 +175,14 @@
 
 .search-icon {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none;
+}
+
+.search-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Blog Posts Grid */

@@ -36,7 +36,7 @@ const UserMenu = () => {
         try {
             const userData = await ApiService.getLoggedInUserInfo();
             setUserInfo({
-                name: userData.name || "Jude Bellingham",
+                name: userData.name,
                 avatar: userData.avatar || "https://i.pravatar.cc/40",
             });
             setIsLoggedIn(true);

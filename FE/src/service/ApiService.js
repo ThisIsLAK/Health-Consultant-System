@@ -216,7 +216,7 @@ export default class ApiService {
      */
     static async getAllUsers() {
         try {
-            const response = await axios.get(`${this.BASE_URL}/identity/admin/getAllUser`, {
+            const response = await axios.get(`${this.BASE_URL}/identity/admin/getAllActiveUser`, {
                 headers: this.getHeader()
             });
 
@@ -824,7 +824,7 @@ export default class ApiService {
             console.log("Deleting survey with ID:", surveyId);
 
             const response = await axios.delete(
-                `${this.BASE_URL}/identity/admin/delete-survey-by-surveyid/${surveyId}`,
+                `${this.BASE_URL}/identity/admin/deletesurveybysurveyid/${surveyId}`,
                 { headers: this.getHeader() }
             );
 
@@ -852,7 +852,7 @@ export default class ApiService {
     static async getAllBlogsForUsers() {
         try {
             const response = await axios.get(
-                `${this.BASE_URL}/identity/users/getallblogs`,
+                `${this.BASE_URL}/identity/users/getallactiveblogs`,
                 { headers: this.getHeader() }
             );
 
@@ -1076,6 +1076,54 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to create user"
+            };
+        }
+    }
+
+    /**
+     * Delete a user by ID
+     * @param {string} userId - The ID of the user to delete
+     * @returns {Promise<Object>} Response object with status and message
+     */
+    static async deleteUserById(userId) {
+        try {
+            if (!userId) {
+                throw new Error("User ID is required for deletion");
+            }
+
+            console.log("Deleting user with ID:", userId);
+
+            const response = await axios.delete(
+                `${this.BASE_URL}/identity/admin/deleteuserbyid/${userId}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Delete user response:", response.data);
+
+            // Check if response has code property for API response format
+            if (response.data && response.data.code !== undefined) {
+                if (response.data.code === 0) {
+                    return {
+                        status: 200,
+                        message: response.data.message || "User deleted successfully"
+                    };
+                } else {
+                    return {
+                        status: 400,
+                        message: response.data.message || "Failed to delete user"
+                    };
+                }
+            } else {
+                return {
+                    status: 200,
+                    message: "User deleted successfully"
+                };
+            }
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to delete user"
             };
         }
     }

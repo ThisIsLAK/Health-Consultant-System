@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Blog.css';
 import Navbar from '../../components/homepage/Navbar';
+import Footer from "../../components/homepage/Footer";
 import ApiService from '../../../service/ApiService';
 
 const Blog = () => {
@@ -17,10 +18,15 @@ const Blog = () => {
         try {
             setLoading(true);
             const response = await ApiService.getAllBlogsForUsers();
-            if (response.status === 200 && response.data) {
-                setBlogs(response.data);
+            console.log("API Response:", response); // Add this to debug
+
+            if (response && response.status === 200) {
+                // Make sure we're setting the array part of the response
+                const blogsData = response.data?.result || response.data;
+                console.log("Setting blogs to:", blogsData);
+                setBlogs(blogsData);
             } else {
-                setError(response.message || 'Failed to fetch blogs');
+                setError(response?.message || 'Failed to fetch blogs');
             }
         } catch (err) {
             setError('Failed to fetch blogs');
@@ -31,11 +37,13 @@ const Blog = () => {
     };
 
     // Filter blogs based on search term
-    const filteredBlogs = blogs.filter(blog => {
-        const searchTermLower = searchTerm.toLowerCase();
-        return blog.title.toLowerCase().includes(searchTermLower) ||
-               blog.blogCode.toLowerCase().includes(searchTermLower);
-    });
+    const filteredBlogs = Array.isArray(blogs)
+        ? blogs.filter(blog => {
+            const searchTermLower = searchTerm.toLowerCase();
+            return blog.title?.toLowerCase().includes(searchTermLower) ||
+                blog.blogCode?.toLowerCase().includes(searchTermLower);
+        })
+        : [];
 
     if (loading) {
         return <div className="loading-spinner">Loading blogs...</div>;
@@ -48,6 +56,10 @@ const Blog = () => {
     return (
         <>
             <Navbar />
+            <div className="notice-header">
+                <h1>Latest Blogs For You</h1>
+                <p>Stay updated with our latest news and program updates.</p>
+            </div>
             <div className="blog-container">
                 <div className="blog-content">
                     {/* Search Section */}
@@ -62,7 +74,7 @@ const Blog = () => {
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
                                 <div className="search-icon">
-                                    <svg className="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
                                     </svg>
                                 </div>
@@ -74,28 +86,22 @@ const Blog = () => {
                     <div className="blog-grid">
                         {filteredBlogs.length > 0 ? (
                             filteredBlogs.map(blog => (
-                                <div className="blog-card" key={blog.id || blog.blogCode}>
-                                    <div className="blog-card-content">
-                                        <h3 className="blog-title">{blog.title}</h3>
-                                        <p className="blog-description">{blog.description}</p>
-                                        <div className="blog-meta">
-                                            <span className="blog-code">Blog Code: {blog.blogCode}</span>
-                                            <span className="blog-date">
-                                                {new Date(blog.createdAt || blog.createdDate).toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                })}
-                                            </span>
-                                        </div>
-                                        <div className="blog-actions">
-                                            <button
-                                                className="read-more-btn"
-                                                onClick={() => window.location.href = `/blog/${blog.blogCode}`}
-                                            >
-                                                Read More →
-                                            </button>
-                                        </div>
+                                <div className="related-blog-card" key={blog.id || blog.blogCode}>
+                                    <div className="related-blog-image">
+                                        <img
+                                            src={blog.image || "https://www.devicemagic.com/wp-content/uploads/2021/06/AdobeStock_131488016-2.jpg"}
+                                            alt={blog.title || blog.description || "Blog Image"}
+                                        />
+                                    </div>
+                                    <div className="related-blog-content">
+                                        <h3>{blog.title || blog.description || "No Title"}</h3>
+                                        <p>{blog.description?.substring(0, 100) + "..." || "No description available"}</p>                                      
+                                        <a
+                                            href={`/blog/${blog.blogCode}`}
+                                            className="read-more-link"
+                                        >
+                                            Read More
+                                        </a>
                                     </div>
                                 </div>
                             ))
@@ -129,6 +135,7 @@ const Blog = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </>
     );
 };
