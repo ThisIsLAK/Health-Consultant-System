@@ -1,6 +1,8 @@
 package com.swp.user_service.mapper;
 
+import com.swp.user_service.dto.request.SurveyAnswerOptionRequest;
 import com.swp.user_service.dto.request.SurveyCreationRequest;
+import com.swp.user_service.dto.request.SurveyQuestionCreationRequest;
 import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyAnswerOptionResponse;
 import com.swp.user_service.dto.response.SurveyQuestionResponse;
@@ -32,6 +34,7 @@ public class SurveyMapperImpl implements SurveyMapper {
         survey.surveyCode( request.getSurveyCode() );
         survey.title( request.getTitle() );
         survey.description( request.getDescription() );
+        survey.questions( surveyQuestionCreationRequestListToSurveyQuestionList( request.getQuestions() ) );
 
         return survey.build();
     }
@@ -83,6 +86,60 @@ public class SurveyMapperImpl implements SurveyMapper {
         }
 
         return list;
+    }
+
+    protected SurveyAnswerOption surveyAnswerOptionRequestToSurveyAnswerOption(SurveyAnswerOptionRequest surveyAnswerOptionRequest) {
+        if ( surveyAnswerOptionRequest == null ) {
+            return null;
+        }
+
+        SurveyAnswerOption.SurveyAnswerOptionBuilder surveyAnswerOption = SurveyAnswerOption.builder();
+
+        surveyAnswerOption.optionText( surveyAnswerOptionRequest.getOptionText() );
+        surveyAnswerOption.score( surveyAnswerOptionRequest.getScore() );
+        surveyAnswerOption.active( surveyAnswerOptionRequest.getActive() );
+
+        return surveyAnswerOption.build();
+    }
+
+    protected List<SurveyAnswerOption> surveyAnswerOptionRequestListToSurveyAnswerOptionList(List<SurveyAnswerOptionRequest> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<SurveyAnswerOption> list1 = new ArrayList<SurveyAnswerOption>( list.size() );
+        for ( SurveyAnswerOptionRequest surveyAnswerOptionRequest : list ) {
+            list1.add( surveyAnswerOptionRequestToSurveyAnswerOption( surveyAnswerOptionRequest ) );
+        }
+
+        return list1;
+    }
+
+    protected SurveyQuestion surveyQuestionCreationRequestToSurveyQuestion(SurveyQuestionCreationRequest surveyQuestionCreationRequest) {
+        if ( surveyQuestionCreationRequest == null ) {
+            return null;
+        }
+
+        SurveyQuestion.SurveyQuestionBuilder surveyQuestion = SurveyQuestion.builder();
+
+        surveyQuestion.questionText( surveyQuestionCreationRequest.getQuestionText() );
+        surveyQuestion.answerOptions( surveyAnswerOptionRequestListToSurveyAnswerOptionList( surveyQuestionCreationRequest.getAnswerOptions() ) );
+        surveyQuestion.active( surveyQuestionCreationRequest.getActive() );
+
+        return surveyQuestion.build();
+    }
+
+    protected List<SurveyQuestion> surveyQuestionCreationRequestListToSurveyQuestionList(List<SurveyQuestionCreationRequest> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<SurveyQuestion> list1 = new ArrayList<SurveyQuestion>( list.size() );
+        for ( SurveyQuestionCreationRequest surveyQuestionCreationRequest : list ) {
+            list1.add( surveyQuestionCreationRequestToSurveyQuestion( surveyQuestionCreationRequest ) );
+        }
+
+        return list1;
     }
 
     protected SurveyAnswerOptionResponse surveyAnswerOptionToSurveyAnswerOptionResponse(SurveyAnswerOption surveyAnswerOption) {

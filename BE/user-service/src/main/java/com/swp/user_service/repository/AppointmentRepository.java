@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +37,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     @Query("SELECT a FROM Appointment a WHERE a.psychologistId =:psychologistId AND a.active = :active")
     List<Appointment> findAllByPsychologistIdAndActive(@Param("psychologistId") String psychologistId, @Param("active") Boolean active);
 
-//    @Query("SELECT a FROM Appointment a WHERE a.active = true AND (a.user.id = :id OR a.psychologistId = :id)")
-//    List<Appointment> findAllActiveAppointmentsByUserIdOrPsychologistId(@Param("id") String id);
+    List<Appointment> findByUserIdAndPsychologistIdAndCancelledAtIsNotNull(String userId, String psychologistId);
 
 }

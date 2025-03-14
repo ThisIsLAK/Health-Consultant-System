@@ -29,8 +29,19 @@ public enum ErrorCode {
 
     NO_APPOINTMENT_FOUND(1024,"No appointment history found" ),
     NOT_USER(1025, "This is not a User"),
-    BLOG_NOT_FOUND(1026, "Blog is not found")
+    BLOG_NOT_FOUND(1026, "Blog is not found"),
+    UNAUTHORIZED(1027,"This is not allow" ),
+    COOLDOWN_NOT_EXPIRED(1028,"Cooldown is not expired" ),
+    BOOKING_TOO_LATE(1029,"Make sure you book 1 day early" ),
+    APPOINTMENT_NOT_FOUND(1030,"Appointment is not exist" ),
+    APPOINTMENT_ALREADY_CANCELLED(1031,"Appointment already cancelled" ),
+    CANCELLATION_TOO_LATE(1032,"Appointment should cancel 4h early" ),
+    SURVEY_CREATION_FAILED(1033, "Can not create survey"),
+    DATABASE_ERROR(1034, "Error when save to database"),
+    SURVEY_NOT_FOUND(1035, "Survey not found")
     ;   //<<====chu y dau (;)===========================================================================================
+
+
 
 
 

@@ -217,7 +217,7 @@ public class AdminController {
 
     @PostMapping("/createsurvey")
     public ApiResponse<SurveyResponse> createSurvey(@RequestBody SurveyCreationRequest request) {
-        SurveyResponse survey = surveyService.createSurvey(request);
+        SurveyResponse survey = surveyService.createSurveyWithQuestions(request);
         return ApiResponse.<SurveyResponse>builder()
                 .message("Survey created successfully")
                 .result(survey)
@@ -239,15 +239,6 @@ public class AdminController {
         return ApiResponse.<SurveyResponse>builder()
                 .message("Survey retrieved successfully with ID: " + surveyId)
                 .result(survey)
-                .build();
-    }
-
-    @PostMapping("/createsurveyquestion")
-    public ApiResponse<SurveyQuestionResponse> createSurveyQuestion(@RequestBody SurveyQuestionCreationRequest request) {
-        SurveyQuestionResponse question = surveyQuestionService.createSurveyQuestion(request);
-        return ApiResponse.<SurveyQuestionResponse>builder()
-                .message("Survey question created successfully")
-                .result(question)
                 .build();
     }
 

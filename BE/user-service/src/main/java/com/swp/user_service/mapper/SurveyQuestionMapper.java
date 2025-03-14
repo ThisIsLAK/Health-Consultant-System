@@ -9,10 +9,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SurveyQuestionMapper {
     @Mapping(target = "active", source = "active")
-    @Mapping(source = "surveyId", target = "survey.surveyId")
+    @Mapping(target = "survey", ignore = true) // Ignore survey mapping here
     SurveyQuestion toSurveyQuestion(SurveyQuestionCreationRequest request);
 
-//    @Mapping(source = "survey.surveyId", target = "surveyId")
     SurveyQuestionResponse toSurveyQuestionResponse(SurveyQuestion question);
 }
-

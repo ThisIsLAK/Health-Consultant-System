@@ -3,7 +3,7 @@ import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 
-const AddSurvey = () => {
+const EditSurvey = () => {
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
   const [questions, setQuestions] = useState([]);
@@ -261,4 +261,4 @@ const AddSurvey = () => {
   );
 };
 
-export default AddSurvey;
+export default EditSurvey;
