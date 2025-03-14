@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
+import './AddSurvey.css'; // Make sure to create this CSS file
 
 const AddSurvey = () => {
   const [surveyTitle, setSurveyTitle] = useState('');
@@ -112,7 +113,7 @@ const AddSurvey = () => {
       <AdminHeader />
       <AdminSidebar />
       <main id='main' className='main'>
-        <PageTitle page="Edit Survey" />
+        <PageTitle page="Create Survey" />
         
         <div className="addsurvey-container">
           {/* Basic Survey Information */}
@@ -153,7 +154,7 @@ const AddSurvey = () => {
                   onClick={handleAddQuestion}
                   className="btn btn-add"
                 >
-                  + Edit Question
+                  + Add Question
                 </button>
               )}
             </div>
@@ -184,7 +185,7 @@ const AddSurvey = () => {
             {/* Add new question form */}
             {isAddingQuestion && (
               <div className="new-question-card">
-                <h3 className="question-form-title">Edit Question</h3>
+                <h3 className="question-form-title">Add New Question</h3>
                 <div className="form-group">
                   <label className="form-label">
                     Question
@@ -227,7 +228,7 @@ const AddSurvey = () => {
                     onClick={handleAddAnswer}
                     className="btn btn-secondary"
                   >
-                    + Edit Answer
+                    + Add Answer
                   </button>
                   <button
                     onClick={handleSaveQuestion}
@@ -252,7 +253,7 @@ const AddSurvey = () => {
               onClick={handleCreateSurvey}
               className="btn btn-submit"
             >
-              Edit Survey
+              Create Survey
             </button>
           </div>
         </div>

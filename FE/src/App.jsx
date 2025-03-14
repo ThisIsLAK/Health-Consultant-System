@@ -20,6 +20,7 @@ import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
 import SurveyList from './pages/student/SurveyList/SurveyList';
 import BlogDetail from './pages/student/BlogDetail/BlogDetail';
+import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 
 import PsychologistBooking from './pages/student/Booking/PsychologistBooking';
 import StudentAppointmentHistory from './pages/student/Appointments/AppointmentHistory';
@@ -54,8 +55,9 @@ import PsySupportProgramDetail from './pages/psychologist/PsySupportProgram/PsyS
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
 import AdminUserList from './pages/components/admin/UserList/AdminUserList';
 import AdminUserDetail from './pages/components/admin/UserDetail/AdminUserDetail';
-import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
+import AddSurvey from './pages/components/admin/AddSurvey/AddSurvey';
 import AdminSurvey from './pages/components/admin/AdminSurvey/AdminSurvey';
+import SurveyDetail from './pages/components/admin/SurveyDetail/SurveyDetail';
 import AddBlog from './pages/components/admin/AddBlog/AddBlog';
 import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
 import EditBlog from './pages/components/admin/EditBlog/EditBlog';
@@ -64,9 +66,8 @@ import AddSupportProgram from './pages/components/admin/SupportProgram/AddSuppor
 import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
 import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
-import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 import ManagingAppointment from './pages/components/admin/ManagingAppointment/ManagingAppointment';
-import BlogDetailsPage from './pages/student/BlogDetail/BlogDetail';
+import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
 
 function App() {
   return (
@@ -123,8 +124,10 @@ function App() {
         <Route path='/adminuserlist' element={<ProtectedRoute element={<AdminUserList />} allowedRoles={['ADMIN']} />} />
         <Route path='/userdetail/:userEmail' element={<ProtectedRoute element={<AdminUserDetail />} allowedRoles={['ADMIN']} />} />
         <Route path='/createuser' element={<ProtectedRoute element={<AdminCreateUser />} allowedRoles={['ADMIN']} />} />
-        <Route path='/editsurvey' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
+        <Route path='/addsurvey' element={<ProtectedRoute element={<AddSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminsurvey' element={<ProtectedRoute element={<AdminSurvey />} allowedRoles={['ADMIN']} />} />
+        <Route path='/surveydetail' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} />
+        <Route path='/editsurvey/:surveyId' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/editblog/:blogCode' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />} />

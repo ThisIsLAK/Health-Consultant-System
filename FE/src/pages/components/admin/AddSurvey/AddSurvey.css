@@ -1,0 +1,216 @@
+/* AddSurvey.css */
+
+.addsurvey-container {
+  background-color: white;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0 16px;
+}
+
+.survey-basic-info {
+  margin-bottom: 32px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-label {
+  display: block;
+  color: #333;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+}
+
+.form-textarea {
+  resize: vertical;
+}
+
+.survey-questions-section {
+  margin-bottom: 32px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.btn {
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s;
+}
+
+.btn-add {
+  background-color: #3182ce;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #2c5282;
+  color: white;
+}
+
+.question-card {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.question-title {
+  font-weight: 700;
+  margin: 0;
+}
+
+.btn-delete {
+  background: none;
+  color: #e53e3e;
+  padding: 0;
+  font-size: 14px;
+}
+
+.btn-delete:hover {
+  color: #c53030;
+}
+
+.answer-list {
+  padding-left: 16px;
+}
+
+.answer-item {
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.answer-number {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 50%;
+  background-color: #cbd5e0;
+  text-align: center;
+  margin-right: 8px;
+}
+
+.new-question-card {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #ebf8ff;
+}
+
+.question-form-title {
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.answers-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.answer-form-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.answer-input-container {
+  flex-grow: 1;
+}
+
+.answer-points-container {
+  width: 96px;
+}
+
+.question-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.btn-secondary {
+  background-color: #e2e8f0;
+  color: #1a202c;
+}
+
+.btn-secondary:hover {
+  background-color: #cbd5e0;
+}
+
+.btn-success {
+  background-color: #38a169;
+  color: white;
+}
+
+.btn-success:hover {
+  background-color: #2f855a;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #c53030;
+}
+
+.survey-submit-container {
+  text-align: center;
+}
+
+.btn-submit {
+  background-color: #2f855a;
+  color: white;
+  font-size: 18px;
+  padding: 12px 24px;
+  border-radius: 8px;
+}
+
+.btn-submit:hover {
+  background-color: #276749;
+  color: white;
+}
