@@ -15,12 +15,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.*;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+
 import java.util.stream.Collectors;
 
 
@@ -30,6 +34,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class AppointmentService {
     private static final List<String> VALID_TIME_SLOTS = Arrays.asList("8h-10h", "10h-12h", "13h-15h", "15h-17h");
+    private static final Duration COOLDOWN_PERIOD = Duration.ofHours(2);
+
 
     AppointmentRepository appointmentRepository;
     UserRepository userRepository;
@@ -39,11 +45,15 @@ public class AppointmentService {
 
     @PreAuthorize("hasAnyRole('STUDENT', 'PARENT')")
     public AppointmentResponse bookAppointment(AppointmentRequest request) {
+        // kiem tra cooldown
+        validateCooldown(request);
 
         // kiem tra slot co hop le khong
         if (!VALID_TIME_SLOTS.contains(request.getTimeSlot())) {
             throw new AppException(ErrorCode.INVALID_SLOT);
         }
+
+        validateBookingTime(request);
 
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
@@ -101,13 +111,72 @@ public class AppointmentService {
         if (userSlotAlreadyBooked) {
             throw new AppException(ErrorCode.SLOT_IS_BOOKING);
         }
+
+    }
+
+    private void validateCooldown(AppointmentRequest request) {
+        List<Appointment> recentCancellations = appointmentRepository.findByUserIdAndPsychologistIdAndCancelledAtIsNotNull(
+                request.getUserId(), request.getPsychologistId()
+        );
+
+        if (recentCancellations.isEmpty()) {
+            return;
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        for (Appointment cancellation : recentCancellations) {
+            if (cancellation.getCancelledAt() != null) {
+                LocalDateTime cooldownEnd = cancellation.getCancelledAt().plus(COOLDOWN_PERIOD);
+                if (now.isBefore(cooldownEnd)) {
+                    throw new AppException(ErrorCode.COOLDOWN_NOT_EXPIRED);
+                }
+            }
+        }
+    }
+    private LocalDateTime getAppointmentStartTime(Date appointmentDate, String timeSlot) {
+        // Convert Date to LocalDateTime
+        Instant instant = appointmentDate.toInstant();
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+        LocalDate datePart = dateTime.toLocalDate();
+
+        // Parse the start time from timeSlot (e.g., "8h-10h" -> 8)
+        String startHourStr = timeSlot.split("-")[0].replace("h", "").trim();
+        int startHour = Integer.parseInt(startHourStr);
+
+        // Combine date with start hour (assuming minutes are 00)
+        return LocalDateTime.of(datePart.getYear(), datePart.getMonth(), datePart.getDayOfMonth(), startHour, 0);
+    }
+
+    private void validateBookingTime(AppointmentRequest request) {
+        LocalDateTime appointmentStartTime = getAppointmentStartTime(request.getAppointmentDate(), request.getTimeSlot());
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime bookingDeadline = appointmentStartTime.minusHours(24);
+
+        if (now.isAfter(bookingDeadline)) {
+            throw new AppException(ErrorCode.BOOKING_TOO_LATE);
+        }
+    }
+    private void validateCancellationTime(Appointment appointment) {
+        LocalDateTime appointmentStartTime = getAppointmentStartTime(appointment.getAppointmentDate(), appointment.getTimeSlot());
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime cancellationDeadline = appointmentStartTime.minusHours(4);
+
+        if (now.isAfter(cancellationDeadline)) {
+            throw new AppException(ErrorCode.CANCELLATION_TOO_LATE);
+        }
     }
 
     public void cancelAppointment(String appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
 
+        validateCancellationTime(appointment);
+
+        if (!appointment.getActive()) {
+            throw new AppException(ErrorCode.APPOINTMENT_ALREADY_CANCELLED);
+        }
         appointment.setActive(false);
+        appointment.setCancelledAt(LocalDateTime.now());
         appointmentRepository.save(appointment);
     }
 
