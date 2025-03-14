@@ -4,7 +4,6 @@ import com.swp.user_service.dto.request.SurveyAnswerOptionRequest;
 import com.swp.user_service.dto.request.SurveyQuestionCreationRequest;
 import com.swp.user_service.dto.response.SurveyAnswerOptionResponse;
 import com.swp.user_service.dto.response.SurveyQuestionResponse;
-import com.swp.user_service.entity.Survey;
 import com.swp.user_service.entity.SurveyAnswerOption;
 import com.swp.user_service.entity.SurveyQuestion;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
 
         SurveyQuestion.SurveyQuestionBuilder surveyQuestion = SurveyQuestion.builder();
 
-        surveyQuestion.survey( surveyQuestionCreationRequestToSurvey( request ) );
         surveyQuestion.active( request.getActive() );
         surveyQuestion.questionText( request.getQuestionText() );
         surveyQuestion.answerOptions( surveyAnswerOptionRequestListToSurveyAnswerOptionList( request.getAnswerOptions() ) );
@@ -49,18 +47,6 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         surveyQuestionResponse.active( question.getActive() );
 
         return surveyQuestionResponse.build();
-    }
-
-    protected Survey surveyQuestionCreationRequestToSurvey(SurveyQuestionCreationRequest surveyQuestionCreationRequest) {
-        if ( surveyQuestionCreationRequest == null ) {
-            return null;
-        }
-
-        Survey.SurveyBuilder survey = Survey.builder();
-
-        survey.surveyId( surveyQuestionCreationRequest.getSurveyId() );
-
-        return survey.build();
     }
 
     protected SurveyAnswerOption surveyAnswerOptionRequestToSurveyAnswerOption(SurveyAnswerOptionRequest surveyAnswerOptionRequest) {

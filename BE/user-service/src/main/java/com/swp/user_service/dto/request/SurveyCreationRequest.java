@@ -3,6 +3,8 @@ package com.swp.user_service.dto.request;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,4 +15,5 @@ public class SurveyCreationRequest {
     String title;
     String description;
     Boolean active;
+    List<SurveyQuestionCreationRequest> questions;
 }

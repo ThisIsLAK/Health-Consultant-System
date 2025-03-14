@@ -30,27 +30,6 @@ public class SurveyQuestionService {
     SurveyQuestionMapper surveyQuestionMapper;
     SurveyAnswerOptionMapper surveyAnswerOptionMapper;
 
-    public SurveyQuestionResponse createSurveyQuestion(SurveyQuestionCreationRequest request) {
-        Survey survey = surveyRepository.findById(request.getSurveyId())
-                .orElseThrow(() -> new RuntimeException("Survey not found"));
-
-        SurveyQuestion question = surveyQuestionMapper.toSurveyQuestion(request);
-        question.setSurvey(survey);
-
-        final SurveyQuestion finalQuestion = question;
-        List<SurveyAnswerOption> answerOptions = request.getAnswerOptions().stream()
-                .map(optionRequest -> {
-                    SurveyAnswerOption option = surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest);
-                    option.setSurveyQuestion(finalQuestion);
-                    return option;
-                })
-                .collect(Collectors.toList());
-
-        question.setAnswerOptions(answerOptions);
-
-        question = surveyQuestionRepository.save(question);
-        return surveyQuestionMapper.toSurveyQuestionResponse(question);
-    }
 
     public SurveyQuestionResponse getSurveyQuestion(String questionId) {
         SurveyQuestion question = surveyQuestionRepository.findById(questionId).orElse(null);
