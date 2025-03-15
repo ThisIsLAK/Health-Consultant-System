@@ -46,6 +46,7 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
         surveyQuestion.questionId( request.getQuestionId() );
         surveyQuestion.questionText( request.getQuestionText() );
         surveyQuestion.answerOptions( surveyAnswerOptionUpdateRequestListToSurveyAnswerOptionList( request.getAnswerOptions() ) );
+        surveyQuestion.active( request.getActive() );
 
         return surveyQuestion.build();
     }
@@ -102,6 +103,8 @@ public class SurveyQuestionMapperImpl implements SurveyQuestionMapper {
 
         surveyAnswerOption.optionId( surveyAnswerOptionUpdateRequest.getOptionId() );
         surveyAnswerOption.optionText( surveyAnswerOptionUpdateRequest.getOptionText() );
+        surveyAnswerOption.score( surveyAnswerOptionUpdateRequest.getScore() );
+        surveyAnswerOption.active( surveyAnswerOptionUpdateRequest.getActive() );
 
         return surveyAnswerOption.build();
     }
