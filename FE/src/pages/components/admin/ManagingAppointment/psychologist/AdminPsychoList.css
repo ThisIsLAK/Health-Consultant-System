@@ -1,0 +1,1037 @@
+/* Main container styles */
+.psycho-list-container {
+  padding: 25px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+/* Card styles */
+.main-card {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: none;
+}
+
+/* Card header styles */
+.card-header {
+  background: linear-gradient(135deg, #3498db, #2c3e50);
+  color: white;
+  padding: 20px;
+  border-bottom: none;
+}
+
+.header-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.header-icon {
+  margin-right: 10px;
+  font-size: 1.5rem;
+}
+
+/* Search container styles */
+.search-container {
+  position: relative;
+  max-width: 400px;
+  margin-left: auto;
+  margin-top: 10px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border-radius: 30px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search-input:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* Card body styles */
+.card-body {
+  padding: 25px;
+}
+
+/* Table styles */
+.psycho-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.psycho-table thead th {
+  background-color: #f0f2f5;
+  color: #495057;
+  font-weight: 600;
+  padding: 15px;
+  border-bottom: 2px solid #dee2e6;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+}
+
+.psycho-table tbody tr {
+  transition: all 0.2s;
+}
+
+.psycho-table tbody tr:hover {
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+.psycho-table td {
+  padding: 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.name-cell {
+  font-weight: 500;
+}
+
+.email-cell {
+  color: #6c757d;
+}
+
+/* Badge styles */
+.status-badge {
+  padding: 8px 12px;
+  border-radius: 30px;
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background-color: #28a745;
+}
+
+.status-badge.inactive {
+  background-color: #dc3545;
+}
+
+/* Button styles */
+.view-button {
+  border-radius: 50px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #17a2b8;
+  border: none;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.view-button:hover {
+  background-color: #138496;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading state styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  gap: 15px;
+}
+
+.loading-container .spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+.loading-container p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-top: 10px;
+}
+
+/* No results message */
+.no-results {
+  text-align: center;
+  padding: 30px;
+  font-size: 1.1rem;
+  background-color: #e8f4f8;
+  border-radius: 8px;
+  border-left: 5px solid #17a2b8;
+}
+
+/* Card footer */
+.card-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #eaeaea;
+  padding: 15px 25px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .psycho-list-container {
+    padding: 15px;
+  }
+  
+  .header-title {
+    margin-bottom: 15px;
+  }
+  
+  .search-container {
+    margin-left: 0;
+  }
+  
+  .card-body {
+    padding: 15px;
+  }
+  
+  .psycho-table thead th,
+  .psycho-table tbody td {
+    padding: 10px;
+  }
+}
+
+/* Modern dashboard layout */
+.psych-dashboard {
+  background-color: #f5f7fa;
+  padding: 25px;
+  min-height: calc(100vh - 60px); /* Adjust based on header height */
+}
+
+/* Header with title and search */
+.psych-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.psych-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.psych-title h3 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.psych-title-icon {
+  font-size: 28px;
+  color: #4361ee;
+  background-color: rgba(67, 97, 238, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.psych-search {
+  position: relative;
+  width: 350px;
+}
+
+.psych-search-input {
+  width: 100%;
+  padding: 12px 20px;
+  border-radius: 50px;
+  border: 1px solid #e0e0e0;
+  padding-right: 50px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+}
+
+.psych-search-input:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.psych-search-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #4361ee;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.psych-search-btn:hover {
+  background-color: #3a56d4;
+}
+
+/* Stats cards */
+.psych-stats {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.psych-stat-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  max-width: 300px;
+  width: 100%;
+  transition: transform 0.2s;
+}
+
+.psych-stat-card:hover {
+  transform: translateY(-5px);
+}
+
+.psych-stat-icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(67, 97, 238, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  font-size: 24px;
+  color: #4361ee;
+}
+
+.psych-stat-content h4 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1;
+  color: #333;
+}
+
+.psych-stat-content p {
+  margin: 5px 0 0;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+/* Grid of psychologist cards */
+.psych-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.psych-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.psych-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.psych-card-header {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.psych-avatar {
+  width: 70px;
+  height: 70px;
+  background-color: #4361ee;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.psych-card-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.psych-name {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.psych-email {
+  margin: 0;
+  color: #777;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.psych-card-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.psych-view-btn, .psych-app-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.psych-view-btn {
+  background-color: #4361ee;
+  color: white;
+}
+
+.psych-view-btn:hover {
+  background-color: #3a56d4;
+  color: white;
+}
+
+.psych-app-btn {
+  background-color: #10b981;
+  color: white;
+}
+
+.psych-app-btn:hover {
+  background-color: #0ea271;
+  color: white;
+}
+
+/* Empty state */
+.psych-empty {
+  background-color: white;
+  border-radius: 12px;
+  padding: 50px 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.psych-empty-icon {
+  font-size: 60px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.psych-empty h3 {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.psych-empty p {
+  color: #888;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Loading state */
+.psych-loading-container {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.psych-loading-spinner {
+  margin-bottom: 15px;
+}
+
+.psych-loading-container p {
+  color: #777;
+}
+
+/* Alert styles */
+.psych-alert {
+  margin-bottom: 30px;
+  border-radius: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .psych-dashboard {
+    padding: 20px;
+  }
+  
+  .psych-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .psych-search {
+    width: 100%;
+  }
+  
+  .psych-stats {
+    flex-direction: column;
+  }
+  
+  .psych-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Admin Layout */
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-container {
+  display: flex;
+  flex: 1;
+}
+
+.admin-content {
+  flex: 1;
+  margin-left: 240px; /* Adjust based on sidebar width */
+  padding-top: 60px; /* Adjust based on header height */
+  transition: all 0.3s;
+}
+
+/* Modern dashboard layout */
+.psych-dashboard {
+  background-color: #f5f7fa;
+  padding: 25px;
+  min-height: calc(100vh - 60px); /* Adjust based on header height */
+}
+
+/* Header wrapper with shadow and background */
+.psych-header-wrapper {
+  background-color: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 25px;
+}
+
+/* Header with title and search */
+.psych-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.psych-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.psych-title h3 {
+  margin: 0;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.psych-title-icon {
+  font-size: 28px;
+  color: #4361ee;
+  background-color: rgba(67, 97, 238, 0.1);
+  padding: 10px;
+  border-radius: 12px;
+}
+
+/* Search wrapper and controls */
+.psych-search-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  max-width: 450px;
+}
+
+.psych-search {
+  position: relative;
+  width: 100%;
+}
+
+.psych-search-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #718096;
+  font-size: 16px;
+  z-index: 2;
+}
+
+.psych-search-input {
+  width: 100%;
+  padding: 12px 20px 12px 45px;
+  border-radius: 50px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s;
+}
+
+.psych-search-input:focus {
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+  background-color: white;
+}
+
+.psych-search-clear {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #718096;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+
+.psych-search-clear:hover {
+  color: #e53e3e;
+}
+
+/* Stats cards */
+.psych-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+/* Keep the rest of your existing CSS below */
+.psych-stat-card {
+  /* ...existing code... */
+}
+
+/* Media queries for responsive design */
+@media (max-width: 1024px) {
+  .admin-content {
+    margin-left: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  
+  .psych-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .psych-search-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .psych-dashboard {
+    padding: 15px;
+  }
+  
+  .psych-header-wrapper {
+    padding: 15px;
+  }
+  
+  .psych-stats {
+    flex-direction: column;
+  }
+  
+  .psych-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+/* Clean up existing duplicate definitions and improve structure */
+
+/* Main layout section - designed to work with AdminHeader and AdminSidebar */
+.main {
+  margin-left: 300px;
+  padding: 20px;
+  padding-top: 80px;
+  transition: all 0.3s;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+@media (max-width: 1199px) {
+  .main {
+    margin-left: 0;
+  }
+  
+  body.toggle-sidebar .main {
+    margin-left: 0;
+  }
+}
+
+/* Modern dashboard layout */
+.psych-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page header with improved search */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.page-icon {
+  font-size: 24px;
+  color: #4361ee;
+  background-color: rgba(67, 97, 238, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Improved search box */
+.search-box {
+  position: relative;
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  width: 350px;
+}
+
+.search-icon-wrapper {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.search-icon {
+  color: #94a3b8;
+  font-size: 16px;
+}
+
+.search-input {
+  width: 100%;
+  height: 45px;
+  padding: 0 45px 0 45px;
+  border-radius: 30px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  font-size: 0.95rem;
+  color: #334155;
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4361ee;
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.15);
+  background-color: white;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-clear {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.search-clear:hover {
+  color: #ef4444;
+}
+
+/* Stats cards */
+.psych-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+/* ...Keep existing CSS for stat cards, card grid, etc... */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+  
+  .search-box, .search-box:focus-within {
+    width: 100%;
+  }
+  
+  .page-actions {
+    width: 100%;
+  }
+  
+  .psych-dashboard {
+    padding: 0;
+  }
+  
+  .psych-stats {
+    flex-direction: column;
+  }
+}
+
+/* Enhanced stats section */
+.stats-overview {
+  margin-bottom: 30px;
+}
+
+.stats-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  max-width: 600px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stats-card-inner {
+  display: flex;
+  padding: 25px 30px;
+  align-items: center;
+}
+
+.stats-icon-area {
+  background-color: rgba(67, 97, 238, 0.1);
+  border-radius: 12px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 25px;
+  flex-shrink: 0;
+}
+
+.stats-icon {
+  color: #4361ee;
+  font-size: 32px;
+}
+
+.stats-content {
+  flex-grow: 1;
+}
+
+.stats-number {
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 5px 0;
+  line-height: 1;
+}
+
+.stats-label {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+}
+
+.stats-footer {
+  background-color: #f8fafc;
+  padding: 12px 30px;
+  border-top: 1px solid #edf2f7;
+}
+
+.stats-info {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Refined search UI */
+.refined-search {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 350px;
+  transition: all 0.3s;
+}
+
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  color: #4b5563;
+  z-index: 2;
+}
+
+.search-input-field {
+  flex: 1;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  padding: 0 40px 0 42px;
+  font-size: 15px;
+  color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.search-input-field:focus {
+  outline: none;
+  border-color: #4361ee;
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+.search-input-field::placeholder {
+  color: #9ca3af;
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.search-clear-btn:hover {
+  color: #4b5563;
+  background-color: #f3f4f6;
+}
+
+.search-results-count {
+  font-size: 13px;
+  color: #6b7280;
+  padding-left: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .refined-search {
+    width: 100%;
+  }
+  
+  .page-actions {
+    width: 100%;
+  }
+}
+
+/* ...rest of existing CSS... */

@@ -1,0 +1,392 @@
+/* Main layout section - designed to work with AdminHeader and AdminSidebar */
+.main {
+  margin-left: 300px;
+  padding: 20px;
+  padding-top: 80px;
+  transition: all 0.3s;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+@media (max-width: 1199px) {
+  .main {
+    margin-left: 0;
+  }
+  
+  body.toggle-sidebar .main {
+    margin-left: 0;
+  }
+}
+
+/* Modern dashboard layout */
+.stu-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Page header with improved search */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  background-color: white;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.page-title h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.page-icon {
+  font-size: 24px;
+  color: #22c55e;  /* Green color for student icon */
+  background-color: rgba(34, 197, 94, 0.1);
+  padding: 12px;
+  border-radius: 12px;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Refined search UI */
+.refined-search {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 350px;
+  transition: all 0.3s;
+}
+
+.search-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  color: #4b5563;
+  z-index: 2;
+}
+
+.search-input-field {
+  flex: 1;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+  padding: 0 40px 0 42px;
+  font-size: 15px;
+  color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.search-input-field:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
+}
+
+.search-input-field::placeholder {
+  color: #9ca3af;
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.search-clear-btn:hover {
+  color: #4b5563;
+  background-color: #f3f4f6;
+}
+
+.search-results-count {
+  font-size: 13px;
+  color: #6b7280;
+  padding-left: 5px;
+}
+
+/* Enhanced stats section */
+.stats-overview {
+  margin-bottom: 30px;
+}
+
+.stats-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  max-width: 600px;
+  margin: 0 auto;
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stats-card-inner {
+  display: flex;
+  padding: 25px 30px;
+  align-items: center;
+}
+
+.stats-icon-area {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-radius: 12px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 25px;
+  flex-shrink: 0;
+}
+
+.stats-icon {
+  color: #22c55e;
+  font-size: 32px;
+}
+
+.stats-content {
+  flex-grow: 1;
+}
+
+.stats-number {
+  font-size: 40px;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 5px 0;
+  line-height: 1;
+}
+
+.stats-label {
+  font-size: 16px;
+  color: #718096;
+  margin: 0;
+}
+
+.stats-footer {
+  background-color: #f8fafc;
+  padding: 12px 30px;
+  border-top: 1px solid #edf2f7;
+}
+
+.stats-info {
+  color: #718096;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Grid of student cards */
+.stu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.stu-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.stu-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.stu-card-header {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.stu-avatar {
+  width: 70px;
+  height: 70px;
+  background-color: #22c55e;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.stu-card-body {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.stu-name {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.stu-email {
+  margin: 0;
+  color: #777;
+  font-size: 0.95rem;
+  word-break: break-all;
+}
+
+.stu-card-footer {
+  padding: 15px 20px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+}
+
+.stu-view-btn, .stu-app-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.stu-view-btn {
+  background-color: #22c55e;
+  color: white;
+}
+
+.stu-view-btn:hover {
+  background-color: #16a34a;
+  color: white;
+}
+
+.stu-app-btn {
+  background-color: #0ea5e9;
+  color: white;
+}
+
+.stu-app-btn:hover {
+  background-color: #0284c7;
+  color: white;
+}
+
+/* Empty state */
+.stu-empty {
+  background-color: white;
+  border-radius: 12px;
+  padding: 50px 30px;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.stu-empty-icon {
+  font-size: 60px;
+  color: #ccc;
+  margin-bottom: 20px;
+}
+
+.stu-empty h3 {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.stu-empty p {
+  color: #888;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Loading state */
+.stu-loading-container {
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.stu-loading-spinner {
+  margin-bottom: 15px;
+}
+
+.stu-loading-container p {
+  color: #777;
+}
+
+/* Alert styles */
+.stu-alert {
+  margin-bottom: 30px;
+  border-radius: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .stu-dashboard {
+    padding: 0 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px;
+  }
+  
+  .refined-search {
+    width: 100%;
+  }
+  
+  .page-actions {
+    width: 100%;
+  }
+  
+  .stu-grid {
+    grid-template-columns: 1fr;
+  }
+}
