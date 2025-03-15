@@ -9,6 +9,7 @@ com\swp\user_service\dto\request\UserUpdateByAdminRequest$UserUpdateByAdminReque
 com\swp\user_service\dto\request\AppointmentRequest.class
 com\swp\user_service\controller\AdminController.class
 com\swp\user_service\entity\Survey.class
+com\swp\user_service\dto\request\SurveyQuestionUpdateRequest$SurveyQuestionUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SurveyAnswerOptionResponse.class
 com\swp\user_service\dto\response\AuthenticationResponse$AuthenticationResponseBuilder.class
 com\swp\user_service\dto\response\SurveyQuestionResponse.class
@@ -65,13 +66,16 @@ com\swp\user_service\controller\ManagerController.class
 com\swp\user_service\dto\response\ApiResponse$ApiResponseBuilder.class
 com\swp\user_service\mapper\PsychologistMapperImpl.class
 com\swp\user_service\service\UserService.class
+com\swp\user_service\dto\request\SurveyAnswerOptionUpdateRequest$SurveyAnswerOptionUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SupportProgramResponse.class
 com\swp\user_service\service\BlogService.class
+com\swp\user_service\dto\request\SurveyAnswerOptionUpdateRequest.class
 com\swp\user_service\dto\response\UserAnswerResponse.class
 com\swp\user_service\dto\request\BlogRequest$BlogRequestBuilder.class
 com\swp\user_service\repository\RoleRepository.class
 com\swp\user_service\repository\SurveyRepository.class
 com\swp\user_service\entity\SupportProgram.class
+com\swp\user_service\dto\request\SurveyQuestionUpdateRequest.class
 com\swp\user_service\repository\UserAnswerRepository.class
 com\swp\user_service\dto\request\UserUpdateRequest$UserUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SurveyAnswerOptionResponse$SurveyAnswerOptionResponseBuilder.class

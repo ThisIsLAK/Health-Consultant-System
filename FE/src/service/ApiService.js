@@ -601,21 +601,23 @@ export default class ApiService {
     }
 
     /**
-     * Create a new survey with questions and answer options
-     * @param {Object} surveyData - The survey data containing title, description, questions, and answer options
-     * @param {string} surveyData.title - The title of the survey
-     * @param {string} surveyData.description - The description of the survey
-     * @param {Array} surveyData.questions - Array of questions with questionText and answerOptions
-     * @param {string} surveyData.questions[].questionText - The text of the question
-     * @param {Array} surveyData.questions[].answerOptions - Array of answer options
-     * @param {string} surveyData.questions[].answerOptions[].optionText - The text of the answer option
-     * @param {number} surveyData.questions[].answerOptions[].score - The score for the answer option
-     * @returns {Promise<Object>} Response object with status, data, and message
-     */
+ * Create a new survey with questions and answer options
+ * @param {Object} surveyData - The survey data containing surveyCode, title, description, questions, and answer options
+ * @param {string} surveyData.surveyCode - The unique code for the survey
+ * @param {string} surveyData.title - The title of the survey
+ * @param {string} surveyData.description - The description of the survey
+ * @param {Array} surveyData.questions - Array of questions with questionText and answerOptions
+ * @param {string} surveyData.questions[].questionText - The text of the question
+ * @param {Array} surveyData.questions[].answerOptions - Array of answer options
+ * @param {string} surveyData.questions[].answerOptions[].optionText - The text of the answer option
+ * @param {number} surveyData.questions[].answerOptions[].score - The score for the answer option
+ * @returns {Promise<Object>} Response object with status, data, and message
+ */
     static async createSurvey(surveyData) {
         try {
-            if (!surveyData.title || !surveyData.description || !surveyData.questions) {
-                throw new Error("Survey title, description, and questions are required");
+            // Validate required fields
+            if (!surveyData.surveyCode || !surveyData.title || !surveyData.description || !surveyData.questions) {
+                throw new Error("Survey code, title, description, and questions are required");
             }
 
             // Validate questions and answer options
@@ -632,9 +634,23 @@ export default class ApiService {
 
             console.log("Creating new survey with data:", surveyData);
 
+            // Prepare the request body, including surveyCode but excluding active and surveyId
+            const requestBody = {
+                surveyCode: surveyData.surveyCode, // Thêm surveyCode
+                title: surveyData.title,
+                description: surveyData.description,
+                questions: surveyData.questions.map((q) => ({
+                    questionText: q.questionText,
+                    answerOptions: q.answerOptions.map((a) => ({
+                        optionText: a.optionText,
+                        score: a.score,
+                    })),
+                })),
+            };
+
             const response = await axios.post(
                 `${this.BASE_URL}/identity/admin/createsurvey`,
-                surveyData,
+                requestBody,
                 { headers: this.getHeader() }
             );
 
@@ -653,7 +669,7 @@ export default class ApiService {
             };
         }
     }
-
+    
     /**
      * Get all surveys
      * @returns {Promise<Object>} Response object with status and data/message
