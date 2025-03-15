@@ -3,15 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Button, Form, Badge, Spinner, Alert, Tabs, Tab, Table } from 'react-bootstrap';
 import { 
   FaEdit, FaArrowLeft, FaSave, FaTimes, FaUser, 
-  FaEnvelope, FaPhone, FaMapMarkerAlt, FaIdCard, 
-  FaCalendarAlt, FaLock, FaHistory, FaUserTag
+  FaEnvelope, FaIdCard, FaHistory
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import ApiService from '../../../../service/ApiService';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-// import './AdminUserDetail.css'; // We'll create this file for custom styling
 
 const AdminUserDetail = () => {
     const { userEmail } = useParams();
@@ -233,10 +231,10 @@ const AdminUserDetail = () => {
                         </Alert>
                     ) : user ? (
                         isEditing ? (
-                            // Edit Mode
-                            <Card className="user-edit-card shadow-sm">
-                                <Card.Header as="h5" className="bg-primary text-white d-flex align-items-center">
-                                    <FaEdit className="me-2" /> Edit User: {user.name || user.email}
+                            // Edit Mode - Simplified
+                            <Card className="shadow-sm">
+                                <Card.Header as="h5" className="bg-primary text-white">
+                                    <FaEdit className="me-2" /> Edit User
                                 </Card.Header>
                                 <Card.Body className="p-4">
                                     <Form>
@@ -289,36 +287,7 @@ const AdminUserDetail = () => {
                                             <Col md={6}>
                                                 <Form.Group className="mb-4">
                                                     <Form.Label className="text-muted fw-bold">
-                                                        <FaPhone className="me-2" />Phone Number
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="phoneNumber"
-                                                        value={editedUser.phoneNumber || ''}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
-
-                                        <Row>
-                                            <Col md={6}>
-                                                <Form.Group className="mb-4">
-                                                    <Form.Label className="text-muted fw-bold">
-                                                        <FaMapMarkerAlt className="me-2" />Address
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="address"
-                                                        value={editedUser.address || ''}
-                                                        onChange={handleInputChange}
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md={6}>
-                                                <Form.Group className="mb-4">
-                                                    <Form.Label className="text-muted fw-bold">
-                                                        <FaLock className="me-2" />Status
+                                                        Status
                                                     </Form.Label>
                                                     <Form.Select
                                                         name="active"
@@ -381,214 +350,92 @@ const AdminUserDetail = () => {
                                 </Card.Footer>
                             </Card>
                         ) : (
-                            // View Mode
-                            <div className="user-detail-view">
-                                <Row>
-                                    <Col lg={4}>
-                                        <Card className="user-profile-card shadow-sm mb-4">
-                                            <Card.Body className="text-center p-4">
-                                                <div className="user-avatar mb-3">
-                                                    <div className="avatar-circle">
-                                                        {user.name ? user.name.charAt(0).toUpperCase() : 
-                                                        (user.email ? user.email.charAt(0).toUpperCase() : '?')}
+                            // View Mode - Redesigned layout
+                            <Row>
+                                <Col lg={12}>
+                                    <Card className="shadow-sm mb-4">
+                                        <Card.Body className="p-0">
+                                            <Row className="g-0">
+                                                <Col md={4} className="border-end p-4 text-center bg-light">
+                                                    <div className="user-avatar my-4">
+                                                        <div className="avatar-circle mx-auto" style={{ width: '120px', height: '120px', fontSize: '48px', lineHeight: '120px', backgroundColor: '#4e73df', color: 'white', borderRadius: '50%' }}>
+                                                            {user.name ? user.name.charAt(0).toUpperCase() : 
+                                                            (user.email ? user.email.charAt(0).toUpperCase() : '?')}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <h4 className="fw-bold mb-1">{user.name || 'No Name'}</h4>
-                                                <p className="text-muted mb-3">{user.email}</p>
-                                                <Badge bg={getRoleBadgeColor(user.role)} className="px-3 py-2 mb-3">
-                                                    {getRoleName(user.role)}
-                                                </Badge>
-                                                <div className="user-status mt-3">
-                                                    <Badge bg={user.active ? 'success' : 'danger'} className="user-status-badge px-3 py-2">
-                                                        {user.active ? 'Active Account' : 'Inactive Account'}
+                                                    <h4 className="fw-bold mb-1">{user.name || 'No Name'}</h4>
+                                                    <p className="text-muted mb-3">{user.email}</p>
+                                                    <Badge bg={getRoleBadgeColor(user.role)} className="px-3 py-2 mb-3">
+                                                        {getRoleName(user.role)}
                                                     </Badge>
-                                                </div>
-                                                <div className="user-actions mt-4">
-                                                    <Button 
-                                                        variant="outline-primary" 
-                                                        className="w-100 mb-2"
-                                                        onClick={handleEditToggle}
-                                                    >
-                                                        <FaEdit className="me-2" /> Edit Profile
-                                                    </Button>
-                                                    <Button 
-                                                        variant={user.active ? 'outline-danger' : 'outline-success'} 
-                                                        className="w-100"
-                                                        onClick={() => {
-                                                            // This would trigger a ban/unban API call in a real implementation
-                                                            toast.info(`This would ${user.active ? 'ban' : 'unban'} the user in a real implementation`);
-                                                        }}
-                                                    >
-                                                        {user.active ? 'Ban User' : 'Unban User'}
-                                                    </Button>
-                                                </div>
-                                            </Card.Body>
-                                        </Card>
-
-                                        <Card className="contact-info-card shadow-sm mb-4">
-                                            <Card.Header className="bg-light">
-                                                <h6 className="mb-0">Contact Information</h6>
-                                            </Card.Header>
-                                            <Card.Body>
-                                                <ul className="list-unstyled">
-                                                    <li className="mb-3">
-                                                        <div className="d-flex">
-                                                            <div className="icon-wrapper me-3">
-                                                                <FaEnvelope className="text-primary" />
+                                                    <div className="user-status mt-3 mb-4">
+                                                        <Badge bg={user.active ? 'success' : 'danger'} className="user-status-badge px-3 py-2">
+                                                            {user.active ? 'Active Account' : 'Inactive Account'}
+                                                        </Badge>
+                                                    </div>
+                                                    <div className="user-actions mt-4">
+                                                        <Button 
+                                                            variant="outline-primary" 
+                                                            className="w-100 mb-2"
+                                                            onClick={handleEditToggle}
+                                                        >
+                                                            <FaEdit className="me-2" /> Edit Profile
+                                                        </Button>
+                                                    </div>
+                                                </Col>
+                                                <Col md={8}>
+                                                    <div className="p-4">
+                                                        <h5 className="mb-4 border-bottom pb-2">User Details</h5>
+                                                        <Table className="table-borderless">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td width="180" className="fw-bold">User ID</td>
+                                                                    <td>
+                                                                        <span className="text-muted">{user.id}</span>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="fw-bold">Full Name</td>
+                                                                    <td>{user.name || 'N/A'}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="fw-bold">Email</td>
+                                                                    <td>{user.email}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="fw-bold">Role</td>
+                                                                    <td>
+                                                                        <Badge bg={getRoleBadgeColor(user.role)}>
+                                                                            {getRoleName(user.role)}
+                                                                        </Badge>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td className="fw-bold">Status</td>
+                                                                    <td>
+                                                                        <Badge bg={user.active ? 'success' : 'danger'}>
+                                                                            {user.active ? 'Active' : 'Inactive'}
+                                                                        </Badge>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </Table>
+                                                        
+                                                        {user.additionalInfo && (
+                                                            <div className="mt-4">
+                                                                <h5 className="mb-3 border-bottom pb-2">Additional Notes</h5>
+                                                                <div className="bg-light p-3 rounded">
+                                                                    <p className="mb-0">{user.additionalInfo}</p>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <small className="text-muted d-block">Email</small>
-                                                                <span>{user.email || 'N/A'}</span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li className="mb-3">
-                                                        <div className="d-flex">
-                                                            <div className="icon-wrapper me-3">
-                                                                <FaPhone className="text-primary" />
-                                                            </div>
-                                                            <div>
-                                                                <small className="text-muted d-block">Phone</small>
-                                                                <span>{user.phoneNumber || 'Not provided'}</span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div className="d-flex">
-                                                            <div className="icon-wrapper me-3">
-                                                                <FaMapMarkerAlt className="text-primary" />
-                                                            </div>
-                                                            <div>
-                                                                <small className="text-muted d-block">Address</small>
-                                                                <span>{user.address || 'Not provided'}</span>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                    <Col lg={8}>
-                                        <Card className="user-details-card shadow-sm mb-4">
-                                            <Card.Header className="bg-light">
-                                                <Tabs
-                                                    activeKey={activeTab}
-                                                    onSelect={(k) => setActiveTab(k)}
-                                                    className="user-tabs"
-                                                >
-                                                    <Tab eventKey="basic" title="Basic Info">
-                                                        <div className="py-3">
-                                                            <Table className="table-borderless table-hover">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td width="180" className="fw-bold">User ID</td>
-                                                                        <td>
-                                                                            <span className="text-muted">{user.id}</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Full Name</td>
-                                                                        <td>{user.name || 'N/A'}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Email</td>
-                                                                        <td>{user.email}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Role</td>
-                                                                        <td>
-                                                                            <Badge bg={getRoleBadgeColor(user.role)}>
-                                                                                {getRoleName(user.role)}
-                                                                            </Badge>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Status</td>
-                                                                        <td>
-                                                                            <Badge bg={user.active ? 'success' : 'danger'}>
-                                                                                {user.active ? 'Active' : 'Inactive'}
-                                                                            </Badge>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Created At</td>
-                                                                        <td>{formatDate(user.createdAt)}</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td className="fw-bold">Last Updated</td>
-                                                                        <td>{formatDate(user.updatedAt) || 'N/A'}</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </Table>
-                                                        </div>
-                                                    </Tab>
-                                                    <Tab eventKey="activities" title="Activities">
-                                                        <div className="pt-3 pb-2">
-                                                            <div className="text-center py-5 my-4">
-                                                                <FaHistory style={{fontSize: '3rem'}} className="text-muted mb-3" />
-                                                                <h5>No Activity Records Available</h5>
-                                                                <p className="text-muted">
-                                                                    User activity tracking is not implemented yet.
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </Tab>
-                                                    <Tab eventKey="notes" title="Notes">
-                                                        <div className="pt-3">
-                                                            <div className="p-3">
-                                                                {user.additionalInfo ? (
-                                                                    <div className="user-notes">
-                                                                        <p>{user.additionalInfo}</p>
-                                                                    </div>
-                                                                ) : (
-                                                                    <div className="text-center py-4">
-                                                                        <p className="text-muted">No additional notes available for this user.</p>
-                                                                    </div>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </Tab>
-                                                </Tabs>
-                                            </Card.Header>
-                                        </Card>
-
-                                        {/* Additional system info card */}
-                                        <Card className="shadow-sm mb-4">
-                                            <Card.Header className="bg-light">
-                                                <h6 className="mb-0">System Information</h6>
-                                            </Card.Header>
-                                            <Card.Body>
-                                                <Row className="system-info">
-                                                    <Col md={6} className="mb-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <div className="icon-wrapper me-3 bg-light p-2 rounded">
-                                                                <FaCalendarAlt className="text-primary" />
-                                                            </div>
-                                                            <div>
-                                                                <small className="text-muted d-block">Last Login</small>
-                                                                <span>Not available</span>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                    <Col md={6} className="mb-3">
-                                                        <div className="d-flex align-items-center">
-                                                            <div className="icon-wrapper me-3 bg-light p-2 rounded">
-                                                                <FaUserTag className="text-primary" />
-                                                            </div>
-                                                            <div>
-                                                                <small className="text-muted d-block">Role ID</small>
-                                                                <span>
-                                                                    {user.role && user.role.roleId ? user.role.roleId : 'N/A'}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </Col>
-                                                </Row>
-                                            </Card.Body>
-                                        </Card>
-                                    </Col>
-                                </Row>
-                            </div>
+                                                        )}
+                                                    </div>
+                                                </Col>
+                                            </Row>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            </Row>
                         )
                     ) : (
                         <Alert variant="warning" className="my-4">

@@ -19,6 +19,8 @@ import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
 import ProgramDetail from './pages/student/SuppportProgram/ProgramDetail';
 import SurveyList from './pages/student/SurveyList/SurveyList';
+import BlogDetail from './pages/student/BlogDetail/BlogDetail';
+import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 
 import PsychologistBooking from './pages/student/Booking/PsychologistBooking';
 import StudentAppointmentHistory from './pages/student/Appointments/AppointmentHistory';
@@ -46,14 +48,16 @@ import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
 import PsyAppointments from './pages/psychologist/Appointments/PsyAppointments';
-
+import PsySupportProgram from './pages/psychologist/PsySupportProgram/PsySupportProgram';
+import PsySupportProgramDetail from './pages/psychologist/PsySupportProgram/PsySupportProgramDetail';
 
 // Admin Routes
 import AdminAccount from './pages/components/admin/AdminDetail/AdminAccount';
 import AdminUserList from './pages/components/admin/UserList/AdminUserList';
 import AdminUserDetail from './pages/components/admin/UserDetail/AdminUserDetail';
-import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
+import AddSurvey from './pages/components/admin/AddSurvey/AddSurvey';
 import AdminSurvey from './pages/components/admin/AdminSurvey/AdminSurvey';
+import SurveyDetail from './pages/components/admin/SurveyDetail/SurveyDetail';
 import AddBlog from './pages/components/admin/AddBlog/AddBlog';
 import AdminBlog from './pages/components/admin/AdminBlog/AdminBlog';
 import EditBlog from './pages/components/admin/EditBlog/EditBlog';
@@ -62,8 +66,8 @@ import AddSupportProgram from './pages/components/admin/SupportProgram/AddSuppor
 import AdminSupportProgram from './pages/components/admin/SupportProgram/AdminSupportProgram';
 import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupportProgram';
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
-import SurveyTake from './pages/student/SurveyTake/SurveyTake';
 import ManagingAppointment from './pages/components/admin/ManagingAppointment/ManagingAppointment';
+import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
 
 function App() {
   return (
@@ -77,11 +81,12 @@ function App() {
         <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} />} />
         <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} />} />
         <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} />} />
-        <Route path="/support/:programId" element={<ProgramDetail />} allowedRoles={['USER']} />
+        <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} allowedRoles={['USER']} />} />
         <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} />} />
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} />} />
         <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
         <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
+        <Route path='/blog/:blogCode' element={<ProtectedRoute element={<BlogDetail />} allowedRoles={['USER']} />} />
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
         <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} />} />
         <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} />} />
@@ -111,14 +116,18 @@ function App() {
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyaccount' element={<ProtectedRoute element={<PsychologistAccount />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappointment' element={<ProtectedRoute element={<PsyAppointments />} allowedRoles={['PSYCHOLOGIST']} />} />
+        <Route path='/psysupport' element={<ProtectedRoute element={<PsySupportProgram />} allowedRoles={['PSYCHOLOGIST']} />} /> 
+        <Route path='/psysupport/:programCode' element={<ProtectedRoute element={<PsySupportProgramDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
 
         {/* Admin Routes */}
         <Route path='/adminaccount' element={<ProtectedRoute element={<AdminAccount />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminuserlist' element={<ProtectedRoute element={<AdminUserList />} allowedRoles={['ADMIN']} />} />
         <Route path='/userdetail/:userEmail' element={<ProtectedRoute element={<AdminUserDetail />} allowedRoles={['ADMIN']} />} />
         <Route path='/createuser' element={<ProtectedRoute element={<AdminCreateUser />} allowedRoles={['ADMIN']} />} />
-        <Route path='/editsurvey' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
+        <Route path='/addsurvey' element={<ProtectedRoute element={<AddSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminsurvey' element={<ProtectedRoute element={<AdminSurvey />} allowedRoles={['ADMIN']} />} />
+        <Route path='/surveydetail' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} />
+        <Route path='/editsurvey/:surveyId' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/editblog/:blogCode' element={<ProtectedRoute element={<EditBlog />} allowedRoles={['ADMIN']} />} />

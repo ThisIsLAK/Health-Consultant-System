@@ -4,6 +4,7 @@ import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import ApiService from '../../../../service/ApiService';
+import './EditBlog.css'; // Make sure to create this CSS file (can be the same as AddBlog.css)
 
 const EditBlog = () => {
     const navigate = useNavigate();
@@ -76,7 +77,18 @@ const EditBlog = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div>
+                <AdminHeader />
+                <AdminSidebar />
+                <main id='main' className='main'>
+                    <PageTitle page="Edit Blog" />
+                    <div className="editblog-container">
+                        <div className="loading-spinner">Loading...</div>
+                    </div>
+                </main>
+            </div>
+        );
     }
 
     return (
@@ -86,52 +98,67 @@ const EditBlog = () => {
 
             <main id='main' className='main'>
                 <PageTitle page="Edit Blog" />
-
-                <div className="add-form-container">
+                
+                <div className="editblog-container">
                     {error && <div className="error-message">{error}</div>}
-                    <form className="admin-form" onSubmit={handleSubmit}>                       
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Title</label>
-                                <input 
-                                    type="text"
-                                    name="title"
-                                    value={blogData.title}
-                                    onChange={handleInputChange}
-                                    required 
-                                />
-                            </div>
+                    
+                    {/* Basic Blog Information */}
+                    <div className="blog-basic-info">
+                        <h2 className="section-title">Basic Information</h2>
+                        <div className="form-group">
+                            <label className="form-label">
+                                Blog Title
+                            </label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                name="title"
+                                value={blogData.title}
+                                onChange={handleInputChange}
+                                placeholder="Enter blog title"
+                                required
+                            />
                         </div>
-
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Blog Code</label>
-                                <input 
-                                    type="text"
-                                    name="blogCode"
-                                    value={blogData.blogCode}
-                                    onChange={handleInputChange}
-                                    required 
-                                    disabled
-                                />
-                            </div>
+                        <div className="form-group">
+                            <label className="form-label">
+                                Blog Code
+                            </label>
+                            <input
+                                type="text"
+                                className="form-input"
+                                name="blogCode"
+                                value={blogData.blogCode}
+                                onChange={handleInputChange}
+                                placeholder="Enter blog code"
+                                required
+                                disabled
+                            />
                         </div>
-
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Description</label>
-                                <textarea 
-                                    rows="10"
-                                    name="description"
-                                    value={blogData.description}
-                                    onChange={handleInputChange}
-                                    required
-                                ></textarea>
-                            </div>
+                        <div className="form-group">
+                            <label className="form-label">
+                                Description
+                            </label>
+                            <textarea
+                                className="form-textarea"
+                                name="description"
+                                value={blogData.description}
+                                onChange={handleInputChange}
+                                placeholder="Enter blog description"
+                                rows="10"
+                                required
+                            />
                         </div>
+                    </div>
 
-                        <button type="submit" className="btn btn-primary">Update Blog</button>
-                    </form>
+                    {/* Update Blog Button */}
+                    <div className="blog-submit-container">
+                        <button
+                            onClick={handleSubmit}
+                            className="btn btn-submit"
+                        >
+                            Update Blog
+                        </button>
+                    </div>
                 </div>
             </main>
         </div>

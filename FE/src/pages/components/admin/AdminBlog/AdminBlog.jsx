@@ -11,8 +11,9 @@ const AdminBlog = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [blogToDelete, setBlogToDelete] = useState(null);
+    const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
+    const [currentPage, setCurrentPage] = useState(1);
+    const blogsPerPage = 9;
 
     useEffect(() => {
         fetchBlogs();
@@ -20,11 +21,12 @@ const AdminBlog = () => {
 
     const fetchBlogs = async () => {
         try {
+            setLoading(true);
             const response = await ApiService.getAllBlogs();
             if (response.status === 200) {
-                setBlogs(response.data.result);
+                setBlogs(response.data.result || []);
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to fetch blogs');
             }
         } catch (err) {
             setError('Failed to fetch blogs');
@@ -34,105 +36,149 @@ const AdminBlog = () => {
         }
     };
 
-    const handleDeleteBlog = async () => {
-        if (!blogToDelete) return;
+    const handleCreate = () => {
+        navigate('/addblog');
+    };
+
+    const handleEdit = (blogCode) => {
+        navigate(`/editblog/${blogCode}`);
+    };
+
+    const handleDeleteClick = (blogCode) => {
+        if (!blogCode) {
+            console.error("Error: No valid ID!");
+            return;
+        }
+        setDeleteConfirm({ show: true, id: blogCode });
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteConfirm({ show: false, id: null });
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deleteConfirm.id) {
+            console.error("No ID to delete!");
+            setError('No valid blog ID to delete');
+            setDeleteConfirm({ show: false, id: null });
+            return;
+        }
 
         try {
-            const response = await ApiService.deleteBlog(blogToDelete.blogCode);
+            setLoading(true);
+            const response = await ApiService.deleteBlog(deleteConfirm.id);
+
             if (response.status === 200) {
-                setBlogs(blogs.filter(blog => blog.blogCode !== blogToDelete.blogCode));
-                setShowDeleteDialog(false);
-                setBlogToDelete(null);
+                setBlogs(blogs.filter(blog => blog.blogCode !== deleteConfirm.id));
+                setDeleteConfirm({ show: false, id: null });
             } else {
-                setError(response.message);
+                setError(response.message || 'Failed to delete blog');
             }
         } catch (err) {
-            setError('Failed to delete blog');
-            console.error('Error:', err);
+            console.error("Error when deleting:", err);
+            setError('Failed to delete blog due to an unexpected error');
+        } finally {
+            setLoading(false);
         }
     };
 
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
-        return new Date(dateString).toLocaleDateString('vi-VN');
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        return new Date(dateString).toLocaleDateString('en-US', options);
     };
 
+    const indexOfLastBlog = currentPage * blogsPerPage;
+    const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
+    const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
+    const totalPages = Math.ceil(blogs.length / blogsPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return <div className="error-message">{error}</div>;
+
     return (
-        <div className="admin-layout">
+        <div>
             <AdminHeader />
             <AdminSidebar />
-
             <main id='main' className='main'>
-                <div className="blog-header">
+                <div className="page-header">
                     <PageTitle page="Blog List" />
-                    <button
-                        className="add-blog-btn"
-                        onClick={() => navigate('/addblog')}
-                    >
-                        + Thêm bài viết mới
+                    <button className="create-button" onClick={handleCreate}>
+                        + Add new Blog
                     </button>
                 </div>
 
-                {error && <div className="error-message">{error}</div>}
-                {loading && <div className="loading">Loading...</div>}
-
-                <div className="blog-grid">
-                    {blogs.map(blog => (
-                        <div className="blog-card" key={blog.blogCode}>
-                            <div className="blog-card-content">
-                                <h3 className="blog-title">{blog.title}</h3>
-                                <p className="blog-description">{blog.description}</p>
-                                <div className="blog-meta">
-                                    <span>Mã blog: {blog.blogCode}</span>
-                                    <span>Ngày tạo: {formatDate(blog.createdAt)}</span>
-                                </div>
-                                <div className="blog-actions">
-                                    <button
-                                        className="edit-button"
-                                        onClick={() => navigate(`/editblog/${blog.blogCode}`)}
-                                    >
-                                        Chỉnh sửa
-                                    </button>
-                                    <button
-                                        className="delete-button"
-                                        onClick={() => {
-                                            setBlogToDelete(blog);
-                                            setShowDeleteDialog(true);
-                                        }}
-                                    >
-                                        Xóa
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {showDeleteDialog && (
-                    <div className="delete-dialog-overlay">
-                        <div className="delete-dialog">
-                            <h3>Xác nhận xóa</h3>
-                            <p>Bạn có chắc chắn muốn xóa bài viết này?</p>
-                            <div className="dialog-actions">
-                                <button
-                                    className="confirm-button"
-                                    onClick={handleDeleteBlog}
-                                >
-                                    Xác nhận
-                                </button>
-                                <button
-                                    className="cancel-button"
-                                    onClick={() => {
-                                        setShowDeleteDialog(false);
-                                        setBlogToDelete(null);
-                                    }}
-                                >
-                                    Hủy
-                                </button>
+                {deleteConfirm.show && (
+                    <div className="delete-confirmation">
+                        <div className="delete-confirmation-content">
+                            <h3>Confirm deletion</h3>
+                            <p>Are you sure you want to delete this blog?</p>
+                            <div className="delete-confirmation-actions">
+                                <button className="cancel-button" onClick={handleDeleteCancel}>Cancel</button>
+                                <button className="confirm-delete-button" onClick={handleDeleteConfirm}>Delete</button>
                             </div>
                         </div>
                     </div>
                 )}
+
+                <div className="adminsurvey-content">
+                    <div className="survey-list">
+                        {currentBlogs.map((blog) => (
+                            <div className="survey-card" key={blog.blogCode}>
+                                <div className="survey-card-content">
+                                    <h2 className="survey-name">{blog.title || 'Untitled Blog'}</h2>
+                                    <p className="survey-description">{blog.description || 'No description'}</p>
+                                </div>
+                                <div className="survey-card-actions">
+                                    <button
+                                        className="edit-button"
+                                        onClick={() => handleEdit(blog.blogCode)}
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        className="delete-button"
+                                        onClick={() => handleDeleteClick(blog.blogCode)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                            <button 
+                                onClick={() => paginate(currentPage - 1)} 
+                                disabled={currentPage === 1}
+                                className="pagination-button"
+                            >
+                                &laquo;
+                            </button>
+                            
+                            {[...Array(totalPages).keys()].map(number => (
+                                <button
+                                    key={number + 1}
+                                    onClick={() => paginate(number + 1)}
+                                    className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+                                >
+                                    {number + 1}
+                                </button>
+                            ))}
+                            
+                            <button 
+                                onClick={() => paginate(currentPage + 1)} 
+                                disabled={currentPage === totalPages}
+                                className="pagination-button"
+                            >
+                                &raquo;
+                            </button>
+                        </div>
+                    )}
+                </div>
             </main>
         </div>
     );

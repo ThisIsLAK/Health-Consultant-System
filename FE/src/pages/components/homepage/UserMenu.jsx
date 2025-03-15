@@ -6,7 +6,7 @@ import ApiService from "../../../service/ApiService";
 const UserMenu = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userInfo, setUserInfo] = useState({ name: "", avatar: "" });
+    const [userInfo, setUserInfo] = useState({ name: "", email: "" });
 
     useEffect(() => {
         // Check authentication status on component mount and token changes
@@ -36,8 +36,8 @@ const UserMenu = () => {
         try {
             const userData = await ApiService.getLoggedInUserInfo();
             setUserInfo({
-                name: userData.name || "Jude Bellingham",
-                avatar: userData.avatar || "https://i.pravatar.cc/40",
+                name: userData.data.name || "",
+                email: userData.data.email || ""
             });
             setIsLoggedIn(true);
         } catch (error) {
@@ -65,6 +65,16 @@ const UserMenu = () => {
         navigate(path);
     };
 
+    // Get the first letter for the avatar
+    const getAvatarLetter = () => {
+        if (userInfo.name && userInfo.name.length > 0) {
+            return userInfo.name.charAt(0).toUpperCase();
+        } else if (userInfo.email && userInfo.email.length > 0) {
+            return userInfo.email.charAt(0).toUpperCase();
+        }
+        return "?";
+    };
+
     if (!isLoggedIn) {
         return (
             <>
@@ -76,18 +86,35 @@ const UserMenu = () => {
 
     return (
         <Dropdown className="relative">
-            {/* Toggle Button */}
+            {/* Toggle Button with Avatar Circle */}
             <Dropdown.Toggle
                 variant="success"
                 id="dropdown-basic"
-                className="bg-blue-500 px-10 py-2 rounded-md w-40 flex items-center justify-center"
+                className="bg-transparent border-0 p-0 d-flex align-items-center"
             >
-                <img src={userInfo.avatar} alt="User Avatar" className="user-avatar w-8 h-8 rounded-full" />
+                <div 
+                    className="avatar-circle" 
+                    style={{ 
+                        width: '40px', 
+                        height: '40px', 
+                        fontSize: '18px', 
+                        lineHeight: '40px', 
+                        backgroundColor: '#4e73df', 
+                        color: 'white', 
+                        borderRadius: '50%',
+                        textAlign: 'center',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    {getAvatarLetter()}
+                </div>
             </Dropdown.Toggle>
 
             {/* Dropdown Menu */}
             <Dropdown.Menu
-                className="absolute w-40 mt-2 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden"
+                className="mt-2 bg-white shadow-lg border border-gray-200 rounded-lg overflow-hidden"
             >
                 <Dropdown.Item
                     href="/info"

@@ -1,6 +1,6 @@
-/* AddBlog.css - Matching the style of AddSurvey.css */
+/* EditBlog.css - Matching the style of AddBlog.css */
 
-.addblog-container {
+.editblog-container {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -47,6 +47,11 @@
     outline: none;
 }
 
+.form-input:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
 .form-textarea {
     resize: vertical;
     min-height: 120px;
@@ -90,4 +95,13 @@
     border-radius: 4px;
     margin-bottom: 20px;
     border-left: 4px solid #c62828;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    font-size: 1.2rem;
+    color: #666;
 }

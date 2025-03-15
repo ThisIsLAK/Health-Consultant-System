@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
-import { Pagination, InputGroup, FormControl, Dropdown, Spinner, Alert, Button } from 'react-bootstrap';
+import { Pagination, InputGroup, FormControl, Dropdown, Spinner, Alert, Button, Badge } from 'react-bootstrap';
 import { FaEye, FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,11 +28,17 @@ const AdminUserList = () => {
         try {
             const response = await ApiService.getAllUsers();
             if (response.status === 200) {
-                // Ensure we have an array of users
-                const usersData = Array.isArray(response.data) ? response.data : [];
-                
-                console.log("Processed users data:", usersData);
-                setUsers(usersData);
+                // Handle the new API response format with code, message, result
+                if (response.data && response.data.code === 1000 && Array.isArray(response.data.result)) {
+                    console.log("Processed users data:", response.data.result);
+                    setUsers(response.data.result);
+                } else if (Array.isArray(response.data)) {
+                    // Fallback for old format
+                    console.log("Processed users data (old format):", response.data);
+                    setUsers(response.data);
+                } else {
+                    throw new Error('Invalid data format received from API');
+                }
             } else {
                 setError(response.message || 'Failed to fetch users');
                 toast.error(response.message || 'Failed to fetch users');
@@ -49,20 +55,25 @@ const AdminUserList = () => {
         }
     };
 
-    // Hàm xử lý ban/unban user
-    const handleBanUnban = (user) => {
-        const updatedUsers = users.map((u) =>
-            u.id === user.id ? { ...u, status: !u.status } : u
-        );
-        setUsers(updatedUsers);
-        toast.success(`${user.status ? 'Banned' : 'Unbanned'} successfully!`);
-    };
-
     // Hàm xử lý xóa user
-    const handleDeleteUser = (user) => {
-        const updatedUsers = users.filter((u) => u.id !== user.id);
-        setUsers(updatedUsers);
-        toast.success('User deleted successfully!');
+    const handleDeleteUser = async (user) => {
+        if (window.confirm(`Are you sure you want to delete user ${user.name || user.email}?`)) {
+            try {
+                const response = await ApiService.deleteUserById(user.id);
+                
+                if (response.status === 200) {
+                    // Remove the user from the local state
+                    const updatedUsers = users.filter((u) => u.id !== user.id);
+                    setUsers(updatedUsers);
+                    toast.success('User deleted successfully!');
+                } else {
+                    toast.error(response.message || 'Failed to delete user');
+                }
+            } catch (error) {
+                console.error("Error deleting user:", error);
+                toast.error('An error occurred while deleting the user');
+            }
+        }
     };
 
     // Handler for Add User button
@@ -80,12 +91,12 @@ const AdminUserList = () => {
             
             if (!u.role) return false;
             
-            // Check if role is an object with roleName property
+            // Check if role is an object with roleName property (new schema)
             if (typeof u.role === 'object' && u.role.roleName) {
                 return u.role.roleName.toUpperCase() === roleFilter.toUpperCase();
             }
             
-            // If role is a string
+            // If role is a string (old schema)
             if (typeof u.role === 'string') {
                 return u.role.toUpperCase() === roleFilter.toUpperCase();
             }
@@ -103,9 +114,8 @@ const AdminUserList = () => {
         const lastNameMatches = u.lastName ? u.lastName.toLowerCase().includes(lowerSearch) : false;
         const emailMatches = u.email ? u.email.toLowerCase().includes(lowerSearch) : false;
         const idMatches = u.id ? String(u.id).includes(lowerSearch) : false;
-        const classroomMatches = u.classroom ? u.classroom.toLowerCase().includes(lowerSearch) : false;
         
-        return nameMatches || firstNameMatches || lastNameMatches || emailMatches || idMatches || classroomMatches;
+        return nameMatches || firstNameMatches || lastNameMatches || emailMatches || idMatches;
     }) : [];
 
     const indexOfLastUser = currentPage * itemsPerPage;
@@ -113,7 +123,7 @@ const AdminUserList = () => {
     const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
     const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
-    // Helper function to get user's full name - with null handling
+    // Helper function to get user's name
     const getUserName = (user) => {
         if (!user) return 'Unknown';
         if (user.name) return user.name;
@@ -122,12 +132,12 @@ const AdminUserList = () => {
         return `${firstName} ${lastName}`.trim() || 'Unknown';
     };
 
-    // Helper function to get user's role name - with null handling
+    // Helper function to get user's role name
     const getUserRole = (user) => {
         if (!user) return 'Unknown';
         if (!user.role) return 'Unknown';
         
-        // Check if role is an object with a roleName property
+        // Check if role matches the new schema
         if (typeof user.role === 'object' && user.role !== null) {
             return user.role.roleName || 'Unknown';
         }
@@ -136,11 +146,17 @@ const AdminUserList = () => {
         return String(user.role) || 'Unknown';
     };
 
-    // Helper function to determine user status - with null handling
+    // Helper function to determine user status
     const getUserStatus = (user) => {
         if (!user) return false;
-        return user.active !== undefined ? user.active : 
-               (user.status !== undefined ? user.status : true);
+        
+        // New schema has direct active property as boolean
+        if (user.active !== undefined) {
+            return user.active === true || user.active === 1;
+        }
+        
+        // Fallback to status for backward compatibility
+        return user.status !== undefined ? user.status : true;
     };
 
     // Map role filter options to match API data
@@ -149,7 +165,7 @@ const AdminUserList = () => {
         { key: 'ADMIN', label: 'Admin' },
         { key: 'PSYCHOLOGIST', label: 'Psychologist' },
         { key: 'MANAGER', label: 'Manager' },
-        { key: 'STUDENT', label: 'Student' },
+        { key: 'USER', label: 'Student' },
         { key: 'PARENT', label: 'Parent' }
     ];
 
@@ -238,9 +254,9 @@ const AdminUserList = () => {
                                                     <td>{user.email || 'Unknown'}</td>
                                                     <td>{getUserRole(user)}</td>
                                                     <td>
-                                                        <span className={`badge bg-${getUserStatus(user) ? 'success' : 'danger'}`}>
-                                                            {getUserStatus(user) ? 'Active' : 'Banned'}
-                                                        </span>
+                                                        <Badge bg={getUserStatus(user) ? 'success' : 'danger'}>
+                                                            {getUserStatus(user) ? 'Active' : 'Inactive'}
+                                                        </Badge>
                                                     </td>
                                                     <td className="d-flex align-items-center">
                                                         <FaEye
@@ -254,9 +270,6 @@ const AdminUserList = () => {
                                                                 &#8942;
                                                             </Dropdown.Toggle>
                                                             <Dropdown.Menu>
-                                                                <Dropdown.Item onClick={() => handleBanUnban(user)}>
-                                                                    {getUserStatus(user) ? 'Ban' : 'Unban'}
-                                                                </Dropdown.Item>
                                                                 <Dropdown.Item onClick={() => handleDeleteUser(user)} className="text-danger">
                                                                     Delete
                                                                 </Dropdown.Item>
