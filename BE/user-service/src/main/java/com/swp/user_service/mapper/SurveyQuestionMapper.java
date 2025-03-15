@@ -13,7 +13,7 @@ public interface SurveyQuestionMapper {
     @Mapping(target = "survey", ignore = true) // Ignore survey mapping here
     SurveyQuestion toSurveyQuestion(SurveyQuestionCreationRequest request);
 
-
+    @Mapping(target = "survey", ignore = true) // Tương tự, gán thủ công sau khi ánh xạ
     SurveyQuestion toSurveyQuestion(SurveyQuestionUpdateRequest request);
 
     SurveyQuestionResponse toSurveyQuestionResponse(SurveyQuestion question);

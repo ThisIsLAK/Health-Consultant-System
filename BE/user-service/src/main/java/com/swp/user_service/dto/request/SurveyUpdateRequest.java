@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SurveyUpdateRequest {
+    String surveyId;
     String surveyCode;
     String title;
     String description;
