@@ -120,8 +120,6 @@ const AdminUserList = () => {
 
     const indexOfLastUser = currentPage * itemsPerPage;
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
-    const currentUsers = filteredUsers.slice(indexOfFirstUser, indexOfLastUser);
-    const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
 
     // Helper function to get user's name
     const getUserName = (user) => {
@@ -169,142 +167,365 @@ const AdminUserList = () => {
         { key: 'PARENT', label: 'Parent' }
     ];
 
+    // Remove status filter
+    // const [statusFilter, setStatusFilter] = useState('All');
+    // const statusOptions = [
+    //     { key: 'All', label: 'All Status' },
+    //     { key: 'Active', label: 'Active' },
+    //     { key: 'Inactive', label: 'Inactive' }
+    // ];
+
+    // Final filtered users without status filtering
+    const finalFilteredUsers = filteredUsers;
+
+    // Sort users by name
+    const [sortOrder, setSortOrder] = useState('asc');
+    const sortedUsers = [...finalFilteredUsers].sort((a, b) => {
+        const nameA = getUserName(a).toLowerCase();
+        const nameB = getUserName(b).toLowerCase();
+        return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
+    });
+
+    const currentUsers = sortedUsers.slice(indexOfFirstUser, indexOfLastUser);
+    const totalPages = Math.ceil(sortedUsers.length / itemsPerPage);
+
+    // Get role-specific color
+    const getRoleBadgeColor = (role) => {
+        const roleStr = String(role).toUpperCase();
+        switch (roleStr) {
+            case 'ADMIN': return 'danger';
+            case 'PSYCHOLOGIST': return 'success';
+            case 'MANAGER': return 'warning';
+            case 'USER': return 'info';
+            case 'PARENT': return 'primary';
+            default: return 'secondary';
+        }
+    };
+
+    // Toggle sort order
+    const toggleSortOrder = () => {
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
+
     return (
         <div>
             <AdminHeader />
             <AdminSidebar />
 
             <main id='main' className='main'>
-                <PageTitle page='User List' />
+                <PageTitle page='User Management' />
 
-                <div className="user-table-container">
-                    <div className="d-flex justify-content-between align-items-center mb-3">
-                        <div className="d-flex align-items-center" style={{ width: '60%' }}>
-                            <InputGroup>
-                                <FormControl
-                                    placeholder="Search by name, email or ID..."
-                                    aria-label="Search"
-                                    value={searchTerm}
-                                    onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
-                                />
-                            </InputGroup>
-                        </div>
-                        <div className="d-flex align-items-center">
-                            <Button 
-                                variant="success" 
-                                onClick={handleAddUserClick} 
-                                className="me-2"
-                                title="Add New User"
-                            >
-                                <FaUserPlus /> Add User
-                            </Button>
-                            <Dropdown onSelect={(eventKey) => { setRoleFilter(eventKey); setCurrentPage(1); }}>
-                                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                    {roleFilter === 'All' ? 'Filter by Role' : 
-                                    roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    {roleFilterOptions.map(option => (
-                                        <Dropdown.Item key={option.key} eventKey={option.key}>
-                                            {option.label}
-                                        </Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown>
+                <section className="section dashboard">
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-body pt-3">
+                                    {/* Header with simplified stats - removed active/inactive counts */}
+                                    <div className="row mb-4">
+                                        <div className="col-md-6 col-sm-6 mb-3 mb-md-0">
+                                            <div className="card border-0 bg-light">
+                                                <div className="card-body p-3">
+                                                    <div className="d-flex align-items-center">
+                                                        <div className="flex-shrink-0 me-3 bg-primary-light rounded-circle p-3">
+                                                            <i className="bi bi-people-fill text-primary fs-4"></i>
+                                                        </div>
+                                                        <div>
+                                                            <h6 className="mb-0">Total Users</h6>
+                                                            <h4 className="mb-0">{users.length}</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-sm-6">
+                                            <div className="card h-100 border-0 bg-primary bg-opacity-10 border-start border-5 border-primary">
+                                                <div className="card-body d-flex flex-column justify-content-center">
+                                                    <h6 className="text-primary mb-2">Need to add a new user?</h6>
+                                                    <Button 
+                                                        variant="primary" 
+                                                        className="d-flex align-items-center justify-content-center"
+                                                        onClick={handleAddUserClick}
+                                                    >
+                                                        <FaUserPlus className="me-2" /> Add New User
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Search and filter section */}
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-body p-3">
+                                            <div className="row g-3">
+                                                <div className="col-md-6">
+                                                    <InputGroup>
+                                                        <InputGroup.Text className="bg-white">
+                                                            <i className="bi bi-search"></i>
+                                                        </InputGroup.Text>
+                                                        <FormControl
+                                                            placeholder="Search users by name, email or ID..."
+                                                            className="border-start-0"
+                                                            value={searchTerm}
+                                                            onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
+                                                        />
+                                                        {searchTerm && (
+                                                            <Button 
+                                                                variant="outline-secondary" 
+                                                                onClick={() => setSearchTerm('')}
+                                                                title="Clear search"
+                                                            >
+                                                                <i className="bi bi-x"></i>
+                                                            </Button>
+                                                        )}
+                                                    </InputGroup>
+                                                </div>
+                                                <div className="col-md-3">
+                                                    <Dropdown onSelect={(eventKey) => { setRoleFilter(eventKey); setCurrentPage(1); }}>
+                                                        <Dropdown.Toggle variant="white" className="w-100 text-start d-flex align-items-center justify-content-between border">
+                                                            <span>
+                                                                <i className="bi bi-filter me-2"></i>
+                                                                {roleFilter === 'All' ? 'All Roles' : 
+                                                                roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
+                                                            </span>
+                                                            <i className="bi bi-chevron-down"></i>
+                                                        </Dropdown.Toggle>
+                                                        <Dropdown.Menu className="w-100">
+                                                            {roleFilterOptions.map(option => (
+                                                                <Dropdown.Item key={option.key} eventKey={option.key}>
+                                                                    {option.label}
+                                                                </Dropdown.Item>
+                                                            ))}
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
+                                                </div>
+                                                <div className="col-md-2">
+                                                    <Button 
+                                                        variant="white" 
+                                                        className="w-100 border d-flex align-items-center justify-content-between"
+                                                        onClick={toggleSortOrder}
+                                                    >
+                                                        <span>
+                                                            <i className="bi bi-sort-alpha-down me-2"></i>
+                                                            Sort: {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}
+                                                        </span>
+                                                        <i className={`bi bi-arrow-${sortOrder === 'asc' ? 'up' : 'down'}`}></i>
+                                                    </Button>
+                                                </div>
+                                                <div className="col-md-1">
+                                                    <Button 
+                                                        variant="outline-secondary" 
+                                                        className="w-100 h-100"
+                                                        onClick={fetchUsers}
+                                                        title="Refresh"
+                                                    >
+                                                        <i className="bi bi-arrow-clockwise"></i>
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {loading ? (
+                                        <div className="text-center my-5 py-5">
+                                            <div className="spinner-border text-primary" role="status" style={{width: '3rem', height: '3rem'}}>
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            <p className="mt-3 text-muted">Loading users data...</p>
+                                        </div>
+                                    ) : error ? (
+                                        <div className="alert alert-danger d-flex align-items-center" role="alert">
+                                            <i className="bi bi-exclamation-triangle-fill me-2"></i>
+                                            <div>
+                                                {error} <a href="#" onClick={(e) => { e.preventDefault(); fetchUsers(); }} className="alert-link">Try again</a>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="d-flex justify-content-between align-items-center mb-3">
+                                                <span className="fs-6">
+                                                    Showing <span className="fw-bold">{Math.min(sortedUsers.length, indexOfFirstUser + 1)}-{Math.min(indexOfLastUser, sortedUsers.length)}</span> of <span className="fw-bold">{sortedUsers.length}</span> users
+                                                </span>
+                                            </div>
+
+                                            {currentUsers.length > 0 ? (
+                                                <div className="table-responsive">
+                                                    <table className="table table-hover align-middle border-bottom">
+                                                        <thead className="bg-light">
+                                                            <tr>
+                                                                <th className="py-3" style={{width: "5%"}}>ID</th>
+                                                                <th className="py-3" style={{width: "35%"}}>User</th>
+                                                                <th className="py-3" style={{width: "30%"}}>Email</th>
+                                                                <th className="py-3" style={{width: "15%"}}>Role</th>
+                                                                <th className="py-3 text-center" style={{width: "15%"}}>Actions</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {currentUsers.map(user => (
+                                                                <tr key={user.id || Math.random()} className="border-bottom">
+                                                                    <td>{user.id || 'Unknown'}</td>
+                                                                    <td>
+                                                                        <div className="d-flex align-items-center">
+                                                                            <div className="avatar text-white d-flex align-items-center justify-content-center me-3"
+                                                                                style={{
+                                                                                    width: '40px', 
+                                                                                    height: '40px', 
+                                                                                    borderRadius: '8px',
+                                                                                    background: `hsl(${(user.id * 31) % 360}, 70%, 60%)`,
+                                                                                    fontSize: '16px'
+                                                                                }}>
+                                                                                {getUserName(user).charAt(0).toUpperCase()}
+                                                                            </div>
+                                                                            <div>
+                                                                                <h6 className="mb-0">{getUserName(user)}</h6>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>{user.email || 'No email'}</td>
+                                                                    <td>
+                                                                        <Badge bg={getRoleBadgeColor(getUserRole(user))} 
+                                                                              className="rounded-pill px-3 py-2">
+                                                                            {getUserRole(user)}
+                                                                        </Badge>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div className="d-flex justify-content-center gap-2">
+                                                                            <Button 
+                                                                                variant="outline-primary" 
+                                                                                size="sm"
+                                                                                onClick={() => navigate(`/userdetail/${encodeURIComponent(user.email || '')}`)}
+                                                                                title="View Details"
+                                                                            >
+                                                                                <FaEye />
+                                                                            </Button>
+                                                                            <Button 
+                                                                                variant="outline-danger" 
+                                                                                size="sm"
+                                                                                onClick={() => handleDeleteUser(user)}
+                                                                                title="Delete User"
+                                                                            >
+                                                                                <i className="bi bi-trash"></i>
+                                                                            </Button>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            ) : (
+                                                <div className="text-center my-5 py-5">
+                                                    <div className="fs-1 text-muted mb-3">
+                                                        <i className="bi bi-search"></i>
+                                                    </div>
+                                                    <h5 className="mb-2">No users found</h5>
+                                                    <p className="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
+                                                    <Button 
+                                                        variant="outline-secondary" 
+                                                        size="sm" 
+                                                        onClick={() => {
+                                                            setSearchTerm('');
+                                                            setRoleFilter('All');
+                                                        }}
+                                                    >
+                                                        Clear all filters
+                                                    </Button>
+                                                </div>
+                                            )}
+
+                                            {totalPages > 1 && (
+                                                <div className="d-flex justify-content-center mt-4">
+                                                    <nav>
+                                                        <ul className="pagination">
+                                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                                <button className="page-link" onClick={() => setCurrentPage(1)}>
+                                                                    <i className="bi bi-chevron-double-left"></i>
+                                                                </button>
+                                                            </li>
+                                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                                <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                                                                    <i className="bi bi-chevron-left"></i>
+                                                                </button>
+                                                            </li>
+                                                            
+                                                            {totalPages <= 5 ? (
+                                                                Array.from({ length: totalPages }, (_, i) => (
+                                                                    <li key={i + 1} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                                                                        <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                                                                            {i + 1}
+                                                                        </button>
+                                                                    </li>
+                                                                ))
+                                                            ) : (
+                                                                <>
+                                                                    {currentPage > 2 && (
+                                                                        <li className="page-item">
+                                                                            <button className="page-link" onClick={() => setCurrentPage(1)}>1</button>
+                                                                        </li>
+                                                                    )}
+                                                                    
+                                                                    {currentPage > 3 && (
+                                                                        <li className="page-item disabled">
+                                                                            <span className="page-link">...</span>
+                                                                        </li>
+                                                                    )}
+                                                                    
+                                                                    {currentPage > 1 && (
+                                                                        <li className="page-item">
+                                                                            <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                                                                                {currentPage - 1}
+                                                                            </button>
+                                                                        </li>
+                                                                    )}
+                                                                    
+                                                                    <li className="page-item active">
+                                                                        <span className="page-link">{currentPage}</span>
+                                                                    </li>
+                                                                    
+                                                                    {currentPage < totalPages && (
+                                                                        <li className="page-item">
+                                                                            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                                                                                {currentPage + 1}
+                                                                            </button>
+                                                                        </li>
+                                                                    )}
+                                                                    
+                                                                    {currentPage < totalPages - 2 && (
+                                                                        <li className="page-item disabled">
+                                                                            <span className="page-link">...</span>
+                                                                        </li>
+                                                                    )}
+                                                                    
+                                                                    {currentPage < totalPages - 1 && (
+                                                                        <li className="page-item">
+                                                                            <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
+                                                                                {totalPages}
+                                                                            </button>
+                                                                        </li>
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                            
+                                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                                <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                                                                    <i className="bi bi-chevron-right"></i>
+                                                                </button>
+                                                            </li>
+                                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                                <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
+                                                                    <i className="bi bi-chevron-double-right"></i>
+                                                                </button>
+                                                            </li>
+                                                        </ul>
+                                                    </nav>
+                                                </div>
+                                            )}
+                                        </>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    {loading ? (
-                        <div className="text-center my-5">
-                            <Spinner animation="border" variant="primary" />
-                            <p className="mt-2">Loading users...</p>
-                        </div>
-                    ) : error ? (
-                        <Alert variant="danger">
-                            {error}. <Alert.Link onClick={fetchUsers}>Try again</Alert.Link>
-                        </Alert>
-                    ) : (
-                        <>
-                            <div className="mb-3">
-                                <span>{`Showing ${filteredUsers.length} user(s)`}</span>
-                            </div>
-
-                            <div className="table-responsive">
-                                <table className="table table-borderless datatable">
-                                    <thead className="table-light">
-                                        <tr>
-                                            <th scope="col">ID</th>
-                                            <th scope="col">User Name</th>
-                                            <th scope="col">Email</th>
-                                            <th scope="col">Role</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {currentUsers.length > 0 ? (
-                                            currentUsers.map((user) => (
-                                                <tr key={user.id || Math.random()}>
-                                                    <th scope="row">
-                                                        <a href="#" className="custom-link">
-                                                            {user.id || 'Unknown'}
-                                                        </a>
-                                                    </th>
-                                                    <td>{getUserName(user)}</td>
-                                                    <td>{user.email || 'Unknown'}</td>
-                                                    <td>{getUserRole(user)}</td>
-                                                    <td>
-                                                        <Badge bg={getUserStatus(user) ? 'success' : 'danger'}>
-                                                            {getUserStatus(user) ? 'Active' : 'Inactive'}
-                                                        </Badge>
-                                                    </td>
-                                                    <td className="d-flex align-items-center">
-                                                        <FaEye
-                                                            onClick={() => navigate(`/userdetail/${encodeURIComponent(user.email || '')}`)}
-                                                            className="custom-icon me-3 text-dark"
-                                                            style={{ cursor: 'pointer' }}
-                                                            title="View Detail"
-                                                        />
-                                                        <Dropdown align="end">
-                                                            <Dropdown.Toggle variant="link" className="custom-button three-dots p-0 text-decoration-none text-dark">
-                                                                &#8942;
-                                                            </Dropdown.Toggle>
-                                                            <Dropdown.Menu>
-                                                                <Dropdown.Item onClick={() => handleDeleteUser(user)} className="text-danger">
-                                                                    Delete
-                                                                </Dropdown.Item>
-                                                            </Dropdown.Menu>
-                                                        </Dropdown>
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="6" className="text-center">
-                                                    No users found
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {totalPages > 1 && (
-                                <Pagination className="justify-content-center">
-                                    {[...Array(totalPages)].map((_, index) => (
-                                        <Pagination.Item
-                                            key={index + 1}
-                                            active={index + 1 === currentPage}
-                                            onClick={() => setCurrentPage(index + 1)}
-                                        >
-                                            {index + 1}
-                                        </Pagination.Item>
-                                    ))}
-                                </Pagination>
-                            )}
-                        </>
-                    )}
-                </div>
+                </section>
             </main>
         </div>
     );
