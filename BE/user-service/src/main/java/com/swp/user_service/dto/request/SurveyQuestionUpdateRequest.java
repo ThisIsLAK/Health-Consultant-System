@@ -10,10 +10,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SurveyUpdateRequest {
-    String surveyCode;
-    String title;
-    String description;
+public class SurveyQuestionUpdateRequest {
+    String questionId;  // Có thể null nếu là câu hỏi mới
+    String surveyId;
+    String questionText;
     Boolean active;
-    List<SurveyQuestionUpdateRequest> questions;
+    List<SurveyAnswerOptionUpdateRequest> answerOptions;
 }

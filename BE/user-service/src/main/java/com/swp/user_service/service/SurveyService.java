@@ -1,8 +1,6 @@
 package com.swp.user_service.service;
 
-import com.swp.user_service.dto.request.SurveyCreationRequest;
-import com.swp.user_service.dto.request.SurveyQuestionCreationRequest;
-import com.swp.user_service.dto.request.SurveyUpdateRequest;
+import com.swp.user_service.dto.request.*;
 import com.swp.user_service.dto.response.AllSurveyResponse;
 import com.swp.user_service.dto.response.SurveyResponse;
 import com.swp.user_service.entity.Survey;
@@ -44,6 +42,7 @@ public class SurveyService {
     SurveyQuestionRepository surveyQuestionRepository;
     SurveyAnswerOptionRepository surveyAnswerOptionRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public SurveyResponse createSurveyWithQuestions(SurveyCreationRequest request) {
         // Bước 1: Tạo và lưu survey trước
         Survey survey = surveyMapper.toSurvey(request);
@@ -102,19 +101,28 @@ public class SurveyService {
     }
 
     public SurveyResponse getSurvey(String surveyId) {
-        Survey survey = surveyRepository.findById(surveyId).orElse(null);
-        if (survey != null) {
-            SurveyResponse response = surveyMapper.toSurveyResponse(survey);
-            response.setQuestions(survey.getQuestions().stream()
-                    .map(surveyQuestionMapper::toSurveyQuestionResponse)
-                    .collect(Collectors.toList()));
-            return response;
+        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
+
+        if (surveyOptional.isEmpty()) {
+            log.warn("Survey not found with ID: {}", surveyId);
+            return null;
         }
-        return null;
+
+        Survey survey = surveyOptional.get();
+        log.info("Survey retrieved: {}", survey);
+
+        SurveyResponse response = surveyMapper.toSurveyResponse(survey);
+        response.setQuestions(survey.getQuestions().stream()
+                .map(surveyQuestionMapper::toSurveyQuestionResponse)
+                .collect(Collectors.toList()));
+
+        return response;
     }
 
     public List<AllSurveyResponse> getAllSurveys() {
         List<Survey> surveys = surveyRepository.findByActiveTrue();
+        log.info("Retrieved {} active surveys", surveys.size());
+
         return surveys.stream()
                 .map(surveyMapper::toAllSurveyResponse)
                 .collect(Collectors.toList());
@@ -127,31 +135,93 @@ public class SurveyService {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteSurveyById(String surveyId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
-        if (surveyOptional.isPresent()) {
-            Survey survey = surveyOptional.get();
-            survey.setActive(false); // Đánh dấu là không hoạt động thay vì xóa hẳn
-            surveyRepository.save(survey);
-            log.info("Survey with ID " + surveyId + " has been deleted.");
-        } else {
-            throw new RuntimeException("Survey not found with ID: " + surveyId);
-        }
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    public SurveyResponse updateSurvey(String surveyId, SurveyUpdateRequest request) {
-        Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
         if (surveyOptional.isEmpty()) {
             throw new RuntimeException("Survey not found with ID: " + surveyId);
         }
 
         Survey survey = surveyOptional.get();
-        survey.setTitle(request.getTitle());
-        survey.setDescription(request.getDescription());
-        survey.setActive(request.getActive());
+        survey.setActive(false);
 
-        Survey updatedSurvey = surveyRepository.save(survey);
+        for (SurveyQuestion question : survey.getQuestions()) {
+            question.setActive(false);
+            for (SurveyAnswerOption option : question.getAnswerOptions()) {
+                option.setActive(false);
+            }
+        }
 
-        return surveyMapper.toSurveyResponse(survey);
+        surveyRepository.save(survey);
+        log.info("Survey with ID {} and its associated questions and answer options have been deactivated.", surveyId);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public SurveyResponse updateSurvey(String surveyId, SurveyUpdateRequest request) {
+        log.info("Updating survey with ID: {}", surveyId);
+
+        try {
+            // Validate request
+            if (request == null || request.getQuestions() == null) {
+                throw new IllegalArgumentException("Invalid request payload");
+            }
+
+            // Tìm Survey trong database
+            Survey survey = surveyRepository.findById(surveyId)
+                    .orElseThrow(() -> new RuntimeException("Survey not found with ID: " + surveyId));
+
+            // Cập nhật thông tin khảo sát
+            survey.setTitle(request.getTitle());
+            survey.setDescription(request.getDescription());
+            survey.setActive(request.getActive());
+
+            // Clear existing questions and update with new ones
+            survey.getQuestions().clear();
+
+            for (SurveyQuestionUpdateRequest questionRequest : request.getQuestions()) {
+                log.info("Processing question with ID: {}", questionRequest.getQuestionId());
+
+                SurveyQuestion question;
+                if (questionRequest.getQuestionId() != null) {
+                    question = surveyQuestionRepository.findById(questionRequest.getQuestionId())
+                            .orElseThrow(() -> new RuntimeException("Question not found with ID: " + questionRequest.getQuestionId()));
+                } else {
+                    question = new SurveyQuestion();
+                    question.setSurvey(survey); // Gán khảo sát vào câu hỏi mới
+                }
+
+                question.setQuestionText(questionRequest.getQuestionText());
+                question.setActive(questionRequest.getActive());
+
+                // Clear existing answer options and update with new ones
+                question.getAnswerOptions().clear();
+
+                for (SurveyAnswerOptionUpdateRequest optionRequest : questionRequest.getAnswerOptions()) {
+                    log.info("Processing answer option with ID: {}", optionRequest.getOptionId());
+
+                    SurveyAnswerOption option;
+                    if (optionRequest.getOptionId() != null) {
+                        option = surveyAnswerOptionRepository.findById(optionRequest.getOptionId())
+                                .orElseThrow(() -> new RuntimeException("Answer option not found with ID: " + optionRequest.getOptionId()));
+                    } else {
+                        option = new SurveyAnswerOption();
+                        option.setOptionId(UUID.randomUUID().toString());
+                    }
+
+                    option.setOptionText(optionRequest.getOptionText());
+                    option.setScore(optionRequest.getScore());
+                    option.setActive(optionRequest.getActive() != null ? optionRequest.getActive() : true); // ✅ Tránh lỗi null
+                    option.setSurveyQuestion(question); // ✅ Gán câu hỏi vào lựa chọn
+
+                    question.getAnswerOptions().add(option);
+                }
+
+                survey.getQuestions().add(question);
+            }
+
+            // Lưu tất cả vào database
+            survey = surveyRepository.save(survey);
+            return surveyMapper.toSurveyResponse(survey);
+        } catch (Exception e) {
+            log.error("Error updating survey with ID: {}", surveyId, e);
+            throw e; // Rethrow the exception to ensure it's properly handled by the caller
+        }
+    }
 }
