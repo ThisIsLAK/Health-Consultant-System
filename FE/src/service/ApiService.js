@@ -327,16 +327,17 @@ export default class ApiService {
      */
     static async getUserByEmail(email) {
         try {
-            // Updated endpoint format - directly using the email without 'getUser/'
-            const response = await axios.get(`${this.BASE_URL}/identity/admin/${encodeURIComponent(email)}`, {
-                headers: this.getHeader()
-            });
+            // Using the finduserbyemail endpoint
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/admin/finduserbyemail/${encodeURIComponent(email)}`,
+                { headers: this.getHeader() }
+            );
 
             console.log("Fetched user details:", response.data);
 
             // Handle response format with code, message, result structure
             if (response.data && typeof response.data === 'object') {
-                if (response.data.code !== undefined && response.data.result !== undefined) {
+                if (response.data.code === 1000 && response.data.result !== undefined) {
                     return {
                         status: 200,
                         data: response.data // Return whole response to process result at component level
@@ -945,7 +946,7 @@ export default class ApiService {
 
             // Check if response has code property for API response format
             if (response.data && response.data.code !== undefined) {
-                if (response.data.code === 0) {
+                if (response.data.code === 1000) {
                     return {
                         status: 200,
                         message: response.data.message || "User deleted successfully"
