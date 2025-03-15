@@ -44,53 +44,26 @@ public class SurveyService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public SurveyResponse createSurveyWithQuestions(SurveyCreationRequest request) {
-        // Bước 1: Tạo và lưu survey trước
         Survey survey = surveyMapper.toSurvey(request);
-        survey.setSurveyId(UUID.randomUUID().toString()); // Generate UUID for surveyId
         survey.setCreatedDate(new Date());
         survey.setActive(true);
 
-        // Debug statement to ensure survey is set up correctly before saving
-        log.info("Survey before saving: {}", survey);
+        final Survey savedSurvey = surveyRepository.save(survey); // Lưu ngay để có ID
 
-//        survey = surveyRepository.save(survey); // Lưu ngay để có ID
-
-        // Debug statement to ensure survey is saved and has an ID
-        log.info("Survey after saving: {}", survey);
-
-        // Khai báo biến finalSurvey để tránh lỗi biến trong lambda
-        final Survey savedSurvey = survey;
-
-        // Bước 2: Tạo danh sách câu hỏi và gán survey
         List<SurveyQuestion> questions = request.getQuestions().stream().map(questionRequest -> {
             SurveyQuestion question = surveyQuestionMapper.toSurveyQuestion(questionRequest);
-            question.setQuestionId(UUID.randomUUID().toString()); // Generate UUID for questionId
-            question.setSurvey(savedSurvey); // Sử dụng biến finalSurvey thay vì survey
-            log.info("SurveyQuestion before saving: {}", question);
-//            SurveyQuestion savedQuestion = surveyQuestionRepository.save(question);
-//            log.info("SurveyQuestion after saving: {}", savedQuestion);
+            question.setSurvey(savedSurvey); // Không cần set UUID ở đây
             return question;
         }).collect(Collectors.toList());
 
-        // Debug statement to ensure questions are linked to the survey
-        questions.forEach(q -> log.info("SurveyQuestion after saving: {}", q));
-
-        // Bước 3: Tạo danh sách lựa chọn trả lời và gán câu hỏi tương ứng
         for (int i = 0; i < request.getQuestions().size(); i++) {
             SurveyQuestion question = questions.get(i);
             List<SurveyAnswerOption> answerOptions = request.getQuestions().get(i).getAnswerOptions().stream()
                     .map(optionRequest -> {
                         SurveyAnswerOption option = surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest);
-                        option.setOptionId(UUID.randomUUID().toString()); // Generate UUID for optionId
-                        option.setSurveyQuestion(question);
-                        log.info("SurveyAnswerOption before saving: {}", option);
-//                        SurveyAnswerOption savedOption = surveyAnswerOptionRepository.save(option);
-//                        log.info("SurveyAnswerOption after saving: {}", savedOption);
+                        option.setSurveyQuestion(question); // Không cần set UUID ở đây
                         return option;
-                    })
-                    .collect(Collectors.toList());
-
-            // Log the answer options after saving
+                    }).collect(Collectors.toList());
             question.setAnswerOptions(answerOptions);
         }
 
@@ -99,6 +72,7 @@ public class SurveyService {
         surveyRepository.save(savedSurvey);
         return surveyMapper.toSurveyResponse(savedSurvey);
     }
+
 
     public SurveyResponse getSurvey(String surveyId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);
@@ -154,25 +128,22 @@ public class SurveyService {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    public SurveyResponse updateSurvey(String surveyId, SurveyUpdateRequest request) {
+    public SurveyResponse updateSurvey(SurveyUpdateRequest request) {
+        String surveyId = request.getSurveyId(); // Lấy surveyId từ request
         log.info("Updating survey with ID: {}", surveyId);
 
         try {
-            // Validate request
             if (request == null || request.getQuestions() == null) {
                 throw new IllegalArgumentException("Invalid request payload");
             }
 
-            // Tìm Survey trong database
             Survey survey = surveyRepository.findById(surveyId)
                     .orElseThrow(() -> new RuntimeException("Survey not found with ID: " + surveyId));
 
-            // Cập nhật thông tin khảo sát
             survey.setTitle(request.getTitle());
             survey.setDescription(request.getDescription());
             survey.setActive(request.getActive());
 
-            // Clear existing questions and update with new ones
             survey.getQuestions().clear();
 
             for (SurveyQuestionUpdateRequest questionRequest : request.getQuestions()) {
@@ -184,13 +155,12 @@ public class SurveyService {
                             .orElseThrow(() -> new RuntimeException("Question not found with ID: " + questionRequest.getQuestionId()));
                 } else {
                     question = new SurveyQuestion();
-                    question.setSurvey(survey); // Gán khảo sát vào câu hỏi mới
+                    question.setSurvey(survey);
                 }
 
                 question.setQuestionText(questionRequest.getQuestionText());
                 question.setActive(questionRequest.getActive());
 
-                // Clear existing answer options and update with new ones
                 question.getAnswerOptions().clear();
 
                 for (SurveyAnswerOptionUpdateRequest optionRequest : questionRequest.getAnswerOptions()) {
@@ -207,8 +177,8 @@ public class SurveyService {
 
                     option.setOptionText(optionRequest.getOptionText());
                     option.setScore(optionRequest.getScore());
-                    option.setActive(optionRequest.getActive() != null ? optionRequest.getActive() : true); // ✅ Tránh lỗi null
-                    option.setSurveyQuestion(question); // ✅ Gán câu hỏi vào lựa chọn
+                    option.setActive(optionRequest.getActive() != null ? optionRequest.getActive() : true);
+                    option.setSurveyQuestion(question);
 
                     question.getAnswerOptions().add(option);
                 }
@@ -216,12 +186,12 @@ public class SurveyService {
                 survey.getQuestions().add(question);
             }
 
-            // Lưu tất cả vào database
             survey = surveyRepository.save(survey);
             return surveyMapper.toSurveyResponse(survey);
         } catch (Exception e) {
             log.error("Error updating survey with ID: {}", surveyId, e);
-            throw e; // Rethrow the exception to ensure it's properly handled by the caller
+            throw e;
         }
     }
+
 }

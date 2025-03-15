@@ -264,10 +264,10 @@ public class AdminController {
             @PathVariable String surveyId,
             @RequestBody @Valid SurveyUpdateRequest request) {
 
-        SurveyResponse updatedSurvey = surveyService.updateSurvey(surveyId, request);
+        SurveyResponse updatedSurvey = surveyService.updateSurvey( request);
         return (ApiResponse.<SurveyResponse>builder()
-                .message("Survey updated successfully with ID: " + surveyId)
-                .result(surveyService.updateSurvey(surveyId, request))
+                .message("Survey updated successfully with ID: " + request.getSurveyId())
+                .result(surveyService.updateSurvey(request))
                 .build());
     }
 
