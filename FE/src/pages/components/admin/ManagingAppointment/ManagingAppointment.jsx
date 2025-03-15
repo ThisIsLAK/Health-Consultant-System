@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 import { Calendar, Search, ChevronDown, User, Clock, Edit, Eye, AlertTriangle } from 'lucide-react';
 import './ManagingAppointment.css';
-import AdminHeader from '../../../../component/admin/adminheader';
+import AdminHeader from '../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 
 const ManagingAppointment = () => {
@@ -24,7 +24,7 @@ const ManagingAppointment = () => {
                 const token = localStorage.getItem('token');
                 
                 // Endpoint to get all psychologists
-                const response = await axios.get('http://localhost:8080/identity/admin/getAllUser', {
+                const response = await axios.get('http://localhost:8080/identity/admin/getAllActiveUser', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }

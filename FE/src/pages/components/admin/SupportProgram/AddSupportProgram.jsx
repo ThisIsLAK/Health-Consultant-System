@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Form, Button, Card, Row, Col } from 'react-bootstrap';
+import { Form, Button, Card, Row, Col, Container } from 'react-bootstrap';
 import SupportProgramService from '../../../../services/SupportProgramService';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,7 +12,7 @@ function AddSupportProgram() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     programCode: '',
-    programName: '', // Using programName to match API structure
+    programName: '',
     description: '',
     startDate: '',
     endDate: '',
@@ -103,7 +103,7 @@ function AddSupportProgram() {
       <AdminHeader />
       <AdminSidebar />
       <div className="admin-content-container">
-        <div className="content-wrapper p-4">
+        <Container fluid className="content-wrapper">
           <Card className="card-container">
             <Card.Header className="card-header-primary">
               <div className="d-flex justify-content-between align-items-center">
@@ -119,8 +119,8 @@ function AddSupportProgram() {
             </Card.Header>
             <Card.Body className="card-body-padded">
               <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col md={6}>
+                <Row className="mb-3">
+                  <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">Program Code*</Form.Label>
                       <Form.Control
@@ -138,7 +138,7 @@ function AddSupportProgram() {
                     </Form.Group>
                   </Col>
                   
-                  <Col md={6}>
+                  <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">Program Name*</Form.Label>
                       <Form.Control
@@ -175,8 +175,8 @@ function AddSupportProgram() {
                   </Form.Control.Feedback>
                 </Form.Group>
 
-                <Row>
-                  <Col md={6}>
+                <Row className="mb-3">
+                  <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">Start Date*</Form.Label>
                       <Form.Control
@@ -193,7 +193,7 @@ function AddSupportProgram() {
                     </Form.Group>
                   </Col>
                   
-                  <Col md={6}>
+                  <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">End Date*</Form.Label>
                       <Form.Control
@@ -219,6 +219,7 @@ function AddSupportProgram() {
                     label="Program Active"
                     checked={formData.active}
                     onChange={handleChange}
+                    className="form-switch"
                   />
                   <Form.Text className="text-muted">
                     Inactive programs won't be visible to users
@@ -232,7 +233,7 @@ function AddSupportProgram() {
                     className="btn-custom"
                     disabled={submitting}
                   >
-                    Cancel
+                    <i className="fas fa-times me-1"></i> Cancel
                   </Button>
                   <Button 
                     variant="primary"
@@ -245,13 +246,17 @@ function AddSupportProgram() {
                         <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                         Creating...
                       </>
-                    ) : 'Create Program'}
+                    ) : (
+                      <>
+                        <i className="fas fa-save me-1"></i> Create Program
+                      </>
+                    )}
                   </Button>
                 </div>
               </Form>
             </Card.Body>
           </Card>
-        </div>
+        </Container>
         <ToastContainer position="top-right" autoClose={3000} />
       </div>
     </>

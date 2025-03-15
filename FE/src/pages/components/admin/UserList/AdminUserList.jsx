@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 import ApiService from '../../../../service/ApiService';
 
 const AdminUserList = () => {
-    const itemsPerPage = 12;
+    const itemsPerPage = 10; // Changed from 12 to 10 items per page
     const [currentPage, setCurrentPage] = useState(1);
     const [users, setUsers] = useState([]);
     const [roleFilter, setRoleFilter] = useState('All');
@@ -22,6 +22,11 @@ const AdminUserList = () => {
         fetchUsers();
     }, []);
 
+    // Reset to first page when filters change
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, roleFilter]);
+ 
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
@@ -167,13 +172,6 @@ const AdminUserList = () => {
         { key: 'PARENT', label: 'Parent' }
     ];
 
-    // Remove status filter
-    // const [statusFilter, setStatusFilter] = useState('All');
-    // const statusOptions = [
-    //     { key: 'All', label: 'All Status' },
-    //     { key: 'Active', label: 'Active' },
-    //     { key: 'Inactive', label: 'Inactive' }
-    // ];
 
     // Final filtered users without status filtering
     const finalFilteredUsers = filteredUsers;
@@ -250,7 +248,7 @@ const AdminUserList = () => {
                                                     </Button>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>  
                                     </div>
 
                                     {/* Search and filter section */}
@@ -341,12 +339,6 @@ const AdminUserList = () => {
                                         </div>
                                     ) : (
                                         <>
-                                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                                <span className="fs-6">
-                                                    Showing <span className="fw-bold">{Math.min(sortedUsers.length, indexOfFirstUser + 1)}-{Math.min(indexOfLastUser, sortedUsers.length)}</span> of <span className="fw-bold">{sortedUsers.length}</span> users
-                                                </span>
-                                            </div>
-
                                             {currentUsers.length > 0 ? (
                                                 <div className="table-responsive">
                                                     <table className="table table-hover align-middle border-bottom">
@@ -432,91 +424,100 @@ const AdminUserList = () => {
                                                 </div>
                                             )}
 
-                                            {totalPages > 1 && (
-                                                <div className="d-flex justify-content-center mt-4">
-                                                    <nav>
-                                                        <ul className="pagination">
-                                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                                                <button className="page-link" onClick={() => setCurrentPage(1)}>
-                                                                    <i className="bi bi-chevron-double-left"></i>
-                                                                </button>
-                                                            </li>
-                                                            <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                                                <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                                                                    <i className="bi bi-chevron-left"></i>
-                                                                </button>
-                                                            </li>
-                                                            
-                                                            {totalPages <= 5 ? (
-                                                                Array.from({ length: totalPages }, (_, i) => (
-                                                                    <li key={i + 1} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
-                                                                        <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
-                                                                            {i + 1}
+                                            {/* Updated pagination container to match SupportProgram.jsx */}
+                                            {currentUsers.length > 0 && (
+                                                <div className="d-flex justify-content-between align-items-center mt-4">
+                                                    <p className="mb-0 text-muted">
+                                                        Showing <span className="fw-bold">{sortedUsers.length > 0 ? `${indexOfFirstUser + 1}-${Math.min(indexOfLastUser, sortedUsers.length)}` : "0"}</span> of <span className="fw-bold">{sortedUsers.length}</span> users
+                                                    </p>
+                                                    
+                                                    {totalPages > 1 && (
+                                                        <div className="d-flex justify-content-center">
+                                                            <nav>
+                                                                <ul className="pagination">
+                                                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                                        <button className="page-link" onClick={() => setCurrentPage(1)}>
+                                                                            <i className="bi bi-chevron-double-left"></i>
                                                                         </button>
                                                                     </li>
-                                                                ))
-                                                            ) : (
-                                                                <>
-                                                                    {currentPage > 2 && (
-                                                                        <li className="page-item">
-                                                                            <button className="page-link" onClick={() => setCurrentPage(1)}>1</button>
-                                                                        </li>
-                                                                    )}
-                                                                    
-                                                                    {currentPage > 3 && (
-                                                                        <li className="page-item disabled">
-                                                                            <span className="page-link">...</span>
-                                                                        </li>
-                                                                    )}
-                                                                    
-                                                                    {currentPage > 1 && (
-                                                                        <li className="page-item">
-                                                                            <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
-                                                                                {currentPage - 1}
-                                                                            </button>
-                                                                        </li>
-                                                                    )}
-                                                                    
-                                                                    <li className="page-item active">
-                                                                        <span className="page-link">{currentPage}</span>
+                                                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
+                                                                        <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                                                                            <i className="bi bi-chevron-left"></i>
+                                                                        </button>
                                                                     </li>
                                                                     
-                                                                    {currentPage < totalPages && (
-                                                                        <li className="page-item">
-                                                                            <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                                                                                {currentPage + 1}
-                                                                            </button>
-                                                                        </li>
+                                                                    {totalPages <= 5 ? (
+                                                                        Array.from({ length: totalPages }, (_, i) => (
+                                                                            <li key={i + 1} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                                                                                <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                                                                                    {i + 1}
+                                                                                </button>
+                                                                            </li>
+                                                                        ))
+                                                                    ) : (
+                                                                        <>
+                                                                            {currentPage > 2 && (
+                                                                                <li className="page-item">
+                                                                                    <button className="page-link" onClick={() => setCurrentPage(1)}>1</button>
+                                                                                </li>
+                                                                            )}
+                                                                            
+                                                                            {currentPage > 3 && (
+                                                                                <li className="page-item disabled">
+                                                                                    <span className="page-link">...</span>
+                                                                                </li>
+                                                                            )}
+                                                                            
+                                                                            {currentPage > 1 && (
+                                                                                <li className="page-item">
+                                                                                    <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
+                                                                                        {currentPage - 1}
+                                                                                    </button>
+                                                                                </li>
+                                                                            )}
+                                                                            
+                                                                            <li className="page-item active">
+                                                                                <span className="page-link">{currentPage}</span>
+                                                                            </li>
+                                                                            
+                                                                            {currentPage < totalPages && (
+                                                                                <li className="page-item">
+                                                                                    <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                                                                                        {currentPage + 1}
+                                                                                    </button>
+                                                                                </li>
+                                                                            )}
+                                                                            
+                                                                            {currentPage < totalPages - 2 && (
+                                                                                <li className="page-item disabled">
+                                                                                    <span className="page-link">...</span>
+                                                                                </li>
+                                                                            )}
+                                                                            
+                                                                            {currentPage < totalPages - 1 && (
+                                                                                <li className="page-item">
+                                                                                    <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
+                                                                                        {totalPages}
+                                                                                    </button>
+                                                                                </li>
+                                                                            )}
+                                                                        </>
                                                                     )}
                                                                     
-                                                                    {currentPage < totalPages - 2 && (
-                                                                        <li className="page-item disabled">
-                                                                            <span className="page-link">...</span>
-                                                                        </li>
-                                                                    )}
-                                                                    
-                                                                    {currentPage < totalPages - 1 && (
-                                                                        <li className="page-item">
-                                                                            <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
-                                                                                {totalPages}
-                                                                            </button>
-                                                                        </li>
-                                                                    )}
-                                                                </>
-                                                            )}
-                                                            
-                                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                                                <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
-                                                                    <i className="bi bi-chevron-right"></i>
-                                                                </button>
-                                                            </li>
-                                                            <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
-                                                                <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
-                                                                    <i className="bi bi-chevron-double-right"></i>
-                                                                </button>
-                                                            </li>
-                                                        </ul>
-                                                    </nav>
+                                                                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                                        <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
+                                                                            <i className="bi bi-chevron-right"></i>
+                                                                        </button>
+                                                                    </li>
+                                                                    <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
+                                                                        <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
+                                                                            <i className="bi bi-chevron-double-right"></i>
+                                                                        </button>
+                                                                    </li>
+                                                                </ul>
+                                                            </nav>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
                                         </>
