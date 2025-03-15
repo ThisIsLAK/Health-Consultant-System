@@ -3,11 +3,9 @@ package com.swp.user_service.service;
 import com.swp.user_service.dto.request.SubmitUserAnswerRequest;
 import com.swp.user_service.dto.response.UserAnswerResponse;
 import com.swp.user_service.dto.response.SurveyResultResponse;
-import com.swp.user_service.entity.Survey;
-import com.swp.user_service.entity.SurveyAnswerOption;
-import com.swp.user_service.entity.SurveyResult;
-import com.swp.user_service.entity.User;
-import com.swp.user_service.entity.UserAnswer;
+import com.swp.user_service.entity.*;
+import com.swp.user_service.exception.AppException;
+import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.SurveyResultMapper;
 import com.swp.user_service.mapper.UserAnswerMapper;
 import com.swp.user_service.repository.*;
@@ -20,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,7 @@ public class UserAnswerService {
     UserRepository userRepository;
     SurveyResultMapper surveyResultMapper;
 
-    @Transactional
+//    @Transactional
     public List<UserAnswerResponse> submitUserAnswers(List<SubmitUserAnswerRequest> requests) {
         if (requests.isEmpty()) {
             throw new IllegalArgumentException("Request list cannot be empty");
@@ -47,10 +46,25 @@ public class UserAnswerService {
 
         // Kiểm tra User và Survey có tồn tại không
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
         Survey survey = surveyRepository.findById(surveyId)
-                .orElseThrow(() -> new IllegalArgumentException("Survey not found: " + surveyId));
+                .orElseThrow(() -> new AppException(ErrorCode.SURVEY_NOT_FOUND));
+
+        // Kiểm tra tất cả câu hỏi trong khảo sát
+        List<String> questionIds = survey.getQuestions().stream()
+                .map(SurveyQuestion::getQuestionId)
+                .collect(Collectors.toList());
+
+        // Kiểm tra tất cả câu trả lời trong yêu cầu
+        List<String> requestQuestionIds = requests.stream()
+                .map(SubmitUserAnswerRequest::getQuestionId)
+                .collect(Collectors.toList());
+
+        // Xác minh tất cả câu hỏi đã được trả lời
+        if (!requestQuestionIds.containsAll(questionIds)) {
+            throw new IllegalArgumentException("Not all questions in the survey have been answered");
+        }
 
         int totalScore = 0;
 

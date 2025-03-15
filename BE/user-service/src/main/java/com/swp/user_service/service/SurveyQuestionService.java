@@ -30,7 +30,6 @@ public class SurveyQuestionService {
     SurveyQuestionMapper surveyQuestionMapper;
     SurveyAnswerOptionMapper surveyAnswerOptionMapper;
 
-
     public SurveyQuestionResponse getSurveyQuestion(String questionId) {
         SurveyQuestion question = surveyQuestionRepository.findById(questionId).orElse(null);
         return surveyQuestionMapper.toSurveyQuestionResponse(question);
@@ -63,10 +62,15 @@ public class SurveyQuestionService {
 
 
     public void deleteSurveyQuestion(String questionId) {
+        // Tìm SurveyQuestion trong database
         SurveyQuestion existingQuestion = surveyQuestionRepository.findById(questionId)
                 .orElseThrow(() -> new RuntimeException("Survey Question not found"));
 
-        surveyQuestionRepository.delete(existingQuestion);
+        // Chuyển active thành 0
+        existingQuestion.setActive(false);
+
+        // Lưu thay đổi vào database
+        surveyQuestionRepository.save(existingQuestion);
     }
 
 }
