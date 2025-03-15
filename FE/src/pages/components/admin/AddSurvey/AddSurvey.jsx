@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
+import ApiService from '../../../../service/ApiService'; // Đảm bảo import ApiService
 import './AddSurvey.css'; // Make sure to create this CSS file
 
 const AddSurvey = () => {
@@ -81,7 +82,7 @@ const AddSurvey = () => {
   };
 
   // Handle creating survey
-  const handleCreateSurvey = () => {
+  const handleCreateSurvey = async () => {
     if (!surveyTitle.trim()) {
       alert('Please enter a survey title');
       return;
@@ -92,20 +93,42 @@ const AddSurvey = () => {
       return;
     }
 
-    // Here you would typically send the data to your backend
+    // Format survey data to match the required structure
     const surveyData = {
       title: surveyTitle,
       description: surveyDescription,
-      questions: questions,
+      questions: questions.map((q) => ({
+        questionText: q.question,
+        answerOptions: q.answers.map((answer) => ({
+          optionText: answer.text,
+          score: answer.points,
+        })),
+      })),
     };
-    
+
     console.log('Survey data to be submitted:', surveyData);
-    alert('Survey created successfully!');
-    
-    // Reset form after successful creation
-    setSurveyTitle('');
-    setSurveyDescription('');
-    setQuestions([]);
+
+    try {
+      // Gọi hàm createSurvey từ ApiService
+      const response = await ApiService.createSurvey(surveyData);
+      console.log('Survey creation response:', response);
+
+      if (response.status === 200) {
+        alert('Survey created successfully!');
+        console.log('Created survey details:', response.data);
+
+        // Reset form sau khi tạo thành công
+        setSurveyTitle('');
+        setSurveyDescription('');
+        setQuestions([]);
+      } else {
+        alert(`Failed to create survey: ${response.message}`);
+        console.error('Failed to create survey:', response.message);
+      }
+    } catch (error) {
+      console.error('Error during survey creation:', error);
+      alert('An error occurred while creating the survey. Please try again.');
+    }
   };
 
   return (

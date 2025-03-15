@@ -600,15 +600,34 @@ export default class ApiService {
     }
 
     /**
-   * Create a new survey
-   * @param {Object} surveyData - The survey data containing title and description
-   * @returns {Promise<Object>} Response object with status, surveyId, data, and message
-   */
+     * Create a new survey with questions and answer options
+     * @param {Object} surveyData - The survey data containing title, description, questions, and answer options
+     * @param {string} surveyData.title - The title of the survey
+     * @param {string} surveyData.description - The description of the survey
+     * @param {Array} surveyData.questions - Array of questions with questionText and answerOptions
+     * @param {string} surveyData.questions[].questionText - The text of the question
+     * @param {Array} surveyData.questions[].answerOptions - Array of answer options
+     * @param {string} surveyData.questions[].answerOptions[].optionText - The text of the answer option
+     * @param {number} surveyData.questions[].answerOptions[].score - The score for the answer option
+     * @returns {Promise<Object>} Response object with status, data, and message
+     */
     static async createSurvey(surveyData) {
         try {
-            if (!surveyData.title || !surveyData.description) {
-                throw new Error("Survey title and description are required");
+            if (!surveyData.title || !surveyData.description || !surveyData.questions) {
+                throw new Error("Survey title, description, and questions are required");
             }
+
+            // Validate questions and answer options
+            surveyData.questions.forEach((question, index) => {
+                if (!question.questionText || !question.answerOptions) {
+                    throw new Error(`Question at index ${index} must have questionText and answerOptions`);
+                }
+                question.answerOptions.forEach((option, optIndex) => {
+                    if (!option.optionText || option.score === undefined) {
+                        throw new Error(`Answer option at index ${optIndex} in question ${index} must have optionText and score`);
+                    }
+                });
+            });
 
             console.log("Creating new survey with data:", surveyData);
 
@@ -623,230 +642,13 @@ export default class ApiService {
             return {
                 status: 200,
                 data: response.data,
-                message: "Survey created successfully",
+                message: "Survey created successfully"
             };
         } catch (error) {
             console.error("Error creating survey:", error);
             return {
                 status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to create survey",
-            };
-        }
-    }
-
-    /**
-     * Get all surveys
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async getAllSurveys() {
-        try {
-            const response = await axios.get(
-                `${this.BASE_URL}/identity/admin/allsurveys`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Fetched surveys:", response.data);
-
-            return {
-                status: 200,
-                data: response.data,
-                message: "Surveys fetched successfully"
-            };
-        } catch (error) {
-            console.error("Error fetching surveys:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch surveys"
-            };
-        }
-    }
-
-    /**
-     * Get a survey by ID
-     * @param {string} surveyId - The ID of the survey to fetch
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async getSurveyById(surveyId) {
-        try {
-            const response = await axios.get(
-                `${this.BASE_URL}/identity/admin/findsurveybyid/${surveyId}`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Fetched survey:", response.data);
-
-            return {
-                status: 200,
-                data: response.data,
-                message: "Survey fetched successfully"
-            };
-        } catch (error) {
-            console.error("Error fetching survey:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch survey"
-            };
-        }
-    }
-
-    /**
-   * Create a new survey question
-   * @param {Object} questionData - The question data containing surveyId, questionText, and answerOptions
-   * @returns {Promise<Object>} Response object with status and data/message
-   */
-    static async createSurveyQuestion(questionData) {
-        try {
-            console.log("🛠️ Debugging questionData:", questionData);
-            if (!questionData.surveyId || !questionData.questionText || !questionData.answerOptions) {
-                throw new Error("Survey ID, question text, and answer options are required");
-            }
-
-            console.log("Creating new survey question with data:", questionData);
-
-            const response = await axios.post(
-                `${this.BASE_URL}/identity/admin/createsurveyquestion`,
-                {
-                    surveyId: questionData.surveyId,
-                    questionText: questionData.questionText,
-                    answerOptions: questionData.answerOptions,
-                    scores: questionData.scores || [] // Scores are optional
-                },
-                { headers: this.getHeader() }
-            );
-
-            console.log("Create survey question response:", response.data);
-
-            if (response.data) {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey question created successfully",
-                };
-            } else {
-                return {
-                    status: 400,
-                    message: "Invalid response format",
-                };
-            }
-        } catch (error) {
-            console.error("Error creating survey question:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to create survey question",
-            };
-        }
-    }
-
-    /**
-     * Get a survey question by ID
-     * @param {string} questionId - The ID of the question to fetch
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async getSurveyQuestionById(questionId) {
-        try {
-            const response = await axios.get(
-                `${this.BASE_URL}/identity/admin/findsurveyquestionbyid/${questionId}`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Fetched survey question:", response.data);
-
-            if (response.data) {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey question fetched successfully"
-                };
-            } else {
-                return {
-                    status: 400,
-                    message: "Invalid response format"
-                };
-            }
-        } catch (error) {
-            console.error("Error fetching survey question:", error);
-
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch survey question"
-            };
-        }
-    }
-
-    /**
- * Update a survey by ID
- * @param {string} surveyId - The ID of the survey to update
- * @param {Object} surveyData - The updated survey data (title, description)
- * @returns {Promise<Object>} Response object with status and data/message
- */
-    static async updateSurvey(surveyId, surveyData) {
-        try {
-            if (!surveyId || !surveyData.title || !surveyData.description) {
-                throw new Error("Survey ID, title, and description are required");
-            }
-
-            console.log("Updating survey with ID:", surveyId);
-            console.log("Update data:", surveyData);
-
-            const response = await axios.put(
-                `${this.BASE_URL}/identity/admin/updatesurvey/${surveyId}`,
-                surveyData,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Update survey response:", response.data);
-
-            return {
-                status: 200,
-                data: response.data,
-                message: "Survey updated successfully"
-            };
-        } catch (error) {
-            console.error("Error updating survey:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to update survey"
-            };
-        }
-    }
-
-    /**
-     * Update a survey question by ID
-     * @param {string} questionId - The ID of the question to update
-     * @param {Object} questionData - The updated question data (questionText, answerOptions, scores)
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async updateSurveyQuestion(questionId, questionData) {
-        try {
-            if (!questionId || !questionData.questionText || !questionData.answerOptions) {
-                throw new Error("Question ID, question text, and answer options are required");
-            }
-
-            console.log("Updating survey question with ID:", questionId);
-            console.log("Update data:", questionData);
-
-            const response = await axios.put(
-                `${this.BASE_URL}/identity/admin/updatesurveyquestion/${questionId}`,
-                {
-                    questionText: questionData.questionText,
-                    answerOptions: questionData.answerOptions,
-                    scores: questionData.scores || [] // Scores are optional
-                },
-                { headers: this.getHeader() }
-            );
-
-            console.log("Update survey question response:", response.data);
-
-            return {
-                status: 200,
-                data: response.data,
-                message: "Survey question updated successfully"
-            };
-        } catch (error) {
-            console.error("Error updating survey question:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to update survey question"
+                message: error.response?.data?.message || error.message || "Failed to create survey"
             };
         }
     }
@@ -885,45 +687,11 @@ export default class ApiService {
         }
     }
 
-    /**
- * Delete a survey by ID
- * @param {string} surveyId - The survey ID to delete
- * @returns {Promise<Object>} Response object with status and message
- */
-    static async deleteSurvey(surveyId) {
-        try {
-            if (!surveyId) {
-                throw new Error("Survey ID is required");
-            }
-
-            console.log("Deleting survey with ID:", surveyId);
-
-            const response = await axios.delete(
-                `${this.BASE_URL}/identity/admin/deletesurveybysurveyid/${surveyId}`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Delete survey response:", response.data);
-
-            return {
-                status: 200,
-                message: "Survey deleted successfully"
-            };
-        } catch (error) {
-            console.error("Error deleting survey:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to delete survey"
-            };
-        }
-    }
-
-
     /* User Services */
     /**
- * Get all blogs for users
- * @returns {Promise<Object>} Response object with status and data/message
- */
+     * Get all blogs for users
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
     static async getAllBlogsForUsers() {
         try {
             const response = await axios.get(
@@ -948,10 +716,10 @@ export default class ApiService {
     }
 
     /**
- * Get a blog by blogCode for users
- * @param {string} blogCode - The unique code of the blog
- * @returns {Promise<Object>} Response object with status and data/message
- */
+     * Get a blog by blogCode for users
+     * @param {string} blogCode - The unique code of the blog
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
     static async getBlogByBlogCode(blogCode) {
         try {
             const response = await axios.get(
@@ -976,9 +744,9 @@ export default class ApiService {
     }
 
     /**
- * Get all surveys for users
- * @returns {Promise<Object>} Response object with status and data/message
- */
+     * Get all surveys for users
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
     static async getAllSurveysForUsers() {
         try {
             const response = await axios.get(
@@ -1094,10 +862,10 @@ export default class ApiService {
     }
 
     /**
- * Creates a new user by admin
- * @param {Object} userData - The user data containing email, password, name, role, etc.
- * @returns {Promise<Object>} Response object with status and data/message
- */
+     * Creates a new user by admin
+     * @param {Object} userData - The user data containing email, password, name, role, etc.
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
     static async createUserByAdmin(userData) {
         try {
             // Validate required fields
