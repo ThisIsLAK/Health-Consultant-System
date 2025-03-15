@@ -3,20 +3,17 @@ import Navbar from "../../components/homepage/Navbar";
 import Sidebar from "../UserInfo/Sidebar";
 import ApiService from "../../../service/ApiService";
 import './EditProfile.css';
+import Footer from "../../components/homepage/Footer";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const [userInfo, setUserInfo] = useState({
     name: "",
     id: "",
     email: "",
-    // For future implementation:
-    // address: "",
-    // bio: "",
-    // avatar: "",
   });
-
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [updateMessage, setUpdateMessage] = useState({ type: "", text: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -30,10 +27,6 @@ const EditProfile = () => {
             name: response.data.result.name || "",
             id: response.data.result.id || "", // Ensure we get the ID from the correct path
             email: response.data.result.email || "",
-            // For future implementation:
-            // address: response.data.result.address || "",
-            // bio: response.data.result.bio || "",
-            // avatar: response.data.result.avatar || "",
           });
           
           // Log the extracted user ID to verify
@@ -55,16 +48,6 @@ const EditProfile = () => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
-  // For future avatar implementation
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedAvatar(imageUrl);
-      // In a real implementation, you would handle file upload here
-    }
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -80,9 +63,6 @@ const EditProfile = () => {
         id: userInfo.id, // Make sure to include the ID
         name: userInfo.name,
         email: userInfo.email,
-        // For future implementation:
-        // address: userInfo.address,
-        // bio: userInfo.bio,
       };
 
       // Log the request details
@@ -105,7 +85,6 @@ const EditProfile = () => {
             name: updatedUserInfo.data.result.name || "",
             id: updatedUserInfo.data.result.id || "",
             email: updatedUserInfo.data.result.email || "",
-            // Other fields for future implementation
           });
         }
       } else {
@@ -126,81 +105,121 @@ const EditProfile = () => {
   };
 
   return (
-    <>
+    <div className="profile-edit-page">
       <Navbar />
-      <div className="info-container">
-        <Sidebar />
-        <div className="content">
+      <div className="profile-edit-container">
+        <Sidebar activeItem="settings" />
+        <div className="profile-edit-content">
           {loading ? (
-            <p>Loading...</p>
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Loading your profile information...</p>
+            </div>
           ) : (
             <>
-              <h2 className="title">Chỉnh sửa hồ sơ</h2>
+              <div className="edit-profile-header">
+                <div className="header-icon">✏️</div>
+                <div className="header-text">
+                  <h1>Edit Profile</h1>
+                  <p>Update your personal information</p>
+                </div>
+              </div>
 
               {updateMessage.text && (
-                <div className={`alert alert-${updateMessage.type}`}>
-                  {updateMessage.text}
+                <div className={`alert-message ${updateMessage.type}`}>
+                  {updateMessage.type === "success" ? "✅" : "⚠️"} {updateMessage.text}
                 </div>
               )}
 
-              {/* Avatar section - for future implementation */}
-              <div className="AvatarUpload">
-                <label htmlFor="avatar" className="cursor-pointer">
-                  <div className="avatar-preview">
-                    <img
-                      src={selectedAvatar || userInfo.avatar || "https://i.pravatar.cc/100"}
-                      alt="Avatar Preview"
-                      className="UploadedAvatar"
-                    />
+              <div className="edit-profile-card">
+                {/* Display fixed avatar section (not editable) */}
+                <div className="profile-header">
+                  <div className="profile-avatar-wrapper">
+                    <div className="profile-avatar">
+                      {userInfo.name ? userInfo.name.charAt(0).toUpperCase() : "?"}
+                    </div>
+                    <div className="avatar-status online"></div>
                   </div>
-                </label>
-                <input type="file" id="avatar" className="hidden" accept="image/*" onChange={handleImageChange} />
+                  <div className="profile-edit-info">
+                    <p className="avatar-notice">Profile picture cannot be changed</p>
+                  </div>
+                </div>
+
+                <div className="form-section">
+                  <h3 className="section-title">Personal Information</h3>
+                  <form className="edit-form" onSubmit={handleSubmit}>
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Full Name</label>
+                        <input 
+                          type="text" 
+                          name="name" 
+                          value={userInfo.name} 
+                          onChange={handleInputChange} 
+                          className="form-control"
+                          placeholder="Enter your full name"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Patient ID</label>
+                        <input 
+                          type="text" 
+                          name="id" 
+                          value={userInfo.id} 
+                          className="form-control disabled" 
+                          readOnly 
+                        />
+                        <small className="form-text">ID cannot be changed</small>
+                      </div>
+                    </div>
+
+                    <div className="form-row">
+                      <div className="form-group">
+                        <label>Email Address</label>
+                        <input 
+                          type="email" 
+                          name="email" 
+                          value={userInfo.email} 
+                          onChange={handleInputChange} 
+                          className="form-control"
+                          placeholder="Enter your email address"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="form-actions">
+                      <button
+                        type="button"
+                        className="cancel-button"
+                        onClick={() => navigate('/info')}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="save-button"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <span className="spinner-small"></span>
+                            Saving...
+                          </>
+                        ) : "Save Changes"}
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
-
-              <form className="profile-form" onSubmit={handleSubmit}>
-                <div className="form-group">
-                  <label>Tên</label>
-                  <input type="text" name="name" value={userInfo.name} onChange={handleInputChange} className="input-field" />
-                </div>
-
-                <div className="form-group">
-                  <label>Patient ID</label>
-                  <input type="text" name="id" value={userInfo.id} className="input-field" readOnly />
-                </div>
-
-                <div className="form-group">
-                  <label>Email</label>
-                  <input type="email" name="email" value={userInfo.email} onChange={handleInputChange} className="input-field" />
-                </div>
-
-                {/* Additional fields for future implementation */}
-                {/* 
-                <div className="form-group">
-                  <label>Địa chỉ</label>
-                  <input type="text" name="address" value={userInfo.address} onChange={handleInputChange} className="input-field" />
-                </div>
-
-                <div className="form-group">
-                  <label>Giới thiệu</label>
-                  <textarea name="bio" value={userInfo.bio} onChange={handleInputChange} className="input-field" rows="3"></textarea>
-                </div>
-                */}
-
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    className="submit-btn"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? "Đang cập nhật..." : "Cập nhật"}
-                  </button>
-                </div>
-              </form>
             </>
           )}
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

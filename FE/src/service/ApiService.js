@@ -108,7 +108,7 @@ export default class ApiService {
 
             // Using the userId from userData.id for the endpoint
             const response = await axios.put(
-                `${this.BASE_URL}/identity/users/${userData.id}`,
+                `${this.BASE_URL}/identity/users/updateuser/${userData.id}`,
                 userData,
                 { headers: this.getHeader() }
             );

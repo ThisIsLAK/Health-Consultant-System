@@ -3,6 +3,7 @@ import './UserInfo.css';
 import Sidebar from './Sidebar';
 import Navbar from '../../components/homepage/Navbar';
 import ApiService from '../../../service/ApiService';
+import Footer from '../../components/homepage/Footer';
 
 const UserInfo = () => {
     const [user, setUser] = useState(null);
@@ -32,57 +33,92 @@ const UserInfo = () => {
     }, []);
 
     return (
-        <>
+        <div className="profile-page">
             <Navbar />
-            <div className="info-container">
-                <Sidebar />
-                <div className="user-details">
-                    <div className="content">
+            <div className="profile-container">
+                <Sidebar activeItem="profile" />
+                <div className="profile-content">
+                    <div className="profile-header-card">
                         {loading ? (
-                            <p>Loading user information...</p>
+                            <div className="loading-container">
+                                <div className="loading-spinner"></div>
+                                <p>Loading your profile information...</p>
+                            </div>
                         ) : error ? (
-                            <p className="error-message">{error}</p>
+                            <div className="error-container">
+                                <div className="error-icon">⚠️</div>
+                                <p className="error-message">{error}</p>
+                                <button className="retry-button" onClick={() => window.location.reload()}>
+                                    Try Again
+                                </button>
+                            </div>
                         ) : user ? (
-                            <>
-                                <h1>{user.result.name || "Unknown User"}</h1>
-                                <p>Patient ID: {user.result.id || "N/A"}</p>
-                                <p>Email: {user.result.email || "N/A"}</p>
-                            </>
+                            <div className="profile-header-content">
+                                <div className="profile-avatar-wrapper">
+                                    <div className="profile-avatar">
+                                        {user.result.name ? user.result.name.charAt(0).toUpperCase() : "?"}
+                                    </div>
+                                    <div className="avatar-status online"></div>
+                                </div>
+                                <div className="profile-details">
+                                    <h1 className="profile-name">{user.result.name || "Unknown User"}</h1>
+                                    <p className="profile-id">ID: {user.result.id || "N/A"}</p>
+                                    <div className="profile-tags">
+                                        <span className="profile-tag">{user.result.role.roleName || "Patient"}</span>
+                                        <span className="profile-tag">Active Account</span>
+                                    </div>
+                                </div>
+                            </div>
                         ) : (
-                            <p>No user data available</p>
+                            <div className="no-data-container">
+                                <p>No profile information available</p>
+                                <button className="retry-button" onClick={() => window.location.reload()}>
+                                    Refresh Page
+                                </button>
+                            </div>
                         )}
                     </div>
 
                     {user && !loading && !error && (
-                        <>
-                            <div className="status">
-                                <h3>Treatment Status</h3>
-                                <p><strong>Current Therapist:</strong> Dr. Le Anh Khoa</p>
-                                <p><strong>Treatment Status:</strong> Ongoing</p>
-                                <p><strong>Next Appointment:</strong> 1/15/2024, 2:00:00 PM</p>
-                                <p><strong>Remaining:</strong> 12 sessions</p>
+                        <div className="profile-cards">
+                            <div className="profile-card">
+                                <div className="card-header">
+                                    <div className="card-icon">📧</div>
+                                    <h3>Contact Information</h3>
+                                </div>
+                                <div className="card-content">
+                                    <div className="info-row">
+                                        <span className="info-label">Email Address</span>
+                                        <span className="info-value">{user.result.email || "Not available"}</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="card">
-                                <h3>Contact Information</h3>
-                                <p>📧 {user.result.email || "Not available"}</p>
-                                <p>📞 {user.result.phoneNumber || "Not available"}</p>
-                                <p>📍 {user.result.address || "Not available"}</p>
+                            
+                            <div className="profile-card">
+                                <div className="card-header">
+                                    <div className="card-icon">🔐</div>
+                                    <h3>Account Security</h3>
+                                </div>
+                                <div className="card-content">
+                                    <div className="info-row">
+                                        <span className="info-label">Account Type</span>
+                                        <span className="info-value">{user.result.role.roleName || "Patient"}</span>
+                                    </div>
+                                    <div className="info-row">
+                                        <span className="info-label">Last Login</span>
+                                        <span className="info-value">Today</span>
+                                    </div>
+                                    <div className="card-actions">
+                                        <button className="action-button">Change Password</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="card">
-                                <h3>Account Details</h3>
-                                <p><strong>Role:</strong> {user.result.role.roleName || "Patient"}</p>
-                                <p><strong>Patient Since:</strong> {user.createdAt || "01/01/2025"}</p>
-                                <p><strong>Medication Status:</strong> Anxiety, Insomnia</p>
-                            </div>
-                            <div className="card">
-                                <h3>Clinical Notes</h3>
-                                <p>Responding well to therapy, regular attendance</p>
-                            </div>
-                        </>
+                        </div>
                     )}
                 </div>
             </div>
-        </>
+            <Footer />
+        </div>
     );
 };
 

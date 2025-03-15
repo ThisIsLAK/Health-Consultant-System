@@ -6,7 +6,21 @@ import ApiService from "../../../service/ApiService";
 const UserMenu = () => {
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userInfo, setUserInfo] = useState({ name: "", email: "" });
+    const [userInfo, setUserInfo] = useState({ name: "", email: "", sub: "" });
+
+    // Helper function to decode JWT token and extract the subject
+    const decodeToken = (token) => {
+        try {
+            // JWT tokens are base64 encoded with three parts: header.payload.signature
+            const payload = token.split('.')[1];
+            // Decode the base64 payload
+            const decodedPayload = JSON.parse(atob(payload));
+            return decodedPayload;
+        } catch (error) {
+            console.error("Error decoding token:", error);
+            return {};
+        }
+    };
 
     useEffect(() => {
         // Check authentication status on component mount and token changes
@@ -34,10 +48,14 @@ const UserMenu = () => {
         }
         
         try {
+            // Decode token to get subject
+            const decodedToken = decodeToken(token);
+            
             const userData = await ApiService.getLoggedInUserInfo();
             setUserInfo({
                 name: userData.data.name || "",
-                email: userData.data.email || ""
+                email: userData.data.email || "",
+                sub: decodedToken.sub || ""
             });
             setIsLoggedIn(true);
         } catch (error) {
@@ -65,9 +83,11 @@ const UserMenu = () => {
         navigate(path);
     };
 
-    // Get the first letter for the avatar
+    // Get the first letter for the avatar - prioritize token subject
     const getAvatarLetter = () => {
-        if (userInfo.name && userInfo.name.length > 0) {
+        if (userInfo.sub && userInfo.sub.length > 0) {
+            return userInfo.sub.charAt(0).toUpperCase();
+        } else if (userInfo.name && userInfo.name.length > 0) {
             return userInfo.name.charAt(0).toUpperCase();
         } else if (userInfo.email && userInfo.email.length > 0) {
             return userInfo.email.charAt(0).toUpperCase();
