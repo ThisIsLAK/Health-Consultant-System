@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9aceaf73-1c00-4d1c-a5df-bf719baafb1f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-    </list>
+    <list default="true" id="9aceaf73-1c00-4d1c-a5df-bf719baafb1f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,9 +33,9 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.UserServiceApplication.executor": "Run",
-    "git-widget-placeholder": "Hoang",
+    "git-widget-placeholder": "Hoang2",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/ALL_CODING_PROJECT/Folder SWP/SWP391",
+    "last_opened_file_path": "D:/ALL_CODING_PROJECT/Folder SWP/hoangswp",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -81,6 +79,7 @@
       <workItem from="1740919252582" duration="3663000" />
       <workItem from="1740924880006" duration="3821000" />
       <workItem from="1741094603863" duration="279000" />
+      <workItem from="1742049846332" duration="290000" />
     </task>
     <servers />
   </component>

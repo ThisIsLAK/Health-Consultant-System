@@ -971,4 +971,39 @@ export default class ApiService {
             };
         }
     }
+
+    // Manager API
+    /**
+     * Get all appointments for manager
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllAppointments() {
+        try {
+            // Kiểm tra xem người dùng có vai trò manager không
+            if (!this.isManager()) {
+                throw new Error("Only managers can access this endpoint");
+            }
+
+            console.log("Fetching all appointments with token:", localStorage.getItem("token"));
+
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/manager/allappointments`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched appointments:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Appointments fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching appointments:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch appointments"
+            };
+        }
+    }
 }
