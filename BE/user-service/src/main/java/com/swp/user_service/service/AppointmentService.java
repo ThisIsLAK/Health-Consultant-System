@@ -2,6 +2,7 @@ package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.AppointmentRequest;
 import com.swp.user_service.dto.response.AppointmentResponse;
+import com.swp.user_service.dto.response.AppointmentSummaryResponse;
 import com.swp.user_service.entity.Appointment;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
@@ -206,6 +207,22 @@ public class AppointmentService {
         List<Appointment> appointments = appointmentRepository.findAll();
         return appointmentMapper.toAppointmentResponses(appointments);
     }
-    
+
+    public AppointmentSummaryResponse getAppointmentSummary() {
+        List<Appointment> appointments = appointmentRepository.findAll();
+        long totalAppointments = appointments.size();
+        long activeAppointments = appointments.stream().filter(Appointment::getActive).count();
+        long cancelledAppointments = appointments.stream().filter(app -> app.getCancelledAt() != null).count();
+        long upcomingAppointments = appointments.stream()
+                .filter(app -> app.getActive() && app.getAppointmentDate().after(new Date()))
+                .count();
+
+        return AppointmentSummaryResponse.builder()
+                .totalAppointments(totalAppointments)
+                .activeAppointments(activeAppointments)
+                .cancelledAppointments(cancelledAppointments)
+                .upcomingAppointments(upcomingAppointments)
+                .build();
+    }
 
 }

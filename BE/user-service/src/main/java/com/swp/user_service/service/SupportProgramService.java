@@ -3,6 +3,7 @@ package com.swp.user_service.service;
 import com.swp.user_service.dto.request.SupportProgramRequest;
 import com.swp.user_service.dto.request.SupportProgramSignupRequest;
 import com.swp.user_service.dto.response.SupportProgramResponse;
+import com.swp.user_service.dto.response.SupportProgramSummaryResponse;
 import com.swp.user_service.entity.SupportProgram;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
@@ -18,6 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -129,6 +132,26 @@ public class SupportProgramService {
                 .description(supportProgram.getDescription())
                 .startDate(supportProgram.getStartDate())
                 .endDate(supportProgram.getEndDate())
+                .build();
+    }
+
+    public SupportProgramSummaryResponse getSupportProgramSummary() {
+        List<SupportProgram> programs = supportProgramRepository.findAll();
+        long totalPrograms = programs.size();
+        long activePrograms = programs.stream().filter(SupportProgram::getActive).count();
+        long totalParticipants = programs.stream()
+                .mapToLong(program -> program.getParticipants().size())
+                .sum();
+        long programsEndingSoon = programs.stream()
+                .filter(program -> program.getActive() && program.getEndDate() != null)
+                .filter(program -> ChronoUnit.DAYS.between(LocalDate.now(), program.getEndDate()) <= 7)
+                .count();
+
+        return SupportProgramSummaryResponse.builder()
+                .totalPrograms(totalPrograms)
+                .activePrograms(activePrograms)
+                .totalParticipants(totalParticipants)
+                .programsEndingSoon(programsEndingSoon)
                 .build();
     }
 

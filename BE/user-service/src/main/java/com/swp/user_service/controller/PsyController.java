@@ -7,6 +7,7 @@ import com.swp.user_service.entity.UserAnswer;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.UserMapper;
+import com.swp.user_service.repository.SurveyResultRepository;
 import com.swp.user_service.repository.UserRepository;
 import com.swp.user_service.service.*;
 import jakarta.validation.Valid;
@@ -14,8 +15,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.swp.user_service.mapper.SurveyResultMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -35,6 +35,8 @@ public class PsyController {
     UserRepository userRepository ;
     UserMapper userMapper ;
     AppointmentService appointmentService;
+    SurveyResultRepository surveyResultRepository;
+    SurveyResultMapper surveyResultMapper;
 
     @PutMapping("/updatepsy/{psychologistId}")
     public ApiResponse<UserResponse> updatePsy(
@@ -95,9 +97,11 @@ public class PsyController {
     }
 
     @GetMapping("/surveyresultsbyid/{userId}")
-    public ApiResponse<List<UserAnswer>> getUserSurveyResults(@PathVariable String userId) {
-        return ApiResponse.<List<UserAnswer>>builder()
-                .result(surveyService.getUserSurveyResults(userId))
+    public ApiResponse<List<SurveyResultResponse>> getUserSurveyResults(@PathVariable String userId) {
+        List<SurveyResultResponse> results = surveyService.getUserSurveyResults(userId);
+        return ApiResponse.<List<SurveyResultResponse>>builder()
+                .message(results.isEmpty() ? "No survey results found for user" : "Survey results retrieved successfully")
+                .result(results)
                 .build();
     }
 
