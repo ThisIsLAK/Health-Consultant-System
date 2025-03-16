@@ -4,16 +4,20 @@ import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import ApiService from '../../../../service/ApiService'; // Đảm bảo import ApiService
 import './AddSurvey.css'; // Make sure to create this CSS file
+import { useNavigate } from 'react-router-dom';
 
 const AddSurvey = () => {
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
+  const [surveyCode, setSurveyCode] = useState(''); // Bỏ giá trị mặc định sinh tự động
   const [questions, setQuestions] = useState([]);
+  const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState({
     question: '',
     answers: [{ text: '', points: 0 }],
   });
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
+  
 
   // Handle adding a new question
   const handleAddQuestion = () => {
@@ -83,6 +87,11 @@ const AddSurvey = () => {
 
   // Handle creating survey
   const handleCreateSurvey = async () => {
+    if (!surveyCode.trim()) {
+      alert('Please enter a survey code');
+      return;
+    }
+
     if (!surveyTitle.trim()) {
       alert('Please enter a survey title');
       return;
@@ -93,8 +102,9 @@ const AddSurvey = () => {
       return;
     }
 
-    // Format survey data to match the required structure
+    // Format survey data to match the required structure, including surveyCode
     const surveyData = {
+      surveyCode: surveyCode,
       title: surveyTitle,
       description: surveyDescription,
       questions: questions.map((q) => ({
@@ -115,11 +125,13 @@ const AddSurvey = () => {
 
       if (response.status === 200) {
         alert('Survey created successfully!');
+        navigate('/adminsurvey');
         console.log('Created survey details:', response.data);
 
         // Reset form sau khi tạo thành công
         setSurveyTitle('');
         setSurveyDescription('');
+        setSurveyCode(''); // Reset surveyCode
         setQuestions([]);
       } else {
         alert(`Failed to create survey: ${response.message}`);
@@ -142,6 +154,18 @@ const AddSurvey = () => {
           {/* Basic Survey Information */}
           <div className="survey-basic-info">
             <h2 className="section-title">Basic Information</h2>
+            <div className="form-group">
+              <label className="form-label">
+                Survey Code
+              </label>
+              <input
+                type="text"
+                className="form-input"
+                value={surveyCode}
+                onChange={(e) => setSurveyCode(e.target.value)}
+                placeholder="Enter survey code (e.g., SRC009)"
+              />
+            </div>
             <div className="form-group">
               <label className="form-label">
                 Survey Title
