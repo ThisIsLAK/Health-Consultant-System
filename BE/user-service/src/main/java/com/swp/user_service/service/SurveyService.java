@@ -43,36 +43,62 @@ public class SurveyService {
     SurveyAnswerOptionRepository surveyAnswerOptionRepository;
 
     @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
     public SurveyResponse createSurveyWithQuestions(SurveyCreationRequest request) {
-        Survey survey = surveyMapper.toSurvey(request);
-        survey.setCreatedDate(new Date());
-        survey.setActive(true);
+        try {
+            // Tạo survey
+            Survey survey = new Survey();
+            survey.setSurveyCode(request.getSurveyCode());
+            survey.setTitle(request.getTitle());
+            survey.setDescription(request.getDescription());
+            survey.setCreatedDate(new Date());
+            survey.setActive(true);
 
-        final Survey savedSurvey = surveyRepository.save(survey); // Lưu ngay để có ID
+            // Tạo danh sách câu hỏi
+            List<SurveyQuestion> questions = new ArrayList<>();
 
-        List<SurveyQuestion> questions = request.getQuestions().stream().map(questionRequest -> {
-            SurveyQuestion question = surveyQuestionMapper.toSurveyQuestion(questionRequest);
-            question.setSurvey(savedSurvey); // Không cần set UUID ở đây
-            return question;
-        }).collect(Collectors.toList());
+            // Gán các câu hỏi cho survey
+            for (SurveyQuestionCreationRequest questionRequest : request.getQuestions()) {
+                SurveyQuestion question = new SurveyQuestion();
+                question.setQuestionText(questionRequest.getQuestionText());
+                question.setActive(true);
+                question.setSurvey(survey); // Thiết lập mối quan hệ với survey
 
-        for (int i = 0; i < request.getQuestions().size(); i++) {
-            SurveyQuestion question = questions.get(i);
-            List<SurveyAnswerOption> answerOptions = request.getQuestions().get(i).getAnswerOptions().stream()
-                    .map(optionRequest -> {
-                        SurveyAnswerOption option = surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest);
-                        option.setSurveyQuestion(question); // Không cần set UUID ở đây
-                        return option;
-                    }).collect(Collectors.toList());
-            question.setAnswerOptions(answerOptions);
+                // Tạo các lựa chọn trả lời
+                List<SurveyAnswerOption> options = new ArrayList<>();
+                for (SurveyAnswerOptionRequest optionRequest : questionRequest.getAnswerOptions()) {
+                    SurveyAnswerOption option = new SurveyAnswerOption();
+                    option.setOptionText(optionRequest.getOptionText());
+                    option.setScore(optionRequest.getScore());
+                    option.setActive(true);
+                    option.setSurveyQuestion(question); // Thiết lập mối quan hệ với question
+                    options.add(option);
+                }
+
+                question.setAnswerOptions(options);
+                questions.add(question);
+            }
+
+            // Thiết lập mối quan hệ hai chiều
+            survey.setQuestions(questions);
+
+            // In ra để kiểm tra mối quan hệ
+            for (SurveyQuestion q : questions) {
+                log.info("Question: {}, Survey: {}", q.getQuestionText(), q.getSurvey() != null ? q.getSurvey().getSurveyId() : "null");
+            }
+
+            // Lưu survey và các thực thể liên quan
+            survey = surveyRepository.saveAndFlush(survey);
+
+            log.info("Survey saved with ID: {}", survey.getSurveyId());
+            log.info("Number of questions saved: {}", survey.getQuestions().size());
+
+            return surveyMapper.toSurveyResponse(survey);
+        } catch (Exception e) {
+            log.error("Error creating survey: ", e);
+            throw e;
         }
-
-        savedSurvey.setQuestions(questions);
-
-        surveyRepository.save(savedSurvey);
-        return surveyMapper.toSurveyResponse(savedSurvey);
     }
-
 
     public SurveyResponse getSurvey(String surveyId) {
         Optional<Survey> surveyOptional = surveyRepository.findById(surveyId);

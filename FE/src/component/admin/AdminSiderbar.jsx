@@ -30,12 +30,45 @@ const AdminSidebar = () => {
             <span>Create Program</span>
           </NavLink>
         </li>
+
+        {/* Updated Appointment Management with sub-options */}
         <li className='nav-item'>
-          <NavLink to="/manageappointments" className='nav-link' activeClassName="active">
+          <a
+            href="#"
+            className='nav-link collapsed'
+            data-bs-target="#appointments-nav"
+            data-bs-toggle="collapse"
+          >
             <i className='bi bi-calendar-plus'></i>
             <span>Appointment Management</span>
-          </NavLink>
+            <i className='bi bi-chevron-down ms-auto'></i>
+          </a>
+          <ul
+            id='appointments-nav'
+            className='nav-content collapse'
+            data-bs-parent='#sidebar-nav'
+          >
+            <li>
+              <NavLink to="/manageappointments">
+                <i className='bi bi-calendar-check'></i>
+                <span>Appointment List</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/adminpsycholist">
+                <i className='bi bi-person-badge'></i>
+                <span>Psychologist List</span>
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/adminstulist">
+                <i className='bi bi-people'></i>
+                <span>Student List</span>
+              </NavLink>
+            </li>
+          </ul>
         </li>
+
         <li className='nav-item'>
           <NavLink to="/adminblog" className='nav-link' activeClassName="active">
             <i className='bi bi-journal-text'></i>

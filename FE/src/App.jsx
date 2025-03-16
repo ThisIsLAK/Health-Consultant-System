@@ -68,6 +68,10 @@ import ViewSupportProgram from './pages/components/admin/SupportProgram/ViewSupp
 import EditSupportProgram from './pages/components/admin/SupportProgram/EditSupportProgram';
 import ManagingAppointment from './pages/components/admin/ManagingAppointment/ManagingAppointment';
 import EditSurvey from './pages/components/admin/EditSurvey/EditSurvey';
+import AdminPsychoList from './pages/components/admin/ManagingAppointment/psychologist/AdminPsychoList';
+import AdminPsychoAppointment from './pages/components/admin/ManagingAppointment/psychologist/AdminPsychoAppointment';
+import AdminStuList from './pages/components/admin/ManagingAppointment/student/AdminStuList';
+import AdminStuAppointment from './pages/components/admin/ManagingAppointment/student/AdminStuAppointment';
 
 function App() {
   return (
@@ -116,7 +120,7 @@ function App() {
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyaccount' element={<ProtectedRoute element={<PsychologistAccount />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappointment' element={<ProtectedRoute element={<PsyAppointments />} allowedRoles={['PSYCHOLOGIST']} />} />
-        <Route path='/psysupport' element={<ProtectedRoute element={<PsySupportProgram />} allowedRoles={['PSYCHOLOGIST']} />} /> 
+        <Route path='/psysupport' element={<ProtectedRoute element={<PsySupportProgram />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psysupport/:programCode' element={<ProtectedRoute element={<PsySupportProgramDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
 
         {/* Admin Routes */}
@@ -136,7 +140,10 @@ function App() {
         <Route path='/viewsupport/:programCode' element={<ProtectedRoute element={<ViewSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/editsupport/:programCode' element={<ProtectedRoute element={<EditSupportProgram />} allowedRoles={['ADMIN']} />} />
         <Route path='/manageappointments' element={<ProtectedRoute element={<ManagingAppointment />} allowedRoles={['ADMIN']} />} />
-
+        <Route path='/adminpsycholist' element={<ProtectedRoute element={<AdminPsychoList />} allowedRoles={['ADMIN']} />} />
+        <Route path='/admin/psychologists/appointments/:psychologistId' element={<ProtectedRoute element={<AdminPsychoAppointment />} allowedRoles={['ADMIN']} />} />
+        <Route path='/admin/students/appointments/:studentId' element={<ProtectedRoute element={<AdminStuAppointment />} allowedRoles={['ADMIN']} />} />
+        <Route path='/adminstulist' element={<ProtectedRoute element={<AdminStuList />} allowedRoles={['ADMIN']} />} />
       </Routes>
     </BrowserRouter>
   );
