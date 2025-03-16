@@ -1,36 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import { Pagination, InputGroup, FormControl } from 'react-bootstrap';
 import PageTitle from '../../../component/manager/PageTitle';
 import { FaEye } from 'react-icons/fa';
+import ApiService from '../../../service/ApiService'; // Import ApiService
 
 const AppointmentHistory = () => {
     const itemsPerPage = 12;
-    const mockAppointments = [
-        { id: 1, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 2, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 4, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 5, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 6, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 7, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 8, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 9, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 10, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-        { id: 11, patientName: 'Nguyen Minh Hoang', classroom: '12A16', dateTime: '10/01/2025', psychologist: 'Thai Binh Duong', status: 'Complete' },
-    ];
-
+    const [appointments, setAppointments] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [appointments, setAppointments] = useState(mockAppointments);
+    const navigate = useNavigate();
+
+    // Gọi API để lấy danh sách appointments khi component được mount
+    useEffect(() => {
+        const fetchAppointments = async () => {
+            try {
+                const response = await ApiService.getAllAppointments();
+                console.log('API Response:', response); // Log để kiểm tra cấu trúc dữ liệu
+                if (response.status === 200 && response.data && Array.isArray(response.data.result)) {
+                    setAppointments(response.data.result); // Lấy mảng từ result
+                } else {
+                    console.error("Unexpected data format or failed to fetch appointments:", response);
+                    setAppointments([]); // Đặt mảng rỗng nếu không đúng định dạng
+                }
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+                setAppointments([]); // Đặt mảng rỗng nếu có lỗi
+            }
+        };
+
+        fetchAppointments();
+    }, []); // Dependency array rỗng để chỉ gọi 1 lần khi component mount
 
     const indexOfLastAppointment = currentPage * itemsPerPage;
     const indexOfFirstAppointment = indexOfLastAppointment - itemsPerPage;
     const currentAppointments = appointments.slice(indexOfFirstAppointment, indexOfLastAppointment);
     const totalPages = Math.ceil(appointments.length / itemsPerPage);
 
-    const navigate = useNavigate();
+    // Hàm định dạng ngày
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }); // Định dạng thành "16/03/2025"
+    };
 
+    // CSS styles for table headers
+    const tableHeaderStyle = {
+        fontSize: '0.85rem',      // Reduced font size
+        padding: '0.5rem',        // Reduced padding
+        width: 'auto',            // Auto width to match content
+        textAlign: 'left',        // Left align text (changed from center)
+        whiteSpace: 'nowrap',     // Prevent text wrapping
+        verticalAlign: 'middle',  // Vertical alignment
+        paddingLeft: '0.75rem'    // Add left padding to shift text left
+    };
 
     return (
         <div>
@@ -47,32 +75,35 @@ const AppointmentHistory = () => {
                         <table className="table table-borderless datatable">
                             <thead className="table-light">
                                 <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Patient Name</th>
-                                    <th scope="col">Classroom</th>
-                                    <th scope="col">Date & Time</th>
-                                    <th scope="col">Psychologist</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Action</th>
+                                    <th scope="col" style={tableHeaderStyle}>Psychologist Id</th>
+                                    <th scope="col" style={tableHeaderStyle}>Appointment Id</th>
+                                    <th scope="col" style={tableHeaderStyle}>User Id</th>
+                                    <th scope="col" style={tableHeaderStyle}>Appointment Date</th>
+                                    <th scope="col" style={tableHeaderStyle}>Time Slot</th>
+                                    <th scope="col" style={tableHeaderStyle}>Status</th>
+                                    <th scope="col" style={tableHeaderStyle}>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {currentAppointments.map((appointment) => (
-                                    <tr key={appointment.id}>
-                                        <th scope="row">
-                                            <a href="#" className="custom-link">
-                                                {appointment.id}
-                                            </a>
-                                        </th>
-                                        <td>{appointment.patientName}</td>
-                                        <td>{appointment.classroom}</td>
-                                        <td>{appointment.dateTime}</td>
-                                        <td>{appointment.psychologist}</td>
+                                {currentAppointments.map((appointment, index) => (
+                                    <tr key={appointment.appointmentId || index}>
+                                        <td>{appointment.psychologistId || 'N/A'}</td>
+                                        <td>{appointment.appointmentId || 'N/A'}</td>
+                                        <td>{appointment.userId || 'N/A'}</td>
+                                        <td>{formatDate(appointment.appointmentDate) || 'N/A'}</td>
+                                        <td>{appointment.timeSlot || 'N/A'}</td>
                                         <td>
-                                            <span className="badge bg-success">{appointment.status}</span>
+                                            <span className="badge bg-success">
+                                                {appointment.active ? 'Active' : 'Inactive'}
+                                            </span>
                                         </td>
                                         <td>
-                                            <FaEye onClick={() => navigate('/appdetails')} className="custom-icon text-dark" style={{ cursor: 'pointer' }} title="View Detail" />
+                                            <FaEye
+                                                onClick={() => navigate('/appdetails')}
+                                                className="custom-icon text-dark"
+                                                style={{ cursor: 'pointer' }}
+                                                title="View Detail"
+                                            />
                                         </td>
                                     </tr>
                                 ))}

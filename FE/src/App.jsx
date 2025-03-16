@@ -130,7 +130,7 @@ function App() {
         <Route path='/createuser' element={<ProtectedRoute element={<AdminCreateUser />} allowedRoles={['ADMIN']} />} />
         <Route path='/addsurvey' element={<ProtectedRoute element={<AddSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminsurvey' element={<ProtectedRoute element={<AdminSurvey />} allowedRoles={['ADMIN']} />} />
-        <Route path='/surveydetail' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} />
+        <Route path='/surveydetail/:surveyId' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} /> 
         <Route path='/editsurvey/:surveyId' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />
