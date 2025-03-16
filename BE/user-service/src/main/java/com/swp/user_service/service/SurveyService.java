@@ -1,21 +1,15 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.*;
-import com.swp.user_service.dto.response.AllSurveyResponse;
-import com.swp.user_service.dto.response.SurveyResponse;
-import com.swp.user_service.entity.Survey;
-import com.swp.user_service.entity.SurveyAnswerOption;
-import com.swp.user_service.entity.SurveyQuestion;
-import com.swp.user_service.entity.UserAnswer;
+import com.swp.user_service.dto.response.*;
+import com.swp.user_service.entity.*;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.mapper.SurveyAnswerOptionMapper;
 import com.swp.user_service.mapper.SurveyMapper;
 import com.swp.user_service.mapper.SurveyQuestionMapper;
-import com.swp.user_service.repository.SurveyAnswerOptionRepository;
-import com.swp.user_service.repository.SurveyQuestionRepository;
-import com.swp.user_service.repository.SurveyRepository;
-import com.swp.user_service.repository.UserAnswerRepository;
+import com.swp.user_service.mapper.SurveyResultMapper;
+import com.swp.user_service.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +35,8 @@ public class SurveyService {
     SurveyAnswerOptionMapper surveyAnswerOptionMapper;
     SurveyQuestionRepository surveyQuestionRepository;
     SurveyAnswerOptionRepository surveyAnswerOptionRepository;
+    SurveyResultMapper surveyResultMapper;
+    SurveyResultRepository surveyResultRepository;
 
     @PreAuthorize("hasRole('ADMIN')")
     @Transactional
@@ -131,8 +127,11 @@ public class SurveyService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserAnswer> getUserSurveyResults(String userId) {
-        return userAnswerRepository.findUserAnswersByUserId(userId);
+    public List<SurveyResultResponse> getUserSurveyResults(String userId) {
+        List<SurveyResult> surveyResults = surveyResultRepository.findByUser_Id(userId);
+        return surveyResults.stream()
+                .map(surveyResultMapper::toSurveyResultResponse)
+                .collect(Collectors.toList());
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -226,5 +225,26 @@ public class SurveyService {
             log.error("Error updating survey with ID: {}", surveyId, e);
             throw e;
         }
+    }
+
+    public SurveySummaryResponse getSurveySummary() {
+        List<Survey> surveys = surveyRepository.findAll();
+        long totalSurveys = surveys.size();
+        long activeSurveys = surveys.stream().filter(Survey::getActive).count();
+
+
+        List<SurveyResult> surveyResults = surveyResultRepository.findAll();
+        long totalSurveyResults = surveyResults.size();
+
+        double averageScore = totalSurveyResults > 0
+                ? surveyResults.stream().mapToInt(SurveyResult::getScore).average().orElse(0.0)
+                : 0.0;
+
+        return SurveySummaryResponse.builder()
+                .totalSurveys(totalSurveys)
+                .activeSurveys(activeSurveys)
+                .totalSurveyResults(totalSurveyResults)
+                .averageScore(averageScore)
+                .build();
     }
 }
