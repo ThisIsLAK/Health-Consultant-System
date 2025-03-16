@@ -1,9 +1,12 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import Navbar from '../../components/homepage/Navbar'
 import HowItWorks from '../../components/homepage/HowItWorks'
 import Hero from '../../components/homepage/Hero'
 import SuccessMetrics from '../../components/homepage/SuccessMetrics'
-import ContactForm from '../../components/homepage/ContactForm'
+import Testimonials from '../../components/homepage/Testimonials'
+import Features from '../../components/homepage/Features'
+import SignUpSection from '../../components/homepage/SignUpSection'
 import Footer from '../../components/homepage/Footer'
 import './Homepage.css'
 
@@ -14,7 +17,9 @@ const Homepage = () => {
     <Hero/>
     <SuccessMetrics/>
     <HowItWorks/>
-    <ContactForm/>
+    <Features/>
+    <Testimonials/>
+    <SignUpSection/>
     <Footer/>
   </div>
   );

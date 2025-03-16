@@ -3,7 +3,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import ApiService from '../service/ApiService';
 
 // allowedRoles: array of roles that can access this route
-const ProtectedRoute = ({ element, allowedRoles }) => {
+// allowGuest: boolean to allow non-authenticated users to access the route
+const ProtectedRoute = ({ element, allowedRoles, allowGuest = false }) => {
   const navigate = useNavigate();
   const isAuthenticated = ApiService.isAuthenticated();
   const userRole = ApiService.getUserRole();
@@ -13,17 +14,18 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
     console.log("- Is authenticated:", isAuthenticated);
     console.log("- User role:", userRole);
     console.log("- Allowed roles:", allowedRoles);
-    console.log("- Has access:", allowedRoles?.includes(userRole));
-  }, [isAuthenticated, userRole, allowedRoles]);
+    console.log("- Allow guest:", allowGuest);
+    console.log("- Has access:", isAuthenticated ? allowedRoles?.includes(userRole) : allowGuest);
+  }, [isAuthenticated, userRole, allowedRoles, allowGuest]);
 
-  // If user is not authenticated, redirect to login
-  if (!isAuthenticated) {
-    console.log("Not authenticated, redirecting to login");
+  // If user is not authenticated and the route doesn't allow guests, redirect to login
+  if (!isAuthenticated && !allowGuest) {
+    console.log("Not authenticated and guests not allowed, redirecting to login");
     return <Navigate to="/login" replace />;
   }
 
-  // If user's role is not in the allowed roles list
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
+  // If user is authenticated but their role is not in the allowed roles list
+  if (isAuthenticated && allowedRoles && !allowedRoles.includes(userRole)) {
     console.log("Unauthorized access attempt");
     
     // Redirect based on their actual role
@@ -47,7 +49,7 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
   }
 
   console.log("Access granted to path");
-  // User is authorized to access this route
+  // User is authorized to access this route or is a guest on an allowGuest route
   return element;
 };
 

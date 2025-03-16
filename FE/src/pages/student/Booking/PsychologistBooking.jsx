@@ -4,6 +4,37 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
+import LoginPrompt from '../../../components/LoginPrompt';
+
+// MUI imports
+import { 
+  Box, 
+  Typography, 
+  Container, 
+  Paper, 
+  Grid, 
+  Button, 
+  TextField, 
+  Avatar, 
+  Card, 
+  CardContent, 
+  CardActionArea, 
+  IconButton,
+  Divider,
+  CircularProgress,
+  Alert
+} from '@mui/material';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Search, 
+  CalendarToday, 
+  Person, 
+  CheckCircle, 
+  Email,
+  LockOutlined
+} from '@mui/icons-material';
+
 import './PsychologistBooking.css';
 
 const parseJwt = (token) => {
@@ -23,6 +54,7 @@ const parseJwt = (token) => {
 
 const PsychologistBooking = () => {
   const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedPsychologist, setSelectedPsychologist] = useState(null);
@@ -35,8 +67,16 @@ const PsychologistBooking = () => {
   const [psychologists, setPsychologists] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
-  // Fetch psychologists from the API
+  // Check authentication on component mount
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+  }, []);
+
+  // Fetch psychologists from the API only if authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    
     const fetchPsychologists = async () => {
       try {
         setLoading(true);
@@ -65,10 +105,12 @@ const PsychologistBooking = () => {
     };
 
     fetchPsychologists();
-  }, []);
+  }, [isAuthenticated]);
 
   // Filter psychologists based on search query
   useEffect(() => {
+    if (!isAuthenticated) return;
+    
     if (searchQuery.trim() === '') {
       setFilteredPsychologists(psychologists);
     } else {
@@ -82,7 +124,7 @@ const PsychologistBooking = () => {
       );
       setFilteredPsychologists(filtered);
     }
-  }, [searchQuery, psychologists]);
+  }, [searchQuery, psychologists, isAuthenticated]);
 
   // Update the generateTimeSlots function to use the specific time slots you requested
 
@@ -310,185 +352,361 @@ const generateTimeSlots = () => {
     }
   };
 
+  // If not authenticated, render the login prompt
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <LoginPrompt 
+          message="You need to be logged in to book appointments with psychologists. Please log in to access this feature."
+        />
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
-      <div className="booking-container">
-        <div className="booking-header">
-          <h1>Book an Appointment</h1>
-          <p>Schedule a session with one of our professional psychologists</p>
-        </div>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box sx={{ textAlign: 'center', mb: 5 }}>
+          <Typography variant="h3" component="h1" gutterBottom sx={{ fontWeight: 500 }}>
+            Book an Appointment
+          </Typography>
+          <Typography variant="h6" color="text.secondary">
+            Schedule a session with one of our professional psychologists
+          </Typography>
+        </Box>
         
-        <div className="booking-content">
-          <div className="booking-grid">
+        <Paper elevation={3} sx={{ borderRadius: 2, overflow: 'hidden' }}>
+          <Grid container spacing={2} sx={{ p: { xs: 2, md: 3 } }}>
             {/* Calendar Section */}
-            <div className="calendar-section">
-              <div className="calendar-header">
-                <button onClick={() => changeMonth(-1)} className="month-nav">
-                  <i className="fas fa-chevron-left"></i>
-                </button>
-                <h2>{formatMonthYear(currentDate)}</h2>
-                <button onClick={() => changeMonth(1)} className="month-nav">
-                  <i className="fas fa-chevron-right"></i>
-                </button>
-              </div>
-              
-              <div className="calendar-grid">
-                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                  <div key={day} className="day-header">{day}</div>
-                ))}
+            <Grid item xs={12} md={4}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 3, 
+                  bgcolor: '#f9f9f9', 
+                  borderRadius: 2,
+                  height: '100%'
+                }}
+              >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                  <IconButton onClick={() => changeMonth(-1)}>
+                    <ChevronLeft />
+                  </IconButton>
+                  <Typography variant="h6">{formatMonthYear(currentDate)}</Typography>
+                  <IconButton onClick={() => changeMonth(1)}>
+                    <ChevronRight />
+                  </IconButton>
+                </Box>
                 
-                {generateCalendarDays().map((item, index) => (
-                  <div 
-                    key={index}
-                    onClick={() => handleDateSelect(item.date)}
-                    className={`calendar-day ${
-                      !item.day ? 'empty' : 
-                      item.isPast ? 'past' : 
-                      item.isToday ? 'today' : 
-                      selectedDate && item.date.getTime() === selectedDate.getTime() ? 'selected' : ''
-                    }`}
-                  >
-                    {item.day}
-                  </div>
-                ))}
-              </div>
-              
-              {selectedDate && (
-                <div className="selected-date-info">
-                  <p><i className="fas fa-calendar-check"></i> Selected date: {formatDate(selectedDate)}</p>
-                </div>
-              )}
-            </div>
+                <Grid container spacing={1}>
+                  {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                    <Grid item xs={1.7} key={day}>
+                      <Typography 
+                        align="center" 
+                        sx={{ fontWeight: 'bold', fontSize: '0.8rem', color: '#555', mb: 1 }}
+                      >
+                        {day}
+                      </Typography>
+                    </Grid>
+                  ))}
+                  
+                  {generateCalendarDays().map((item, index) => (
+                    <Grid item xs={1.7} key={index}>
+                      <Box
+                        onClick={() => handleDateSelect(item.date)}
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          height: 40,
+                          width: '100%',
+                          borderRadius: '50%',
+                          cursor: item.day && !item.isPast ? 'pointer' : 'default',
+                          bgcolor: !item.day ? 'transparent' : 
+                                  item.isPast ? 'transparent' : 
+                                  item.isToday ? '#e3f2fd' : 
+                                  selectedDate && item.date?.getTime() === selectedDate?.getTime() ? '#3498db' : 'transparent',
+                          color: !item.day ? 'transparent' : 
+                                 item.isPast ? '#ccc' : 
+                                 item.isToday ? '#1976d2' : 
+                                 selectedDate && item.date?.getTime() === selectedDate?.getTime() ? 'white' : 'inherit',
+                          '&:hover': {
+                            bgcolor: !item.day || item.isPast ? undefined : selectedDate && item.date?.getTime() === selectedDate?.getTime() ? '#3498db' : '#edf5ff'
+                          },
+                          visibility: !item.day ? 'hidden' : 'visible'
+                        }}
+                      >
+                        {item.day}
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
+                
+                {selectedDate && (
+                  <Box sx={{ mt: 3, p: 2, bgcolor: '#e3f2fd', borderRadius: 1, color: '#1976d2' }}>
+                    <Typography variant="body2">
+                      <CalendarToday fontSize="small" sx={{ mr: 1, verticalAlign: 'middle' }} />
+                      Selected date: {formatDate(selectedDate)}
+                    </Typography>
+                  </Box>
+                )}
+              </Paper>
+            </Grid>
             
             {/* Psychologist Selection */}
-            <div className="psychologist-section">
-              <h2>Select a Psychologist</h2>
-              
-              <div className="search-box">
-                <input
-                  type="text"
-                  placeholder="Search by name..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <i className="fas fa-search"></i>
-              </div>
-              
-              <div className="psychologist-list">
-                {loading ? (
-                  <div className="loading">Loading psychologists...</div>
-                ) : filteredPsychologists.length > 0 ? (
-                  filteredPsychologists.map(psychologist => (
-                    <div 
-                      key={psychologist.id}
-                      className={`psychologist-card ${selectedPsychologist?.id === psychologist.id ? 'selected' : ''}`}
-                      onClick={() => setSelectedPsychologist(psychologist)}
-                    >
-                      <div className="psychologist-avatar">
-                        <i className="fas fa-user-md"></i>
-                      </div>
-                      <div className="psychologist-info">
-                        <h3>{psychologist.name}</h3>
-                        <p>{psychologist.email}</p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="no-results">No psychologists found</div>
-                )}
-              </div>
-            </div>
+            <Grid item xs={12} md={4}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 3, 
+                  bgcolor: '#f9f9f9', 
+                  borderRadius: 2,
+                  height: '100%'
+                }}
+              >
+                <Typography variant="h5" sx={{ mb: 3 }}>Select a Psychologist</Typography>
+                
+                <Box sx={{ position: 'relative', mb: 3 }}>
+                  <TextField
+                    fullWidth
+                    placeholder="Search by name..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    variant="outlined"
+                    InputProps={{
+                      startAdornment: <Search color="action" sx={{ ml: 1, mr: 1 }} />
+                    }}
+                    size="small"
+                  />
+                </Box>
+                
+                <Box sx={{ maxHeight: 400, overflow: 'auto', pr: 1 }}>
+                  {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                      <CircularProgress size={40} />
+                    </Box>
+                  ) : filteredPsychologists.length > 0 ? (
+                    filteredPsychologists.map(psychologist => (
+                      <Card 
+                        key={psychologist.id} 
+                        variant="outlined"
+                        sx={{ 
+                          mb: 2, 
+                          borderColor: selectedPsychologist?.id === psychologist.id ? '#3498db' : '#eee',
+                          bgcolor: selectedPsychologist?.id === psychologist.id ? '#e3f2fd' : 'white',
+                          transition: 'all 0.3s',
+                          '&:hover': {
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 4px 10px rgba(0, 0, 0, 0.05)'
+                          }
+                        }}
+                      >
+                        <CardActionArea onClick={() => setSelectedPsychologist(psychologist)}>
+                          <CardContent sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+                            <Avatar 
+                              sx={{ 
+                                bgcolor: '#3498db', 
+                                color: 'white',
+                                width: 50, 
+                                height: 50,
+                                mr: 2
+                              }}
+                            >
+                              <Person fontSize="large" />
+                            </Avatar>
+                            <Box>
+                              <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                                {psychologist.name}
+                              </Typography>
+                              <Typography variant="body2" color="text.secondary" sx={{ display: 'flex', alignItems: 'center' }}>
+                                <Email fontSize="small" sx={{ mr: 0.5, fontSize: '0.9rem' }} />
+                                {psychologist.email}
+                              </Typography>
+                            </Box>
+                          </CardContent>
+                        </CardActionArea>
+                      </Card>
+                    ))
+                  ) : (
+                    <Box sx={{ textAlign: 'center', py: 4, color: '#777' }}>
+                      <Typography>No psychologists found</Typography>
+                    </Box>
+                  )}
+                </Box>
+              </Paper>
+            </Grid>
             
             {/* Time Slots & Booking */}
-            <div className="booking-section">
-              <h2>Complete Your Booking</h2>
-              
-              {selectedDate && selectedPsychologist ? (
-                <>
-                  <div className="booking-info">
-                    <p><strong>Psychologist:</strong> {selectedPsychologist.name}</p>
-                    <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
-                  </div>
-                  
-                  <div className="time-slots">
-                    <h3>Select a Time Slot</h3>
-                    <div className="slots-grid">
+            <Grid item xs={12} md={4}>
+              <Paper 
+                elevation={0} 
+                sx={{ 
+                  p: 3, 
+                  bgcolor: '#f9f9f9', 
+                  borderRadius: 2,
+                  height: '100%'
+                }}
+              >
+                <Typography variant="h5" sx={{ mb: 3 }}>Complete Your Booking</Typography>
+                
+                {selectedDate && selectedPsychologist ? (
+                  <>
+                    <Paper variant="outlined" sx={{ p: 2, mb: 3, borderRadius: 2 }}>
+                      <Typography variant="body1" sx={{ mb: 1 }}>
+                        <strong>Psychologist:</strong> {selectedPsychologist.name}
+                      </Typography>
+                      <Typography variant="body1">
+                        <strong>Date:</strong> {formatDate(selectedDate)}
+                      </Typography>
+                    </Paper>
+                    
+                    <Typography variant="h6" sx={{ mb: 2 }}>Select a Time Slot</Typography>
+                    <Grid container spacing={1} sx={{ mb: 3 }}>
                       {timeSlots.map(slot => (
-                        <button
-                          key={slot.id}
-                          onClick={() => setSelectedSlot(slot.id)}
-                          className={`time-slot ${
-                            isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? 'booked' :
-                            selectedSlot === slot.id ? 'selected' : ''
-                          }`}
-                          disabled={isSlotBooked(selectedDate, selectedPsychologist.id, slot.id)}
-                        >
-                          {slot.time}
-                          {isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) && (
-                            <span className="booked-label">Booked</span>
-                          )}
-                        </button>
+                        <Grid item xs={6} key={slot.id}>
+                          <Button
+                            fullWidth
+                            variant={selectedSlot === slot.id ? "contained" : "outlined"}
+                            onClick={() => setSelectedSlot(slot.id)}
+                            disabled={isSlotBooked(selectedDate, selectedPsychologist.id, slot.id)}
+                            sx={{
+                              p: 1.5,
+                              textTransform: 'none',
+                              bgcolor: isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? '#f3f3f3' : 
+                                      selectedSlot === slot.id ? '#3498db' : 'white',
+                              color: isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? '#aaa' : 
+                                     selectedSlot === slot.id ? 'white' : 'inherit',
+                              borderColor: isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? '#ddd' : 
+                                          selectedSlot === slot.id ? '#3498db' : '#ddd',
+                              '&:hover': {
+                                borderColor: isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? '#ddd' : '#3498db',
+                                bgcolor: isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) ? '#f3f3f3' : 
+                                        selectedSlot === slot.id ? '#3498db' : 'white'
+                              }
+                            }}
+                          >
+                            {slot.time}
+                            {isSlotBooked(selectedDate, selectedPsychologist.id, slot.id) && (
+                              <Typography variant="caption" display="block" sx={{ color: '#999', mt: 0.5 }}>
+                                Booked
+                              </Typography>
+                            )}
+                          </Button>
+                        </Grid>
                       ))}
-                    </div>
-                  </div>
-                  
-                  {selectedSlot !== null && (
-                    <div className="booking-form">
-                      <h3>Complete Booking</h3>
-                      <div className="booking-summary">
-                        <p><strong>Summary:</strong> Appointment with {selectedPsychologist.name}</p>
-                        <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
-                        <p><strong>Time:</strong> {timeSlots[selectedSlot].time}</p>
-                      </div>
-                      
-                      <button 
-                        className="submit-btn"
-                        onClick={bookAppointment}
-                        disabled={submitting}
+                    </Grid>
+                    
+                    {selectedSlot !== null && (
+                      <Box>
+                        <Typography variant="h6" sx={{ mb: 2 }}>Complete Booking</Typography>
+                        <Paper 
+                          variant="outlined" 
+                          sx={{ 
+                            p: 2, 
+                            mb: 3, 
+                            bgcolor: '#f0f8ff',
+                            borderRadius: 2
+                          }}
+                        >
+                          <Typography variant="body2" sx={{ mb: 1 }}>
+                            <strong>Summary:</strong> Appointment with {selectedPsychologist.name}
+                          </Typography>
+                          <Typography variant="body2" sx={{ mb: 1 }}>
+                            <strong>Date:</strong> {formatDate(selectedDate)}
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Time:</strong> {timeSlots[selectedSlot].time}
+                          </Typography>
+                        </Paper>
+                        
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={bookAppointment}
+                          disabled={submitting}
+                          sx={{
+                            py: 1.5,
+                            bgcolor: '#3498db',
+                            '&:hover': {
+                              bgcolor: '#2980b9'
+                            }
+                          }}
+                        >
+                          {submitting ? 'Booking...' : 'Confirm Appointment'}
+                        </Button>
+                        
+                        <Typography 
+                          variant="caption" 
+                          sx={{ 
+                            mt: 2, 
+                            display: 'block', 
+                            textAlign: 'center', 
+                            color: '#777' 
+                          }}
+                        >
+                          By booking this appointment, you agree to our cancellation policy. You can cancel or reschedule up to 24 hours before your appointment.
+                        </Typography>
+                      </Box>
+                    )}
+                    
+                    {showConfirmation && (
+                      <Alert 
+                        severity="success"
+                        variant="filled"
+                        icon={<CheckCircle />}
+                        sx={{ 
+                          mt: 2, 
+                          p: 2, 
+                          borderRadius: 2,
+                          animation: 'fadeIn 0.5s'
+                        }}
                       >
-                        {submitting ? 'Booking...' : 'Confirm Appointment'}
-                      </button>
-                      
-                      <p className="booking-terms">
-                        By booking this appointment, you agree to our cancellation policy. You can cancel or reschedule up to 24 hours before your appointment.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {showConfirmation && (
-                    <div className="booking-confirmation">
-                      <div className="confirmation-icon">
-                        <i className="fas fa-check-circle"></i>
-                      </div>
-                      <h3>Appointment Booked!</h3>
-                      <div className="confirmation-details">
-                        <p><strong>Psychologist:</strong> {selectedPsychologist.name}</p>
-                        <p><strong>Date:</strong> {formatDate(selectedDate)}</p>
-                        <p><strong>Time:</strong> {timeSlots[selectedSlot].time}</p>
-                      </div>
-                      <p className="confirmation-redirect">
-                        You will be redirected to your appointments page in a moment...
-                      </p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="booking-placeholder">
-                  <div className="placeholder-icon">
-                    <i className="fas fa-calendar-alt"></i>
-                  </div>
-                  <p>
-                    {!selectedDate 
-                      ? 'Please select a date from the calendar' 
-                      : 'Please select a psychologist to continue'}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+                        <Typography variant="h6" sx={{ mb: 1 }}>Appointment Booked!</Typography>
+                        <Paper sx={{ bgcolor: 'rgba(255, 255, 255, 0.5)', p: 2, borderRadius: 1, mb: 2 }}>
+                          <Typography variant="body2" sx={{ mb: 0.5 }}>
+                            <strong>Psychologist:</strong> {selectedPsychologist.name}
+                          </Typography>
+                          <Typography variant="body2" sx={{ mb: 0.5 }}>
+                            <strong>Date:</strong> {formatDate(selectedDate)}
+                          </Typography>
+                          <Typography variant="body2">
+                            <strong>Time:</strong> {timeSlots[selectedSlot].time}
+                          </Typography>
+                        </Paper>
+                        <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
+                          You will be redirected to your appointments page in a moment...
+                        </Typography>
+                      </Alert>
+                    )}
+                  </>
+                ) : (
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      py: 6,
+                      textAlign: 'center',
+                      color: '#777'
+                    }}
+                  >
+                    <CalendarToday sx={{ fontSize: '3rem', color: '#bbb', mb: 2 }} />
+                    <Typography>
+                      {!selectedDate 
+                        ? 'Please select a date from the calendar' 
+                        : 'Please select a psychologist to continue'}
+                    </Typography>
+                  </Box>
+                )}
+              </Paper>
+            </Grid>
+          </Grid>
+        </Paper>
+      </Container>
       <Footer />
       <ToastContainer position="bottom-right" autoClose={3000} />
     </>

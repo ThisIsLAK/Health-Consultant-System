@@ -5,6 +5,10 @@ import { format } from 'date-fns';
 import { toast, ToastContainer } from 'react-toastify';
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
+import Sidebar from '../UserInfo/Sidebar';
+// Import MUI components
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import './AppointmentHistory.css';
 
 const AppointmentHistory = () => {
@@ -14,7 +18,7 @@ const AppointmentHistory = () => {
   const [filter, setFilter] = useState('all'); // 'all', 'upcoming', 'past', 'cancelled'
   const [cancelling, setCancelling] = useState(false); // Track cancellation state
   const [currentPage, setCurrentPage] = useState(1);
-  const [appointmentsPerPage] = useState(5);
+  const [appointmentsPerPage] = useState(1);
 
   useEffect(() => {
     fetchAppointments();
@@ -212,170 +216,177 @@ const AppointmentHistory = () => {
   };
 
   return (
-    <>
+    <div className="profile-page">
       <Navbar />
-      <div className="appointment-history-container">
-        <div className="appointment-history-header">
-          <h1>My Appointments</h1>
-          <p>View and manage your scheduled appointments</p>
-        </div>
-        
-        <div className="appointment-history-content">
-          <div className="filter-controls">
-            <button 
-              className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
-              onClick={() => setFilter('all')}
-            >
-              All Appointments
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'upcoming' ? 'active' : ''}`}
-              onClick={() => setFilter('upcoming')}
-            >
-              Upcoming
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
-              onClick={() => setFilter('past')}
-            >
-              Past
-            </button>
-            <button 
-              className={`filter-btn ${filter === 'cancelled' ? 'active' : ''}`}
-              onClick={() => setFilter('cancelled')}
-            >
-              Cancelled
-            </button>
+      <div className="profile-container">
+        <Sidebar activeItem="appointments" />
+        <div className="profile-content">
+          <div className="profile-header-card">
+            <div className="appointment-history-header">
+              <h1>My Appointments</h1>
+              <p>View and manage your scheduled appointments</p>
+            </div>
+            
+            <div className="filter-controls">
+              <button 
+                className={`filter-btn ${filter === 'all' ? 'active' : ''}`}
+                onClick={() => setFilter('all')}
+              >
+                All Appointments
+              </button>
+              <button 
+                className={`filter-btn ${filter === 'upcoming' ? 'active' : ''}`}
+                onClick={() => setFilter('upcoming')}
+              >
+                Upcoming
+              </button>
+              <button 
+                className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
+                onClick={() => setFilter('past')}
+              >
+                Past
+              </button>
+              <button 
+                className={`filter-btn ${filter === 'cancelled' ? 'active' : ''}`}
+                onClick={() => setFilter('cancelled')}
+              >
+                Cancelled
+              </button>
+            </div>
+            
+            <div className="actions-bar">
+              <Link to="/booking" className="new-appointment-btn">
+                <i className="fas fa-plus-circle"></i> Book New Appointment
+              </Link>
+            </div>
           </div>
           
-          <div className="actions-bar">
-            <Link to="/booking" className="new-appointment-btn">
-              <i className="fas fa-plus-circle"></i> Book New Appointment
-            </Link>
-          </div>
-          
-          {loading ? (
-            <div className="loading-state">
-              <div className="spinner"></div>
-              <p>Loading your appointments...</p>
-            </div>
-          ) : error ? (
-            <div className="error-state">
-              <i className="fas fa-exclamation-circle"></i>
-              <p>{error}</p>
-              <button onClick={fetchAppointments} className="retry-btn">Try Again</button>
-            </div>
-          ) : filteredAndSortedAppointments.length > 0 ? (
-            <>
-              <div className="appointments-list">
-                {currentAppointments.map((appointment) => (
-                  <div 
-                    key={appointment.appointmentId} 
-                    className={`appointment-card ${appointment.active === false || appointment.active === 0 ? 'cancelled' : ''}`}
-                  >
-                    <div className={`appointment-status ${getAppointmentStatus(appointment)}`}>
-                      {appointment.active === false || appointment.active === 0 
-                        ? 'Cancelled' 
-                        : isUpcoming(appointment.appointmentDate, true) ? 'Upcoming' : 'Past'}
-                    </div>
-                    
-                    <div className="appointment-details">
-                      <div className="appointment-date">
-                        <i className="fas fa-calendar-day"></i>
-                        <span>{formatAppointmentDate(appointment.appointmentDate)}</span>
-                      </div>
-                      
-                      <div className="appointment-time">
-                        <i className="fas fa-clock"></i>
-                        <span>{formatTimeSlot(appointment.timeSlot)}</span>
-                      </div>
-                      
-                      {/* Display additional information if available */}
-                      {appointment.psychologistName && (
-                        <div className="appointment-doctor">
-                          <i className="fas fa-user-md"></i>
-                          <span>Dr. {appointment.psychologistName}</span>
-                        </div>
-                      )}
-                      
-                      {appointment.notes && (
-                        <div className="appointment-notes">
-                          <i className="fas fa-sticky-note"></i>
-                          <span>{appointment.notes}</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {isUpcoming(appointment.appointmentDate, appointment.active === true || appointment.active === 1) && (
-                      <div className="appointment-actions">
-                        <button 
-                          className="cancel-btn" 
-                          onClick={() => cancelAppointment(appointment.appointmentId)}
-                          disabled={cancelling}
-                        >
-                          <i className="fas fa-times-circle"></i> 
-                          {cancelling ? 'Cancelling...' : 'Cancel'}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                ))}
+          <div className="profile-card appointments-card">
+            {loading ? (
+              <div className="loading-container">
+                <div className="loading-spinner"></div>
+                <p>Loading your appointments...</p>
               </div>
-              
-              {/* Pagination Controls */}
-              {filteredAndSortedAppointments.length > appointmentsPerPage && (
-                <div className="pagination">
-                  <button 
-                    onClick={() => paginate(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="pagination-btn"
-                  >
-                    <i className="fas fa-chevron-left"></i>
-                  </button>
-                  
-                  {[...Array(Math.ceil(filteredAndSortedAppointments.length / appointmentsPerPage))].map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => paginate(i + 1)}
-                      className={`pagination-btn ${currentPage === i + 1 ? 'active' : ''}`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-                  
-                  <button 
-                    onClick={() => paginate(currentPage + 1)}
-                    disabled={currentPage === Math.ceil(filteredAndSortedAppointments.length / appointmentsPerPage)}
-                    className="pagination-btn"
-                  >
-                    <i className="fas fa-chevron-right"></i>
-                  </button>
+            ) : error ? (
+              <div className="error-container">
+                <div className="error-icon">⚠️</div>
+                <p className="error-message">{error}</p>
+                <button className="retry-button" onClick={fetchAppointments}>Try Again</button>
+              </div>
+            ) : filteredAndSortedAppointments.length > 0 ? (
+              <>
+                <div className="appointments-list">
+                  {currentAppointments.map((appointment) => {
+                    const status = getAppointmentStatus(appointment);
+                    return (
+                      <div 
+                        key={appointment.appointmentId} 
+                        className={`appointment-card ${status}`}
+                      >
+                        <div className={`appointment-status ${status}`}>
+                          {status === 'cancelled' 
+                            ? 'Cancelled' 
+                            : status === 'upcoming' ? 'Upcoming' : 'Past'}
+                        </div>
+                        
+                        <div className="appointment-details">
+                          <div className="appointment-date">
+                            <i className="fas fa-calendar-alt"></i>
+                            <span>{formatAppointmentDate(appointment.appointmentDate)}</span>
+                          </div>
+                          
+                          <div className="detail-divider"></div>
+                          
+                          <div className="appointment-time">
+                            <i className="fas fa-clock"></i>
+                            <span>{formatTimeSlot(appointment.timeSlot)}</span>
+                          </div>
+                          
+                          {appointment.psychologistName && (
+                            <>
+                              <div className="detail-divider"></div>
+                              <div className="appointment-doctor">
+                                <i className="fas fa-user-md"></i>
+                                <span>Dr. {appointment.psychologistName}</span>
+                              </div>
+                            </>
+                          )}
+                          
+                          {appointment.notes && (
+                            <>
+                              <div className="detail-divider"></div>
+                              <div className="appointment-notes">
+                                <i className="fas fa-sticky-note"></i>
+                                <span>{appointment.notes}</span>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        
+                        {status === 'upcoming' && (
+                          <div className="appointment-actions">
+                            <button 
+                              className="cancel-btn" 
+                              onClick={() => cancelAppointment(appointment.appointmentId)}
+                              disabled={cancelling}
+                            >
+                              <i className="fas fa-times-circle"></i> 
+                              {cancelling ? 'Cancelling...' : 'Cancel Appointment'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
-              )}
-            </>
-          ) : (
-            <div className="empty-state">
-              <div className="empty-icon">
-                <i className="far fa-calendar"></i>
+                
+                {/* Replace custom pagination with MUI Pagination */}
+                {filteredAndSortedAppointments.length > appointmentsPerPage && (
+                  <div className="pagination-container-mui">
+                    <div className="pagination-info">
+                      Showing {currentAppointments.length > 0 ? `${indexOfFirstAppointment + 1}-${Math.min(indexOfLastAppointment, filteredAndSortedAppointments.length)}` : "0"} of {filteredAndSortedAppointments.length} appointments
+                    </div>
+                    
+                    <Stack spacing={2}>
+                      <Pagination 
+                        count={Math.ceil(filteredAndSortedAppointments.length / appointmentsPerPage)} 
+                        page={currentPage}
+                        onChange={(event, value) => paginate(value)}
+                        color="primary"
+                        size="large"
+                        showFirstButton
+                        showLastButton
+                        siblingCount={1}
+                        className="mui-pagination"
+                      />
+                    </Stack>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">
+                  <i className="far fa-calendar"></i>
+                </div>
+                <h3>No {filter !== 'all' ? filter : ''} appointments found</h3>
+                <p>
+                  {filter === 'upcoming' 
+                    ? "You don't have any upcoming appointments scheduled."
+                    : filter === 'past'
+                    ? "You don't have any past appointments."
+                    : filter === 'cancelled'
+                    ? "You don't have any cancelled appointments."
+                    : "You haven't booked any appointments yet."}
+                </p>
+                <Link to="/booking" className="book-now-btn">Book an Appointment Now</Link>
               </div>
-              <h3>No {filter !== 'all' ? filter : ''} appointments found</h3>
-              <p>
-                {filter === 'upcoming' 
-                  ? "You don't have any upcoming appointments scheduled."
-                  : filter === 'past'
-                  ? "You don't have any past appointments."
-                  : filter === 'cancelled'
-                  ? "You don't have any cancelled appointments."
-                  : "You haven't booked any appointments yet."}
-              </p>
-              <Link to="/booking" className="book-now-btn">Book an Appointment Now</Link>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
       <Footer />
       <ToastContainer position="bottom-right" autoClose={3000} />
-    </>
+    </div>
   );
 };
 
