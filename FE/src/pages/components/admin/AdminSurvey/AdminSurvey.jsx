@@ -163,7 +163,7 @@ const AdminSurvey = () => {
                     {currentSurveys.map((survey) => (
                         <div className="survey-card" key={survey.surveyId}>
                             <div className="survey-card-content">
-                                <h3 className="survey-title">{survey.title || 'Untitled Survey'}</h3>
+                                <h3 className="mainsurvey-title">{survey.title || 'Untitled Survey'}</h3>
                                 <p className="survey-description">{survey.description || 'No description available'}</p>
                                 <div className="survey-meta">
                                     <span>Created: {formatDate(survey.createdAt)}</span>
@@ -177,7 +177,7 @@ const AdminSurvey = () => {
                                         <FaEye /> View
                                     </button>
                                     <button
-                                        className="delete-button"
+                                        className="surveydelete-button"
                                         onClick={() => handleDeleteClick(survey.surveyId, survey.title)}
                                     >
                                         <FaTrash /> Delete

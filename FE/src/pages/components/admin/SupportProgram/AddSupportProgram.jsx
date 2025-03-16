@@ -24,11 +24,11 @@ function AddSupportProgram() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({ 
-      ...formData, 
+    setFormData({
+      ...formData,
       [name]: type === 'checkbox' ? checked : value
     });
-    
+
     // Clear the error for this field
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
@@ -37,63 +37,63 @@ function AddSupportProgram() {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.programCode.trim()) {
       newErrors.programCode = 'Program Code is required';
     }
-    
+
     if (!formData.programName.trim()) {
       newErrors.programName = 'Program Name is required';
     }
-    
+
     if (!formData.description.trim()) {
       newErrors.description = 'Description is required';
     }
-    
+
     if (!formData.startDate) {
       newErrors.startDate = 'Start Date is required';
     }
-    
+
     if (!formData.endDate) {
       newErrors.endDate = 'End Date is required';
     } else if (new Date(formData.endDate) <= new Date(formData.startDate)) {
       newErrors.endDate = 'End Date must be after Start Date';
     }
-    
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const formErrors = validateForm();
     if (Object.keys(formErrors).length > 0) {
       setErrors(formErrors);
       return;
     }
-    
+
     setSubmitting(true);
-    
+
     try {
       console.log("Sending data to API:", formData);
       const response = await SupportProgramService.createSupportProgram(formData);
       console.log("API response:", response);
-      
+
       toast.success('Support program created successfully');
-      
+
       setTimeout(() => {
         navigate('/adminsupport');
       }, 2000);
     } catch (error) {
       console.error('Error creating support program:', error);
-      
+
       // Show more specific error message
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(`Error: ${error.response.data.message}`);
       } else {
         toast.error('Failed to create support program');
       }
-      
+
       setSubmitting(false);
     }
   };
@@ -104,17 +104,19 @@ function AddSupportProgram() {
       <AdminSidebar />
       <div className="admin-content-container">
         <Container fluid className="content-wrapper">
+          <div className="back-link-container">
+            <Button
+              variant="link"
+              className="back-link"
+              onClick={() => navigate('/adminsupport')}
+            >
+              <i className="fas fa-arrow-left"></i> Back
+            </Button>
+          </div>
           <Card className="card-container">
             <Card.Header className="card-header-primary">
               <div className="d-flex justify-content-between align-items-center">
                 <h2 className="mb-0">Add New Support Program</h2>
-                <Button 
-                  variant="light" 
-                  className="btn-custom-sm"
-                  onClick={() => navigate('/adminsupport')}
-                >
-                  <i className="fas fa-arrow-left me-1"></i> Back
-                </Button>
               </div>
             </Card.Header>
             <Card.Body className="card-body-padded">
@@ -137,7 +139,7 @@ function AddSupportProgram() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                  
+
                   <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">Program Name*</Form.Label>
@@ -192,7 +194,7 @@ function AddSupportProgram() {
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
-                  
+
                   <Col lg={6} md={12}>
                     <Form.Group className="mb-4">
                       <Form.Label className="form-label-bold">End Date*</Form.Label>
@@ -227,17 +229,17 @@ function AddSupportProgram() {
                 </Form.Group>
 
                 <div className="button-row">
-                  <Button 
-                    variant="secondary" 
+                  <Button
+                    variant="secondary"
                     onClick={() => navigate('/adminsupport')}
                     className="btn-custom"
                     disabled={submitting}
                   >
                     <i className="fas fa-times me-1"></i> Cancel
                   </Button>
-                  <Button 
+                  <Button
                     variant="primary"
-                    type="submit" 
+                    type="submit"
                     disabled={submitting}
                     className="btn-custom"
                   >

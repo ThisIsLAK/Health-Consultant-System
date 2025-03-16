@@ -131,8 +131,8 @@
 .meta-item {
     display: flex;
     flex-direction: column;
-    text-align: center; /* Changed from left to center */
-    align-items: center; /* Added to center the content horizontally */
+    text-align: center;
+    align-items: center;
 }
 
 .meta-label {
@@ -543,4 +543,147 @@
 .pagination-button.active,
 .pagination-button:disabled {
     display: none;
+}
+
+/* New Hero Section Styles */
+.survey-page {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  color: #333;
+}
+
+.survey-hero {
+  background: linear-gradient(135deg, #6200ea 0%, #3700b3 100%);
+  color: white;
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.survey-hero::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #f8f9fa;
+  clip-path: polygon(0 100%, 100% 100%, 100% 0);
+}
+
+.survey-hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.survey-hero h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
+}
+
+.survey-hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.hero-search-container {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 50px;
+  overflow: hidden;
+  background: white;
+}
+
+.hero-search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+.hero-search-button {
+  background: #6200ea;
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s;
+}
+
+.hero-search-button:hover {
+  background: #5000ca;
+}
+
+.survey-main-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+}
+
+.survey-header-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 1rem;
+}
+
+.survey-header-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+}
+
+.survey-count {
+  color: #718096;
+  font-size: 1rem;
+}
+
+/* Responsive Adjustments for Hero Section */
+@media (max-width: 768px) {
+  .survey-hero h1 {
+    font-size: 2.25rem;
+  }
+  
+  .survey-hero p {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .survey-main-content {
+    padding: 2rem 1rem;
+  }
+  
+  .survey-hero {
+    padding: 3rem 1rem;
+  }
+  
+  .hero-search-container {
+    flex-direction: column;
+    border-radius: 12px;
+  }
+  
+  .hero-search-button {
+    width: 100%;
+    padding: 0.75rem;
+  }
+  
+  .survey-header-section {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
 }

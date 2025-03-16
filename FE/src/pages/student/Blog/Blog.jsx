@@ -186,18 +186,7 @@ const Blog = () => {
                             </>
                         )}
                     </>
-                )}
-                
-                <div className="blog-newsletter">
-                    <div className="newsletter-content">
-                        <h3>Stay Updated</h3>
-                        <p>Subscribe to our newsletter to receive the latest health and wellness articles directly to your inbox.</p>
-                        <div className="newsletter-form">
-                            <input type="email" placeholder="Your email address" className="newsletter-input" />
-                            <button className="newsletter-button">Subscribe</button>
-                        </div>
-                    </div>
-                </div>
+                )}               
             </div>
             <Footer />
         </div>
