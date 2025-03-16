@@ -7,14 +7,14 @@ import ApiService from '../../../../service/ApiService';
 import './SurveyDetail.css';
 
 const SurveyDetail = () => {
-  const { surveyId } = useParams(); // Changed from id to surveyId
+  const { surveyId } = useParams();
   const navigate = useNavigate();
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log("Survey ID from params:", surveyId); // Debug log
+    console.log("Survey ID from params:", surveyId);
     fetchSurveyDetail(surveyId);
   }, [surveyId]);
 
@@ -32,6 +32,7 @@ const SurveyDetail = () => {
           }
           const formattedSurvey = {
             id: matchedSurvey.surveyId,
+            surveyCode: matchedSurvey.surveyCode || "No code available", // Add surveyCode
             title: matchedSurvey.title || "Untitled Survey",
             description: matchedSurvey.description || "No description available",
             questions: matchedSurvey.questions.map(q => ({
@@ -49,6 +50,7 @@ const SurveyDetail = () => {
           const apiSurvey = surveys;
           const formattedSurvey = {
             id: apiSurvey.surveyId,
+            surveyCode: apiSurvey.surveyCode || "No code available", // Add surveyCode
             title: apiSurvey.title || "Untitled Survey",
             description: apiSurvey.description || "No description available",
             questions: apiSurvey.questions.map(q => ({
@@ -74,7 +76,7 @@ const SurveyDetail = () => {
   };
 
   const handleEdit = () => {
-    navigate(`/editsurvey/${surveyId}`); // Changed from id to surveyId
+    navigate(`/editsurvey/${surveyId}`);
   };
 
   if (loading) {
@@ -117,6 +119,7 @@ const SurveyDetail = () => {
           <div className="survey-info-section">
             <div className="survey-header">
               <h1 className="survey-title">{survey.title}</h1>
+              <p className="survey-code">Survey Code: {survey.surveyCode}</p> {/* Display surveyCode */}
             </div>
             <div className="survey-description">
               <p>{survey.description}</p>

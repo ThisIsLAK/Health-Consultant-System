@@ -80,22 +80,22 @@ function App() {
         <Route path='/login' element={<LoginSignup />} />
 
         {/* Student/User Routes */}
-        <Route path='/' element={<ProtectedRoute element={<Homepage />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/profile' element={<ProtectedRoute element={<UserProfile />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} />} allowGuest={true}/>
-        <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/blog/:blogCode' element={<ProtectedRoute element={<BlogDetail />} allowedRoles={['USER']} allowGuest={true}/>} />
+        <Route path='/' element={<ProtectedRoute element={<Homepage />} allowedRoles={['USER']} />} />
+        <Route path='/profile' element={<ProtectedRoute element={<UserProfile />} allowedRoles={['USER']} />} />
+        <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} />} />
+        <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} />} />
+        <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} />} />
+        <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} allowedRoles={['USER']} />} />
+        <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} />} />
+        <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} />} />
+        <Route path='/editprofile' element={<ProtectedRoute element={<EditProfile />} allowedRoles={['USER']} />} />
+        <Route path='/blog' element={<ProtectedRoute element={<Blog />} allowedRoles={['USER']} />} />
+        <Route path='/blog/:blogCode' element={<ProtectedRoute element={<BlogDetail />} allowedRoles={['USER']} />} />
         <Route path="/psychologists" element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['USER']} />} />
-        <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/booking' element={<ProtectedRoute element={<PsychologistBooking />} allowedRoles={['USER']} allowGuest={true}/>} />
-        <Route path='/appointments' element={<ProtectedRoute element={<StudentAppointmentHistory />} allowedRoles={['USER']} allowGuest={true}/>} />
+        <Route path="/tests" element={<ProtectedRoute element={<SurveyList />} allowedRoles={['USER']} />} />
+        <Route path="/surveytake/:surveyId" element={<ProtectedRoute element={<SurveyTake />} allowedRoles={['USER']} />} />
+        <Route path='/booking' element={<ProtectedRoute element={<PsychologistBooking />} allowedRoles={['USER']} />} />
+        <Route path='/appointments' element={<ProtectedRoute element={<StudentAppointmentHistory />} allowedRoles={['USER']} />} />
 
 
         {/* Manager Routes */}
@@ -130,7 +130,7 @@ function App() {
         <Route path='/createuser' element={<ProtectedRoute element={<AdminCreateUser />} allowedRoles={['ADMIN']} />} />
         <Route path='/addsurvey' element={<ProtectedRoute element={<AddSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminsurvey' element={<ProtectedRoute element={<AdminSurvey />} allowedRoles={['ADMIN']} />} />
-        <Route path='/surveydetail' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} />
+        <Route path='/surveydetail/:surveyId' element={<ProtectedRoute element={<SurveyDetail />} allowedRoles={['ADMIN']} />} /> 
         <Route path='/editsurvey/:surveyId' element={<ProtectedRoute element={<EditSurvey />} allowedRoles={['ADMIN']} />} />
         <Route path='/addblog' element={<ProtectedRoute element={<AddBlog />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminblog' element={<ProtectedRoute element={<AdminBlog />} allowedRoles={['ADMIN']} />} />

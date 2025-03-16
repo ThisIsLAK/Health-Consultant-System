@@ -14,6 +14,7 @@ const AdminSurvey = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
     const surveysPerPage = 6;
 
     useEffect(() => {
@@ -65,6 +66,10 @@ const AdminSurvey = () => {
                 handleDeleteConfirm(surveyId);
             }
         });
+    };
+
+    const handleDeleteCancel = () => {
+        setDeleteConfirm({ show: false, id: null });
     };
 
     const handleDeleteConfirm = async (surveyId) => {
@@ -146,7 +151,7 @@ const AdminSurvey = () => {
             <AdminHeader />
             <AdminSidebar />
             <main id='main' className='main'>
-                <div className="survey-header">
+                <div className="adminsurvey-header">
                     <div className="survey-header-content">
                         <PageTitle page="Survey Management" />
                         <div className="survey-counter">
@@ -158,6 +163,19 @@ const AdminSurvey = () => {
                         <FaPlus /> Add New Survey
                     </button>
                 </div>
+
+                {deleteConfirm.show && (
+                    <div className="delete-confirmation">
+                        <div className="delete-confirmation-content">
+                            <h3>Confirm deletion</h3>
+                            <p>Are you sure you want to delete this survey?</p>
+                            <div className="delete-confirmation-actions">
+                                <button className="cancel-button" onClick={handleDeleteCancel}>Cancel</button>
+                                <button className="confirm-delete-button" onClick={() => handleDeleteConfirm(deleteConfirm.id)}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="survey-grid">
                     {currentSurveys.map((survey) => (
@@ -203,14 +221,14 @@ const AdminSurvey = () => {
 
                 {totalPages > 1 && (
                     <div className="pagination">
-                        <button 
-                            onClick={() => paginate(currentPage - 1)} 
+                        <button
+                            onClick={() => paginate(currentPage - 1)}
                             disabled={currentPage === 1}
                             className="page-btn"
                         >
                             &laquo;
                         </button>
-                        
+
                         {[...Array(totalPages).keys()].map(number => (
                             <button
                                 key={number + 1}
@@ -220,9 +238,9 @@ const AdminSurvey = () => {
                                 {number + 1}
                             </button>
                         ))}
-                        
-                        <button 
-                            onClick={() => paginate(currentPage + 1)} 
+
+                        <button
+                            onClick={() => paginate(currentPage + 1)}
                             disabled={currentPage === totalPages}
                             className="page-btn"
                         >
