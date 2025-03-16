@@ -287,18 +287,35 @@
 
 /* Survey results styles */
 .psy-results-container {
-  max-height: 600px;
+  max-height: 700px;
   overflow-y: auto;
   padding-right: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
 }
 
-.psy-results-container h4 {
-  margin-top: 0;
+.psy-results-header {
   margin-bottom: 1.5rem;
-  font-size: 1.1rem;
-  color: #111827;
   padding-bottom: 1rem;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.psy-results-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.psy-results-user i {
+  font-size: 1.5rem;
+  color: #2563eb;
+}
+
+.psy-results-user h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #1f2937;
 }
 
 .psy-survey-result-card {
@@ -378,6 +395,286 @@
   color: #4b5563;
 }
 
+/* Survey scores styles - updated card layout */
+.psy-survey-scores {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.psy-survey-scores h4 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  color: #111827;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.psy-scores-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.psy-score-card {
+  background: white;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.psy-score-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.psy-score-header {
+  padding: 1.25rem;
+  background-color: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.psy-survey-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.psy-survey-id {
+  font-size: 0.85rem;
+  color: #4b5563;
+  font-weight: 500;
+  display: block;
+  word-break: break-all;
+  font-family: monospace;
+}
+
+.psy-total-score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem;
+  background-color: white;
+}
+
+.psy-score-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.psy-score-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: white;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  width: 3.5rem;
+  height: 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+}
+
+.psy-evaluation {
+  margin-top: 0;
+  padding: 1.25rem;
+  font-size: 0.9rem;
+  border-top: 1px solid #e5e7eb;
+  border-left: none;
+  border-radius: 0;
+}
+
+.psy-evaluation-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  gap: 0.5rem;
+}
+
+.psy-evaluation p {
+  margin: 0;
+  line-height: 1.6;
+  color: #4b5563;
+}
+
+.evaluation-good {
+  background-color: #f0fdf4;
+  border-left: none;
+}
+
+.evaluation-good .psy-evaluation-header {
+  color: #16a34a;
+}
+
+.evaluation-good .psy-score-value {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+}
+
+.evaluation-mild {
+  background-color: #fefce8;
+  border-left: none;
+}
+
+.evaluation-mild .psy-evaluation-header {
+  color: #ca8a04;
+}
+
+.evaluation-mild .psy-score-value {
+  background: linear-gradient(135deg, #eab308, #ca8a04);
+}
+
+.evaluation-moderate {
+  background-color: #fff7ed;
+  border-left: none;
+}
+
+.evaluation-moderate .psy-evaluation-header {
+  color: #ea580c;
+}
+
+.evaluation-moderate .psy-score-value {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+}
+
+.evaluation-severe {
+  background-color: #fef2f2;
+  border-left: none;
+}
+
+.evaluation-severe .psy-evaluation-header {
+  color: #dc2626;
+}
+
+.evaluation-severe .psy-score-value {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Detailed Results Section */
+.psy-detailed-results {
+  margin-top: 2rem;
+}
+
+.psy-detailed-results h4 {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+  font-size: 1.1rem;
+  color: #111827;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.psy-survey-result-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.psy-survey-result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.psy-survey-result-header h5 {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #111827;
+  flex: 1;
+}
+
+.psy-survey-id-badge {
+  font-size: 0.75rem;
+  background-color: #f3f4f6;
+  color: #6b7280;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+
+.psy-survey-description {
+  margin-bottom: 1.5rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 0.75rem;
+  background-color: #f9fafb;
+  border-radius: 0.375rem;
+  border-left: 3px solid #d1d5db;
+}
+
+.psy-answers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.psy-answer-item {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.psy-answer-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.psy-question {
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.psy-question-number {
+  display: inline-block;
+  min-width: 1.75rem;
+  font-weight: 600;
+  color: #111827;
+  margin-right: 0.25rem;
+}
+
+.psy-answer {
+  background: #f9fafb;
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.9rem;
+  color: #111827;
+  position: relative;
+}
+
+.psy-answer-label {
+  font-weight: 500;
+  color: #4b5563;
+  margin-right: 0.5rem;
+}
+
+.psy-score {
+  position: absolute;
+  right: 1rem;
+  top: 0.75rem;
+  background: #f3f4f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .psy-program-detail-container {
@@ -410,5 +707,13 @@
     overflow-x: auto;
     white-space: nowrap;
     padding-bottom: 0.25rem;
+  }
+
+  .psy-scores-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .psy-evaluation {
+    padding: 0.75rem;
   }
 }

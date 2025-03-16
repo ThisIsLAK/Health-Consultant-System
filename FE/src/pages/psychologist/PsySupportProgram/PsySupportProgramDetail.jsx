@@ -155,6 +155,65 @@ const PsySupportProgramDetail = () => {
     return participant ? participant.name : `User ${userId}`;
   };
 
+  // Display survey scores 
+  const renderSurveyScores = (results) => {
+    if (!results || results.length === 0) return null;
+    
+    return (
+      <div className="psy-survey-scores">
+        <h4>Summary of Survey Results</h4>
+        <div className="psy-scores-container">
+          {results.map((result, index) => {
+            // Evaluation message based on score
+            let evaluationMessage = "";
+            let evaluationClass = "";
+            let evaluationIcon = "bi-clipboard-check";
+            
+            if (result.score >= 0 && result.score <= 4) {
+              evaluationMessage = "No anxiety or depression symptoms detected. Your mental health appears to be in good condition.";
+              evaluationClass = "evaluation-good";
+              evaluationIcon = "bi-emoji-smile";
+            } else if (result.score >= 5 && result.score <= 9) {
+              evaluationMessage = "Mild anxiety or depression detected. Consider consulting with a mental health professional.";
+              evaluationClass = "evaluation-mild";
+              evaluationIcon = "bi-emoji-neutral";
+            } else if (result.score >= 10 && result.score <= 14) {
+              evaluationMessage = "Moderate anxiety or depression detected. Professional support is recommended.";
+              evaluationClass = "evaluation-moderate";
+              evaluationIcon = "bi-emoji-frown";
+            } else if (result.score >= 15) {
+              evaluationMessage = "Severe anxiety or depression detected. Please consult with a mental health specialist as soon as possible.";
+              evaluationClass = "evaluation-severe";
+              evaluationIcon = "bi-exclamation-triangle";
+            }
+            
+            return (
+              <div key={index} className={`psy-score-card ${evaluationClass}`}>
+                <div className="psy-score-header">
+                  <span className="psy-survey-label">Survey ID:</span>
+                  <span className="psy-survey-id">{result.surveyId}</span>
+                </div>
+                <div className="psy-total-score">
+                  <div className="psy-score-label">Total Score</div>
+                  <div className="psy-score-value">{result.score}</div>
+                </div>
+                {evaluationMessage && (
+                  <div className={`psy-evaluation ${evaluationClass}`}>
+                    <div className="psy-evaluation-header">
+                      <i className={`bi ${evaluationIcon}`}></i>
+                      <span>Evaluation</span>
+                    </div>
+                    <p>{evaluationMessage}</p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <PsychologistHeader />
@@ -319,32 +378,50 @@ const PsySupportProgramDetail = () => {
                       </div>
                     ) : (
                       <div className="psy-results-container">
-                        <h4>Results for {getUserName(selectedParticipant)}</h4>
-                        
-                        {Object.entries(groupSurveyResults(surveyResults[selectedParticipant])).map(([surveyId, survey]) => (
-                          <div key={surveyId} className="psy-survey-result-card">
-                            <h5>{survey.title}</h5>
-                            {survey.description && <p className="psy-survey-description">{survey.description}</p>}
-                            
-                            <div className="psy-answers-list">
-                              {survey.answers.map((answer, index) => (
-                                <div key={index} className="psy-answer-item">
-                                  <div className="psy-question">
-                                    <span className="psy-question-number">Q{index + 1}:</span> 
-                                    {answer.questionText}
-                                  </div>
-                                  <div className="psy-answer">
-                                    <span className="psy-answer-label">Answer:</span> 
-                                    {answer.answerText}
-                                    {typeof answer.score === 'number' && (
-                                      <span className="psy-score">Score: {answer.score}</span>
-                                    )}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
+                        <div className="psy-results-header">
+                          <div className="psy-results-user">
+                            <i className="bi bi-person-check-fill"></i>
+                            <h4>Results for {getUserName(selectedParticipant)}</h4>
                           </div>
-                        ))}
+                        </div>
+                        
+                        {/* Display the total scores from the new endpoint */}
+                        {renderSurveyScores(surveyResults[selectedParticipant])}
+                        
+                        {/* Keep the existing detailed results if needed */}
+                        {surveyResults[selectedParticipant].answerDetails && (
+                          <div className="psy-detailed-results">
+                            <h4>Detailed Survey Responses</h4>
+                            {Object.entries(groupSurveyResults(surveyResults[selectedParticipant].answerDetails)).map(([surveyId, survey]) => (
+                              <div key={surveyId} className="psy-survey-result-card">
+                                <div className="psy-survey-result-header">
+                                  <h5>{survey.title}</h5>
+                                  <span className="psy-survey-id-badge">ID: {surveyId}</span>
+                                </div>
+                                
+                                {survey.description && <p className="psy-survey-description">{survey.description}</p>}
+                                
+                                <div className="psy-answers-list">
+                                  {survey.answers.map((answer, index) => (
+                                    <div key={index} className="psy-answer-item">
+                                      <div className="psy-question">
+                                        <span className="psy-question-number">Q{index + 1}:</span> 
+                                        {answer.questionText}
+                                      </div>
+                                      <div className="psy-answer">
+                                        <span className="psy-answer-label">Response:</span> 
+                                        {answer.answerText}
+                                        {typeof answer.score === 'number' && (
+                                          <span className="psy-score">Score: {answer.score}</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
