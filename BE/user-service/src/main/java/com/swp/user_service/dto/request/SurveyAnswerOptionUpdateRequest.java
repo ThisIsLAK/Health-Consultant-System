@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class SurveyAnswerOptionUpdateRequest {
     String optionId;  // Có thể null nếu là lựa chọn mới
     String optionText;
-    int score;
+    Integer score;
     Boolean active;
 }
