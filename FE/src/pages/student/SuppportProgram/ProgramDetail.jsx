@@ -5,7 +5,6 @@ import axios from "axios";
 import "./ProgramDetail.css";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
-import { FaArrowLeft, FaCalendarAlt, FaClipboardList, FaUserFriends } from 'react-icons/fa';
 
 const ProgramDetail = () => {
   const { programCode } = useParams();
@@ -146,108 +145,91 @@ const ProgramDetail = () => {
 
   if (loading) {
     return (
-      <div className="program-page">
+      <>
         <Navbar />
-        <div className="program-container">
+        <div className="program-detail-container">
           <div className="loading-container">
-            <Spinner animation="border" role="status" className="loading-spinner" />
+            <Spinner animation="border" role="status" />
             <p>Loading program details...</p>
           </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   if (error || !program) {
     return (
-      <div className="program-page">
+      <>
         <Navbar />
-        <div className="program-container">
+        <div className="program-detail-container">
           <div className="error-container">
             <h3>Program Not Found</h3>
             <p>{error || "Unable to load program details"}</p>
-            <Button 
-              variant="primary" 
-              onClick={() => navigate("/support")}
-              className="mt-3"
-            >
+            <Button variant="primary" onClick={() => navigate("/support")}>
               Back to Programs
             </Button>
           </div>
         </div>
         <Footer />
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="program-page">
+    <>
       <Navbar />
-      <div className="program-container">
-        <div className="program-hero">
+      <div className="program-detail-container">
+        <div className="program-header">
           <Button 
+            variant="outline-primary" 
             className="back-button"
             onClick={() => navigate("/support")}
           >
-            <FaArrowLeft /> Back to Programs
+            ← Back to Programs
           </Button>
           
           <h1 className="program-title">{program?.programName || 'Program'}</h1>
           <p className="program-code">Program Code: {program?.programCode || 'Unknown'}</p>
+          {/* Debug info section removed */}
         </div>
         
-        <div className="program-content">
+        <div className="program-body">
           <div className="program-section">
-            <h3><FaClipboardList /> Description</h3>
+            <h3>Description</h3>
             <p className="program-description">{program?.description || 'No description available'}</p>
           </div>
           
           <div className="program-section">
-            <h3><FaCalendarAlt /> Program Timeline</h3>
+            <h3>Program Timeline</h3>
             <div className="program-dates">
-              <div className="date-card">
-                <div className="date-label">Start Date</div>
-                <div className="date-value">{formatDate(program?.startDate)}</div>
-              </div>
-              
-              <div className="date-card">
-                <div className="date-label">End Date</div>
-                <div className="date-value">{formatDate(program?.endDate)}</div>
-              </div>
-              
+              <p><strong>Start Date:</strong> {formatDate(program?.startDate)}</p>
+              <p><strong>End Date:</strong> {formatDate(program?.endDate)}</p>
+              {/* Only show participants if available in the data */}
               {program?.registeredUsers !== null && program?.registeredUsers !== undefined && (
-                <div className="date-card">
-                  <div className="date-label">Current Participants</div>
-                  <div className="date-value participants">
-                    <FaUserFriends /> {program.registeredUsers}
-                  </div>
-                </div>
+                <p><strong>Current Participants:</strong> {program.registeredUsers}</p>
               )}
             </div>
           </div>
           
           {registrationStatus && registrationStatus.success && (
-            <div className="program-section">
-              <Alert variant="success" className="alert alert-success">
-                <h4 className="alert-heading">Registration Successful!</h4>
-                <p>You have successfully registered for this program.</p>
-              </Alert>
-            </div>
+            <Alert variant="success" className="mt-3">
+              <Alert.Heading>Registration Successful!</Alert.Heading>
+              <p>You have successfully registered for this program.</p>
+            </Alert>
           )}
           
           {registrationStatus && registrationStatus.error && (
-            <div className="program-section">
-              <Alert variant="danger" className="alert alert-danger">
-                <h4 className="alert-heading">Registration Failed</h4>
-                <p>{registrationStatus.error}</p>
-              </Alert>
-            </div>
+            <Alert variant="danger" className="mt-3">
+              <Alert.Heading>Registration Failed</Alert.Heading>
+              <p>{registrationStatus.error}</p>
+            </Alert>
           )}
           
           <div className="program-registration">
             <Button 
               variant="primary" 
+              size="lg" 
               className="register-button"
               onClick={handleRegister}
               disabled={registrationStatus && (registrationStatus.loading || registrationStatus.success)}
@@ -274,7 +256,7 @@ const ProgramDetail = () => {
         </div>
       </div>
       <Footer />
-    </div>
+    </>
   );
 };
 

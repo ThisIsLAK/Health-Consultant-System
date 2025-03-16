@@ -358,10 +358,7 @@ const generateTimeSlots = () => {
       <>
         <Navbar />
         <LoginPrompt 
-          featureName="psychologist appointments"
-          title="Ready to speak with a mental health professional?"
-          message="Sign in to book appointments with our qualified psychologists. Get the support you need on your schedule."
-          buttonText="Sign In to Book" 
+          message="You need to be logged in to book appointments with psychologists. Please log in to access this feature."
         />
         <Footer />
       </>

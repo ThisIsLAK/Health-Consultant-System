@@ -4,8 +4,6 @@ import Navbar from '../../components/homepage/Navbar';
 import Footer from "../../components/homepage/Footer";
 import ApiService from '../../../service/ApiService';
 import LoginPrompt from '../../../components/LoginPrompt';
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
@@ -13,8 +11,6 @@ const Blog = () => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [blogsPerPage] = useState(5);
 
     useEffect(() => {
         // Check if user is authenticated
@@ -55,24 +51,9 @@ const Blog = () => {
         ? blogs.filter(blog => {
             const searchTermLower = searchTerm.toLowerCase();
             return blog.title?.toLowerCase().includes(searchTermLower) ||
-                blog.blogCode?.toLowerCase().includes(searchTermLower) ||
-                blog.description?.toLowerCase().includes(searchTermLower);
+                blog.blogCode?.toLowerCase().includes(searchTermLower);
         })
         : [];
-
-    // Get current blogs for pagination
-    const indexOfLastBlog = currentPage * blogsPerPage;
-    const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-    const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
-
-    // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-    // Handle search input change
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-        setCurrentPage(1); // Reset to first page on search
-    };
 
     // If not authenticated, render the login prompt
     if (!isAuthenticated) {
@@ -80,127 +61,105 @@ const Blog = () => {
             <>
                 <Navbar />
                 <LoginPrompt 
-                    featureName="blog articles"
-                    title="Interested in mental health resources?"
-                    message="Our blog contains valuable articles, tips, and insights from mental health professionals. Sign in to access our full library of content."
-                    buttonText="Sign In to Read"
+                    message="You need to be logged in to view blogs. Please log in to access this content."
                 />
                 <Footer />
             </>
         );
     }
 
-    return (
-        <div className="blog-page">
-            <Navbar />
-            <div className="blog-hero">
-                <div className="blog-hero-content">
-                    <h1>Health & Wellness Blog</h1>
-                    <p>Insights, tips and expert advice to improve your health and wellbeing</p>
-                    <div className="hero-search-container">
-                        <input
-                            type="text"
-                            placeholder="Search for articles..."
-                            value={searchTerm}
-                            onChange={handleSearchChange}
-                            className="hero-search-input"
-                        />
-                        <button className="hero-search-button">
-                            <i className="fas fa-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
+    if (loading) {
+        return <div className="loading-spinner">Loading blogs...</div>;
+    }
 
-            <div className="blog-main-content">
-                {loading ? (
-                    <div className="loading-spinner">
-                        <div className="spinner"></div>
-                        <p>Loading articles...</p>
-                    </div>
-                ) : error ? (
-                    <div className="error-container">
-                        <p className="error">{error}</p>
-                        <button className="retry-button" onClick={fetchBlogs}>
-                            Try Again
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        <div className="blog-header-section">
-                            <h2>Latest Articles</h2>
-                            <p className="blog-count">{filteredBlogs.length} article{filteredBlogs.length !== 1 ? 's' : ''} available</p>
-                        </div>
-                        
-                        {filteredBlogs.length === 0 ? (
-                            <div className="no-blogs">
-                                <p>No articles found matching your search. Please try a different keyword.</p>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="blog-layout">
-                                    {currentBlogs.map((blog, index) => (
-                                        <div key={blog.blogId || blog.id || blog.blogCode} 
-                                            className={`blog-item ${index === 0 && currentPage === 1 ? 'blog-featured' : ''}`}>
-                                            <div className="blog-image">
-                                                <img
-                                                    src={blog.image || "https://www.devicemagic.com/wp-content/uploads/2021/06/AdobeStock_131488016-2.jpg"}
-                                                    alt={blog.title || "Blog Image"}
-                                                />
-                                            </div>
-                                            <div className="blog-details">
-                                                <h3 className="blog-title">{blog.title || "No Title"}</h3>
-                                                <p className="blog-description">{blog.description?.substring(0, 150) + "..." || "No description available"}</p>
-                                                <div className="blog-footer">
-                                                    <a href={`/blog/${blog.blogCode}`} className="read-more-link">
-                                                        Read Article
-                                                        <span className="read-more-icon">→</span>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))}
+    if (error) {
+        return <div className="error-message">{error}</div>;
+    }
+
+    return (
+        <>
+            <Navbar />
+            <div className="notice-header">
+                <h1>Latest Blogs For You</h1>
+                <p>Stay updated with our latest news and program updates.</p>
+            </div>
+            <div className="blog-container">
+                <div className="blog-content">
+                    {/* Search Section */}
+                    <div className="blog-filters">
+                        <div className="search-container">
+                            <div className="search-wrapper">
+                                <input
+                                    type="text"
+                                    placeholder="Search by title or blog code..."
+                                    className="search-input"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                                <div className="search-icon">
+                                    <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+                                    </svg>
                                 </div>
-                                
-                                {filteredBlogs.length > blogsPerPage && (
-                                    <div className="pagination-section">
-                                        <div className="pagination-info">
-                                            Showing {currentBlogs.length > 0 ? `${indexOfFirstBlog + 1}-${Math.min(indexOfLastBlog, filteredBlogs.length)}` : "0"} of {filteredBlogs.length} articles
-                                        </div>
-                                        
-                                        <Stack spacing={2}>
-                                            <Pagination 
-                                                count={Math.ceil(filteredBlogs.length / blogsPerPage)} 
-                                                page={currentPage}
-                                                onChange={(event, value) => paginate(value)}
-                                                color="primary"
-                                                size="large"
-                                                showFirstButton
-                                                showLastButton
-                                                siblingCount={1}
-                                                className="mui-pagination"
-                                            />
-                                        </Stack>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Blog Grid */}
+                    <div className="blog-grid">
+                        {filteredBlogs.length > 0 ? (
+                            filteredBlogs.map(blog => (
+                                <div className="related-blog-card" key={blog.id || blog.blogCode}>
+                                    <div className="related-blog-image">
+                                        <img
+                                            src={blog.image || "https://www.devicemagic.com/wp-content/uploads/2021/06/AdobeStock_131488016-2.jpg"}
+                                            alt={blog.title || blog.description || "Blog Image"}
+                                        />
                                     </div>
-                                )}
-                            </>
+                                    <div className="related-blog-content">
+                                        <h3>{blog.title || blog.description || "No Title"}</h3>
+                                        <p>{blog.description?.substring(0, 100) + "..." || "No description available"}</p>                                      
+                                        <a
+                                            href={`/blog/${blog.blogCode}`}
+                                            className="read-more-link"
+                                        >
+                                            Read More
+                                        </a>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="no-blogs-message">
+                                No blogs found matching your search.
+                            </div>
                         )}
-                    </>
-                )}
-                
-                <div className="blog-newsletter">
-                    <div className="newsletter-content">
-                        <h3>Stay Updated</h3>
-                        <p>Subscribe to our newsletter to receive the latest health and wellness articles directly to your inbox.</p>
-                        <div className="newsletter-form">
-                            <input type="email" placeholder="Your email address" className="newsletter-input" />
-                            <button className="newsletter-button">Subscribe</button>
+                    </div>
+
+                    {/* Newsletter Section */}
+                    <div className="newsletter">
+                        <div className="newsletter-container">
+                            <div className="newsletter-content">
+                                <h2 className="newsletter-title">Subscribe to our newsletter</h2>
+                                <p className="newsletter-description">
+                                    Get the latest mental health tips, resources, and articles delivered to your inbox.
+                                </p>
+                                <div className="newsletter-form">
+                                    <input
+                                        type="email"
+                                        placeholder="Enter your email"
+                                        className="newsletter-input"
+                                    />
+                                    <button className="newsletter-button">
+                                        Subscribe
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <Footer />
-        </div>
+        </>
     );
 };
 
