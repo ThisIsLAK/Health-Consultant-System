@@ -977,7 +977,7 @@ export default class ApiService {
 
             const response = await axios.post(
                 `${this.BASE_URL}/identity/users/submit-answers`,
-                answerData.answers,  // Lấy trực tiếp mảng thay vì bọc trong { answers: [...] }
+                answerData, // Gửi trực tiếp mảng answerData
                 { headers: this.getHeader() }
             );
 
