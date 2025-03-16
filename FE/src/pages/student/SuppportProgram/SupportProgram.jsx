@@ -95,7 +95,10 @@ const SupportProgram = () => {
       <>
         <Navbar />
         <LoginPrompt 
-          message="You need to be logged in to view support programs. Please log in to access this feature."
+          featureName="support programs"
+          title="Discover programs designed for your wellbeing"
+          message="Our support programs are tailored to help you navigate life's challenges. Sign in to explore programs that match your needs."
+          buttonText="Sign In to Explore"
         />
         <Footer />
       </>
@@ -103,108 +106,106 @@ const SupportProgram = () => {
   }
 
   return (
-    <div>
+    <div className="support-page">
       <Navbar/>
-      <div className="support-container">
-        <div className="support-header">
+      <div className="support-hero">
+        <div className="support-hero-content">
           <h1>Support Programs</h1>
-          <p>Find the right mental health support program to help you navigate life's challenges.</p>
+          <p>Find the right mental health support program to help you navigate life's challenges</p>
+          <div className="hero-search-container">
+            <input
+              type="text"
+              placeholder="Search for programs..."
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="hero-search-input"
+            />
+            <button className="hero-search-button">
+              <i className="fas fa-search"></i>
+            </button>
+          </div>
         </div>
-        <div className="support-content">
-          {loading ? (
-            <div className="loading-spinner">
-              <div className="spinner"></div>
-              <p>Loading programs...</p>
+      </div>
+
+      <div className="support-main-content">
+        {loading ? (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Loading programs...</p>
+          </div>
+        ) : (
+          <>
+            <div className="support-header-section">
+              <h2>Our Support Services</h2>
+              <p className="support-count">{filteredPrograms.length} program{filteredPrograms.length !== 1 ? 's' : ''} available</p>
             </div>
-          ) : (
-            <>
-              <div className="programs-overview-container">
-                <div className="programs-overview">
-                  <h2>Our Support Services</h2>
-                  <p className="overview-text">You have {filteredPrograms.length} program(s) available</p>
-                </div>
-                
-                <div className="search-container">
-                  <div className="search-input-wrapper">
-                    <input
-                      type="text"
-                      placeholder="Search programs..."
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      className="search-input"
-                    />
-                    <i className="search-icon fas fa-search"></i>
-                  </div>
-                </div>
+            
+            {filteredPrograms.length === 0 ? (
+              <div className="no-programs">
+                <p>No support programs found matching your search. Please try a different keyword.</p>
               </div>
-              
-              {filteredPrograms.length === 0 ? (
-                <div className="no-programs">
-                  <p>No support programs found matching your search. Please try a different keyword.</p>
-                </div>
-              ) : (
-                <>
-                  <div className="program-grid">
-                    {currentPrograms.map((program) => (
-                      <div key={program.programCode} className="program-card">
-                        <div className="program-card-header">
-                          <h3>{program.programName}</h3>
-                        </div>
-                        <div className="program-card-body">
-                          <p className="program-description">
-                            {program.description && program.description.length > 120
-                              ? `${program.description.substring(0, 120)}...`
-                              : program.description || "No description available."}
-                          </p>
-                          <div className="program-meta">
-                            <div className="meta-item">
-                              <span className="meta-label">Start Date:</span>
-                              <span className="meta-value">{formatDate(program.startDate)}</span>
-                            </div>
-                            <div className="meta-item">
-                              <span className="meta-label">End Date:</span>
-                              <span className="meta-value">{formatDate(program.endDate)}</span>
-                            </div>
+            ) : (
+              <>
+                <div className="program-grid">
+                  {currentPrograms.map((program) => (
+                    <div key={program.programCode} className="program-card">
+                      <div className="program-card-header">
+                        <h3>{program.programName}</h3>
+                      </div>
+                      <div className="program-card-body">
+                        <p className="program-description">
+                          {program.description && program.description.length > 120
+                            ? `${program.description.substring(0, 120)}...`
+                            : program.description || "No description available."}
+                        </p>
+                        <div className="program-meta">
+                          <div className="meta-item">
+                            <span className="meta-label">Start Date:</span>
+                            <span className="meta-value">{formatDate(program.startDate)}</span>
+                          </div>
+                          <div className="meta-item">
+                            <span className="meta-label">End Date:</span>
+                            <span className="meta-value">{formatDate(program.endDate)}</span>
                           </div>
                         </div>
-                        <div className="program-card-footer">
-                          <Link
-                            to={`/support/${program.programCode}`}
-                            className="view-program-btn"
-                          >
-                            Learn More
-                          </Link>
-                        </div>
                       </div>
-                    ))}
-                  </div>
-                  
-                  {filteredPrograms.length > programsPerPage && (
-                    <div className="pagination-container-mui">
-                      <div className="pagination-info">
-                        Showing {currentPrograms.length > 0 ? `${indexOfFirstProgram + 1}-${Math.min(indexOfLastProgram, filteredPrograms.length)}` : "0"} of {filteredPrograms.length} programs
+                      <div className="program-card-footer">
+                        <Link
+                          to={`/support/${program.programCode}`}
+                          className="view-program-btn"
+                        >
+                          Learn More
+                        </Link>
                       </div>
-                      
-                      <Stack spacing={2}>
-                        <Pagination 
-                          count={Math.ceil(filteredPrograms.length / programsPerPage)} 
-                          page={currentPage}
-                          onChange={handlePageChange}
-                          color="primary"
-                          size="large"
-                          showFirstButton
-                          showLastButton
-                          siblingCount={1}
-                          className="mui-pagination"
-                        />
-                      </Stack>
                     </div>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </div>
+                  ))}
+                </div>
+                
+                {filteredPrograms.length > programsPerPage && (
+                  <div className="pagination-container-mui">
+                    <div className="pagination-info">
+                      Showing {currentPrograms.length > 0 ? `${indexOfFirstProgram + 1}-${Math.min(indexOfLastProgram, filteredPrograms.length)}` : "0"} of {filteredPrograms.length} programs
+                    </div>
+                    
+                    <Stack spacing={2}>
+                      <Pagination 
+                        count={Math.ceil(filteredPrograms.length / programsPerPage)} 
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        color="primary"
+                        size="large"
+                        showFirstButton
+                        showLastButton
+                        siblingCount={1}
+                        className="mui-pagination"
+                      />
+                    </Stack>
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
       <Footer/>
     </div>

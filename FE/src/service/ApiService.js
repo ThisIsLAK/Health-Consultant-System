@@ -614,8 +614,8 @@ export default class ApiService {
      */
     static async createSurvey(surveyData) {
         try {
-            if (!surveyData.title || !surveyData.description || !surveyData.questions || !surveyData.surveyCode) {
-                throw new Error("Survey title, description, questions, and surveyCode are required");
+            if (!surveyData.title || !surveyData.description || !surveyData.questions) {
+                throw new Error("Survey title, description, and questions are required");
             }
 
             // Validate questions and answer options
@@ -684,171 +684,6 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch surveys"
-            };
-        }
-    }
-
-    /**
- * Get a survey by surveyId
- * @param {string} surveyId - The ID of the survey to fetch
- * @returns {Promise<Object>} Response object with status and data/message
- */
-    static async getSurveyById(surveyId) {
-        try {
-            if (!surveyId) {
-                throw new Error("Survey ID is required");
-            }
-
-            console.log("Fetching survey with surveyId:", surveyId);
-
-            const response = await axios.get(
-                `${this.BASE_URL}/identity/admin/findsurveybyid/${surveyId}`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Fetched survey details:", response.data);
-
-            // Check if response follows the {code, message, result} format
-            if (response.data && response.data.result !== undefined) {
-                return {
-                    status: 200,
-                    data: response.data.result,
-                    message: "Survey fetched successfully"
-                };
-            } else {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey fetched successfully"
-                };
-            }
-        } catch (error) {
-            console.error("Error fetching survey:", error);
-            console.log(surveyId);
-
-
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch survey"
-            };
-        }
-    }
-
-    /**
- * Update an existing survey by surveyId
- * @param {string} surveyId - The ID of the survey to update
- * @param {Object} surveyData - The updated survey data containing title, description, questions, and surveyCode
- * @param {string} surveyData.surveyCode - The survey code
- * @param {string} surveyData.title - The title of the survey
- * @param {string} surveyData.description - The description of the survey
- * @param {Array} surveyData.questions - Array of questions with questionText and answerOptions
- * @param {string} surveyData.questions[].questionText - The text of the question
- * @param {Array} surveyData.questions[].answerOptions - Array of answer options
- * @param {string} surveyData.questions[].answerOptions[].optionText - The text of the answer option
- * @param {number} surveyData.questions[].answerOptions[].score - The score for the answer option
- * @returns {Promise<Object>} Response object with status, data, and message
- */
-    static async updateSurvey(surveyId, surveyData) {
-        try {
-            // Validate required fields
-            if (!surveyId) {
-                throw new Error("Survey ID is required for update");
-            }
-            if (!surveyData.title || !surveyData.description || !surveyData.questions || !surveyData.surveyCode) {
-                throw new Error("Survey title, description, questions, and surveyCode are required");
-            }
-
-            // Validate questions and answer options
-            surveyData.questions.forEach((question, index) => {
-                if (!question.questionText || !question.answerOptions) {
-                    throw new Error(`Question at index ${index} must have questionText and answerOptions`);
-                }
-                question.answerOptions.forEach((option, optIndex) => {
-                    if (!option.optionText || option.score === undefined) {
-                        throw new Error(`Answer option at index ${optIndex} in question ${index} must have optionText and score`);
-                    }
-                });
-            });
-
-            console.log("Updating survey with surveyId:", surveyId);
-            console.log("Update data:", surveyData);
-
-            // Send PUT request to update the survey
-            const response = await axios.put(
-                `${this.BASE_URL}/identity/admin/updatesurvey/${surveyId}`,
-                surveyData,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Update survey response:", response.data);
-
-            // Check if response follows the {code, message, result} format
-            if (response.data && response.data.result !== undefined) {
-                return {
-                    status: 200,
-                    data: response.data.result,
-                    message: "Survey updated successfully"
-                };
-            } else {
-                return {
-                    status: 200,
-                    data: response.data,
-                    message: "Survey updated successfully"
-                };
-            }
-        } catch (error) {
-            console.error("Error updating survey:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to update survey"
-            };
-        }
-    }
-
-    /**
- * Delete a survey by surveyId
- * @param {string} surveyId - The ID of the survey to delete
- * @returns {Promise<Object>} Response object with status and message
- */
-    static async deleteSurveyBySurveyId(surveyId) {
-        try {
-            if (!surveyId) {
-                throw new Error("Survey ID is required for deletion");
-            }
-
-            console.log("Deleting survey with surveyId:", surveyId);
-
-            const response = await axios.delete(
-                `${this.BASE_URL}/identity/admin/deletesurveybysurveyid/${surveyId}`, // Adjust endpoint if different
-                { headers: this.getHeader() }
-            );
-
-            console.log("Delete survey response:", response.data);
-
-            // Check if response has code property for API response format
-            if (response.data && response.data.code !== undefined) {
-                if (response.data.code === 1000) {
-                    return {
-                        status: 200,
-                        message: response.data.message || "Survey deleted successfully"
-                    };
-                } else {
-                    return {
-                        status: 400,
-                        message: response.data.message || "Failed to delete survey"
-                    };
-                }
-            } else {
-                return {
-                    status: 200,
-                    message: "Survey deleted successfully"
-                };
-            }
-        } catch (error) {
-            console.error("Error deleting survey:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to delete survey"
             };
         }
     }
@@ -1133,41 +968,6 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to delete user"
-            };
-        }
-    }
-
-    // Manager API
-    /**
-     * Get all appointments for manager
-     * @returns {Promise<Object>} Response object with status and data/message
-     */
-    static async getAllAppointments() {
-        try {
-            // Kiểm tra xem người dùng có vai trò manager không
-            if (!this.isManager()) {
-                throw new Error("Only managers can access this endpoint");
-            }
-
-            console.log("Fetching all appointments with token:", localStorage.getItem("token"));
-
-            const response = await axios.get(
-                `${this.BASE_URL}/identity/manager/allappointments`,
-                { headers: this.getHeader() }
-            );
-
-            console.log("Fetched appointments:", response.data);
-
-            return {
-                status: 200,
-                data: response.data,
-                message: "Appointments fetched successfully"
-            };
-        } catch (error) {
-            console.error("Error fetching appointments:", error);
-            return {
-                status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch appointments"
             };
         }
     }

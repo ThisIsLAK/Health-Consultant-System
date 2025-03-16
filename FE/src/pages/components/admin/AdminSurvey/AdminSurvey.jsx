@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
+import AdminHeader from '../../../../component/admin/AdminHeader';
+import { useNavigate } from 'react-router-dom';
 import ApiService from '../../../../service/ApiService';
-import Swal from 'sweetalert2';
-import { FaPlus, FaEye, FaTrash, FaPoll } from 'react-icons/fa';
 import './AdminSurvey.css';
 
 const AdminSurvey = () => {
@@ -13,8 +11,9 @@ const AdminSurvey = () => {
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deleteConfirm, setDeleteConfirm] = useState({ show: false, id: null });
     const [currentPage, setCurrentPage] = useState(1);
-    const surveysPerPage = 6;
+    const surveysPerPage = 9;
 
     useEffect(() => {
         fetchSurveys();
@@ -41,61 +40,43 @@ const AdminSurvey = () => {
         navigate('/addsurvey');
     };
 
-    const handleView = (surveyId) => {
-        navigate(`/surveydetail/${surveyId}`);
+    const handleEdit = (surveyId) => {
+        navigate(`/editsurvey/${surveyId}`);
     };
 
-    const handleDeleteClick = (surveyId, surveyTitle) => {
+    const handleDeleteClick = (surveyId) => {
         if (!surveyId) {
             console.error("Error: No valid ID!");
             return;
         }
-
-        Swal.fire({
-            title: 'Are you sure?',
-            text: `Do you want to delete "${surveyTitle || 'this survey'}"?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc3545',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                handleDeleteConfirm(surveyId);
-            }
-        });
+        setDeleteConfirm({ show: true, id: surveyId });
     };
 
-    const handleDeleteConfirm = async (surveyId) => {
+    const handleDeleteCancel = () => {
+        setDeleteConfirm({ show: false, id: null });
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (!deleteConfirm.id) {
+            console.error("No ID to delete!");
+            setError('No valid survey ID to delete');
+            setDeleteConfirm({ show: false, id: null });
+            return;
+        }
+
         try {
             setLoading(true);
-            const response = await ApiService.deleteSurveyBySurveyId(surveyId);
+            const response = await ApiService.deleteSurvey(deleteConfirm.id);
+
             if (response.status === 200) {
-                setSurveys(surveys.filter(survey => survey.surveyId !== surveyId));
-                Swal.fire({
-                    title: 'Deleted!',
-                    text: 'Survey has been deleted successfully.',
-                    icon: 'success',
-                    confirmButtonColor: '#4CAF50'
-                });
+                setSurveys(surveys.filter(survey => survey.surveyId !== deleteConfirm.id));
+                setDeleteConfirm({ show: false, id: null });
             } else {
                 setError(response.message || 'Failed to delete survey');
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Failed to delete survey.',
-                    icon: 'error',
-                    confirmButtonColor: '#dc3545'
-                });
             }
         } catch (err) {
             console.error("Error when deleting:", err);
-            Swal.fire({
-                title: 'Error!',
-                text: 'An unexpected error occurred.',
-                icon: 'error',
-                confirmButtonColor: '#dc3545'
-            });
+            setError('Failed to delete survey due to an unexpected error');
         } finally {
             setLoading(false);
         }
@@ -114,122 +95,90 @@ const AdminSurvey = () => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-    if (loading) return (
-        <div>
-            <AdminHeader />
-            <AdminSidebar />
-            <main id='main' className='main'>
-                <div className="loading-container">
-                    <div className="loading-spinner"></div>
-                    <p>Loading surveys...</p>
-                </div>
-            </main>
-        </div>
-    );
-
-    if (error) return (
-        <div>
-            <AdminHeader />
-            <AdminSidebar />
-            <main id='main' className='main'>
-                <div className="error-message">
-                    <h3>Something went wrong</h3>
-                    <p>{error}</p>
-                    <button className="retry-button" onClick={fetchSurveys}>Try Again</button>
-                </div>
-            </main>
-        </div>
-    );
+    if (loading) return <div className="loading">Loading...</div>;
+    if (error) return <div className="error-message">{error}</div>;
 
     return (
-        <div className="admin-layout">
+        <div>
             <AdminHeader />
             <AdminSidebar />
             <main id='main' className='main'>
-                <div className="survey-header">
-                    <div className="survey-header-content">
-                        <PageTitle page="Survey Management" />
-                        <div className="survey-counter">
-                            <FaPoll className="survey-counter-icon" />
-                            <span className="survey-counter-text">Total Surveys: <strong>{surveys.length}</strong></span>
-                        </div>
-                    </div>
-                    <button className="add-survey-btn" onClick={handleCreate}>
-                        <FaPlus /> Add New Survey
+                <div className="page-header">
+                    <PageTitle page="Surveys List" />
+                    <button className="create-button" onClick={handleCreate}>
+                        + Create new survey
                     </button>
                 </div>
 
-                <div className="survey-grid">
-                    {currentSurveys.map((survey) => (
-                        <div className="survey-card" key={survey.surveyId}>
-                            <div className="survey-card-content">
-                                <h3 className="survey-title">{survey.title || 'Untitled Survey'}</h3>
-                                <p className="survey-description">{survey.description || 'No description available'}</p>
-                                <div className="survey-meta">
-                                    <span>Created: {formatDate(survey.createdAt)}</span>
-                                    <span>Status: {survey.status || 'Draft'}</span>
+                {deleteConfirm.show && (
+                    <div className="delete-confirmation">
+                        <div className="delete-confirmation-content">
+                            <h3>Confirm deletion</h3>
+                            <p>Are you sure you want to delete this survey?</p>
+                            <div className="delete-confirmation-actions">
+                                <button className="cancel-button" onClick={handleDeleteCancel}>Cancel</button>
+                                <button className="confirm-delete-button" onClick={handleDeleteConfirm}>Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                <div className="adminsurvey-content">
+                    <div className="survey-list">
+                        {currentSurveys.map((survey) => (
+                            <div className="survey-card" key={survey.surveyId}>
+                                <div className="survey-card-content">
+                                    <h2 className="survey-name">{survey.title || 'Untitled Survey'}</h2>
+                                    <p className="survey-description">{survey.description || 'No description'}</p>                                   
                                 </div>
-                                <div className="survey-actions">
+                                <div className="survey-card-actions">
                                     <button
-                                        className="view-button"
-                                        onClick={() => handleView(survey.surveyId)}
+                                        className="edit-button"
+                                        onClick={() => handleEdit(survey.surveyId)}
                                     >
-                                        <FaEye /> View
+                                        Edit
                                     </button>
                                     <button
                                         className="delete-button"
-                                        onClick={() => handleDeleteClick(survey.surveyId, survey.title)}
+                                        onClick={() => handleDeleteClick(survey.surveyId)}
                                     >
-                                        <FaTrash /> Delete
+                                        Delete
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
-
-                {surveys.length === 0 && (
-                    <div className="no-surveys">
-                        <div className="no-surveys-icon">
-                            <FaPoll />
-                        </div>
-                        <h3>No Surveys Found</h3>
-                        <p>Get started by creating your first survey</p>
-                        <button className="add-survey-btn" onClick={handleCreate}>
-                            <FaPlus /> Create Survey
-                        </button>
-                    </div>
-                )}
-
-                {totalPages > 1 && (
-                    <div className="pagination">
-                        <button 
-                            onClick={() => paginate(currentPage - 1)} 
-                            disabled={currentPage === 1}
-                            className="page-btn"
-                        >
-                            &laquo;
-                        </button>
-                        
-                        {[...Array(totalPages).keys()].map(number => (
-                            <button
-                                key={number + 1}
-                                onClick={() => paginate(number + 1)}
-                                className={`page-btn ${currentPage === number + 1 ? 'active' : ''}`}
-                            >
-                                {number + 1}
-                            </button>
                         ))}
-                        
-                        <button 
-                            onClick={() => paginate(currentPage + 1)} 
-                            disabled={currentPage === totalPages}
-                            className="page-btn"
-                        >
-                            &raquo;
-                        </button>
                     </div>
-                )}
+
+                    {totalPages > 1 && (
+                        <div className="pagination">
+                            <button 
+                                onClick={() => paginate(currentPage - 1)} 
+                                disabled={currentPage === 1}
+                                className="pagination-button"
+                            >
+                                &laquo;
+                            </button>
+                            
+                            {[...Array(totalPages).keys()].map(number => (
+                                <button
+                                    key={number + 1}
+                                    onClick={() => paginate(number + 1)}
+                                    className={`pagination-button ${currentPage === number + 1 ? 'active' : ''}`}
+                                >
+                                    {number + 1}
+                                </button>
+                            ))}
+                            
+                            <button 
+                                onClick={() => paginate(currentPage + 1)} 
+                                disabled={currentPage === totalPages}
+                                className="pagination-button"
+                            >
+                                &raquo;
+                            </button>
+                        </div>
+                    )}
+                </div>
             </main>
         </div>
     );
