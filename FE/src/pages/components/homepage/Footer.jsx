@@ -44,14 +44,6 @@ const Footer = () => (
                     <li><a href="#">Contact Us</a></li>
                 </ul>
             </div>
-            <div className="footer-column">
-                <h4>Newsletter</h4>
-                <p>Join Our Mailing List To Stay Up To Date With World</p>
-                <div className="newsletter">
-                    <input type="email" placeholder="Email address" className="newsletter-input" />
-                    <button className="btn-subscribe">Subscribe</button>
-                </div>
-            </div>
         </div>
     </footer>
 );

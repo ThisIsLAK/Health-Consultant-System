@@ -3,6 +3,7 @@ import "./AboutUs.css";
 import Footer from "../../components/homepage/Footer";
 import Navbar from "../../components/homepage/Navbar";
 import { motion } from "framer-motion";
+import ApiService from "../../../service/ApiService";
 
 const bounceVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -288,18 +289,24 @@ const AboutUs = () => (
     >
       <h2>Get Started Today</h2>
       <p>Ready to improve mental health support at your school? Contact us to learn more about our platform.</p>
-      <motion.button 
-        className="contact-button"
-        variants={pulseVariants}
-        animate="pulse"
-        whileHover={{ 
-          scale: 1.1,
-          transition: { type: "spring", stiffness: 400, damping: 10 }
-        }}
-        whileTap={{ scale: 0.9 }}
-      >
-        Contact Us
-      </motion.button>
+      
+      {!ApiService.isAuthenticated() && (
+        <motion.button 
+          className="contact-button"
+          variants={pulseVariants}
+          animate="pulse"
+          whileHover={{ 
+            scale: 1.1,
+            transition: { type: "spring", stiffness: 400, damping: 10 }
+          }}
+          whileTap={{ scale: 0.9 }}
+          onClick={() => {
+            window.location.href = "/signup";
+          }}
+        >
+          Get Started
+        </motion.button>
+      )}
     </motion.div>
     
     <Footer />

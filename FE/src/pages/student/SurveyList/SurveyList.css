@@ -1,11 +1,12 @@
 /* Survey List Page Styles */
 .survey-container {
     background-color: #f8f9fa;
-    min-height: auto;
+    min-height: 80vh;
     display: flex;
     margin-bottom: 2rem;
     flex-direction: column;
     align-items: center;
+    padding-bottom: 50px;
 }
 
 .survey-header {
@@ -13,64 +14,533 @@
     color: white;
     width: 100%;
     text-align: center;
-    padding: 2rem;
+    padding: 3rem 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .survey-header h1 {
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
 }
 
 .survey-header p {
-    font-size: 1rem;
+    font-size: 1.1rem;
     margin-top: 0.5rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .survey-content {
     background-color: white;
     padding: 2rem;
-    max-width: 900px;
-    width: 100%;
-    margin-top: 2rem;
+    max-width: 1200px;
+    width: 90%;
+    margin-top: -40px;
     text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
 }
 
-.survey-content h2 {
+/* Updated surveys overview container to allow for flexbox layout */
+.surveys-overview-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.surveys-overview {
+    text-align: left;
+    flex: 1;
+    min-width: 250px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.surveys-overview h2 {
     font-size: 1.75rem;
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.overview-text {
+    color: #666;
+    font-size: 1rem;
 }
 
 .survey-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
     margin-top: 1rem;
 }
 
 .survey-card {
-    background: #f3f4f6;
-    padding: 1.5rem;
-    border-radius: 8px;
-    text-align: left;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s;
-    text-decoration: none;
-    color: inherit;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #eaeaea;
 }
 
 .survey-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
 }
 
-.survey-card h3 {
-    font-size: 1.25rem;
-    font-weight: bold;
-    color: #333;
+.survey-card-header {
+    padding: 1.25rem 1.5rem 0.75rem;
+    position: relative;
 }
 
-.survey-card p {
-    font-size: 1rem;
+.survey-card-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #111;
+    margin-top: 10px;
+}
+
+.survey-card-body {
+    padding: 0 1.5rem 1rem;
+    flex-grow: 1;
+}
+
+.survey-description {
     color: #555;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.survey-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    text-align: center; /* Changed from left to center */
+    align-items: center; /* Added to center the content horizontally */
+}
+
+.meta-label {
+    color: #777;
+    margin-bottom: 2px;
+}
+
+.meta-value {
+    font-weight: 500;
+    color: #444;
+}
+
+.survey-card-footer {
+    padding: 0.75rem 1.5rem 1.5rem;
+    text-align: center;
+}
+
+.take-survey-btn {
+    background-color: #4a6bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s;
+    width: 100%;
+}
+
+.take-survey-btn:hover {
+    background-color: #3950c4;
+}
+
+/* Improved loading spinner styles */
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    padding: 2rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(98, 0, 234, 0.1);
+    border-radius: 50%;
+    border-top-color: #6200ea;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-spinner p {
+    color: #6200ea;
+    font-weight: 500;
+    font-size: 1.1rem;
+    animation: fadeInOut 1.5s ease-in-out infinite;
     margin-top: 0.5rem;
+}
+
+@keyframes fadeInOut {
+    0% { opacity: 0.7; }
+    50% { opacity: 1; }
+    100% { opacity: 0.7; }
+}
+
+.error-container {
+    padding: 2rem;
+    background-color: #ffebee;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.error {
+    color: #c62828;
+    margin-bottom: 1rem;
+}
+
+.retry-button {
+    background-color: #c62828;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.no-surveys {
+    padding: 3rem;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    color: #616161;
+    margin-top: 20px;
+}
+
+/* Modified search container to fit in the same line */
+.search-container {
+    margin-bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+    min-width: 250px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.search-icon {
+    position: absolute;
+    right: 260px; /* Changed from left to right */
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 0.95rem;
+    z-index: 1;
+    pointer-events: none; /* Ensures the icon doesn't interfere with input clicks */
+}
+
+.search-input {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px 40px 10px 15px; /* Adjusted padding (right padding for the icon) */
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-input:focus {
+    box-shadow: 0 0 0 2px rgba(98, 0, 234, 0.2);
+    border-color: #6200ea;
+    background-color: #fff;
+}
+
+.search-input:focus + .search-icon,
+.search-input-wrapper:focus-within .search-icon {
+    color: #6200ea;
+}
+
+/* Enhanced pagination styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.pagination-button {
+    min-width: 40px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    color: #555;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+    border-color: #aaa;
+}
+
+.pagination-button.active {
+    background-color: #6200ea;
+    color: white;
+    border-color: #6200ea;
+    font-weight: 600;
+}
+
+.pagination-nav {
+    min-width: 80px;
+}
+
+.pagination-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Updated pagination styles to match AdminSupportProgram */
+.pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.page-item {
+    margin: 0 2px;
+}
+
+.page-item:first-child .page-link {
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.page-item:last-child .page-link {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+}
+
+.page-item.active .page-link {
+    background-color: #6200ea;
+    border-color: #6200ea;
+    color: white;
+    font-weight: 600;
+    z-index: 3;
+}
+
+.page-item.disabled .page-link {
+    color: #ccc;
+    pointer-events: none;
+    cursor: not-allowed;
+    background-color: #fff;
+    border-color: #ddd;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    color: #6200ea;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    min-width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 1.5;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    z-index: 2;
+    color: #6200ea;
+    text-decoration: none;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+.page-link:focus {
+    z-index: 3;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(98, 0, 234, 0.25);
+}
+
+/* Keep the old pagination-container style for spacing/positioning */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+/* Remove the old pagination-button styles as they're replaced */
+.pagination-button,
+.pagination-nav,
+.pagination-button:hover:not(:disabled),
+.pagination-button.active,
+.pagination-button:disabled {
+    display: none;
+}
+
+/* Responsive styles for pagination */
+@media (max-width: 768px) {
+    .d-flex.justify-content-between.align-items-center.mt-4 {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .pagination-info {
+        margin-bottom: 10px;
+    }
+    
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+/* Ensure Font Awesome icons are visible */
+.fas {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+}
+
+.fas.fa-angle-left:before {
+    content: "‹";
+}
+
+.fas.fa-angle-right:before {
+    content: "›";
+}
+
+.fas.fa-angle-double-left:before {
+    content: "«";
+}
+
+.fas.fa-angle-double-right:before {
+    content: "»";
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .surveys-overview-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .surveys-overview {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    
+    .search-container {
+        width: 100%;
+        justify-content: flex-start;
+    }
+    
+    .search-input {
+        max-width: 100%;
+    }
+}
+
+/* MUI Pagination container */
+.pagination-container-mui {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.pagination-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+/* Customize MUI Pagination */
+.mui-pagination {
+    margin: 0 auto;
+}
+
+.mui-pagination .MuiPaginationItem-root {
+    color: #6200ea;
+}
+
+.mui-pagination .MuiPaginationItem-page.Mui-selected {
+    background-color: #6200ea;
+    color: white;
+}
+
+/* Responsive styles for MUI pagination */
+@media (max-width: 768px) {
+    .pagination-container-mui {
+        margin-top: 30px;
+    }
+    
+    .pagination-info {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
+/* Remove the old pagination styles as they're replaced by MUI */
+.pagination,
+.page-item,
+.page-link,
+.page-item.active .page-link,
+.page-item.disabled .page-link,
+.page-link:hover,
+.page-link:focus,
+.pagination-container,
+.pagination-button,
+.pagination-nav,
+.pagination-button:hover:not(:disabled),
+.pagination-button.active,
+.pagination-button:disabled {
+    display: none;
 }

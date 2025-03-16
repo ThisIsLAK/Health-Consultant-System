@@ -3,15 +3,25 @@ import './Blog.css';
 import Navbar from '../../components/homepage/Navbar';
 import Footer from "../../components/homepage/Footer";
 import ApiService from '../../../service/ApiService';
+import LoginPrompt from '../../../components/LoginPrompt';
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        fetchBlogs();
+        // Check if user is authenticated
+        const token = localStorage.getItem('token');
+        setIsAuthenticated(!!token);
+        
+        if (token) {
+            fetchBlogs();
+        } else {
+            setLoading(false);
+        }
     }, []);
 
     const fetchBlogs = async () => {
@@ -44,6 +54,19 @@ const Blog = () => {
                 blog.blogCode?.toLowerCase().includes(searchTermLower);
         })
         : [];
+
+    // If not authenticated, render the login prompt
+    if (!isAuthenticated) {
+        return (
+            <>
+                <Navbar />
+                <LoginPrompt 
+                    message="You need to be logged in to view blogs. Please log in to access this content."
+                />
+                <Footer />
+            </>
+        );
+    }
 
     if (loading) {
         return <div className="loading-spinner">Loading blogs...</div>;

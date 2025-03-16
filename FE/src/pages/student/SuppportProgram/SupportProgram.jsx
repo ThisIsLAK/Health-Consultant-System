@@ -1,20 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { InputGroup, FormControl, Pagination } from 'react-bootstrap';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 import "./SupportProgram.css";
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
+import LoginPrompt from '../../../components/LoginPrompt';
 
 const SupportProgram = () => {
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const programsPerPage = 6;
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const programsPerPage = 9;
 
   useEffect(() => {
-    fetchSupportPrograms();
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    setIsAuthenticated(!!token);
+    
+    if (token) {
+      fetchSupportPrograms();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchSupportPrograms = async () => {
@@ -66,12 +77,30 @@ const SupportProgram = () => {
   const indexOfLastProgram = currentPage * programsPerPage;
   const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
   const currentPrograms = filteredPrograms.slice(indexOfFirstProgram, indexOfLastProgram);
-  const totalPages = Math.ceil(filteredPrograms.length / programsPerPage);
 
   // Change page
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = (event, pageNumber) => {
     setCurrentPage(pageNumber);
   };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+    setCurrentPage(1); // Reset to first page on search
+  };
+
+  // If not authenticated, render the login prompt
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <LoginPrompt 
+          message="You need to be logged in to view support programs. Please log in to access this feature."
+        />
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <div>
@@ -82,102 +111,98 @@ const SupportProgram = () => {
           <p>Find the right mental health support program to help you navigate life's challenges.</p>
         </div>
         <div className="support-content">
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>Our Support Services</h2>
-            <div className="search-container" style={{ width: '50%' }}>
-              <InputGroup>
-                <FormControl
-                  placeholder="Search programs by name, code or description..."
-                  value={searchTerm}
-                  onChange={(e) => {
-                    setSearchTerm(e.target.value);
-                    setCurrentPage(1);
-                  }}
-                />
-                <InputGroup.Text>
-                  <i className="bi bi-search"></i>
-                </InputGroup.Text>
-              </InputGroup>
-            </div>
-          </div>
-          
           {loading ? (
-            <div style={{ textAlign: 'center', padding: '2rem' }}>
-              <div 
-                style={{ 
-                  display: 'inline-block',
-                  width: '40px',
-                  height: '40px',
-                  border: '4px solid rgba(0, 0, 0, 0.1)',
-                  borderRadius: '50%',
-                  borderLeftColor: '#6200ea',
-                  animation: 'spin 1s linear infinite'
-                }}
-              />
-              <p style={{ marginTop: '1rem' }}>Loading programs...</p>
+            <div className="loading-spinner">
+              <div className="spinner"></div>
+              <p>Loading programs...</p>
             </div>
           ) : (
-            filteredPrograms && filteredPrograms.length > 0 ? (
-              <>
-                <div className="program-grid">
-                  {currentPrograms.map((program) => (
-                    <Link 
-                      key={program.programCode} 
-                      to={`/support/${program.programCode}`} 
-                      className="program-card"
-                    >
-                      <h3>{program.programName}</h3>
-                      <div className="program-code">
-                        <span className="badge bg-light text-dark">Code: {program.programCode}</span>
-                      </div>
-                      <div style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#666' }}>
-                        <span>{formatDate(program.startDate)} - {formatDate(program.endDate)}</span>
-                      </div>
-                      <span className="learn-more">Learn More →</span>
-                    </Link>
-                  ))}
+            <>
+              <div className="programs-overview-container">
+                <div className="programs-overview">
+                  <h2>Our Support Services</h2>
+                  <p className="overview-text">You have {filteredPrograms.length} program(s) available</p>
                 </div>
                 
-                {/* Pagination */}
-                {totalPages > 1 && (
-                  <div className="pagination-container mt-4 d-flex justify-content-center">
-                    <Pagination>
-                      <Pagination.First 
-                        onClick={() => handlePageChange(1)} 
-                        disabled={currentPage === 1}
-                      />
-                      <Pagination.Prev 
-                        onClick={() => handlePageChange(currentPage - 1)} 
-                        disabled={currentPage === 1}
-                      />
-                      
-                      {[...Array(totalPages)].map((_, index) => (
-                        <Pagination.Item 
-                          key={index + 1} 
-                          active={index + 1 === currentPage}
-                          onClick={() => handlePageChange(index + 1)}
-                        >
-                          {index + 1}
-                        </Pagination.Item>
-                      ))}
-                      
-                      <Pagination.Next 
-                        onClick={() => handlePageChange(currentPage + 1)} 
-                        disabled={currentPage === totalPages}
-                      />
-                      <Pagination.Last 
-                        onClick={() => handlePageChange(totalPages)} 
-                        disabled={currentPage === totalPages}
-                      />
-                    </Pagination>
+                <div className="search-container">
+                  <div className="search-input-wrapper">
+                    <input
+                      type="text"
+                      placeholder="Search programs..."
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="search-input"
+                    />
+                    <i className="search-icon fas fa-search"></i>
                   </div>
-                )}
-              </>
-            ) : (
-              <div style={{ textAlign: 'center', padding: '2rem', backgroundColor: '#f3f4f6', borderRadius: '8px' }}>
-                <p>No support programs available at the moment. Please check back later.</p>
+                </div>
               </div>
-            )
+              
+              {filteredPrograms.length === 0 ? (
+                <div className="no-programs">
+                  <p>No support programs found matching your search. Please try a different keyword.</p>
+                </div>
+              ) : (
+                <>
+                  <div className="program-grid">
+                    {currentPrograms.map((program) => (
+                      <div key={program.programCode} className="program-card">
+                        <div className="program-card-header">
+                          <h3>{program.programName}</h3>
+                        </div>
+                        <div className="program-card-body">
+                          <p className="program-description">
+                            {program.description && program.description.length > 120
+                              ? `${program.description.substring(0, 120)}...`
+                              : program.description || "No description available."}
+                          </p>
+                          <div className="program-meta">
+                            <div className="meta-item">
+                              <span className="meta-label">Start Date:</span>
+                              <span className="meta-value">{formatDate(program.startDate)}</span>
+                            </div>
+                            <div className="meta-item">
+                              <span className="meta-label">End Date:</span>
+                              <span className="meta-value">{formatDate(program.endDate)}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="program-card-footer">
+                          <Link
+                            to={`/support/${program.programCode}`}
+                            className="view-program-btn"
+                          >
+                            Learn More
+                          </Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {filteredPrograms.length > programsPerPage && (
+                    <div className="pagination-container-mui">
+                      <div className="pagination-info">
+                        Showing {currentPrograms.length > 0 ? `${indexOfFirstProgram + 1}-${Math.min(indexOfLastProgram, filteredPrograms.length)}` : "0"} of {filteredPrograms.length} programs
+                      </div>
+                      
+                      <Stack spacing={2}>
+                        <Pagination 
+                          count={Math.ceil(filteredPrograms.length / programsPerPage)} 
+                          page={currentPage}
+                          onChange={handlePageChange}
+                          color="primary"
+                          size="large"
+                          showFirstButton
+                          showLastButton
+                          siblingCount={1}
+                          className="mui-pagination"
+                        />
+                      </Stack>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           )}
         </div>
       </div>
