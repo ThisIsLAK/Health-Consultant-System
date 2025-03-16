@@ -40,8 +40,8 @@ const AdminSurvey = () => {
         navigate('/addsurvey');
     };
 
-    const handleEdit = (surveyId) => {
-        navigate(`/editsurvey/${surveyId}`);
+    const handleView = (surveyId) => {
+        navigate(`/surveydetail/${surveyId}`);
     };
 
     const handleDeleteClick = (surveyId) => {
@@ -49,28 +49,26 @@ const AdminSurvey = () => {
             console.error("Error: No valid ID!");
             return;
         }
-        setDeleteConfirm({ show: true, id: surveyId });
+        // Show confirmation alert
+        const confirmDelete = window.confirm("Are you sure you want to delete this survey?");
+        if (confirmDelete) {
+            handleDeleteConfirm(surveyId);
+        }
     };
 
     const handleDeleteCancel = () => {
         setDeleteConfirm({ show: false, id: null });
     };
 
-    const handleDeleteConfirm = async () => {
-        if (!deleteConfirm.id) {
-            console.error("No ID to delete!");
-            setError('No valid survey ID to delete');
-            setDeleteConfirm({ show: false, id: null });
-            return;
-        }
-
+    const handleDeleteConfirm = async (surveyId) => {
         try {
             setLoading(true);
-            const response = await ApiService.deleteSurvey(deleteConfirm.id);
+            const response = await ApiService.deleteSurveyBySurveyId(surveyId);
 
             if (response.status === 200) {
-                setSurveys(surveys.filter(survey => survey.surveyId !== deleteConfirm.id));
+                setSurveys(surveys.filter(survey => survey.surveyId !== surveyId));
                 setDeleteConfirm({ show: false, id: null });
+                alert("Survey deleted successfully!");
             } else {
                 setError(response.message || 'Failed to delete survey');
             }
@@ -117,7 +115,7 @@ const AdminSurvey = () => {
                             <p>Are you sure you want to delete this survey?</p>
                             <div className="delete-confirmation-actions">
                                 <button className="cancel-button" onClick={handleDeleteCancel}>Cancel</button>
-                                <button className="confirm-delete-button" onClick={handleDeleteConfirm}>Delete</button>
+                                <button className="confirm-delete-button" onClick={() => handleDeleteConfirm(deleteConfirm.id)}>Delete</button>
                             </div>
                         </div>
                     </div>
@@ -134,9 +132,9 @@ const AdminSurvey = () => {
                                 <div className="survey-card-actions">
                                     <button
                                         className="edit-button"
-                                        onClick={() => handleEdit(survey.surveyId)}
+                                        onClick={() => handleView(survey.surveyId)}
                                     >
-                                        Edit
+                                        View Detail
                                     </button>
                                     <button
                                         className="delete-button"

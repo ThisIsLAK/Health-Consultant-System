@@ -3,74 +3,78 @@ import { useParams, useNavigate } from 'react-router-dom';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
+import ApiService from '../../../../service/ApiService';
 import './SurveyDetail.css';
 
 const SurveyDetail = () => {
-  const { id } = useParams();
+  const { surveyId } = useParams(); // Changed from id to surveyId
   const navigate = useNavigate();
   const [survey, setSurvey] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch survey data - replace with your actual API call
-    fetchSurveyDetail(id);
-  }, [id]);
+    console.log("Survey ID from params:", surveyId); // Debug log
+    fetchSurveyDetail(surveyId);
+  }, [surveyId]);
 
-  const fetchSurveyDetail = (surveyId) => {
-    // This is a mock API call - replace with your actual API
+  const fetchSurveyDetail = async (surveyId) => {
     setLoading(true);
-    
-    // Mock data for demonstration purposes
-    setTimeout(() => {
-      const mockSurvey = {
-        id: surveyId,
-        title: "Employee Satisfaction Survey",
-        description: "This survey helps us understand employee satisfaction and identify areas for improvement.",
-        questions: [
-          {
-            id: 1,
-            question: "How satisfied are you with your work environment?",
-            answers: [
-              { id: 1, text: "Very Dissatisfied", points: 1 },
-              { id: 2, text: "Dissatisfied", points: 2 },
-              { id: 3, text: "Neutral", points: 3 },
-              { id: 4, text: "Satisfied", points: 4 },
-              { id: 5, text: "Very Satisfied", points: 5 }
-            ]
-          },
-          {
-            id: 2,
-            question: "How would you rate your work-life balance?",
-            answers: [
-              { id: 1, text: "Poor", points: 1 },
-              { id: 2, text: "Fair", points: 2 },
-              { id: 3, text: "Good", points: 3 },
-              { id: 4, text: "Very Good", points: 4 },
-              { id: 5, text: "Excellent", points: 5 }
-            ]
-          },
-          {
-            id: 3,
-            question: "How likely are you to recommend our company as a place to work?",
-            answers: [
-              { id: 1, text: "Not likely at all", points: 0 },
-              { id: 2, text: "Somewhat unlikely", points: 3 },
-              { id: 3, text: "Neutral", points: 5 },
-              { id: 4, text: "Somewhat likely", points: 8 },
-              { id: 5, text: "Extremely likely", points: 10 }
-            ]
+    setError(null);
+    try {
+      const response = await ApiService.getSurveyById(surveyId);
+      if (response.status === 200) {
+        const surveys = response.data.result || response.data;
+        if (Array.isArray(surveys)) {
+          const matchedSurvey = surveys.find(survey => survey.surveyId === surveyId);
+          if (!matchedSurvey) {
+            throw new Error(`Survey with ID ${surveyId} not found`);
           }
-        ]
-      };
-      
-      setSurvey(mockSurvey);
+          const formattedSurvey = {
+            id: matchedSurvey.surveyId,
+            title: matchedSurvey.title || "Untitled Survey",
+            description: matchedSurvey.description || "No description available",
+            questions: matchedSurvey.questions.map(q => ({
+              id: q.questionId,
+              question: q.questionText,
+              answers: q.answerOptions.map(a => ({
+                id: a.optionId,
+                text: a.optionText,
+                points: a.score
+              }))
+            }))
+          };
+          setSurvey(formattedSurvey);
+        } else {
+          const apiSurvey = surveys;
+          const formattedSurvey = {
+            id: apiSurvey.surveyId,
+            title: apiSurvey.title || "Untitled Survey",
+            description: apiSurvey.description || "No description available",
+            questions: apiSurvey.questions.map(q => ({
+              id: q.questionId,
+              question: q.questionText,
+              answers: q.answerOptions.map(a => ({
+                id: a.optionId,
+                text: a.optionText,
+                points: a.score
+              }))
+            }))
+          };
+          setSurvey(formattedSurvey);
+        }
+      } else {
+        throw new Error("Failed to fetch survey details");
+      }
+    } catch (err) {
+      setError(err.message || "An error occurred while fetching survey details");
+    } finally {
       setLoading(false);
-    }, 500);
+    }
   };
 
   const handleEdit = () => {
-    // Navigate to edit page
-    navigate(`/admin/surveys/edit/${id}`);
+    navigate(`/editsurvey/${surveyId}`); // Changed from id to surveyId
   };
 
   if (loading) {
@@ -88,15 +92,28 @@ const SurveyDetail = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div>
+        <AdminHeader />
+        <AdminSidebar />
+        <main id='main' className='main'>
+          <PageTitle title='Survey Detail' />
+          <div className="survey-detail-container">
+            <div className="error-message">{error}</div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div>
       <AdminHeader />
       <AdminSidebar />
       <main id='main' className='main'>
         <PageTitle title='Survey Detail' />
-        
         <div className="survey-detail-container">
-          {/* Basic Survey Information */}
           <div className="survey-info-section">
             <div className="survey-header">
               <h1 className="survey-title">{survey.title}</h1>
@@ -105,18 +122,14 @@ const SurveyDetail = () => {
               <p>{survey.description}</p>
             </div>
           </div>
-          
-          {/* Questions & Answers */}
           <div className="questions-section">
             <h2 className="detailsection-title">Questions</h2>
-            
             {survey.questions.map((question, qIndex) => (
               <div key={question.id} className="question-card">
                 <div className="question-header">
                   <h3 className="question-number">Question {qIndex + 1}</h3>
                   <h3 className="question-text">{question.question}</h3>
                 </div>
-                
                 <div className="answers-container">
                   <table className="answers-table">
                     <thead>
@@ -140,13 +153,8 @@ const SurveyDetail = () => {
               </div>
             ))}
           </div>
-          
-          {/* Actions */}
           <div className="survey-actions">
-            <button 
-              className="btn btn-edit"
-              onClick={handleEdit}
-            >
+            <button className="btn btn-edit" onClick={handleEdit}>
               Edit Survey
             </button>
           </div>
