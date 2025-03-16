@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SurveyAnswerOptionRequest {
     String optionText;
-    Integer score;
+    int score;
     Boolean active;
 }

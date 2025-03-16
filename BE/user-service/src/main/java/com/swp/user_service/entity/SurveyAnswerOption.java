@@ -16,7 +16,7 @@ public class SurveyAnswerOption {
     String optionId;
 
     String optionText;
-    Integer score;
+    int score;
 
     @ManyToOne
     @JoinColumn(name = "question_id", nullable = false)

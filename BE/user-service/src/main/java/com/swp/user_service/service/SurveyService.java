@@ -69,6 +69,9 @@ public class SurveyService {
                 for (SurveyAnswerOptionRequest optionRequest : questionRequest.getAnswerOptions()) {
                     SurveyAnswerOption option = new SurveyAnswerOption();
                     option.setOptionText(optionRequest.getOptionText());
+                    if (optionRequest.getScore() < 0) {
+                        throw new IllegalArgumentException("Score must be a non-negative number.");
+                    }
                     option.setScore(optionRequest.getScore());
                     option.setActive(true);
                     option.setSurveyQuestion(question); // Thiết lập mối quan hệ với question
@@ -203,7 +206,7 @@ public class SurveyService {
                     Optional.ofNullable(optionRequest.getOptionText()).ifPresent(option::setOptionText);
 
                     // Chỉ cập nhật score nếu score mới không null, nếu null thì giữ nguyên score cũ
-                    if (optionRequest.getScore() != null) {
+                    if (optionRequest.getScore() != -1) { // Chỉ cập nhật nếu không phải giá trị mặc định
                         option.setScore(optionRequest.getScore());
                     }
 

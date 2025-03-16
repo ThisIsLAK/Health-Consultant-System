@@ -11,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class SurveyAnswerOptionResponse {
     String optionId;
     String optionText;
-    Integer score;
+    int score;
     Boolean active;
 }
