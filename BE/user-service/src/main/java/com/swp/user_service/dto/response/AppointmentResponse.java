@@ -14,11 +14,15 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentResponse {
-    private String psychologistId;
-    private String appointmentId;
-    private String userId;
-    private Date appointmentDate;
-    private String timeSlot;
-    private Boolean active;
+    String psychologistId;
+    String psychologistName;
+    String psychologistEmail;
+    String appointmentId;
+    String userId;
+    String studentName;
+    String studentEmail;
+    Date appointmentDate;
+    String timeSlot;
+    Boolean active;
 
 }

@@ -24,6 +24,8 @@ public class AppointmentMapperImpl implements AppointmentMapper {
         AppointmentResponse.AppointmentResponseBuilder appointmentResponse = AppointmentResponse.builder();
 
         appointmentResponse.userId( appointmentUserId( appointment ) );
+        appointmentResponse.studentName( appointmentUserName( appointment ) );
+        appointmentResponse.studentEmail( appointmentUserEmail( appointment ) );
         appointmentResponse.psychologistId( appointment.getPsychologistId() );
         appointmentResponse.appointmentId( appointment.getAppointmentId() );
         appointmentResponse.appointmentDate( appointment.getAppointmentDate() );
@@ -60,5 +62,35 @@ public class AppointmentMapperImpl implements AppointmentMapper {
             return null;
         }
         return id;
+    }
+
+    private String appointmentUserName(Appointment appointment) {
+        if ( appointment == null ) {
+            return null;
+        }
+        User user = appointment.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String name = user.getName();
+        if ( name == null ) {
+            return null;
+        }
+        return name;
+    }
+
+    private String appointmentUserEmail(Appointment appointment) {
+        if ( appointment == null ) {
+            return null;
+        }
+        User user = appointment.getUser();
+        if ( user == null ) {
+            return null;
+        }
+        String email = user.getEmail();
+        if ( email == null ) {
+            return null;
+        }
+        return email;
     }
 }

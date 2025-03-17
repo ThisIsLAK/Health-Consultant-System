@@ -3,6 +3,7 @@ package com.swp.user_service.controller;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.dto.response.DashboardResponse;
+import com.swp.user_service.dto.response.UserSummaryResponse;
 import com.swp.user_service.service.AppointmentService;
 import com.swp.user_service.service.ManagerService;
 import lombok.AccessLevel;
@@ -11,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +42,15 @@ public class ManagerController {
         return ApiResponse.<DashboardResponse>builder()
                 .message("Dashboard data retrieved successfully")
                 .result(dashboardData)
+                .build();
+    }
+
+    @GetMapping("/active-by-role/{roleId}")
+    public ApiResponse<List<UserSummaryResponse>> getActiveUsersByRoleId(@PathVariable String roleId) {
+        List<UserSummaryResponse> users = managerService.getActiveUsersByRoleId(roleId);
+        return ApiResponse.<List<UserSummaryResponse>>builder()
+                .message("Active users retrieved successfully")
+                .result(users)
                 .build();
     }
 }
