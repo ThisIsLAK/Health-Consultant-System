@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { format, addDays, subDays, parseISO, isToday, isPast, isFuture } from 'date-fns';
-import { Calendar, ChevronLeft, ChevronRight, Phone, Mail, Link as LinkIcon, FileText, Edit, Clock, User, AlertCircle } from 'lucide-react';
+import { Calendar, ChevronLeft, ChevronRight, Phone, Mail, Link as LinkIcon, FileText, Edit, Clock, User, AlertCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 import PsychologistHeader from '../../../component/psychologist/PsychologistHeader';
 import PsychologistSidebar from '../../../component/psychologist/PsychologistSidebar';
@@ -14,7 +15,7 @@ const parseJwt = (token) => {
     try {
         const base64Url = token.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
 
@@ -34,6 +35,9 @@ const PsyAppointments = () => {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [psychologistId, setPsychologistId] = useState(null);
     const [dateFilterActive, setDateFilterActive] = useState(false); // New state to track if date filtering is active
+    const [cancellingAppointment, setCancellingAppointment] = useState(null);
+    const [cancelSuccess, setCancelSuccess] = useState(null);
+    const [cancelError, setCancelError] = useState(null);
 
     // Status filter options
     const statuses = [
@@ -74,10 +78,10 @@ const PsyAppointments = () => {
             try {
                 // First approach: Check if psychologistId is available in token claims
                 const decoded = parseJwt(token);
-                
+
                 // Use User ID from token as fallback - this would only work if the user ID is the psychologist ID
                 const userId = decoded?.iss || decoded?.sub;
-                
+
                 if (userId) {
                     setPsychologistId(userId);
                     console.log("Set psychologist ID from token:", userId);
@@ -104,7 +108,7 @@ const PsyAppointments = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
-            
+
             // Extract psychologist ID from the profile response
             if (response.data && response.data.result && response.data.result.id) {
                 setPsychologistId(response.data.result.id);
@@ -131,39 +135,41 @@ const PsyAppointments = () => {
     useEffect(() => {
         const fetchAppointments = async () => {
             if (!psychologistId) return;
-            
+
             setLoading(true);
             try {
                 const token = localStorage.getItem('token');
-                
+
                 // Make request to the specified endpoint
                 const response = await axios.get(
-                    `http://localhost:8080/identity/psychologists/allactiveappointments/${psychologistId}`,
+                    `http://localhost:8080/identity/psychologists/psyappointment/${psychologistId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${token}`
                         }
                     }
                 );
-                
+
                 console.log("Appointments response:", response.data);
-                
+
                 if (response.data && Array.isArray(response.data.result)) {
                     // Process the appointments based on the provided schema
                     const formattedAppointments = response.data.result.map(app => {
                         // Parse the date
                         const date = parseISO(app.appointmentDate);
-                        
-                        // Default status is ACTIVE if not provided
-                        const status = app.status || 'ACTIVE';
-                        
+
+                        // Determine status based on 'active' property
+                        // If active is false, status is CANCELLED, otherwise use existing status or default to ACTIVE
+                        const status = app.active === false ? 'CANCELLED' : (app.status || 'ACTIVE');
+
                         return {
-                            appointmentId: app.appointmentId,
-                            userId: app.userId,
+                            studentName: app.studentName,
+                            studentEmail: app.studentEmail,
                             psychologistId: app.psychologistId,
                             appointmentDate: app.appointmentDate,
                             timeSlot: app.timeSlot,
-                            status: status,
+                            active: app.active, // Store the active property
+                            status: status, // Set status based on active property
                             // Format time for display
                             formattedTime: format(date, 'HH:mm'),
                             formattedDate: format(date, 'PPP'),
@@ -172,17 +178,17 @@ const PsyAppointments = () => {
                             timing: getAppointmentTiming(app.appointmentDate)
                         };
                     });
-                    
+
                     // Sort by date (past first, then today, then future)
-                    formattedAppointments.sort((a, b) => 
+                    formattedAppointments.sort((a, b) =>
                         new Date(a.appointmentDate) - new Date(b.appointmentDate)
                     );
-                    
+
                     setAppointments(formattedAppointments);
                 } else {
                     setAppointments([]);
                 }
-                
+
                 setLoading(false);
             } catch (err) {
                 console.error("Error fetching appointments:", err);
@@ -194,32 +200,114 @@ const PsyAppointments = () => {
         fetchAppointments();
     }, [psychologistId]);
 
+    // Function to show cancel confirmation dialog using SweetAlert
+    const showCancelConfirmation = (appointmentId) => {
+        Swal.fire({
+            title: 'Cancel Appointment',
+            text: 'Are you sure you want to cancel this appointment? This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Yes, Cancel Appointment',
+            cancelButtonText: 'No, Keep Appointment'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                handleCancelAppointment(appointmentId);
+            }
+        });
+    };
+
+    // Function to handle appointment cancellation
+    const handleCancelAppointment = async (appointmentId) => {
+        if (!appointmentId) return;
+
+        // Set cancelling state
+        setCancellingAppointment(appointmentId);
+        setCancelSuccess(null);
+        setCancelError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+
+            // Make request to cancel appointment endpoint using correct URL
+            const response = await axios.delete(
+                `http://localhost:8080/identity/psychologists/cancelappointment/${appointmentId}`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+
+            console.log("Cancel appointment response:", response.data);
+
+            // Handle the specific response schema
+            if (response.data && response.data.code === 1000) {
+                // Update the appointment in the local state
+                setAppointments(prevAppointments =>
+                    prevAppointments.map(app =>
+                        app.appointmentId === appointmentId
+                            ? { ...app, status: 'CANCELLED', active: false }
+                            : app
+                    )
+                );
+
+                // Show success message with SweetAlert
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.data.message || `Appointment cancelled successfully.`,
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            } else {
+                // Show error message with SweetAlert
+                Swal.fire({
+                    title: 'Error!',
+                    text: response.data?.message || "Failed to cancel appointment. Please try again.",
+                    icon: 'error'
+                });
+            }
+        } catch (err) {
+            console.error("Error cancelling appointment:", err);
+            // Show error message with SweetAlert
+            Swal.fire({
+                title: 'Error!',
+                text: "Failed to cancel appointment. " + (err.response?.data?.message || err.message),
+                icon: 'error'
+            });
+        } finally {
+            setCancellingAppointment(null);
+        }
+    };
+
     // Filter appointments based on selected status and date (if date filter is active)
     const filteredAppointments = appointments.filter(app => {
         // Filter by status if not "all"
         const statusMatch = selectedStatus === 'all' || app.status === selectedStatus;
-        
+
         // Filter by current selected date only if date filter is active
         let dateMatch = true;
         if (dateFilterActive) {
             const appDate = parseISO(app.appointmentDate);
-            dateMatch = 
-                appDate.getDate() === currentDate.getDate() && 
-                appDate.getMonth() === currentDate.getMonth() && 
+            dateMatch =
+                appDate.getDate() === currentDate.getDate() &&
+                appDate.getMonth() === currentDate.getMonth() &&
                 appDate.getFullYear() === currentDate.getFullYear();
         }
-        
+
         return statusMatch && dateMatch;
     });
 
     // Group appointments by date for better organization
     const getGroupedAppointments = () => {
         const grouped = {};
-        
+
         filteredAppointments.forEach(app => {
             const dateKey = format(parseISO(app.appointmentDate), 'yyyy-MM-dd');
             const timing = getAppointmentTiming(app.appointmentDate);
-            
+
             if (!grouped[dateKey]) {
                 grouped[dateKey] = {
                     formattedDate: format(parseISO(app.appointmentDate), 'EEEE, MMMM d, yyyy'),
@@ -229,7 +317,7 @@ const PsyAppointments = () => {
             }
             grouped[dateKey].appointments.push(app);
         });
-        
+
         // Sort dates chronologically
         return Object.keys(grouped)
             .sort((a, b) => new Date(a) - new Date(b))
@@ -246,7 +334,7 @@ const PsyAppointments = () => {
 
             <main id="main" className="main">
                 <PageTitle page="My Appointments" />
-                
+
                 <div className="psy-appointments-container">
                     {/* Header with filters and date navigation */}
                     <div className="appointments-header">
@@ -308,10 +396,25 @@ const PsyAppointments = () => {
                             <Calendar size={48} strokeWidth={1} />
                             <h3>No appointments found</h3>
                             <p>
-                                {dateFilterActive 
+                                {dateFilterActive
                                     ? `There are no appointments scheduled for ${formattedDate} with the selected filter.`
                                     : 'There are no appointments matching the selected filters.'}
                             </p>
+                        </div>
+                    )}
+
+                    {/* Display success message if any */}
+                    {cancelSuccess && (
+                        <div className="success-alert">
+                            <div className="success-message">{cancelSuccess}</div>
+                        </div>
+                    )}
+
+                    {/* Display error message if any */}
+                    {cancelError && (
+                        <div className="error-alert">
+                            <div className="error-message">{cancelError}</div>
+                            <button className="close-alert" onClick={() => setCancelError(null)}>×</button>
                         </div>
                     )}
 
@@ -327,8 +430,8 @@ const PsyAppointments = () => {
                                         {group.timing === 'future' && <span className="timing-indicator future">Upcoming</span>}
                                     </h3>
                                     {group.appointments.map(appointment => (
-                                        <div 
-                                            className={`appointment-card status-${appointment.status.toLowerCase()} timing-${appointment.timing}`} 
+                                        <div
+                                            className={`appointment-card status-${appointment.status.toLowerCase()} timing-${appointment.timing}`}
                                             key={appointment.appointmentId}
                                         >
                                             {/* Time section */}
@@ -337,24 +440,34 @@ const PsyAppointments = () => {
                                                     {appointment.timeSlot}
                                                 </div>
                                             </div>
-                                            
+
                                             {/* Details section */}
                                             <div className="details-section">
                                                 <div className="app-header">
                                                     <div className="name-status">
                                                         <h3 className="patient-name">
                                                             <User size={16} className="user-icon" />
-                                                            Student ID: {appointment.userId}
+                                                            Student ID: {appointment.studentName}
                                                         </h3>
                                                         <div className="status-wrapper">
-                                                            {appointment.timing === 'past' && 
+                                                            {appointment.timing === 'past' &&
                                                                 <span className="timing-badge past">Past</span>
                                                             }
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="info-grid">
+
+                                                    {/* User ID information */}
+                                                    <div className="info-item">
+                                                        <User className="icon" size={16} />
+                                                        <span className="text">
+                                                            Student Email: {appointment.studentEmail}
+                                                        </span>
+                                                    </div>
+
+
                                                     {/* Date information */}
                                                     <div className="info-item">
                                                         <Calendar className="icon" size={16} />
@@ -362,7 +475,7 @@ const PsyAppointments = () => {
                                                             {appointment.formattedDate}
                                                         </span>
                                                     </div>
-                                                    
+
                                                     {/* Time slot information */}
                                                     <div className="info-item">
                                                         <Clock className="icon" size={16} />
@@ -370,42 +483,30 @@ const PsyAppointments = () => {
                                                             Time Slot: {appointment.timeSlot}
                                                         </span>
                                                     </div>
-                                                    
-                                                    {/* User ID information */}
-                                                    <div className="info-item">
-                                                        <User className="icon" size={16} />
-                                                        <span className="text">
-                                                            User ID: {appointment.userId}
-                                                        </span>
-                                                    </div>
-                                                    
-                                                    {/* Appointment ID information */}
-                                                    <div className="info-item">
-                                                        <FileText className="icon" size={16} />
-                                                        <span className="text notes-text">
-                                                            Appointment ID: {appointment.appointmentId}
-                                                        </span>
-                                                    </div>
+
+
+                                                    {/* Remove the Appointment ID information section */}
                                                 </div>
                                             </div>
-                                            
-                                            {/* Actions section */}
+
+                                            {/* Actions section - replaced with only Cancel button */}
                                             <div className="actions">
-                                                <button 
-                                                    className="action-btn edit-notes"
-                                                    onClick={() => handleEdit(appointment.appointmentId)}
-                                                    disabled={appointment.status === 'CANCELLED'}
-                                                >
-                                                    <Edit className="icon" size={16} />
-                                                    <span>{appointment.timing === 'past' ? 'View Notes' : 'Add Notes'}</span>
-                                                </button>
-                                                
-                                                <button 
-                                                    className="action-btn view-profile"
-                                                    onClick={() => navigate(`/student-profile/${appointment.userId}`)}
-                                                >
-                                                    View Student
-                                                </button>
+                                                {appointment.status !== 'CANCELLED' && appointment.timing !== 'past' ? (
+                                                    <button
+                                                        className="action-btn cancel-appointment"
+                                                        onClick={() => showCancelConfirmation(appointment.appointmentId)}
+                                                        disabled={cancellingAppointment === appointment.appointmentId}
+                                                    >
+                                                        {cancellingAppointment === appointment.appointmentId ? (
+                                                            <span>Cancelling...</span>
+                                                        ) : (
+                                                            <>
+                                                                <AlertCircle className="icon" size={16} />
+                                                                <span>Cancel Appointment</span>
+                                                            </>
+                                                        )}
+                                                    </button>
+                                                ) : null}
                                             </div>
                                         </div>
                                     ))}

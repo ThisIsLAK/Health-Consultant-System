@@ -78,11 +78,24 @@ const AdminPsychoAppointment = () => {
         });
     };
 
-    // Get status badge based on active property
-    const getStatusBadge = (active) => {
-        return active ? 
-            <Badge bg="success">Active</Badge> : 
-            <Badge bg="danger">Cancelled</Badge>;
+    // Check if appointment is in the past
+    const isAppointmentInPast = (dateString) => {
+        if (!dateString) return false;
+        const appointmentDate = new Date(dateString);
+        return appointmentDate < new Date();
+    };
+
+    // Get status badge based on active property and date
+    const getStatusBadge = (active, appointmentDate) => {
+        if (!active) {
+            return <Badge bg="danger">Cancelled</Badge>;
+        }
+        
+        if (isAppointmentInPast(appointmentDate)) {
+            return <Badge bg="secondary">Completed</Badge>;
+        }
+        
+        return <Badge bg="success">Upcoming</Badge>;
     };
 
     // First initial for avatar
@@ -201,8 +214,8 @@ const AdminPsychoAppointment = () => {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Appointment ID</th>
-                                                <th>Student ID</th>
+                                                <th>Student</th>
+                                                <th>Student Email</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
                                                 <th>Status</th>
@@ -212,11 +225,11 @@ const AdminPsychoAppointment = () => {
                                             {appointments.map((appointment, index) => (
                                                 <tr key={appointment.appointmentId}>
                                                     <td>{index + 1}</td>
-                                                    <td>{appointment.appointmentId.substring(0, 8)}...</td>
-                                                    <td>{appointment.userId.substring(0, 8)}...</td>
+                                                    <td>{appointment.studentName}</td>
+                                                    <td>{appointment.studentEmail}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
-                                                    <td>{getStatusBadge(appointment.active)}</td>
+                                                    <td>{getStatusBadge(appointment.active, appointment.appointmentDate)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

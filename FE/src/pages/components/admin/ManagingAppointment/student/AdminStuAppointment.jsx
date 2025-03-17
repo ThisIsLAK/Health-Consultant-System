@@ -200,8 +200,8 @@ const AdminStuAppointment = () => {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Appointment ID</th>
                                                 <th>Psychologist</th>
+                                                <th>Psychologist Email</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
                                                 <th>Status</th>
@@ -211,8 +211,8 @@ const AdminStuAppointment = () => {
                                             {appointments.map((appointment, index) => (
                                                 <tr key={appointment.appointmentId}>
                                                     <td>{index + 1}</td>
-                                                    <td>{appointment.appointmentId.substring(0, 8)}...</td>
-                                                    <td>{psychologistNames[appointment.psychologistId] || appointment.psychologistId.substring(0, 8) + '...'}</td>
+                                                    <td>{psychologistNames[appointment.psychologistName]}</td>
+                                                    <td>{appointment.psychologistEmail}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
                                                     <td>{getStatusBadge(appointment.active)}</td>

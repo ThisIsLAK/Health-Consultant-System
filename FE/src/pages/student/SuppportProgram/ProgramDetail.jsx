@@ -187,7 +187,7 @@ const ProgramDetail = () => {
       <div className="program-container">
         <div className="program-hero">
           <Button 
-            className="back-button"
+            className="back-button-programdetail"
             onClick={() => navigate("/support")}
           >
             <FaArrowLeft /> Back to Programs

@@ -399,6 +399,61 @@
     background: #1d4ed8;
 }
 
+/* Cancel button styles */
+.psy-appointments-container .cancel-appointment {
+    background-color: #ef4444;
+    color: white;
+    border: none;
+}
+
+.psy-appointments-container .cancel-appointment:hover:not(:disabled) {
+    background-color: #dc2626;
+}
+
+.psy-appointments-container .cancel-appointment:disabled {
+    background-color: #fca5a5;
+    cursor: not-allowed;
+}
+
+/* Alert messages */
+.psy-appointments-container .success-alert,
+.psy-appointments-container .error-alert {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.psy-appointments-container .success-alert {
+    background-color: #d1fae5;
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.psy-appointments-container .error-alert {
+    background-color: #fee2e2;
+    color: #b91c1c;
+    border-left: 4px solid #ef4444;
+}
+
+.psy-appointments-container .success-message,
+.psy-appointments-container .error-message {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.psy-appointments-container .close-alert {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0 0 1rem;
+}
+
 /* Status-specific card styles */
 .psy-appointments-container .status-completed {
     background-color: rgba(39, 174, 96, 0.02);

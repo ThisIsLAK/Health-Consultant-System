@@ -84,9 +84,12 @@ const ManagingAppointment = () => {
         
         const matchesSearch = 
             searchQuery === "" || 
+            appointment.studentEmail.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            appointment.studentName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            appointment.psychologistName.toLowerCase().includes(searchQuery.toLowerCase()) ||
             appointment.userId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            appointment.appointmentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            appointment.psychologistId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            // appointment.appointmentId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            // appointment.psychologistId.toLowerCase().includes(searchQuery.toLowerCase()) ||
             appointment.timeSlot.toLowerCase().includes(searchQuery.toLowerCase());
         
         return matchesFilter && matchesSearch;
@@ -298,9 +301,10 @@ const ManagingAppointment = () => {
                                                 <th>Status</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
-                                                <th>Student ID</th>
-                                                <th>Psychologist ID</th>
-                                                <th>Appointment ID</th>
+                                                <th>Student</th>
+                                                <th>Student Email</th>
+                                                <th>Psychologist</th>
+                                                <th>Psychologist Email</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -326,19 +330,24 @@ const ManagingAppointment = () => {
                                                         </td>
                                                         <td className="student-cell">
                                                             <User size={16} className="cell-icon" />
-                                                            <span className="id-text" title={appointment.userId}>
-                                                                {appointment.userId.substring(0, 8)}...
+                                                            <span className="id-text" title={appointment.studentName}>
+                                                                {appointment.studentName}
+                                                            </span>
+                                                        </td>
+                                                        <td className="student-email-cell">
+                                                            <span className="id-text" title={appointment.studentEmail}>
+                                                                {appointment.studentEmail}
                                                             </span>
                                                         </td>
                                                         <td className="psychologist-cell">
                                                             <User size={16} className="cell-icon" />
-                                                            <span className="id-text" title={appointment.psychologistId}>
-                                                                {appointment.psychologistId.substring(0, 8)}...
+                                                            <span className="id-text" title={appointment.psychologistName}>
+                                                                {appointment.psychologistName}
                                                             </span>
                                                         </td>
-                                                        <td className="appointment-id-cell">
-                                                            <span className="appointment-id" title={appointment.appointmentId}>
-                                                                {appointment.appointmentId.substring(0, 8)}...
+                                                        <td className="psychologist-email-cell">
+                                                            <span className="id-text" title={appointment.psychologistEmail}>
+                                                                {appointment.psychologistEmail}
                                                             </span>
                                                         </td>
                                                         <td className="actions-cell">
