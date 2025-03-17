@@ -38,8 +38,8 @@ public enum ErrorCode {
     CANCELLATION_TOO_LATE(1032,"Appointment should cancel 4h early" ),
     SURVEY_CREATION_FAILED(1033, "Can not create survey"),
     DATABASE_ERROR(1034, "Error when save to database"),
-    SURVEY_NOT_FOUND(1035, "Survey not found")
-    ;   //<<====chu y dau (;)===========================================================================================
+    SURVEY_NOT_FOUND(1035, "Survey not found"),
+    PSYCHOLOGIST_NOT_FOUND(1036,"psychologist not found" );   //<<====chu y dau (;)===========================================================================================
 
 
 

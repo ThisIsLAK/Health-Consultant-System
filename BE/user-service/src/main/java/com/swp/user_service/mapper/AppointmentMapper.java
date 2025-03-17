@@ -9,10 +9,10 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface AppointmentMapper {
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.name", target = "studentName")
-    @Mapping(source = "user.email", target = "studentEmail")
-    @Mapping(source = "psychologistId", target = "psychologistId")
+    @Mapping(source = "user.id", target = "userId", defaultValue = "Unknown")
+    @Mapping(source = "user.name", target = "studentName", defaultValue = "Unknown")
+    @Mapping(source = "user.email", target = "studentEmail", defaultValue = "N/A")
+    @Mapping(source = "psychologistId", target = "psychologistId", defaultValue = "Unknown")
     @Mapping(target = "psychologistName", ignore = true) // Sẽ xử lý sau
     @Mapping(target = "psychologistEmail", ignore = true) // Sẽ xử lý sau
     AppointmentResponse toAppointmentResponse(Appointment appointment);

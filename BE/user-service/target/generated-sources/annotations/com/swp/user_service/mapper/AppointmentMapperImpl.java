@@ -23,10 +23,33 @@ public class AppointmentMapperImpl implements AppointmentMapper {
 
         AppointmentResponse.AppointmentResponseBuilder appointmentResponse = AppointmentResponse.builder();
 
-        appointmentResponse.userId( appointmentUserId( appointment ) );
-        appointmentResponse.studentName( appointmentUserName( appointment ) );
-        appointmentResponse.studentEmail( appointmentUserEmail( appointment ) );
-        appointmentResponse.psychologistId( appointment.getPsychologistId() );
+        String id = appointmentUserId( appointment );
+        if ( id != null ) {
+            appointmentResponse.userId( id );
+        }
+        else {
+            appointmentResponse.userId( "Unknown" );
+        }
+        String name = appointmentUserName( appointment );
+        if ( name != null ) {
+            appointmentResponse.studentName( name );
+        }
+        else {
+            appointmentResponse.studentName( "Unknown" );
+        }
+        String email = appointmentUserEmail( appointment );
+        if ( email != null ) {
+            appointmentResponse.studentEmail( email );
+        }
+        else {
+            appointmentResponse.studentEmail( "N/A" );
+        }
+        if ( appointment.getPsychologistId() != null ) {
+            appointmentResponse.psychologistId( appointment.getPsychologistId() );
+        }
+        else {
+            appointmentResponse.psychologistId( "Unknown" );
+        }
         appointmentResponse.appointmentId( appointment.getAppointmentId() );
         appointmentResponse.appointmentDate( appointment.getAppointmentDate() );
         appointmentResponse.timeSlot( appointment.getTimeSlot() );

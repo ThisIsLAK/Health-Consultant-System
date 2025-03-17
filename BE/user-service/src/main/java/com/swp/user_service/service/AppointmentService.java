@@ -21,10 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import java.util.stream.Collectors;
 
@@ -183,17 +180,18 @@ public class AppointmentService {
 
     public List<AppointmentResponse> getPsychologistAppointments(String psychologistId) {
         List<Appointment> appointments = appointmentRepository.findAppointmentsByPsychologistId(psychologistId);
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+        responses.forEach(response -> {
+            String psyId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psyId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
 
-        return appointments.stream().map(appointment -> {
-            AppointmentResponse response = new AppointmentResponse();
-            response.setActive(appointment.getActive());
-            response.setAppointmentId(appointment.getAppointmentId());
-            response.setAppointmentDate(appointment.getAppointmentDate());
-            response.setTimeSlot(appointment.getTimeSlot());
-            response.setUserId(appointment.getUser().getId()); // Đảm bảo lấy đúng UserId
-            response.setPsychologistId(appointment.getPsychologistId()); // Lấy psychologistId từ field riêng
-            return response;
-        }).collect(Collectors.toList());
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
+        return responses;
     }
 
     public List<AppointmentResponse> getUserAppointments(String id) {
@@ -206,17 +204,20 @@ public class AppointmentService {
     public List<AppointmentResponse> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
         List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
-
-        // Gán thông tin psychologist thủ công
         responses.forEach(response -> {
-            userRepository.findById(response.getPsychologistName()).ifPresent(psychologist -> {
-                response.setPsychologistName(psychologist.getName());
-                response.setPsychologistEmail(psychologist.getEmail());
-            });
-        });
+            String psychologistId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psychologistId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
 
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
         return responses;
     }
+
+
 
     public AppointmentSummaryResponse getAppointmentSummary() {
         List<Appointment> appointments = appointmentRepository.findAll();

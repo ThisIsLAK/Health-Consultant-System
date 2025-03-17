@@ -7,6 +7,7 @@ import com.swp.user_service.entity.Appointment;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
+import com.swp.user_service.mapper.AppointmentMapper;
 import com.swp.user_service.mapper.PsychologistMapper;
 import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.AppointmentRepository;
@@ -19,10 +20,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -35,6 +36,7 @@ public class PsyService {
     PasswordEncoder passwordEncoder;
     UserMapper userMapper;
     AppointmentRepository appointmentRepository;
+    AppointmentMapper appointmentMapper;
 
     public UserResponse getPsychologistById(String id) {
         User user = userRepository.findById(id)
@@ -80,19 +82,8 @@ public class PsyService {
         return psychologists;
     }
 
-    public List<AppointmentResponse> getAllActiveAppointments(String psychologistId) {
-        List<Appointment> appointments = appointmentRepository.findAllByPsychologistIdAndActive(psychologistId,true);
 
-        return appointments.stream().map(appointment -> {
-            AppointmentResponse response = new AppointmentResponse();
-            response.setPsychologistId(appointment.getPsychologistId());
-            response.setAppointmentId(appointment.getAppointmentId());
-            response.setAppointmentDate(appointment.getAppointmentDate());
-            response.setTimeSlot(appointment.getTimeSlot());
-            response.setUserId(appointment.getUser().getId());
-            return response;
-        }).collect(Collectors.toList());
-    }
+
 
     public List<UserResponse> getAllStudents() {
         return userRepository.findAll().stream()
@@ -107,5 +98,21 @@ public class PsyService {
                 .map(userMapper::toUserResponse)
                 .collect(Collectors.toList());
     }
+    public List<AppointmentResponse> getAllActiveAppointments(String psychologistId) {
+        List<Appointment> appointments = appointmentRepository.findAllByPsychologistIdAndActive(psychologistId, true);
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+
+        responses.forEach(response -> {
+            String psyId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psyId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
+
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
+        return responses;
+}
 
 }

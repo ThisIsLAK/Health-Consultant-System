@@ -24,5 +24,4 @@ public class AppointmentResponse {
     Date appointmentDate;
     String timeSlot;
     Boolean active;
-
 }

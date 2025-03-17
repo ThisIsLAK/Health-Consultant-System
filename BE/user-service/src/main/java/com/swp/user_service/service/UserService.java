@@ -27,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -91,31 +92,35 @@ public class UserService {
 
     public List<AppointmentResponse> getAppointmentHistory(String userId) {
         List<Appointment> appointments = appointmentRepository.findAppointmentsByUserId(userId);
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+        responses.forEach(response -> {
+            String psyId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psyId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
 
-        return appointments.stream().map(appointment -> {
-            AppointmentResponse response = new AppointmentResponse();
-            response.setAppointmentId(appointment.getAppointmentId());
-            response.setAppointmentDate(appointment.getAppointmentDate());
-            response.setTimeSlot(appointment.getTimeSlot());
-            response.setUserId(appointment.getUser().getId());
-            response.setActive(appointment.getActive());
-            response.setPsychologistId(appointment.getPsychologistId());
-            return response;
-        }).collect(Collectors.toList());
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
+        return responses;
     }
 
     public List<AppointmentResponse> getAllActiveAppointments(String userId) {
-
         List<Appointment> appointments = appointmentRepository.findAllByUserIdAndActive(userId, true);
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+        responses.forEach(response -> {
+            String psyId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psyId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
 
-        return appointments.stream().map(appointment -> {
-            AppointmentResponse response = new AppointmentResponse();
-            response.setPsychologistId(appointment.getPsychologistId());
-            response.setAppointmentId(appointment.getAppointmentId());
-            response.setAppointmentDate(appointment.getAppointmentDate());
-            response.setTimeSlot(appointment.getTimeSlot());
-            response.setUserId(appointment.getUser().getId());
-            return response;
-        }).collect(Collectors.toList());
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
+        return responses;
     }
-}
+    }
+
+
