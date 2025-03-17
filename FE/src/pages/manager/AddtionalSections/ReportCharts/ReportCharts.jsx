@@ -1,18 +1,25 @@
-import React, { useState } from 'react'
-import Chart from 'react-apexcharts'
+import React, { useState, useEffect } from 'react';
+import Chart from 'react-apexcharts';
+import ApiService from '../../../../service/ApiService';
 
 const ReportCharts = () => {
-    const [data, setData] = useState({
-        series: [{
-            name: 'Sales',
-            data: [31, 40, 28, 51, 42, 109, 100]
-        }, {
-            name: 'Revenue',
-            data: [11, 32, 45, 32, 34, 52, 41]
-        }, {
-            name: 'Customers',
-            data: [15, 11, 32, 18, 9, 24, 11]
-        }],
+    const [dashboardData, setDashboardData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [chartData, setChartData] = useState({
+        series: [
+            {
+                name: 'Appointments',
+                data: [0, 0, 0, 0]
+            },
+            {
+                name: 'Programs',
+                data: [0, 0, 0, 0]
+            },
+            {
+                name: 'Surveys',
+                data: [0, 0, 0, 0]
+            }
+        ],
         options: {
             chart: {
                 height: 350,
@@ -41,30 +48,94 @@ const ReportCharts = () => {
                 curve: 'smooth'
             },
             xaxis: {
-                type: 'datetime',
-                categories: ["2018-09-19T00:00:00.000Z",
-                             "2018-09-19T01:30:00.000Z",
-                             "2018-09-19T02:30:00.000Z",
-                             "2018-09-19T03:30:00.000Z",
-                             "2018-09-19T04:30:00.000Z",
-                             "2018-09-19T05:30:00.000Z",
-                             "2018-09-19T06:30:00.000Z"]
+                categories: ['Total', 'Active', 'Completed/Canceled', 'Upcoming/Ending Soon']
             },
             tooltip: {
-                x: {
-                    format: 'dd/MM/yy HH:mm'
-                },
+                y: {
+                    formatter: function (val) {
+                        return val
+                    }
+                }
             },
         },
-    })
+    });
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            setLoading(true);
+            try {
+                const response = await ApiService.getManagerDashboardData();
+                if (response.status === 200 && response.data) {
+                    setDashboardData(response.data);
+                    updateChartData(response.data);
+                } else {
+                    console.error("Failed to fetch dashboard data:", response.message);
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
+
+    const updateChartData = (data) => {
+        const { appointmentSummary, supportProgramSummary, surveySummary } = data;
+        
+        setChartData({
+            ...chartData,
+            series: [
+                {
+                    name: 'Appointments',
+                    data: [
+                        appointmentSummary.totalAppointments,
+                        appointmentSummary.activeAppointments,
+                        appointmentSummary.cancelledAppointments,
+                        appointmentSummary.upcomingAppointments
+                    ]
+                },
+                {
+                    name: 'Programs',
+                    data: [
+                        supportProgramSummary.totalPrograms,
+                        supportProgramSummary.activePrograms,
+                        0, // No "completed" data in API response
+                        supportProgramSummary.programsEndingSoon
+                    ]
+                },
+                {
+                    name: 'Surveys',
+                    data: [
+                        surveySummary.totalSurveys,
+                        surveySummary.activeSurveys,
+                        surveySummary.totalSurveyResults,
+                        surveySummary.averageScore
+                    ]
+                }
+            ]
+        });
+    };
+
+    if (loading) {
+        return <div>Loading dashboard data...</div>;
+    }
 
     return (
-        <Chart
-            options={data.options}
-            series={data.series}
-            type={data.options.chart.type}
-            height={data.options.chart.height}/>
-    )
-}
+        <div>
+            {dashboardData ? (
+                <Chart
+                    options={chartData.options}
+                    series={chartData.series}
+                    type={chartData.options.chart.type}
+                    height={chartData.options.chart.height}
+                />
+            ) : (
+                <div>No dashboard data available</div>
+            )}
+        </div>
+    );
+};
 
-export default ReportCharts
+export default ReportCharts;

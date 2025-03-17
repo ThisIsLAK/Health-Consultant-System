@@ -1138,4 +1138,38 @@ export default class ApiService {
             };
         }
     }
+
+    /**
+     * Get dashboard data for manager
+     * @returns {Promise<Object>} Response object with dashboard statistics
+     */
+    static async getManagerDashboardData() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/manager/dashboard`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched manager dashboard data:", response.data);
+
+            if (response.data && response.data.code === 1000) {
+                return {
+                    status: 200,
+                    data: response.data.result,
+                    message: "Dashboard data fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: response.data?.message || "Failed to fetch dashboard data"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching manager dashboard data:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch dashboard data"
+            };
+        }
+    }
 }
