@@ -197,7 +197,7 @@ const AdminBlog = () => {
                                         <FaEdit /> Edit
                                     </button>
                                     <button
-                                        className="delete-button"
+                                        className="blogdelete-button"
                                         onClick={() => handleDeleteClick(blog.blogCode, blog.title)}
                                     >
                                         <FaTrash /> Delete

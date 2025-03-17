@@ -153,7 +153,7 @@
 }
 
 /* Buttons */
-.edit-button, .delete-button {
+.edit-button, .blogdelete-button {
     padding: 8px 16px;
     border-radius: 4px;
     font-weight: 500;
@@ -168,22 +168,24 @@
 }
 
 .edit-button {
-    background-color: #007bff;
+    background-color: #17a2b8;
     color: white;
     border: none;
+    border-radius: 20px;
 }
 
 .edit-button:hover {
     background-color: #0056b3;
 }
 
-.delete-button {
+.blogdelete-button {
     background-color: #dc3545;
     color: white;
     border: none;
+    border-radius: 20px;
 }
 
-.delete-button:hover {
+.blogdelete-button:hover {
     background-color: #c82333;
 }
 

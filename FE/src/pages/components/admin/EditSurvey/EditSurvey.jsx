@@ -6,17 +6,19 @@ import AdminHeader from '../../../../component/admin/AdminHeader';
 import ApiService from '../../../../service/ApiService';
 
 const EditSurvey = () => {
-  const { surveyId } = useParams(); // Get surveyId from the URL
+  const { surveyId } = useParams();
   const navigate = useNavigate();
 
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
-  const [surveyCode, setSurveyCode] = useState(''); // Add surveyCode to match AddSurvey
+  const [surveyCode, setSurveyCode] = useState('');
   const [questions, setQuestions] = useState([]);
-  const [editingQuestionId, setEditingQuestionId] = useState(null); // Track which question is being edited
+  const [editingQuestionId, setEditingQuestionId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState({
-    question: '',
-    answers: [{ text: '', points: 0 }],
+    questionId: null,
+    surveyId: null, // Thêm surveyId cho mỗi câu hỏi
+    questionText: '',
+    answers: [{ optionId: null, optionText: '', points: 0 }],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -28,18 +30,22 @@ const EditSurvey = () => {
         const response = await ApiService.getSurveyById(surveyId);
         if (response.status === 200) {
           const surveyData = response.data.result || response.data;
+          console.log('Fetched survey data:', surveyData);
           if (surveyData) {
             setSurveyTitle(surveyData.title || '');
             setSurveyDescription(surveyData.description || '');
-            setSurveyCode(surveyData.surveyCode || ''); // Set surveyCode
+            setSurveyCode(surveyData.surveyCode || '');
             setQuestions(
               surveyData.questions.map((q) => ({
-                id: q.questionId || Date.now(), // Use questionId if available, otherwise generate
-                question: q.questionText,
+                id: q.questionId || Date.now(),
+                questionId: q.questionId,
+                surveyId: q.surveyId || surveyId, // Lấy surveyId từ API hoặc từ params
+                questionText: q.questionText,
                 answers: q.answerOptions.map((a) => ({
-                  id: a.optionId || Date.now(), // Use optionId if available, otherwise generate
-                  text: a.optionText,
-                  points: a.score,
+                  id: a.optionId || Date.now(),
+                  optionId: a.optionId,
+                  optionText: a.optionText,
+                  score: a.score,
                 })),
               }))
             );
@@ -61,7 +67,14 @@ const EditSurvey = () => {
   const handleEditQuestion = (question) => {
     setEditingQuestionId(question.id);
     setCurrentQuestion({
-      ...question,
+      questionId: question.questionId,
+      surveyId: question.surveyId, // Thêm surveyId
+      questionText: question.questionText,
+      answers: question.answers.map((a) => ({
+        optionId: a.optionId,
+        optionText: a.optionText,
+        points: a.score,
+      })),
     });
   };
 
@@ -69,14 +82,14 @@ const EditSurvey = () => {
   const handleQuestionChange = (e) => {
     setCurrentQuestion({
       ...currentQuestion,
-      question: e.target.value,
+      questionText: e.target.value,
     });
   };
 
   // Handle changing answer text
   const handleAnswerTextChange = (index, e) => {
     const updatedAnswers = [...currentQuestion.answers];
-    updatedAnswers[index].text = e.target.value;
+    updatedAnswers[index].optionText = e.target.value;
     setCurrentQuestion({
       ...currentQuestion,
       answers: updatedAnswers,
@@ -95,18 +108,18 @@ const EditSurvey = () => {
 
   // Save the edited question
   const handleSaveQuestion = () => {
-    if (!currentQuestion.question.trim()) {
+    if (!currentQuestion.questionText.trim()) {
       alert('Please enter a question');
       return;
     }
-    
-    if (currentQuestion.answers.some(answer => !answer.text.trim())) {
+
+    if (currentQuestion.answers.some(answer => !answer.optionText.trim())) {
       alert('Please fill in all answers');
       return;
     }
 
-    setQuestions(questions.map(q => 
-      q.id === editingQuestionId ? { ...currentQuestion, id: q.id } : q
+    setQuestions(questions.map(q =>
+      q.id === editingQuestionId ? { ...currentQuestion, id: q.id, questionId: q.questionId, surveyId: q.surveyId } : q
     ));
     setEditingQuestionId(null);
   };
@@ -115,8 +128,10 @@ const EditSurvey = () => {
   const handleCancelEdit = () => {
     setEditingQuestionId(null);
     setCurrentQuestion({
-      question: '',
-      answers: [{ text: '', points: 0 }],
+      questionId: null,
+      surveyId: surveyId, // Sử dụng surveyId từ params
+      questionText: '',
+      answers: [{ optionId: null, optionText: '', points: 0 }],
     });
   };
 
@@ -143,31 +158,35 @@ const EditSurvey = () => {
     }
 
     const surveyData = {
+      surveyId: surveyId, // Thêm surveyId vào body
       surveyCode: surveyCode,
       title: surveyTitle,
       description: surveyDescription,
       questions: questions.map((q) => ({
-        questionText: q.question,
+        questionId: q.questionId ? String(q.questionId) : undefined,
+        surveyId: q.surveyId || surveyId, // Thêm surveyId cho mỗi câu hỏi
+        questionText: q.questionText,
         answerOptions: q.answers.map((answer) => ({
-          optionText: answer.text,
-          score: answer.points,
+          optionId: answer.optionId ? String(answer.optionId) : undefined,
+          optionText: answer.optionText,
+          score: parseInt(answer.points),
         })),
       })),
     };
 
-    console.log('Survey data to be updated:', surveyData);
+    console.log('Survey data to be updated:', JSON.stringify(surveyData, null, 2));
 
     try {
       const response = await ApiService.updateSurvey(surveyId, surveyData);
       if (response.status === 200) {
         alert('Survey updated successfully!');
-        navigate(`/surveydetail/${surveyId}`); // Redirect to SurveyDetail after success
+        navigate('/adminsurvey');
       } else {
         alert(`Failed to update survey: ${response.message}`);
       }
     } catch (error) {
-      alert('An error occurred while updating the survey.');
-      console.error('Update error:', error);
+      console.error('Update error:', error.response?.data || error.message);
+      alert(`An error occurred while updating the survey: ${error.response?.data?.message || error.message}`);
     }
   };
 
@@ -261,7 +280,7 @@ const EditSurvey = () => {
                       <input
                         type="text"
                         className="form-input"
-                        value={currentQuestion.question}
+                        value={currentQuestion.questionText}
                         onChange={handleQuestionChange}
                         placeholder="Enter question"
                       />
@@ -274,7 +293,7 @@ const EditSurvey = () => {
                           <input
                             type="text"
                             className="form-input answer-text-input"
-                            value={answer.text}
+                            value={answer.optionText}
                             onChange={(e) => handleAnswerTextChange(index, e)}
                             placeholder={`Answer ${index + 1}`}
                           />
@@ -308,7 +327,7 @@ const EditSurvey = () => {
                   </div>
                 ) : (
                   <div className="question-header">
-                    <h3 className="question-title">{q.question}</h3>
+                    <h3 className="question-title">{q.questionText}</h3>
                     <div>
                       <button
                         onClick={() => handleEditQuestion(q)}
@@ -329,7 +348,7 @@ const EditSurvey = () => {
                   {q.answers.map((answer, index) => (
                     <div key={index} className="answer-item">
                       <span className="answer-number">{index + 1}</span>
-                      <span className="answer-text">{answer.text} - {answer.points} points</span>
+                      <span className="answer-text">{answer.optionText} - {answer.points} points</span>
                     </div>
                   ))}
                 </div>

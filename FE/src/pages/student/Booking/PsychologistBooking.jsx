@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import Navbar from "../../components/homepage/Navbar";
 import Footer from "../../components/homepage/Footer";
 import LoginPrompt from '../../../components/LoginPrompt';
+import Swal from 'sweetalert2'; // Add this import
 
 // MUI imports
 import { 
@@ -267,90 +268,119 @@ const generateTimeSlots = () => {
   }, []);
 
   // Book the selected appointment with exact field names matching the API
-  const bookAppointment = async () => {
-    if (!selectedDate || !selectedPsychologist || selectedSlot === null) {
-      toast.error("Please select date, psychologist, and time slot");
+const bookAppointment = async () => {
+  if (!selectedDate || !selectedPsychologist || selectedSlot === null) {
+    toast.error("Please select date, psychologist, and time slot");
+    return;
+  }
+  
+  try {
+    // Show SweetAlert confirmation dialog
+    const result = await Swal.fire({
+      title: 'Confirm Appointment',
+      html: `
+        <div style="text-align: left; padding: 10px;">
+          <p><strong>Psychologist:</strong> ${selectedPsychologist.name}</p>
+          <p><strong>Date:</strong> ${formatDate(selectedDate)}</p>
+          <p><strong>Time:</strong> ${timeSlots[selectedSlot].time}</p>
+        </div>
+      `,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3498db',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, book it!',
+      cancelButtonText: 'Cancel'
+    });
+    
+    // If the user cancels, exit the function
+    if (!result.isConfirmed) {
       return;
     }
     
-    try {
-      setSubmitting(true);
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        toast.error("You need to be logged in to book an appointment");
-        return;
-      }
-      
-      // Extract userId from token instead of using localStorage directly
-      const decoded = parseJwt(token);
-      const userId = decoded?.iss;
-      
-      if (!userId) {
-        toast.error("Could not determine user identity. Please log in again.");
-        return;
-      }
-      
-      console.log("Using userId:", userId);
-      
-      // Format the date for the API
-      const appointmentDate = new Date(selectedDate);
-      const formattedDate = appointmentDate.toISOString();
-      
-      // Create payload EXACTLY matching the API requirements
-      const appointmentData = {
-        userId: userId,
-        psychologistId: selectedPsychologist.id,
-        appointmentDate: formattedDate,
-        timeSlot: timeSlots[selectedSlot].value
-      };
-      
-      console.log("Sending booking data:", appointmentData);
-      
-      // Make API request
-      const response = await axios.post(
-        'http://localhost:8080/identity/users/bookappointment',
-        appointmentData,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
-      );
-      
-      console.log("Booking response:", response.data);
-      
-      // Check if booking was successful
-      if (response.data && (response.data.code === 1000)) {
-        // Update local state to reflect booking
-        const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
-        const newBookings = { ...bookings };
-        if (!newBookings[bookingKey]) {
-          newBookings[bookingKey] = {};
-        }
-        newBookings[bookingKey][selectedSlot] = "Booked";
-        setBookings(newBookings);
-        
-        // Show success message
-        toast.success("Appointment booked successfully!");
-        setShowConfirmation(true);
-        
-        // Hide confirmation after delay
-        setTimeout(() => {
-          setShowConfirmation(false);
-          navigate('/appointments'); // Navigate to appointments list
-        }, 3000);
-      } else {
-        toast.error(response.data?.message || "Failed to book appointment");
-      }
-    } catch (error) {
-      console.error("Error booking appointment:", error);
-      toast.error(error.response?.data?.message || "Failed to book appointment. Please try again.");
-    } finally {
-      setSubmitting(false);
+    setSubmitting(true);
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      toast.error("You need to be logged in to book an appointment");
+      return;
     }
-  };
+    
+    // Extract userId from token instead of using localStorage directly
+    const decoded = parseJwt(token);
+    const userId = decoded?.iss;
+    
+    if (!userId) {
+      toast.error("Could not determine user identity. Please log in again.");
+      return;
+    }
+    
+    console.log("Using userId:", userId);
+    
+    // Format the date for the API
+    const appointmentDate = new Date(selectedDate);
+    const formattedDate = appointmentDate.toISOString();
+    
+    // Create payload EXACTLY matching the API requirements
+    const appointmentData = {
+      userId: userId,
+      psychologistId: selectedPsychologist.id,
+      appointmentDate: formattedDate,
+      timeSlot: timeSlots[selectedSlot].value
+    };
+    
+    console.log("Sending booking data:", appointmentData);
+    
+    // Make API request
+    const response = await axios.post(
+      'http://localhost:8080/identity/users/bookappointment',
+      appointmentData,
+      {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    console.log("Booking response:", response.data);
+    
+    // Check if booking was successful
+    if (response.data && (response.data.code === 1000)) {
+      // Update local state to reflect booking
+      const bookingKey = getBookingKey(selectedDate, selectedPsychologist.id);
+      const newBookings = { ...bookings };
+      if (!newBookings[bookingKey]) {
+        newBookings[bookingKey] = {};
+      }
+      newBookings[bookingKey][selectedSlot] = "Booked";
+      setBookings(newBookings);
+      
+      // Show success message with SweetAlert
+      await Swal.fire({
+        title: 'Success!',
+        text: 'Your appointment has been booked successfully.',
+        icon: 'success',
+        confirmButtonColor: '#3498db'
+      });
+      
+      setShowConfirmation(true);
+      
+      // Hide confirmation after delay
+      setTimeout(() => {
+        setShowConfirmation(false);
+        navigate('/appointments'); // Navigate to appointments list
+      }, 3000);
+    } else {
+      toast.error(response.data?.message || "Failed to book appointment");
+    }
+  } catch (error) {
+    console.error("Error booking appointment:", error);
+    toast.error(error.response?.data?.message || "Failed to book appointment. Please try again.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   // If not authenticated, render the login prompt
   if (!isAuthenticated) {
@@ -358,7 +388,10 @@ const generateTimeSlots = () => {
       <>
         <Navbar />
         <LoginPrompt 
-          message="You need to be logged in to book appointments with psychologists. Please log in to access this feature."
+          featureName="psychologist appointments"
+          title="Ready to speak with a mental health professional?"
+          message="Sign in to book appointments with our qualified psychologists. Get the support you need on your schedule."
+          buttonText="Sign In to Book" 
         />
         <Footer />
       </>

@@ -7,6 +7,7 @@ import { FaEye, FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import ApiService from '../../../../service/ApiService';
+import './AdminUserList.css'
 
 const AdminUserList = () => {
     const itemsPerPage = 10; // Changed from 12 to 10 items per page
@@ -26,7 +27,7 @@ const AdminUserList = () => {
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, roleFilter]);
- 
+
     const fetchUsers = async () => {
         setLoading(true);
         setError(null);
@@ -65,7 +66,7 @@ const AdminUserList = () => {
         if (window.confirm(`Are you sure you want to delete user ${user.name || user.email}?`)) {
             try {
                 const response = await ApiService.deleteUserById(user.id);
-                
+
                 if (response.status === 200) {
                     // Remove the user from the local state
                     const updatedUsers = users.filter((u) => u.id !== user.id);
@@ -89,38 +90,35 @@ const AdminUserList = () => {
     // Lọc users theo role và tìm kiếm - with safeguards
     const filteredUsers = Array.isArray(users) ? users.filter((u) => {
         if (!u) return false;
-        
+
         // Handle role object structure
         const roleMatches = () => {
             if (roleFilter === 'All') return true;
-            
+
             if (!u.role) return false;
-            
-            // Check if role is an object with roleName property (new schema)
+
             if (typeof u.role === 'object' && u.role.roleName) {
                 return u.role.roleName.toUpperCase() === roleFilter.toUpperCase();
             }
-            
-            // If role is a string (old schema)
+
             if (typeof u.role === 'string') {
                 return u.role.toUpperCase() === roleFilter.toUpperCase();
             }
-            
+
             return false;
         };
-        
+
         if (!roleMatches()) return false;
-        
+
         if (searchTerm === '') return true;
-        
+
         const lowerSearch = searchTerm.toLowerCase();
         const nameMatches = u.name ? u.name.toLowerCase().includes(lowerSearch) : false;
         const firstNameMatches = u.firstName ? u.firstName.toLowerCase().includes(lowerSearch) : false;
         const lastNameMatches = u.lastName ? u.lastName.toLowerCase().includes(lowerSearch) : false;
         const emailMatches = u.email ? u.email.toLowerCase().includes(lowerSearch) : false;
-        const idMatches = u.id ? String(u.id).includes(lowerSearch) : false;
-        
-        return nameMatches || firstNameMatches || lastNameMatches || emailMatches || idMatches;
+
+        return nameMatches || firstNameMatches || lastNameMatches || emailMatches;
     }) : [];
 
     const indexOfLastUser = currentPage * itemsPerPage;
@@ -139,12 +137,12 @@ const AdminUserList = () => {
     const getUserRole = (user) => {
         if (!user) return 'Unknown';
         if (!user.role) return 'Unknown';
-        
+
         // Check if role matches the new schema
         if (typeof user.role === 'object' && user.role !== null) {
             return user.role.roleName || 'Unknown';
         }
-        
+
         // If role is a string
         return String(user.role) || 'Unknown';
     };
@@ -152,12 +150,12 @@ const AdminUserList = () => {
     // Helper function to determine user status
     const getUserStatus = (user) => {
         if (!user) return false;
-        
+
         // New schema has direct active property as boolean
         if (user.active !== undefined) {
             return user.active === true || user.active === 1;
         }
-        
+
         // Fallback to status for backward compatibility
         return user.status !== undefined ? user.status : true;
     };
@@ -239,8 +237,8 @@ const AdminUserList = () => {
                                             <div className="card h-100 border-0 bg-primary bg-opacity-10 border-start border-5 border-primary">
                                                 <div className="card-body d-flex flex-column justify-content-center">
                                                     <h6 className="text-primary mb-2">Need to add a new user?</h6>
-                                                    <Button 
-                                                        variant="primary" 
+                                                    <Button
+                                                        variant="primary"
                                                         className="d-flex align-items-center justify-content-center"
                                                         onClick={handleAddUserClick}
                                                     >
@@ -248,7 +246,7 @@ const AdminUserList = () => {
                                                     </Button>
                                                 </div>
                                             </div>
-                                        </div>  
+                                        </div>
                                     </div>
 
                                     {/* Search and filter section */}
@@ -261,14 +259,14 @@ const AdminUserList = () => {
                                                             <i className="bi bi-search"></i>
                                                         </InputGroup.Text>
                                                         <FormControl
-                                                            placeholder="Search users by name, email or ID..."
+                                                            placeholder="Search users by name or email..."
                                                             className="border-start-0"
                                                             value={searchTerm}
                                                             onChange={(e) => { setSearchTerm(e.target.value); setCurrentPage(1); }}
                                                         />
                                                         {searchTerm && (
-                                                            <Button 
-                                                                variant="outline-secondary" 
+                                                            <Button
+                                                                variant="outline-secondary"
                                                                 onClick={() => setSearchTerm('')}
                                                                 title="Clear search"
                                                             >
@@ -282,8 +280,8 @@ const AdminUserList = () => {
                                                         <Dropdown.Toggle variant="white" className="w-100 text-start d-flex align-items-center justify-content-between border">
                                                             <span>
                                                                 <i className="bi bi-filter me-2"></i>
-                                                                {roleFilter === 'All' ? 'All Roles' : 
-                                                                roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
+                                                                {roleFilter === 'All' ? 'All Roles' :
+                                                                    roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
                                                             </span>
                                                             <i className="bi bi-chevron-down"></i>
                                                         </Dropdown.Toggle>
@@ -297,9 +295,9 @@ const AdminUserList = () => {
                                                     </Dropdown>
                                                 </div>
                                                 <div className="col-md-2">
-                                                    <Button 
-                                                        variant="white" 
-                                                        className="w-100 border d-flex align-items-center justify-content-between"
+                                                    <Button
+                                                        variant="white"
+                                                        className="w-100 border d-flex align-items-center justify-content-between small-text"
                                                         onClick={toggleSortOrder}
                                                     >
                                                         <span>
@@ -310,8 +308,8 @@ const AdminUserList = () => {
                                                     </Button>
                                                 </div>
                                                 <div className="col-md-1">
-                                                    <Button 
-                                                        variant="outline-secondary" 
+                                                    <Button
+                                                        variant="outline-secondary"
                                                         className="w-100 h-100"
                                                         onClick={fetchUsers}
                                                         title="Refresh"
@@ -325,7 +323,7 @@ const AdminUserList = () => {
 
                                     {loading ? (
                                         <div className="text-center my-5 py-5">
-                                            <div className="spinner-border text-primary" role="status" style={{width: '3rem', height: '3rem'}}>
+                                            <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
                                                 <span className="visually-hidden">Loading...</span>
                                             </div>
                                             <p className="mt-3 text-muted">Loading users data...</p>
@@ -344,23 +342,21 @@ const AdminUserList = () => {
                                                     <table className="table table-hover align-middle border-bottom">
                                                         <thead className="bg-light">
                                                             <tr>
-                                                                <th className="py-3" style={{width: "5%"}}>ID</th>
-                                                                <th className="py-3" style={{width: "35%"}}>User</th>
-                                                                <th className="py-3" style={{width: "30%"}}>Email</th>
-                                                                <th className="py-3" style={{width: "15%"}}>Role</th>
-                                                                <th className="py-3 text-center" style={{width: "15%"}}>Actions</th>
+                                                                <th className="py-3" style={{ width: "40%" }}>User</th>
+                                                                <th className="py-3" style={{ width: "35%" }}>Email</th>
+                                                                <th className="py-3" style={{ width: "15%" }}>Role</th>
+                                                                <th className="py-3 text-center" style={{ width: "10%" }}>Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {currentUsers.map(user => (
                                                                 <tr key={user.id || Math.random()} className="border-bottom">
-                                                                    <td>{user.id || 'Unknown'}</td>
                                                                     <td>
                                                                         <div className="d-flex align-items-center">
                                                                             <div className="avatar text-white d-flex align-items-center justify-content-center me-3"
                                                                                 style={{
-                                                                                    width: '40px', 
-                                                                                    height: '40px', 
+                                                                                    width: '40px',
+                                                                                    height: '40px',
                                                                                     borderRadius: '8px',
                                                                                     background: `hsl(${(user.id * 31) % 360}, 70%, 60%)`,
                                                                                     fontSize: '16px'
@@ -374,23 +370,23 @@ const AdminUserList = () => {
                                                                     </td>
                                                                     <td>{user.email || 'No email'}</td>
                                                                     <td>
-                                                                        <Badge bg={getRoleBadgeColor(getUserRole(user))} 
-                                                                              className="rounded-pill px-3 py-2">
+                                                                        <Badge bg={getRoleBadgeColor(getUserRole(user))}
+                                                                            className="rounded-pill px-3 py-2">
                                                                             {getUserRole(user)}
                                                                         </Badge>
                                                                     </td>
                                                                     <td>
                                                                         <div className="d-flex justify-content-center gap-2">
-                                                                            <Button 
-                                                                                variant="outline-primary" 
+                                                                            <Button
+                                                                                variant="outline-primary"
                                                                                 size="sm"
                                                                                 onClick={() => navigate(`/userdetail/${encodeURIComponent(user.email || '')}`)}
                                                                                 title="View Details"
                                                                             >
                                                                                 <FaEye />
                                                                             </Button>
-                                                                            <Button 
-                                                                                variant="outline-danger" 
+                                                                            <Button
+                                                                                variant="outline-danger"
                                                                                 size="sm"
                                                                                 onClick={() => handleDeleteUser(user)}
                                                                                 title="Delete User"
@@ -411,9 +407,9 @@ const AdminUserList = () => {
                                                     </div>
                                                     <h5 className="mb-2">No users found</h5>
                                                     <p className="text-muted">Try adjusting your search or filter to find what you're looking for.</p>
-                                                    <Button 
-                                                        variant="outline-secondary" 
-                                                        size="sm" 
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        size="sm"
                                                         onClick={() => {
                                                             setSearchTerm('');
                                                             setRoleFilter('All');
@@ -430,7 +426,7 @@ const AdminUserList = () => {
                                                     <p className="mb-0 text-muted">
                                                         Showing <span className="fw-bold">{sortedUsers.length > 0 ? `${indexOfFirstUser + 1}-${Math.min(indexOfLastUser, sortedUsers.length)}` : "0"}</span> of <span className="fw-bold">{sortedUsers.length}</span> users
                                                     </p>
-                                                    
+
                                                     {totalPages > 1 && (
                                                         <div className="d-flex justify-content-center">
                                                             <nav>
@@ -445,7 +441,7 @@ const AdminUserList = () => {
                                                                             <i className="bi bi-chevron-left"></i>
                                                                         </button>
                                                                     </li>
-                                                                    
+
                                                                     {totalPages <= 5 ? (
                                                                         Array.from({ length: totalPages }, (_, i) => (
                                                                             <li key={i + 1} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
@@ -461,13 +457,13 @@ const AdminUserList = () => {
                                                                                     <button className="page-link" onClick={() => setCurrentPage(1)}>1</button>
                                                                                 </li>
                                                                             )}
-                                                                            
+
                                                                             {currentPage > 3 && (
                                                                                 <li className="page-item disabled">
                                                                                     <span className="page-link">...</span>
                                                                                 </li>
                                                                             )}
-                                                                            
+
                                                                             {currentPage > 1 && (
                                                                                 <li className="page-item">
                                                                                     <button className="page-link" onClick={() => setCurrentPage(currentPage - 1)}>
@@ -475,11 +471,11 @@ const AdminUserList = () => {
                                                                                     </button>
                                                                                 </li>
                                                                             )}
-                                                                            
+
                                                                             <li className="page-item active">
                                                                                 <span className="page-link">{currentPage}</span>
                                                                             </li>
-                                                                            
+
                                                                             {currentPage < totalPages && (
                                                                                 <li className="page-item">
                                                                                     <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
@@ -487,13 +483,13 @@ const AdminUserList = () => {
                                                                                     </button>
                                                                                 </li>
                                                                             )}
-                                                                            
+
                                                                             {currentPage < totalPages - 2 && (
                                                                                 <li className="page-item disabled">
                                                                                     <span className="page-link">...</span>
                                                                                 </li>
                                                                             )}
-                                                                            
+
                                                                             {currentPage < totalPages - 1 && (
                                                                                 <li className="page-item">
                                                                                     <button className="page-link" onClick={() => setCurrentPage(totalPages)}>
@@ -503,7 +499,7 @@ const AdminUserList = () => {
                                                                             )}
                                                                         </>
                                                                     )}
-                                                                    
+
                                                                     <li className={`page-item ${currentPage === totalPages ? 'disabled' : ''}`}>
                                                                         <button className="page-link" onClick={() => setCurrentPage(currentPage + 1)}>
                                                                             <i className="bi bi-chevron-right"></i>

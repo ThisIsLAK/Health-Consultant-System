@@ -138,7 +138,7 @@ const PsyAppointments = () => {
                 
                 // Make request to the specified endpoint
                 const response = await axios.get(
-                    `http://localhost:8080/identity/psychologists/psyappointment/${psychologistId}`,
+                    `http://localhost:8080/identity/psychologists/allactiveappointments/${psychologistId}`,
                     {
                         headers: {
                             'Authorization': `Bearer ${token}`

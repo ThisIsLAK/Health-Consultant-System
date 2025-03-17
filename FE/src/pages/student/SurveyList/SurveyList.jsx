@@ -81,7 +81,10 @@ const SurveyList = () => {
             <>
                 <Navbar />
                 <LoginPrompt 
-                    message="You need to be logged in to access health surveys. Please log in to continue."
+                    featureName="health surveys"
+                    title="Would you like to take a health assessment?"
+                    message="Our health surveys help us understand your needs better and provide personalized recommendations. Sign in to get started."
+                    buttonText="Sign In to Take Surveys"
                 />
                 <Footer />
             </>
@@ -89,107 +92,105 @@ const SurveyList = () => {
     }
 
     return (
-        <div>
+        <div className="survey-page">
             <Navbar />
-            <div className="survey-container">
-                <div className="survey-header">
-                    <h1>Health Surveys</h1>
-                    <p>Complete surveys to help us understand your health needs better</p>
+            <div className="survey-hero">
+                <div className="survey-hero-content">
+                    <h1>Health Assessments</h1>
+                    <p>Complete surveys to help us understand your health needs and provide personalized recommendations</p>
+                    <div className="hero-search-container">
+                        <input
+                            type="text"
+                            placeholder="Search for surveys..."
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="hero-search-input"
+                        />
+                        <button className="hero-search-button">
+                            <i className="fas fa-search"></i>
+                        </button>
+                    </div>
                 </div>
-                <div className="survey-content">
-                    {loading ? (
-                        <div className="loading-spinner">
-                            <div className="spinner"></div>
-                            <p>Loading surveys...</p>
+            </div>
+
+            <div className="survey-main-content">
+                {loading ? (
+                    <div className="loading-spinner">
+                        <div className="spinner"></div>
+                        <p>Loading surveys...</p>
+                    </div>
+                ) : error ? (
+                    <div className="error-container">
+                        <p className="error">{error}</p>
+                        <button className="retry-button" onClick={fetchSurveys}>
+                            Try Again
+                        </button>
+                    </div>
+                ) : (
+                    <>
+                        <div className="survey-header-section">
+                            <h2>Available Surveys</h2>
+                            <p className="survey-count">{filteredSurveys.length} survey{filteredSurveys.length !== 1 ? 's' : ''} available</p>
                         </div>
-                    ) : error ? (
-                        <div className="error-container">
-                            <p className="error">{error}</p>
-                            <button className="retry-button" onClick={fetchSurveys}>
-                                Try Again
-                            </button>
-                        </div>
-                    ) : (
-                        <>
-                            <div className="surveys-overview-container">
-                                <div className="surveys-overview">
-                                    <h2>Available Surveys</h2>
-                                    <p className="overview-text">You have {filteredSurveys.length} survey(s) available</p>
-                                </div>
-                                
-                                <div className="search-container">
-                                    <div className="search-input-wrapper">
-                                        <input
-                                            type="text"
-                                            placeholder="Search surveys..."
-                                            value={searchTerm}
-                                            onChange={handleSearchChange}
-                                            className="search-input"
-                                        />
-                                        <i className="search-icon fas fa-search"></i>
-                                    </div>
-                                </div>
+                        
+                        {filteredSurveys.length === 0 ? (
+                            <div className="no-surveys">
+                                <p>No surveys found matching your search. Please try a different keyword.</p>
                             </div>
-                            
-                            {filteredSurveys.length === 0 ? (
-                                <div className="no-surveys">
-                                    <p>No surveys found matching your search. Please try a different keyword.</p>
-                                </div>
-                            ) : (
-                                <>
-                                    <div className="survey-grid">
-                                        {currentSurveys.map((survey) => (
-                                            <div key={survey.surveyId} className="survey-card">
-                                                <div className="survey-card-header">
-                                                    <h3>{survey.title}</h3>
-                                                </div>
-                                                <div className="survey-card-body">
-                                                    <p className="survey-description">{survey.description}</p>
-                                                    <div className="survey-meta">
-                                                        <div className="meta-item">
-                                                            <span className="meta-label">Created:</span>
-                                                            <span className="meta-value">{formatDate(survey.createdDate)}</span>
-                                                        </div>
+                        ) : (
+                            <>
+                                <div className="survey-grid">
+                                    {currentSurveys.map((survey) => (
+                                        <div key={survey.surveyId} className="survey-card">
+                                            <div className="survey-card-header">
+                                                <h3>{survey.title}</h3>
+                                            </div>
+                                            <div className="survey-card-body">
+                                                <p className="survey-description">{survey.description}</p>
+                                                <div className="survey-meta">
+                                                    <div className="meta-item">
+                                                        <span className="meta-label">Created:</span>
+                                                        <span className="meta-value">{formatDate(survey.createdDate)}</span>
                                                     </div>
                                                 </div>
-                                                <div className="survey-card-footer">
-                                                    <Link
-                                                        to={`/surveytake/${survey.surveyId}`}
-                                                        className="take-survey-btn"
-                                                    >
-                                                        Take Survey
-                                                    </Link>
-                                                </div>
                                             </div>
-                                        ))}
-                                    </div>
-                                    
-                                    {filteredSurveys.length > surveysPerPage && (
-                                        <div className="pagination-container-mui">
-                                            <div className="pagination-info">
-                                                Showing {currentSurveys.length > 0 ? `${indexOfFirstSurvey + 1}-${Math.min(indexOfLastSurvey, filteredSurveys.length)}` : "0"} of {filteredSurveys.length} surveys
+                                            <div className="survey-card-footer">
+                                                <Link
+                                                    to={`/surveytake/${survey.surveyId}`}
+                                                    className="take-survey-btn"
+                                                >
+                                                    Take Survey
+                                                </Link>
                                             </div>
-                                            
-                                            <Stack spacing={2}>
-                                                <Pagination 
-                                                    count={Math.ceil(filteredSurveys.length / surveysPerPage)} 
-                                                    page={currentPage}
-                                                    onChange={(event, value) => paginate(value)}
-                                                    color="primary"
-                                                    size="large"
-                                                    showFirstButton
-                                                    showLastButton
-                                                    siblingCount={1}
-                                                    className="mui-pagination"
-                                                />
-                                            </Stack>
                                         </div>
-                                    )}
-                                </>
-                            )}
-                        </>
-                    )}
-                </div>
+                                    ))}
+                                </div>
+                                
+                                {filteredSurveys.length > surveysPerPage && (
+                                    <div className="pagination-container-mui">
+                                        <div className="pagination-info">
+                                            Showing {currentSurveys.length > 0 ? `${indexOfFirstSurvey + 1}-${Math.min(indexOfLastSurvey, filteredSurveys.length)}` : "0"} of {filteredSurveys.length} surveys
+                                        </div>
+                                        
+                                        <Stack spacing={2}>
+                                            <Pagination 
+                                                count={Math.ceil(filteredSurveys.length / surveysPerPage)} 
+                                                page={currentPage}
+                                                onChange={(event, value) => paginate(value)}
+                                                color="primary"
+                                                size="large"
+                                                showFirstButton
+                                                showLastButton
+                                                siblingCount={1}
+                                                className="mui-pagination"
+                                            />
+                                        </Stack>
+                                    </div>
+                                )}
+                            </>
+                        )}
+                    </>
+                )}
             </div>
             <Footer />
         </div>

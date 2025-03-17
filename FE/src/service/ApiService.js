@@ -614,8 +614,8 @@ export default class ApiService {
      */
     static async createSurvey(surveyData) {
         try {
-            if (!surveyData.title || !surveyData.description || !surveyData.questions || !surveyData.surveyCode) {
-                throw new Error("Survey title, description, questions, and surveyCode are required");
+            if (!surveyData.title || !surveyData.description || !surveyData.questions) {
+                throw new Error("Survey title, description, and questions are required");
             }
 
             // Validate questions and answer options
@@ -741,9 +741,11 @@ export default class ApiService {
  * @param {string} surveyData.surveyCode - The survey code
  * @param {string} surveyData.title - The title of the survey
  * @param {string} surveyData.description - The description of the survey
- * @param {Array} surveyData.questions - Array of questions with questionText and answerOptions
+ * @param {Array} surveyData.questions - Array of questions with questionId, questionText and answerOptions
+ * @param {string} surveyData.questions[].questionId - The ID of the question (optional for existing questions)
  * @param {string} surveyData.questions[].questionText - The text of the question
  * @param {Array} surveyData.questions[].answerOptions - Array of answer options
+ * @param {string} surveyData.questions[].answerOptions[].optionId - The ID of the answer option (optional for existing options)
  * @param {string} surveyData.questions[].answerOptions[].optionText - The text of the answer option
  * @param {number} surveyData.questions[].answerOptions[].score - The score for the answer option
  * @returns {Promise<Object>} Response object with status, data, and message
@@ -758,7 +760,7 @@ export default class ApiService {
                 throw new Error("Survey title, description, questions, and surveyCode are required");
             }
 
-            // Validate questions and answer options
+            // Validate questions and answer options, including IDs
             surveyData.questions.forEach((question, index) => {
                 if (!question.questionText || !question.answerOptions) {
                     throw new Error(`Question at index ${index} must have questionText and answerOptions`);
@@ -975,7 +977,7 @@ export default class ApiService {
 
             const response = await axios.post(
                 `${this.BASE_URL}/identity/users/submit-answers`,
-                answerData.answers,  // Lấy trực tiếp mảng thay vì bọc trong { answers: [...] }
+                answerData, // Gửi trực tiếp mảng answerData
                 { headers: this.getHeader() }
             );
 
@@ -1137,37 +1139,36 @@ export default class ApiService {
         }
     }
 
-    // Manager API
     /**
-     * Get all appointments for manager
-     * @returns {Promise<Object>} Response object with status and data/message
+     * Get dashboard data for manager
+     * @returns {Promise<Object>} Response object with dashboard statistics
      */
-    static async getAllAppointments() {
+    static async getManagerDashboardData() {
         try {
-            // Kiểm tra xem người dùng có vai trò manager không
-            if (!this.isManager()) {
-                throw new Error("Only managers can access this endpoint");
-            }
-
-            console.log("Fetching all appointments with token:", localStorage.getItem("token"));
-
             const response = await axios.get(
-                `${this.BASE_URL}/identity/manager/allappointments`,
+                `${this.BASE_URL}/identity/manager/dashboard`,
                 { headers: this.getHeader() }
             );
 
-            console.log("Fetched appointments:", response.data);
+            console.log("Fetched manager dashboard data:", response.data);
 
-            return {
-                status: 200,
-                data: response.data,
-                message: "Appointments fetched successfully"
-            };
+            if (response.data && response.data.code === 1000) {
+                return {
+                    status: 200,
+                    data: response.data.result,
+                    message: "Dashboard data fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: response.data?.message || "Failed to fetch dashboard data"
+                };
+            }
         } catch (error) {
-            console.error("Error fetching appointments:", error);
+            console.error("Error fetching manager dashboard data:", error);
             return {
                 status: error.response?.status || 400,
-                message: error.response?.data?.message || error.message || "Failed to fetch appointments"
+                message: error.response?.data?.message || error.message || "Failed to fetch dashboard data"
             };
         }
     }
