@@ -1,52 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PsychologistHeader from '../../../component/psychologist/PsychologistHeader';
 import PsychologistSidebar from '../../../component/psychologist/PsychologistSidebar';
 import PageTitle from '../../../component/psychologist/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
+import ApiService from '../../../service/ApiService'; // Import the ApiService
 
 const UserList = () => {
     const itemsPerPage = 10;
-    const mockPatients = [
-        { id: 1, name: 'John Doe', psychologist: 'Dr. Smith', email: 'johndoe@example.com', status: true },
-        { id: 2, name: 'Jane Smith', psychologist: 'Dr. Brown', email: 'janesmith@example.com', status: false },
-        { id: 3, name: 'Alice Johnson', psychologist: 'Dr. Adams', email: 'alicej@example.com', status: true },
-        { id: 4, name: 'Bob Brown', psychologist: 'Dr. Lee', email: 'bobbrown@example.com', status: false },
-        { id: 5, name: 'Charlie White', psychologist: 'Dr. Garcia', email: 'charliew@example.com', status: true },
-        { id: 6, name: 'David Green', psychologist: 'Dr. Patel', email: 'davidg@example.com', status: true },
-        { id: 7, name: 'Emma Black', psychologist: 'Dr. Kim', email: 'emmab@example.com', status: false },
-        { id: 8, name: 'Frank Blue', psychologist: 'Dr. Ortiz', email: 'frankb@example.com', status: true },
-        { id: 9, name: 'Grace Red', psychologist: 'Dr. Chen', email: 'gracer@example.com', status: false },
-        { id: 10, name: 'Henry Yellow', psychologist: 'Dr. Wong', email: 'henryy@example.com', status: true },
-        { id: 11, name: 'Isabella Pink', psychologist: 'Dr. Lopez', email: 'isabellap@example.com', status: true },
-        { id: 12, name: 'James Orange', psychologist: 'Dr. Taylor', email: 'jameso@example.com', status: false },
-    ];
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [patients, setPatients] = useState(mockPatients);
+    const [students, setStudents] = useState([]); // Renamed from patients to students
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [loading, setLoading] = useState(true); // Added loading state
+    const [error, setError] = useState(null); // Added error state
 
-    // Filter patients based on search term
-    const filteredPatients = patients.filter((patient) => {
+    // Fetch students when the component mounts
+    useEffect(() => {
+        const fetchStudents = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await ApiService.getAllStudents();
+                console.log('API Response:', response); // Debug the response structure
+                if (response.status === 200) {
+                    // Check if data is an array or nested inside a result field
+                    let studentData = response.data;
+                    if (Array.isArray(response.data)) {
+                        studentData = response.data;
+                    } else if (response.data && Array.isArray(response.data.result)) {
+                        studentData = response.data.result;
+                    } else {
+                        throw new Error('Unexpected API response format');
+                    }
+                    setStudents(studentData);
+                } else {
+                    setError(response.message || 'Failed to fetch students');
+                }
+            } catch (err) {
+                setError('An error occurred while fetching students');
+                console.error('Fetch error:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchStudents();
+    }, []); // Empty dependency array to run only on mount
+
+    // Filter students based on search term
+    const filteredStudents = Array.isArray(students) ? students.filter((student) => {
         if (searchTerm === '') return true;
         const lowerSearch = searchTerm.toLowerCase();
         return (
-            patient.name.toLowerCase().includes(lowerSearch) ||
-            patient.email.toLowerCase().includes(lowerSearch)
+            student.name?.toLowerCase().includes(lowerSearch) ||
+            student.email?.toLowerCase().includes(lowerSearch)
         );
+    }) : [];
+
+    // Sort students by name
+    const sortedStudents = [...filteredStudents].sort((a, b) => {
+        const nameA = a.name?.toLowerCase() || '';
+        const nameB = b.name?.toLowerCase() || '';
+        return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameB);
     });
 
-    // Sort patients by name
-    const sortedPatients = [...filteredPatients].sort((a, b) => {
-        const nameA = a.name.toLowerCase();
-        const nameB = b.name.toLowerCase();
-        return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-    });
-
-    const indexOfLastPatient = currentPage * itemsPerPage;
-    const indexOfFirstPatient = indexOfLastPatient - itemsPerPage;
-    const currentPatients = sortedPatients.slice(indexOfFirstPatient, indexOfLastPatient);
-    const totalPages = Math.ceil(sortedPatients.length / itemsPerPage);
+    const indexOfLastStudent = currentPage * itemsPerPage;
+    const indexOfFirstStudent = indexOfLastStudent - itemsPerPage;
+    const currentStudents = sortedStudents.slice(indexOfFirstStudent, indexOfLastStudent);
+    const totalPages = Math.ceil(sortedStudents.length / itemsPerPage);
 
     // Toggle sort order
     const toggleSortOrder = () => {
@@ -66,7 +89,7 @@ const UserList = () => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-body pt-3">
-                                    {/* Header with total patients */}
+                                    {/* Header with total students */}
                                     <div className="row mb-4">
                                         <div className="col-md-6 col-sm-6 mb-3 mb-md-0">
                                             <div className="card border-0 bg-light">
@@ -76,8 +99,8 @@ const UserList = () => {
                                                             <i className="bi bi-people-fill text-primary fs-4"></i>
                                                         </div>
                                                         <div>
-                                                            <h6 className="mb-0">Total Patients</h6>
-                                                            <h4 className="mb-0">{patients.length}</h4>
+                                                            <h6 className="mb-0">Total Students</h6>
+                                                            <h4 className="mb-0">{students.length}</h4>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -95,7 +118,7 @@ const UserList = () => {
                                                             <i className="bi bi-search"></i>
                                                         </InputGroup.Text>
                                                         <FormControl
-                                                            placeholder="Search patients by name or email..."
+                                                            placeholder="Search students by name or email..."
                                                             className="border-start-0"
                                                             value={searchTerm}
                                                             onChange={(e) => {
@@ -131,19 +154,43 @@ const UserList = () => {
                                         </div>
                                     </div>
 
-                                    {/* Table */}
-                                    {currentPatients.length > 0 ? (
+                                    {/* Loading state */}
+                                    {loading ? (
+                                        <div className="text-center my-5 py-5">
+                                            <div className="spinner-border text-primary" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            <h5 className="mt-3">Loading students...</h5>
+                                        </div>
+                                    ) : error ? (
+                                        /* Error state */
+                                        <div className="text-center my-5 py-5">
+                                            <div className="fs-1 text-danger mb-3">
+                                                <i className="bi bi-exclamation-triangle-fill"></i>
+                                            </div>
+                                            <h5 className="mb-2">Error</h5>
+                                            <p className="text-muted">{error}</p>
+                                            <Button
+                                                variant="outline-primary"
+                                                size="sm"
+                                                onClick={() => window.location.reload()}
+                                            >
+                                                Retry
+                                            </Button>
+                                        </div>
+                                    ) : currentStudents.length > 0 ? (
+                                        /* Table */
                                         <div className="table-responsive">
                                             <table className="table table-hover align-middle border-bottom">
                                                 <thead className="bg-light">
                                                     <tr>
-                                                        <th className="py-3" style={{ width: '50%' }}>Patient</th>
+                                                        <th className="py-3" style={{ width: '50%' }}>Student</th>
                                                         <th className="py-3" style={{ width: '50%' }}>Email</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentPatients.map((patient) => (
-                                                        <tr key={patient.id} className="border-bottom">
+                                                    {currentStudents.map((student) => (
+                                                        <tr key={student.id} className="border-bottom">
                                                             <td>
                                                                 <div className="d-flex align-items-center">
                                                                     <div
@@ -152,29 +199,30 @@ const UserList = () => {
                                                                             width: '40px',
                                                                             height: '40px',
                                                                             borderRadius: '8px',
-                                                                            background: `hsl(${(patient.id * 31) % 360}, 70%, 60%)`,
+                                                                            background: `hsl(${(student.id * 31) % 360}, 70%, 60%)`,
                                                                             fontSize: '16px',
                                                                         }}
                                                                     >
-                                                                        {patient.name.charAt(0).toUpperCase()}
+                                                                        {student.name?.charAt(0).toUpperCase()}
                                                                     </div>
                                                                     <div>
-                                                                        <h6 className="mb-0">{patient.name}</h6>
+                                                                        <h6 className="mb-0">{student.name}</h6>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>{patient.email}</td>
+                                                            <td>{student.email}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </table>
                                         </div>
                                     ) : (
+                                        /* Empty state */
                                         <div className="text-center my-5 py-5">
                                             <div className="fs-1 text-muted mb-3">
                                                 <i className="bi bi-search"></i>
                                             </div>
-                                            <h5 className="mb-2">No patients found</h5>
+                                            <h5 className="mb-2">No Students found</h5>
                                             <p className="text-muted">Try adjusting your search to find what you're looking for.</p>
                                             <Button
                                                 variant="outline-secondary"
@@ -187,19 +235,19 @@ const UserList = () => {
                                     )}
 
                                     {/* Pagination */}
-                                    {currentPatients.length > 0 && (
+                                    {!loading && !error && currentStudents.length > 0 && (
                                         <div className="d-flex justify-content-between align-items-center mt-4">
                                             <p className="mb-0 text-muted">
                                                 Showing{' '}
                                                 <span className="fw-bold">
-                                                    {sortedPatients.length > 0
-                                                        ? `${indexOfFirstPatient + 1}-${Math.min(
-                                                            indexOfLastPatient,
-                                                            sortedPatients.length
+                                                    {sortedStudents.length > 0
+                                                        ? `${indexOfFirstStudent + 1}-${Math.min(
+                                                            indexOfLastStudent,
+                                                            sortedStudents.length
                                                         )}`
                                                         : '0'}
                                                 </span>{' '}
-                                                of <span className="fw-bold">{sortedPatients.length}</span> patients
+                                                of <span className="fw-bold">{sortedStudents.length}</span> students
                                             </p>
 
                                             {totalPages > 1 && (

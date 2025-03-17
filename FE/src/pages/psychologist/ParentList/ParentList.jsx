@@ -1,52 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PsychologistHeader from '../../../component/psychologist/PsychologistHeader';
 import PsychologistSidebar from '../../../component/psychologist/PsychologistSidebar';
 import PageTitle from '../../../component/psychologist/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
+import ApiService from '../../../service/ApiService'; // Corrected the import path
 
 const ParentList = () => {
     const itemsPerPage = 10;
-    const mockPatients = [
-        { id: 1, name: 'John Doe', psychologist: 'Dr. Smith', email: 'johndoe@example.com', status: true },
-        { id: 2, name: 'Jane Smith', psychologist: 'Dr. Brown', email: 'janesmith@example.com', status: false },
-        { id: 3, name: 'Alice Johnson', psychologist: 'Dr. Adams', email: 'alicej@example.com', status: true },
-        { id: 4, name: 'Bob Brown', psychologist: 'Dr. Lee', email: 'bobbrown@example.com', status: false },
-        { id: 5, name: 'Charlie White', psychologist: 'Dr. Garcia', email: 'charliew@example.com', status: true },
-        { id: 6, name: 'David Green', psychologist: 'Dr. Patel', email: 'davidg@example.com', status: true },
-        { id: 7, name: 'Emma Black', psychologist: 'Dr. Kim', email: 'emmab@example.com', status: false },
-        { id: 8, name: 'Frank Blue', psychologist: 'Dr. Ortiz', email: 'frankb@example.com', status: true },
-        { id: 9, name: 'Grace Red', psychologist: 'Dr. Chen', email: 'gracer@example.com', status: false },
-        { id: 10, name: 'Henry Yellow', psychologist: 'Dr. Wong', email: 'henryy@example.com', status: true },
-        { id: 11, name: 'Isabella Pink', psychologist: 'Dr. Lopez', email: 'isabellap@example.com', status: true },
-        { id: 12, name: 'James Orange', psychologist: 'Dr. Taylor', email: 'jameso@example.com', status: false },
-    ];
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [patients, setPatients] = useState(mockPatients);
+    const [parents, setParents] = useState([]); // Renamed from patients to parents
     const [searchTerm, setSearchTerm] = useState('');
     const [sortOrder, setSortOrder] = useState('asc');
+    const [loading, setLoading] = useState(true); // Added loading state
+    const [error, setError] = useState(null); // Added error state
 
-    // Filter patients based on search term
-    const filteredPatients = patients.filter((patient) => {
+    // Fetch parents when the component mounts
+    useEffect(() => {
+        const fetchParents = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await ApiService.getAllParents();
+                console.log('API Response:', response); // Debug the response structure
+                if (response.status === 200) {
+                    // Check if data is an array or nested inside a result field
+                    let parentData = response.data;
+                    if (Array.isArray(response.data)) {
+                        parentData = response.data;
+                    } else if (response.data && Array.isArray(response.data.result)) {
+                        parentData = response.data.result;
+                    } else {
+                        throw new Error('Unexpected API response format');
+                    }
+                    setParents(parentData);
+                } else {
+                    setError(response.message || 'Failed to fetch parents');
+                }
+            } catch (err) {
+                setError('An error occurred while fetching parents');
+                console.error('Fetch error:', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchParents();
+    }, []); // Empty dependency array to run only on mount
+
+    // Filter parents based on search term
+    const filteredParents = Array.isArray(parents) ? parents.filter((parent) => {
         if (searchTerm === '') return true;
         const lowerSearch = searchTerm.toLowerCase();
         return (
-            patient.name.toLowerCase().includes(lowerSearch) ||
-            patient.email.toLowerCase().includes(lowerSearch)
+            parent.name?.toLowerCase().includes(lowerSearch) ||
+            parent.email?.toLowerCase().includes(lowerSearch)
         );
+    }) : [];
+
+    // Sort parents by name
+    const sortedParents = [...filteredParents].sort((a, b) => {
+        const nameA = a.name?.toLowerCase() || '';
+        const nameB = b.name?.toLowerCase() || '';
+        return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameB);
     });
 
-    // Sort patients by name
-    const sortedPatients = [...filteredPatients].sort((a, b) => {
-        const nameA = a.name.toLowerCase();
-        const nameB = b.name.toLowerCase();
-        return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
-    });
-
-    const indexOfLastPatient = currentPage * itemsPerPage;
-    const indexOfFirstPatient = indexOfLastPatient - itemsPerPage;
-    const currentPatients = sortedPatients.slice(indexOfFirstPatient, indexOfLastPatient);
-    const totalPages = Math.ceil(sortedPatients.length / itemsPerPage);
+    const indexOfLastParent = currentPage * itemsPerPage;
+    const indexOfFirstParent = indexOfLastParent - itemsPerPage;
+    const currentParents = sortedParents.slice(indexOfFirstParent, indexOfLastParent);
+    const totalPages = Math.ceil(sortedParents.length / itemsPerPage);
 
     // Toggle sort order
     const toggleSortOrder = () => {
@@ -66,7 +89,7 @@ const ParentList = () => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-body pt-3">
-                                    {/* Header with total patients */}
+                                    {/* Header with total parents */}
                                     <div className="row mb-4">
                                         <div className="col-md-6 col-sm-6 mb-3 mb-md-0">
                                             <div className="card border-0 bg-light">
@@ -77,7 +100,7 @@ const ParentList = () => {
                                                         </div>
                                                         <div>
                                                             <h6 className="mb-0">Total Parents</h6>
-                                                            <h4 className="mb-0">{patients.length}</h4>
+                                                            <h4 className="mb-0">{parents.length}</h4>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -131,8 +154,32 @@ const ParentList = () => {
                                         </div>
                                     </div>
 
-                                    {/* Table */}
-                                    {currentPatients.length > 0 ? (
+                                    {/* Loading state */}
+                                    {loading ? (
+                                        <div className="text-center my-5 py-5">
+                                            <div className="spinner-border text-primary" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </div>
+                                            <h5 className="mt-3">Loading parents...</h5>
+                                        </div>
+                                    ) : error ? (
+                                        /* Error state */
+                                        <div className="text-center my-5 py-5">
+                                            <div className="fs-1 text-danger mb-3">
+                                                <i className="bi bi-exclamation-triangle-fill"></i>
+                                            </div>
+                                            <h5 className="mb-2">Error</h5>
+                                            <p className="text-muted">{error}</p>
+                                            <Button
+                                                variant="outline-primary"
+                                                size="sm"
+                                                onClick={() => window.location.reload()}
+                                            >
+                                                Retry
+                                            </Button>
+                                        </div>
+                                    ) : currentParents.length > 0 ? (
+                                        /* Table */
                                         <div className="table-responsive">
                                             <table className="table table-hover align-middle border-bottom">
                                                 <thead className="bg-light">
@@ -142,8 +189,8 @@ const ParentList = () => {
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    {currentPatients.map((patient) => (
-                                                        <tr key={patient.id} className="border-bottom">
+                                                    {currentParents.map((parent) => (
+                                                        <tr key={parent.id} className="border-bottom">
                                                             <td>
                                                                 <div className="d-flex align-items-center">
                                                                     <div
@@ -152,24 +199,25 @@ const ParentList = () => {
                                                                             width: '40px',
                                                                             height: '40px',
                                                                             borderRadius: '8px',
-                                                                            background: `hsl(${(patient.id * 31) % 360}, 70%, 60%)`,
+                                                                            background: `hsl(${(parent.id * 31) % 360}, 70%, 60%)`,
                                                                             fontSize: '16px',
                                                                         }}
                                                                     >
-                                                                        {patient.name.charAt(0).toUpperCase()}
+                                                                        {parent.name?.charAt(0).toUpperCase()}
                                                                     </div>
                                                                     <div>
-                                                                        <h6 className="mb-0">{patient.name}</h6>
+                                                                        <h6 className="mb-0">{parent.name}</h6>
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td>{patient.email}</td>
+                                                            <td>{parent.email}</td>
                                                         </tr>
                                                     ))}
                                                 </tbody>
                                             </table>
                                         </div>
                                     ) : (
+                                        /* Empty state */
                                         <div className="text-center my-5 py-5">
                                             <div className="fs-1 text-muted mb-3">
                                                 <i className="bi bi-search"></i>
@@ -187,19 +235,19 @@ const ParentList = () => {
                                     )}
 
                                     {/* Pagination */}
-                                    {currentPatients.length > 0 && (
+                                    {!loading && !error && currentParents.length > 0 && (
                                         <div className="d-flex justify-content-between align-items-center mt-4">
                                             <p className="mb-0 text-muted">
                                                 Showing{' '}
                                                 <span className="fw-bold">
-                                                    {sortedPatients.length > 0
-                                                        ? `${indexOfFirstPatient + 1}-${Math.min(
-                                                            indexOfLastPatient,
-                                                            sortedPatients.length
+                                                    {sortedParents.length > 0
+                                                        ? `${indexOfFirstParent + 1}-${Math.min(
+                                                            indexOfLastParent,
+                                                            sortedParents.length
                                                         )}`
                                                         : '0'}
                                                 </span>{' '}
-                                                of <span className="fw-bold">{sortedPatients.length}</span> parents
+                                                of <span className="fw-bold">{sortedParents.length}</span> parents
                                             </p>
 
                                             {totalPages > 1 && (

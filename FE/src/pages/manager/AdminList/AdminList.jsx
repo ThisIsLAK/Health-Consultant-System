@@ -1,45 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
+import ApiService from '../../../service/ApiService'; // Adjust the import path as needed
 
 const AdminList = () => {
-  const itemsPerPage = 10; // Aligned with previous updates
-  const mockAdmins = [
-    { id: 1, name: 'Nguyen Minh Hoang', email: 'admin@example.com', status: true },
-    { id: 2, name: 'Tran Binh Nam', email: 'tranbinhnam@example.com', status: true },
-    { id: 3, name: 'Le Thi Hong', email: 'lethihong@example.com', status: true },
-    { id: 4, name: 'Pham Van Anh', email: 'phamvananh@example.com', status: true },
-    { id: 5, name: 'Hoang Duc Minh', email: 'hoangducminh@example.com', status: true },
-    { id: 6, name: 'Nguyen Thi Lan', email: 'nguyenthilan@example.com', status: true },
-    { id: 7, name: 'Vu Quang Huy', email: 'vuquanghuy@example.com', status: true },
-    { id: 8, name: 'Doan Minh Tu', email: 'doanminhtu@example.com', status: true },
-    { id: 9, name: 'Bui Thi Mai', email: 'buithimai@example.com', status: true },
-    { id: 10, name: 'Trinh Van Long', email: 'trinhvanlong@example.com', status: true },
-    { id: 11, name: 'Dang Thi Hoa', email: 'dangthihoa@example.com', status: true },
-    { id: 12, name: 'Ngo Van Khoa', email: 'ngovankhoa@example.com', status: true },
-  ];
-
+  const itemsPerPage = 10;
+  const roleId = 1; // Hardcoded roleId to 1 as requested
   const [currentPage, setCurrentPage] = useState(1);
-  const [admins, setAdmins] = useState(mockAdmins);
+  const [admins, setAdmins] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch users by roleId when the component mounts or searchTerm changes
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await ApiService.getUserByRoleId(roleId);
+        if (response.status === 200) {
+          setAdmins(response.data || []);
+        } else {
+          setError(response.message || 'Failed to fetch admins');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching admins');
+        console.error('Error fetching admins:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [roleId, searchTerm]); // Re-fetch if searchTerm changes
 
   // Filter admins based on search term
   const filteredAdmins = admins.filter((admin) => {
     if (searchTerm === '') return true;
     const lowerSearch = searchTerm.toLowerCase();
     return (
-      admin.name.toLowerCase().includes(lowerSearch) ||
-      admin.email.toLowerCase().includes(lowerSearch)
+      admin.name?.toLowerCase().includes(lowerSearch) ||
+      admin.email?.toLowerCase().includes(lowerSearch)
     );
   });
 
   // Sort admins by name
   const sortedAdmins = [...filteredAdmins].sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
+    const nameA = a.name?.toLowerCase() || '';
+    const nameB = b.name?.toLowerCase() || '';
     return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
   });
 
@@ -52,6 +64,32 @@ const AdminList = () => {
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="text-center my-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="text-center my-5">
+        <div className="fs-1 text-danger mb-3">
+          <i className="bi bi-exclamation-triangle"></i>
+        </div>
+        <h5 className="mb-2">{error}</h5>
+        <Button variant="outline-primary" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -156,7 +194,7 @@ const AdminList = () => {
                                       fontSize: '16px',
                                     }}
                                   >
-                                    {admin.name.charAt(0).toUpperCase()}
+                                    {admin.name?.charAt(0).toUpperCase()}
                                   </div>
                                   <div>
                                     <h6 className="mb-0">{admin.name}</h6>

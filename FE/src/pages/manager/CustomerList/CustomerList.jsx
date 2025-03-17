@@ -1,46 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
+import ApiService from '../../../service/ApiService'; // Adjust the import path as needed
 import './CustomerList.css';
 
 const CustomerList = () => {
   const itemsPerPage = 10;
-  const mockPatients = [
-    { id: 1, name: 'John Doe', psychologist: 'Dr. Smith', email: 'johndoe@example.com', status: true },
-    { id: 2, name: 'Jane Smith', psychologist: 'Dr. Brown', email: 'janesmith@example.com', status: false },
-    { id: 3, name: 'Alice Johnson', psychologist: 'Dr. Adams', email: 'alicej@example.com', status: true },
-    { id: 4, name: 'Bob Brown', psychologist: 'Dr. Lee', email: 'bobbrown@example.com', status: false },
-    { id: 5, name: 'Charlie White', psychologist: 'Dr. Garcia', email: 'charliew@example.com', status: true },
-    { id: 6, name: 'David Green', psychologist: 'Dr. Patel', email: 'davidg@example.com', status: true },
-    { id: 7, name: 'Emma Black', psychologist: 'Dr. Kim', email: 'emmab@example.com', status: false },
-    { id: 8, name: 'Frank Blue', psychologist: 'Dr. Ortiz', email: 'frankb@example.com', status: true },
-    { id: 9, name: 'Grace Red', psychologist: 'Dr. Chen', email: 'gracer@example.com', status: false },
-    { id: 10, name: 'Henry Yellow', psychologist: 'Dr. Wong', email: 'henryy@example.com', status: true },
-    { id: 11, name: 'Isabella Pink', psychologist: 'Dr. Lopez', email: 'isabellap@example.com', status: true },
-    { id: 12, name: 'James Orange', psychologist: 'Dr. Taylor', email: 'jameso@example.com', status: false },
-  ];
-
+  const roleId = 2; // Hardcoded roleId as requested
   const [currentPage, setCurrentPage] = useState(1);
-  const [patients, setPatients] = useState(mockPatients);
+  const [patients, setPatients] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch users by roleId when the component mounts or searchTerm changes
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await ApiService.getUserByRoleId(roleId);
+        if (response.status === 200) {
+          setPatients(response.data || []);
+        } else {
+          setError(response.message || 'Failed to fetch users');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching users');
+        console.error('Error fetching users:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [roleId, searchTerm]); // Re-fetch if searchTerm changes
 
   // Filter patients based on search term
   const filteredPatients = patients.filter((patient) => {
     if (searchTerm === '') return true;
     const lowerSearch = searchTerm.toLowerCase();
     return (
-      patient.name.toLowerCase().includes(lowerSearch) ||
-      patient.email.toLowerCase().includes(lowerSearch)
+      patient.name?.toLowerCase().includes(lowerSearch) ||
+      patient.email?.toLowerCase().includes(lowerSearch)
     );
   });
 
   // Sort patients by name
   const sortedPatients = [...filteredPatients].sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
+    const nameA = a.name?.toLowerCase() || '';
+    const nameB = b.name?.toLowerCase() || '';
     return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
   });
 
@@ -53,6 +65,32 @@ const CustomerList = () => {
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="text-center my-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="text-center my-5">
+        <div className="fs-1 text-danger mb-3">
+          <i className="bi bi-exclamation-triangle"></i>
+        </div>
+        <h5 className="mb-2">{error}</h5>
+        <Button variant="outline-primary" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -157,7 +195,7 @@ const CustomerList = () => {
                                       fontSize: '16px',
                                     }}
                                   >
-                                    {patient.name.charAt(0).toUpperCase()}
+                                    {patient.name?.charAt(0).toUpperCase()}
                                   </div>
                                   <div>
                                     <h6 className="mb-0">{patient.name}</h6>

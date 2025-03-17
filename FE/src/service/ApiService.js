@@ -1139,6 +1139,7 @@ export default class ApiService {
         }
     }
 
+    //Manager Endpoint
     /**
      * Get dashboard data for manager
      * @returns {Promise<Object>} Response object with dashboard statistics
@@ -1169,6 +1170,105 @@ export default class ApiService {
             return {
                 status: error.response?.status || 400,
                 message: error.response?.data?.message || error.message || "Failed to fetch dashboard data"
+            };
+        }
+    }
+
+    /**
+ * Get users by roleId
+ * @param {string} roleId - The ID of the role to filter users
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async getUserByRoleId(roleId) {
+        try {
+            if (!roleId) {
+                throw new Error("Role ID is required to fetch users");
+            }
+
+            console.log("Fetching users with roleId:", roleId);
+
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/manager/active-by-role/${encodeURIComponent(roleId)}`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched users by roleId:", response.data);
+
+            // Check if response follows the {code, message, result} format
+            if (response.data && response.data.result !== undefined) {
+                return {
+                    status: 200,
+                    data: response.data.result,
+                    message: "Users fetched successfully by roleId"
+                };
+            } else {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Users fetched successfully by roleId"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching users by roleId:", error);
+
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch users by roleId"
+            };
+        }
+    }
+
+    //Psychologist Endpoint
+    /**
+ * Get all students
+ * @returns {Promise<Object>} Response object with status and data/message
+ */
+    static async getAllStudents() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/psychologists/allstudents`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched all students:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Students fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching all students:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch students"
+            };
+        }
+    }
+
+    /**
+     * Get all parents
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getAllParents() {
+        try {
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/psychologists/allparents`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched all parents:", response.data);
+
+            return {
+                status: 200,
+                data: response.data,
+                message: "Parents fetched successfully"
+            };
+        } catch (error) {
+            console.error("Error fetching all parents:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch parents"
             };
         }
     }

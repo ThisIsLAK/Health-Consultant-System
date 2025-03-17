@@ -1,45 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
+import ApiService from '../../../service/ApiService'; // Adjust the import path as needed
 
 const ManagerPsychologistList = () => {
-  const itemsPerPage = 10; // Aligned with previous updates
-  const mockPsychologists = [
-    { id: 1, name: 'Dr. James Smith', email: 'jsmith@example.com', status: true },
-    { id: 2, name: 'Dr. Sarah Johnson', email: 'sjohnson@example.com', status: false },
-    { id: 3, name: 'Dr. Michael Brown', email: 'mbrown@example.com', status: true },
-    { id: 4, name: 'Dr. Emily White', email: 'ewhite@example.com', status: false },
-    { id: 5, name: 'Dr. Daniel Garcia', email: 'dgarcia@example.com', status: true },
-    { id: 6, name: 'Dr. Laura Patel', email: 'lpatel@example.com', status: true },
-    { id: 7, name: 'Dr. Robert Kim', email: 'rkim@example.com', status: false },
-    { id: 8, name: 'Dr. Olivia Ortiz', email: 'oortiz@example.com', status: true },
-    { id: 9, name: 'Dr. Thomas Chen', email: 'tchen@example.com', status: false },
-    { id: 10, name: 'Dr. Sophia Wong', email: 'swong@example.com', status: true },
-    { id: 11, name: 'Dr. Ethan Lopez', email: 'elopez@example.com', status: true },
-    { id: 12, name: 'Dr. Mia Taylor', email: 'mtaylor@example.com', status: false },
-  ];
-
+  const itemsPerPage = 10;
+  const roleId = 4; // Hardcoded roleId to 4 as requested
   const [currentPage, setCurrentPage] = useState(1);
-  const [psychologists, setPsychologists] = useState(mockPsychologists);
+  const [psychologists, setPsychologists] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch users by roleId when the component mounts or searchTerm changes
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await ApiService.getUserByRoleId(roleId);
+        if (response.status === 200) {
+          setPsychologists(response.data || []);
+        } else {
+          setError(response.message || 'Failed to fetch psychologists');
+        }
+      } catch (err) {
+        setError('An error occurred while fetching psychologists');
+        console.error('Error fetching psychologists:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [roleId, searchTerm]); // Re-fetch if searchTerm changes
 
   // Filter psychologists based on search term
   const filteredPsychologists = psychologists.filter((psychologist) => {
     if (searchTerm === '') return true;
     const lowerSearch = searchTerm.toLowerCase();
     return (
-      psychologist.name.toLowerCase().includes(lowerSearch) ||
-      psychologist.email.toLowerCase().includes(lowerSearch)
+      psychologist.name?.toLowerCase().includes(lowerSearch) ||
+      psychologist.email?.toLowerCase().includes(lowerSearch)
     );
   });
 
   // Sort psychologists by name
   const sortedPsychologists = [...filteredPsychologists].sort((a, b) => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
+    const nameA = a.name?.toLowerCase() || '';
+    const nameB = b.name?.toLowerCase() || '';
     return sortOrder === 'asc' ? nameA.localeCompare(nameB) : nameB.localeCompare(nameA);
   });
 
@@ -55,6 +67,32 @@ const ManagerPsychologistList = () => {
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="text-center my-5">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="text-center my-5">
+        <div className="fs-1 text-danger mb-3">
+          <i className="bi bi-exclamation-triangle"></i>
+        </div>
+        <h5 className="mb-2">{error}</h5>
+        <Button variant="outline-primary" onClick={() => window.location.reload()}>
+          Retry
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -159,7 +197,7 @@ const ManagerPsychologistList = () => {
                                       fontSize: '16px',
                                     }}
                                   >
-                                    {psychologist.name.charAt(0).toUpperCase()}
+                                    {psychologist.name?.charAt(0).toUpperCase()}
                                   </div>
                                   <div>
                                     <h6 className="mb-0">{psychologist.name}</h6>
@@ -197,9 +235,9 @@ const ManagerPsychologistList = () => {
                         <span className="fw-bold">
                           {sortedPsychologists.length > 0
                             ? `${indexOfFirstPsychologist + 1}-${Math.min(
-                              indexOfLastPsychologist,
-                              sortedPsychologists.length
-                            )}`
+                                indexOfLastPsychologist,
+                                sortedPsychologists.length
+                              )}`
                             : '0'}
                         </span>{' '}
                         of <span className="fw-bold">{sortedPsychologists.length}</span> psychologists
