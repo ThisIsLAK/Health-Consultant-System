@@ -1,63 +1,85 @@
-import React from 'react'
+import React from 'react';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
-import { useNavigate } from 'react-router-dom';
 
 const AdminDetail = () => {
-    const navigate = useNavigate()
+  return (
+    <div>
+      <ManagerHeader />
+      <ManagerSidebar />
 
-    return (
-        <div>
-            <ManagerHeader />
-            <ManagerSidebar />
+      <main id="main" className="main">
+        <PageTitle page="Admin Details" />
 
-            <main id='main' className='main'>
-                <PageTitle page="Admin Details" />
-
-                <div className="appointment-container">
-                    {/* Patient Name and ID */}
-                    <div className="patient-header">
-                        <h2 className="patient-name">Tran Binh Nam</h2>
-                        <p className="patient-id">Admin ID: SE****</p>
-                    </div>
-
-                    {/* Patient Details */}
-                    <div className="details-card">
-                        <div style={{ marginLeft: 20 }}>
-                            <h3 className="app-card-title">Account Details</h3>
-                            <div className="detail-row">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                </svg>
-                                <label>Role:</label>
-                                <span>Admin</span>
+        <section className="section dashboard">
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-body pt-3">
+                  {/* Header with admin info */}
+                  <div className="row mb-4">
+                    <div className="col-md-6 col-sm-6 mb-3 mb-md-0">
+                      <div className="card border-0 bg-light">
+                        <div className="card-body p-3">
+                          <div className="d-flex align-items-center">
+                            <div
+                              className="avatar text-white d-flex align-items-center justify-content-center me-3"
+                              style={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '8px',
+                                background: `hsl(${1 * 31 % 360}, 70%, 60%)`, // Static ID-based color
+                                fontSize: '20px',
+                              }}
+                            >
+                              T {/* First letter of "Tran Binh Nam" */}
                             </div>
-                            <div className="detail-row">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                </svg>
-                                <label>Since:</label>
-                                <span>01/01/2025</span>
-                            </div>                                                      
-                            <div className="detail-row">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
-                                        d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                                </svg>
-                                <label>Personal Email:</label>
-                                <span>abc@gmail.com</span>
+                            <div>
+                              <h2 className="mb-1" style={{ fontSize: '1.5rem', fontWeight: '600' }}>
+                                Tran Binh Nam
+                              </h2>
+                              <p className="text-muted mb-0" style={{ fontSize: '0.9rem' }}>
+                                Admin ID: SE****
+                              </p>
                             </div>
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
 
-                    <button onClick={() => navigate('/adminlist')} className="return-button">Return to List</button>
+                  {/* Admin Details */}
+                  <div className="card shadow-sm mb-4">
+                    <div className="card-body p-3">
+                      <h3 className="mb-3" style={{ fontSize: '1.25rem', fontWeight: '500' }}>
+                        Account Details
+                      </h3>
+                      <div className="detail-row mb-3 d-flex align-items-center">
+                        <i className="bi bi-person-fill me-2 text-primary" style={{ fontSize: '1.2rem' }}></i>
+                        <label style={{ width: '150px', fontWeight: '500' }}>Role:</label>
+                        <span>Admin</span>
+                      </div>
+                      <div className="detail-row mb-3 d-flex align-items-center">
+                        <i className="bi bi-calendar-fill me-2 text-primary" style={{ fontSize: '1.2rem' }}></i>
+                        <label style={{ width: '150px', fontWeight: '500' }}>Since:</label>
+                        <span>01/01/2025</span>
+                      </div>
+                      <div className="detail-row mb-3 d-flex align-items-center">
+                        <i className="bi bi-envelope-fill me-2 text-primary" style={{ fontSize: '1.2rem' }}></i>
+                        <label style={{ width: '150px', fontWeight: '500' }}>Personal Email:</label>
+                        <span>abc@gmail.com</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-            </main>
-        </div>
-    )
-}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+};
 
-export default AdminDetail
+export default AdminDetail;

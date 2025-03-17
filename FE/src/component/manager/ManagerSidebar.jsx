@@ -36,7 +36,13 @@ const ManagerSidebar = () => {
             <li>
               <a href="/customerlist">
                 <i className='bi bi-person'></i>
-                <span>Patient</span>
+                <span>Student</span>
+              </a>
+            </li>
+            <li>
+              <a href="/managerparentlist">
+                <i className='bi bi-person'></i>
+                <span>Parents</span>
               </a>
             </li>
             <li>

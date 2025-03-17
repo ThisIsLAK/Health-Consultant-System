@@ -1,3 +1,3 @@
 .small-text {
-    font-size: 0.8rem; /* Điều chỉnh kích thước chữ nhỏ hơn */
+    font-size: 0.8rem !important; /* Điều chỉnh kích thước chữ nhỏ hơn */
 }

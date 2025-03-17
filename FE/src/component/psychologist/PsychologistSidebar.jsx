@@ -23,7 +23,14 @@ const PsychologistSidebar = () => {
         <li className='nav-item'>
           <a href="/patientlist" className='nav-link'>
             <i className='bi bi-grid'></i>
-            <span>Patient List</span>
+            <span>Student List</span>
+          </a>
+        </li>
+
+        <li className='nav-item'>
+          <a href="/parentlist" className='nav-link'>
+            <i className='bi bi-grid'></i>
+            <span>Parent List</span>
           </a>
         </li>
 

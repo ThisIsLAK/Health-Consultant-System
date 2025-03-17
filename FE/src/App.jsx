@@ -27,6 +27,7 @@ import StudentAppointmentHistory from './pages/student/Appointments/AppointmentH
 
 /* Manager Routes */
 import CustomerList from './pages/manager/CustomerList/CustomerList';
+import ManagerParentList from './pages/manager/ManagerParentList/ManagerParentList';
 import PsychologistList from './pages/manager/PsychologistList/PsychologistList';
 import AdminList from './pages/manager/AdminList/AdminList';
 import AppointmentHistory from './pages/manager/AppointmentHistory/AppointmentHistory';
@@ -42,6 +43,7 @@ import ManagerAccount from './pages/manager/ManagerAccount/ManagerAccount'
 
 /* Psychologist Routes */
 import UserList from './pages/psychologist/UserList/UserList';
+import ParentList from './pages/psychologist/ParentList/ParentList';
 import UserDetail from './pages/psychologist/UserDetail/UserDetail';
 import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
 import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
@@ -100,6 +102,7 @@ function App() {
 
         {/* Manager Routes */}
         <Route path='/customerlist' element={<ProtectedRoute element={<CustomerList />} allowedRoles={['MANAGER']} />} />
+        <Route path='/managerparentlist' element={<ProtectedRoute element={<ManagerParentList />} allowedRoles={['MANAGER']} />} />
         <Route path='/psychologistlist' element={<ProtectedRoute element={<PsychologistList />} allowedRoles={['MANAGER']} />} />
         <Route path='/adminlist' element={<ProtectedRoute element={<AdminList />} allowedRoles={['MANAGER']} />} />
         <Route path='/apphistory' element={<ProtectedRoute element={<AppointmentHistory />} allowedRoles={['MANAGER']} />} />
@@ -112,8 +115,10 @@ function App() {
         <Route path='/addadmin' element={<ProtectedRoute element={<AdminAdd />} allowedRoles={['MANAGER']} />} />
         <Route path='/editadmin' element={<ProtectedRoute element={<AdminEdit />} allowedRoles={['MANAGER']} />} />
         <Route path='/manageraccount' element={<ProtectedRoute element={<ManagerAccount />} allowedRoles={['MANAGER']} />} />
+
         {/* Psychologist Routes */}
         <Route path='/patientlist' element={<ProtectedRoute element={<UserList />} allowedRoles={['PSYCHOLOGIST']} />} />
+        <Route path='/parentlist' element={<ProtectedRoute element={<ParentList />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/patientdetail' element={<ProtectedRoute element={<UserDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/therapynote' element={<ProtectedRoute element={<TherapyNote />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyapphistory' element={<ProtectedRoute element={<PsyAppHistory />} allowedRoles={['PSYCHOLOGIST']} />} />

@@ -28,6 +28,7 @@ const AdminCreateUser = () => {
     const roleOptions = [
         { id: '2', name: 'Student' },
         { id: '4', name: 'Psychologist' },
+        { id: '5', name: 'Parents' },
         { id: '3', name: 'Manager' },
         { id: '1', name: 'Admin' }
     ];

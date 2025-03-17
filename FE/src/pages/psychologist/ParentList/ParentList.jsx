@@ -4,7 +4,7 @@ import PsychologistSidebar from '../../../component/psychologist/PsychologistSid
 import PageTitle from '../../../component/psychologist/PageTitle';
 import { Pagination, InputGroup, FormControl, Button } from 'react-bootstrap';
 
-const UserList = () => {
+const ParentList = () => {
     const itemsPerPage = 10;
     const mockPatients = [
         { id: 1, name: 'John Doe', psychologist: 'Dr. Smith', email: 'johndoe@example.com', status: true },
@@ -59,7 +59,7 @@ const UserList = () => {
             <PsychologistSidebar />
 
             <main id="main" className="main">
-                <PageTitle page="Student List" />
+                <PageTitle page="Parent List" />
 
                 <section className="section dashboard">
                     <div className="row">
@@ -76,7 +76,7 @@ const UserList = () => {
                                                             <i className="bi bi-people-fill text-primary fs-4"></i>
                                                         </div>
                                                         <div>
-                                                            <h6 className="mb-0">Total Patients</h6>
+                                                            <h6 className="mb-0">Total Parents</h6>
                                                             <h4 className="mb-0">{patients.length}</h4>
                                                         </div>
                                                     </div>
@@ -95,7 +95,7 @@ const UserList = () => {
                                                             <i className="bi bi-search"></i>
                                                         </InputGroup.Text>
                                                         <FormControl
-                                                            placeholder="Search patients by name or email..."
+                                                            placeholder="Search parents by name or email..."
                                                             className="border-start-0"
                                                             value={searchTerm}
                                                             onChange={(e) => {
@@ -137,7 +137,7 @@ const UserList = () => {
                                             <table className="table table-hover align-middle border-bottom">
                                                 <thead className="bg-light">
                                                     <tr>
-                                                        <th className="py-3" style={{ width: '50%' }}>Patient</th>
+                                                        <th className="py-3" style={{ width: '50%' }}>Parents</th>
                                                         <th className="py-3" style={{ width: '50%' }}>Email</th>
                                                     </tr>
                                                 </thead>
@@ -174,7 +174,7 @@ const UserList = () => {
                                             <div className="fs-1 text-muted mb-3">
                                                 <i className="bi bi-search"></i>
                                             </div>
-                                            <h5 className="mb-2">No patients found</h5>
+                                            <h5 className="mb-2">No Parents found</h5>
                                             <p className="text-muted">Try adjusting your search to find what you're looking for.</p>
                                             <Button
                                                 variant="outline-secondary"
@@ -199,7 +199,7 @@ const UserList = () => {
                                                         )}`
                                                         : '0'}
                                                 </span>{' '}
-                                                of <span className="fw-bold">{sortedPatients.length}</span> patients
+                                                of <span className="fw-bold">{sortedPatients.length}</span> parents
                                             </p>
 
                                             {totalPages > 1 && (
@@ -321,4 +321,4 @@ const UserList = () => {
     );
 };
 
-export default UserList;
+export default ParentList;
