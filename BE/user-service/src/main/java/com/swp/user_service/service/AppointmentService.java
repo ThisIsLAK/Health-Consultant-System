@@ -202,10 +202,20 @@ public class AppointmentService {
                 .map(appointmentMapper::toAppointmentResponse)
                 .collect(Collectors.toList());
     }
-    
+
     public List<AppointmentResponse> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
-        return appointmentMapper.toAppointmentResponses(appointments);
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+
+        // Gán thông tin psychologist thủ công
+        responses.forEach(response -> {
+            userRepository.findById(response.getPsychologistName()).ifPresent(psychologist -> {
+                response.setPsychologistName(psychologist.getName());
+                response.setPsychologistEmail(psychologist.getEmail());
+            });
+        });
+
+        return responses;
     }
 
     public AppointmentSummaryResponse getAppointmentSummary() {

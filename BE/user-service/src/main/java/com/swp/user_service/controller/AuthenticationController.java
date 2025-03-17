@@ -3,6 +3,7 @@ package com.swp.user_service.controller;
 import com.nimbusds.jose.JOSEException;
 import com.swp.user_service.dto.request.AuthenticationRequest;
 import com.swp.user_service.dto.request.IntrospectRequest;
+import com.swp.user_service.dto.request.LogoutRequest;
 import com.swp.user_service.dto.response.ApiResponse;
 import com.swp.user_service.dto.response.AuthenticationResponse;
 import com.swp.user_service.dto.response.IntrospectResponse;
@@ -11,10 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 
@@ -42,4 +40,13 @@ public class AuthenticationController {
                 .result(result)
                 .build();
     }
+
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestHeader("Authorization") String authorizationHeader) throws ParseException, JOSEException {
+        authenticationService.logout(authorizationHeader);
+        return ApiResponse.<Void>builder()
+                .message("Logout successfully")
+                .build();
+    }
+
 }
