@@ -53,8 +53,12 @@ const Report = () => {
                     <div className="ps-3">
                       <h6>Total: {dashboardData.appointmentSummary.totalAppointments}</h6>
                       <span className="text-success small pt-1 fw-bold">
-                        {dashboardData.appointmentSummary.activeAppointments}
-                      </span> <span className="text-muted small pt-2 ps-1">active</span>
+                        {dashboardData.appointmentSummary.completedAppointments}
+                      </span> <span className="text-muted small pt-2 ps-1">completed</span>
+                      <br/>
+                      <span className="text-primary small pt-1 fw-bold">
+                        {dashboardData.appointmentSummary.upcomingAppointments}
+                      </span> <span className="text-muted small pt-2 ps-1">upcoming</span>
                     </div>
                   </div>
                 </div>
