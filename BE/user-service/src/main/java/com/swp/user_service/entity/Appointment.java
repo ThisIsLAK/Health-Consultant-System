@@ -21,7 +21,7 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    User user;
 
     String psychologistId;
 
@@ -32,11 +32,6 @@ public class Appointment {
 
     LocalDateTime cancelledAt;
 
-    private Boolean active;
-    @PrePersist
-    protected void onCreate() {
-        if (active == null) {
-            active = true;
-        }
-    }
+    Boolean active;
+
 }

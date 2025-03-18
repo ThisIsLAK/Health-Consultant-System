@@ -74,7 +74,7 @@ public class AppointmentService {
         appointment.setPsychologistId(psychologist.getId());
         appointment.setAppointmentDate(request.getAppointmentDate());
         appointment.setTimeSlot(request.getTimeSlot());
-        appointment.setActive(true);
+        appointment.setActive(null);
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
@@ -96,6 +96,15 @@ public class AppointmentService {
         boolean slotAlreadyBooked = appointmentRepository.existsByPsychologistIdAndAppointmentDateAndTimeSlot(
                 psychologist.getId(), request.getAppointmentDate(), request.getTimeSlot()
         );
+
+        boolean userHasAppointmentOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDate(
+                request.getUserId(), request.getAppointmentDate()
+        );
+
+        // Nếu user đã có lịch hẹn trong cùng ngày, ném lỗi
+        if (userHasAppointmentOnSameDay) {
+            throw new AppException(ErrorCode.ONE_APPOINTMENT_PER_DAY_LIMIT);
+        }
 
         // Nếu slot đã bị đặt trước đó, ném lỗi
         if (slotAlreadyBooked) {
@@ -168,11 +177,16 @@ public class AppointmentService {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
 
-        validateCancellationTime(appointment);
-
-        if (!appointment.getActive()) {
+        Boolean active = appointment.getActive();
+        if (active != null && active) {
+            throw new AppException(ErrorCode.APPOINTMENT_ALREADY_COMPLETED);
+        }
+        if (active != null && !active) {
             throw new AppException(ErrorCode.APPOINTMENT_ALREADY_CANCELLED);
         }
+
+        validateCancellationTime(appointment);
+        
         appointment.setActive(false);
         appointment.setCancelledAt(LocalDateTime.now());
         appointmentRepository.save(appointment);
@@ -243,6 +257,22 @@ public class AppointmentService {
                 .cancelledAppointments(cancelledAppointments)
                 .upcomingAppointments(upcomingAppointments)
                 .build();
+    }
+
+    public void completeAppointment(String appointmentId) {
+        Appointment appointment = appointmentRepository.findById(appointmentId)
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+
+        if (appointment.getActive() != null && appointment.getActive()) {
+            throw new AppException(ErrorCode.APPOINTMENT_ALREADY_COMPLETED);
+        }
+
+        if (appointment.getActive() != null && !appointment.getActive()) {
+            throw new AppException(ErrorCode.APPOINTMENT_ALREADY_CANCELLED);
+        }
+
+        appointment.setActive(true);
+        appointmentRepository.save(appointment);
     }
 
 }
