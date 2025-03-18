@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DashboardResponse {
-    private AppointmentSummaryResponse appointmentSummary;
-    private SupportProgramSummaryResponse supportProgramSummary;
-    private SurveySummaryResponse surveySummary;
+    AppointmentSummaryResponse appointmentSummary;
+    SupportProgramSummaryResponse supportProgramSummary;
+    SurveySummaryResponse surveySummary;
 }

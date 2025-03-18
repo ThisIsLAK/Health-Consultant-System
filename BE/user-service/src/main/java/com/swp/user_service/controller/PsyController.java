@@ -37,6 +37,7 @@ public class PsyController {
     AppointmentService appointmentService;
     SurveyResultRepository surveyResultRepository;
     SurveyResultMapper surveyResultMapper;
+    AdminService adminService;
 
     @PutMapping("/updatepsy/{psychologistId}")
     public ApiResponse<UserResponse> updatePsy(
@@ -63,6 +64,24 @@ public class PsyController {
     public ApiResponse<List<UserResponse>> getAllPsychologists() {
         return ApiResponse.<List<UserResponse>>builder()
                 .result(psyService.getAllPsychologists())
+                .build();
+    }
+
+    @GetMapping("/allstudents")
+    public ApiResponse<List<UserResponse>> getAllStudents() {
+        List<UserResponse> userResponse = adminService.getAllStudents();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userResponse)
+                .message("All students retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/allparents")
+    public ApiResponse<List<UserResponse>> getAllParents() {
+        List<UserResponse> userResponse = adminService.getAllParents();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userResponse)
+                .message("All parents retrieved successfully")
                 .build();
     }
 

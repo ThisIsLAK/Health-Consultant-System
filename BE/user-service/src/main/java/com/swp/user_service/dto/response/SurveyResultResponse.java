@@ -11,5 +11,6 @@ import lombok.experimental.FieldDefaults;
 public class SurveyResultResponse {
     String surveyId;
     String userId;
+    String userName;
     int score;
 }
