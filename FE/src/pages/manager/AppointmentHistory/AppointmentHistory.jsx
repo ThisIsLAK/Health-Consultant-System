@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { format, parseISO, isToday } from 'date-fns'; // Add date-fns imports
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import { InputGroup, FormControl, Form, Row, Col, Button } from 'react-bootstrap';
@@ -16,7 +17,7 @@ const AppointmentHistory = () => {
 
     // Add filters
     const [filters, setFilters] = useState({
-        status: 'all', // 'all', 'upcoming', 'completed', 'cancelled'
+        status: 'all', // 'all', 'upcoming', 'completed', 'cancelled', 'past'
         timeSlot: '', // Replace startDate/endDate with timeSlot
         psychologist: ''
     });
@@ -88,7 +89,7 @@ const AppointmentHistory = () => {
         if (filters.status !== 'all') {
             filtered = filtered.filter(appointment => {
                 const status = getAppointmentStatus(appointment);
-                return status.label.toLowerCase() === filters.status.toLowerCase();
+                return status.value === filters.status.toLowerCase();
             });
         }
         
@@ -140,21 +141,39 @@ const AppointmentHistory = () => {
 
     // Determine appointment status
     const getAppointmentStatus = (appointment) => {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        const currentDate = new Date();
+        const appointmentDate = parseISO(appointment.appointmentDate);
+        const isPastAppointment = new Date(appointmentDate) < new Date() && !isToday(appointmentDate);
         
-        // If appointment is not active, it's cancelled
-        if (!appointment.active) {
-            return { label: 'Cancelled', className: 'bg-danger' };
+        // Determine status based on 'active' property and date:
+        // - active = null -> UPCOMING
+        // - active = false -> CANCELLED
+        // - active = true -> COMPLETED
+        // - past date (and not cancelled or completed) -> PAST
+        if (appointment.active === false) {
+            return { label: 'Cancelled', value: 'cancelled' };
+        } else if (appointment.active === true) {
+            return { label: 'Completed', value: 'completed' };
+        } else if (isPastAppointment && appointment.active === null) {
+            return { label: 'Past', value: 'past' };
+        } else {
+            return { label: 'Upcoming', value: 'upcoming' };
         }
-        
-        // If appointment date is in the past, it's completed
-        if (appointmentDate < currentDate) {
-            return { label: 'Completed', className: 'bg-success' };
+    };
+
+    // Update handleStatus to match the new status values
+    const handleStatus = status => {
+        switch (status.toLowerCase()) {
+            case 'completed':
+                return 'success';
+            case 'upcoming':
+                return 'primary';
+            case 'cancelled':
+                return 'danger';
+            case 'past':
+                return 'secondary';
+            default:
+                return 'info';
         }
-        
-        // Otherwise it's an upcoming appointment
-        return { label: 'Upcoming', className: 'bg-primary' };
     };
 
     return (
@@ -189,6 +208,7 @@ const AppointmentHistory = () => {
                                                 <option value="upcoming">Upcoming</option>
                                                 <option value="completed">Completed</option>
                                                 <option value="cancelled">Cancelled</option>
+                                                <option value="past">Past</option>
                                             </Form.Select>
                                         </Form.Group>
                                     </Col>
@@ -271,7 +291,7 @@ const AppointmentHistory = () => {
                                                 <td>{appointment.psychologistName}</td>
                                                 <td>{appointment.psychologistEmail}</td>
                                                 <td>
-                                                    <span className={`badge ${status.className}`}>
+                                                    <span className={`badge bg-${handleStatus(status.value)}`}>
                                                         {status.label}
                                                     </span>
                                                 </td>

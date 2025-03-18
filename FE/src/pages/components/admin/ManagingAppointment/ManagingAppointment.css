@@ -173,10 +173,13 @@
     font-weight: 500;
 }
 
-.search-container {
+/* Search container and input styles - updated for better appearance */
+.search-container-psychoappointment {
     position: relative;
     flex-grow: 1;
     max-width: 400px;
+    display: flex;
+    align-items: center;
 }
 
 .search-icon {
@@ -185,6 +188,7 @@
     top: 50%;
     transform: translateY(-50%);
     color: #94a3b8;
+    pointer-events: none; /* Ensures the icon doesn't interfere with input clicks */
 }
 
 .search-input {
@@ -195,12 +199,18 @@
     font-size: 0.875rem;
     color: #334155;
     background-color: white;
+    transition: all 0.2s ease;
 }
 
 .search-input:focus {
     outline: none;
     border-color: #3b82f6;
-    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.search-input::placeholder {
+    color: #94a3b8;
+    opacity: 0.8;
 }
 
 .clear-search-btn {
@@ -213,10 +223,16 @@
     cursor: pointer;
     color: #94a3b8;
     padding: 0.25rem;
+    transition: color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
 .clear-search-btn:hover {
     color: #64748b;
+    background-color: #f1f5f9;
 }
 
 /* Appointments Content */
@@ -649,19 +665,24 @@ tr.upcoming td {
     white-space: nowrap;
 }
 
-.status-badge.active {
-    background-color: #e0f2fe !important;
-    color: #0284c7;
+.status-badge.upcoming {
+    background-color: #dbeafe;
+    color: #2563eb;
 }
 
-.status-badge.inactive {
-    background-color: #fee2e2 !important;
+.status-badge.completed {
+    background-color: #d1fae5;
+    color: #10b981;
+}
+
+.status-badge.cancelled {
+    background-color: #fee2e2;
     color: #ef4444;
 }
 
 .status-badge.past {
-    background-color: #f1f5f9;
-    color: #64748b;
+    background-color: #f3f4f6;
+    color: #6b7280;
 }
 
 .status-icon {
@@ -669,15 +690,20 @@ tr.upcoming td {
 }
 
 /* Table Row Status Styles */
-.appointments-table tr.active {
+.appointments-table tr.upcoming {
     background-color: #f0f9ff;
 }
 
-.appointments-table tr.inactive {
+.appointments-table tr.completed {
+    background-color: #f0fdf4;
+}
+
+.appointments-table tr.cancelled {
     background-color: #fef2f2;
 }
 
 .appointments-table tr.past {
+    background-color: #f8fafc;
     color: #64748b;
 }
 

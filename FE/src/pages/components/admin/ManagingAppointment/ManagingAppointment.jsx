@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isToday } from 'date-fns';
 import axios from 'axios';
 import { Calendar, Search, User, Clock, Eye, AlertTriangle, CheckCircle, XCircle, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight } from 'lucide-react';
 import './ManagingAppointment.css';
@@ -37,13 +37,30 @@ const ManagingAppointment = () => {
                     // Process the appointment data
                     const formattedAppointments = response.data.result.map(appointment => {
                         const appointmentDate = parseISO(appointment.appointmentDate);
+                        const isPastAppointment = new Date(appointmentDate) < new Date() && !isToday(appointmentDate);
+                        
+                        // Determine status based on 'active' property and date:
+                        // - active = null -> UPCOMING
+                        // - active = false -> CANCELLED
+                        // - active = true -> COMPLETED
+                        // - past date (and not cancelled or completed) -> PAST
+                        let status;
+                        if (appointment.active === false) {
+                            status = 'CANCELLED';
+                        } else if (appointment.active === true) {
+                            status = 'COMPLETED';
+                        } else if (isPastAppointment && appointment.active === null) {
+                            status = 'PAST';
+                        } else {
+                            status = 'UPCOMING';
+                        }
                         
                         return {
                             ...appointment,
                             formattedDate: format(appointmentDate, 'EEEE, MMMM d, yyyy'),
                             formattedTime: format(appointmentDate, 'h:mm a'),
-                            status: appointment.active ? 'active' : 'inactive',
-                            isPast: new Date(appointmentDate) < new Date()
+                            status: status,
+                            isPast: isPastAppointment
                         };
                     });
                     
@@ -77,10 +94,10 @@ const ManagingAppointment = () => {
     const filteredAppointments = appointments.filter(appointment => {
         const matchesFilter = 
             filter === 'all' || 
-            (filter === 'upcoming' && !appointment.isPast) ||
-            (filter === 'past' && appointment.isPast) ||
-            (filter === 'active' && appointment.active) ||
-            (filter === 'inactive' && !appointment.active);
+            (filter === 'upcoming' && appointment.status === 'UPCOMING') ||
+            (filter === 'past' && appointment.status === 'PAST') ||
+            (filter === 'completed' && appointment.status === 'COMPLETED') ||
+            (filter === 'cancelled' && appointment.status === 'CANCELLED'); // Fix for cancelled filter
         
         const matchesSearch = 
             searchQuery === "" || 
@@ -128,7 +145,11 @@ const ManagingAppointment = () => {
                 // Update the appointment in the local state
                 const updatedAppointments = appointments.map(appointment => {
                     if (appointment.appointmentId === appointmentId) {
-                        return { ...appointment, active: false };
+                        return { 
+                            ...appointment, 
+                            active: false,
+                            status: 'CANCELLED'
+                        };
                     }
                     return appointment;
                 });
@@ -149,24 +170,37 @@ const ManagingAppointment = () => {
 
     // Get appointment status class and label
     const getAppointmentStatusInfo = (appointment) => {
-        if (appointment.isPast) {
-            return {
-                className: 'past',
-                label: 'Completed',
-                icon: <CheckCircle size={14} className="status-icon" />
-            };
-        } else if (appointment.active) {
-            return {
-                className: 'active',
-                label: 'Active',
-                icon: <Clock size={14} className="status-icon" />
-            };
-        } else {
-            return {
-                className: 'inactive',
-                label: 'Cancelled',
-                icon: <XCircle size={14} className="status-icon" />
-            };
+        switch(appointment.status) {
+            case 'COMPLETED':
+                return {
+                    className: 'completed',
+                    label: 'Completed',
+                    icon: <CheckCircle size={14} className="status-icon" />
+                };
+            case 'CANCELLED':
+                return {
+                    className: 'cancelled',
+                    label: 'Cancelled',
+                    icon: <XCircle size={14} className="status-icon" />
+                };
+            case 'PAST':
+                return {
+                    className: 'past',
+                    label: 'Past',
+                    icon: <Clock size={14} className="status-icon" />
+                };
+            case 'UPCOMING':
+                return {
+                    className: 'upcoming',
+                    label: 'Upcoming',
+                    icon: <Clock size={14} className="status-icon" />
+                };
+            default:
+                return {
+                    className: 'unknown',
+                    label: 'Unknown',
+                    icon: <AlertTriangle size={14} className="status-icon" />
+                };
         }
     };
 
@@ -199,26 +233,26 @@ const ManagingAppointment = () => {
                                     Upcoming
                                 </button>
                                 <button 
-                                    className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
-                                    onClick={() => setFilter('past')}
+                                    className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
+                                    onClick={() => setFilter('completed')}
                                 >
                                     Completed
                                 </button>
                                 <button 
-                                    className={`filter-btn ${filter === 'active' ? 'active' : ''}`}
-                                    onClick={() => setFilter('active')}
+                                    className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
+                                    onClick={() => setFilter('past')}
                                 >
-                                    Active
+                                    Past
                                 </button>
                                 <button 
-                                    className={`filter-btn ${filter === 'inactive' ? 'active' : ''}`}
-                                    onClick={() => setFilter('inactive')}
+                                    className={`filter-btn ${filter === 'cancelled' ? 'active' : ''}`}
+                                    onClick={() => setFilter('cancelled')}
                                 >
                                     Cancelled
                                 </button>
                             </div>
                             
-                            <div className="search-container">
+                            <div className="search-container-psychoappointment">
                                 <Search size={16} className="search-icon" />
                                 <input 
                                     type="text" 
@@ -351,7 +385,8 @@ const ManagingAppointment = () => {
                                                             </span>
                                                         </td>
                                                         <td className="actions-cell">
-                                                            {appointment.active && !appointment.isPast ? (
+                                                            {/* Only show cancel button for UPCOMING appointments that are not in the past */}
+                                                            {appointment.status === 'UPCOMING' ? (
                                                                 <button 
                                                                     className="action-btn cancel-appointment"
                                                                     onClick={() => cancelAppointment(appointment.appointmentId)}
@@ -363,7 +398,9 @@ const ManagingAppointment = () => {
                                                                 </button>
                                                             ) : (
                                                                 <span className="no-action-available">
-                                                                    {appointment.isPast ? "Completed" : "Cancelled"}
+                                                                    {appointment.status === 'COMPLETED' ? "Completed" : 
+                                                                    appointment.status === 'CANCELLED' ? "Cancelled" : 
+                                                                    appointment.status === 'PAST' ? "Past" : "No action"}
                                                                 </span>
                                                             )}
                                                         </td>

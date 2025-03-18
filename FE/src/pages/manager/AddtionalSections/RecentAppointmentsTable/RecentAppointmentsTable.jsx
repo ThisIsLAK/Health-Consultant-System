@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { format, parseISO, isToday } from 'date-fns'; // Import date-fns functions
 
 const RecentAppointmentsTable = () => {
     const [appointments, setAppointments] = useState([]);
@@ -61,35 +62,39 @@ const RecentAppointmentsTable = () => {
         return date.toLocaleDateString('en-GB'); // DD/MM/YYYY format
     };
 
-    // Determine appointment status
+    // Updated appointment status determination function using the consistent logic
     const getAppointmentStatus = (appointment) => {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        const currentDate = new Date();
+        const appointmentDate = parseISO(appointment.appointmentDate);
+        const isPastAppointment = new Date(appointmentDate) < new Date() && !isToday(appointmentDate);
         
-        // If appointment is not active, it's cancelled
-        if (!appointment.active) {
+        // Determine status based on 'active' property and date:
+        // - active = null -> UPCOMING
+        // - active = false -> CANCELLED
+        // - active = true -> COMPLETED
+        // - past date (and not cancelled or completed) -> PAST
+        if (appointment.active === false) {
             return { label: 'Cancelled', value: 'Cancelled' };
+        } else if (appointment.active === true) {
+            return { label: 'Completed', value: 'Completed' };
+        } else if (isPastAppointment && appointment.active === null) {
+            return { label: 'Past', value: 'Past' };
+        } else {
+            return { label: 'Upcoming', value: 'Upcoming' };
         }
-        
-        // If appointment date is in the past, it's completed
-        if (appointmentDate < currentDate) {
-            return { label: 'Completed', value: 'Confirmed' };
-        }
-        
-        // Otherwise it's an upcoming appointment
-        return { label: 'Upcoming', value: 'Pending' };
     };
 
     const handleStatus = status => {
         switch (status) {
-            case 'Confirmed':
+            case 'Completed':
                 return 'success';
-            case 'Pending':
-                return 'success';
+            case 'Upcoming':
+                return 'primary';
             case 'Cancelled':
                 return 'danger';
+            case 'Past':
+                return 'secondary';
             default:
-                return 'primary';
+                return 'info';
         }
     };
 

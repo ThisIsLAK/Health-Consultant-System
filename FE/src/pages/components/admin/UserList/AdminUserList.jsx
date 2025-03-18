@@ -166,7 +166,7 @@ const AdminUserList = () => {
         { key: 'ADMIN', label: 'Admin' },
         { key: 'PSYCHOLOGIST', label: 'Psychologist' },
         { key: 'MANAGER', label: 'Manager' },
-        { key: 'USER', label: 'Student' },
+        { key: 'STUDENT', label: 'Student' },
         { key: 'PARENT', label: 'Parent' }
     ];
 
@@ -283,7 +283,6 @@ const AdminUserList = () => {
                                                                 {roleFilter === 'All' ? 'All Roles' :
                                                                     roleFilterOptions.find(opt => opt.key === roleFilter)?.label || roleFilter}
                                                             </span>
-                                                            <i className="bi bi-chevron-down"></i>
                                                         </Dropdown.Toggle>
                                                         <Dropdown.Menu className="w-100">
                                                             {roleFilterOptions.map(option => (

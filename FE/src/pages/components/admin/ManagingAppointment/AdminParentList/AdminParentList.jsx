@@ -1,53 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaEye, FaGraduationCap, FaSearch, FaUserAlt, FaTimes, FaCalendarAlt } from 'react-icons/fa';
+import axios from 'axios'; // Import axios for API calls
+import { FaEye, FaUserFriends, FaSearch, FaTimes, FaCalendarAlt } from 'react-icons/fa';
 import AdminHeader from '../../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../../component/admin/AdminSiderbar';
-import './AdminParentList.css'; // Đảm bảo tạo file CSS tương ứng nếu chưa có
+import './AdminParentList.css';
 
 const AdminParentList = () => {
-    const [students, setStudents] = useState([]);
+    const [parents, setParents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
-    // Dữ liệu giả
-    const mockStudents = [
-        { id: '1', name: 'John Doe', email: 'john.doe@example.com', role: { roleName: 'STUDENT' } },
-        { id: '2', name: 'Jane Smith', email: 'jane.smith@example.com', role: { roleName: 'STUDENT' } },
-        { id: '3', name: 'Alice Johnson', email: 'alice.johnson@example.com', role: { roleName: 'STUDENT' } },
-        { id: '4', name: 'Bob Brown', email: 'bob.brown@example.com', role: { roleName: 'STUDENT' } },
-        { id: '5', name: 'Emma Davis', email: 'emma.davis@example.com', role: { roleName: 'STUDENT' } },
-    ];
-
     useEffect(() => {
-        fetchStudents();
+        fetchParents();
     }, []);
 
-    const fetchStudents = async () => {
+    const fetchParents = async () => {
         try {
             setLoading(true);
-            // Thay vì gọi API, sử dụng dữ liệu giả
-            setTimeout(() => { // Giả lập thời gian tải dữ liệu
-                const studentsList = mockStudents.filter(user =>
-                    user.role && user.role.roleName === 'STUDENT'
-                );
-                setStudents(studentsList);
+            // Get token from localStorage
+            const token = localStorage.getItem('token');
+            
+            // Make API call to fetch parents
+            const response = await axios.get('http://localhost:8080/identity/admin/allparents', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.data && Array.isArray(response.data.result)) {
+                setParents(response.data.result);
                 setError(null);
-                setLoading(false);
-            }, 1000); // Delay 1 giây để mô phỏng tải dữ liệu
+            } else {
+                setError('Failed to load parents data. Invalid response format.');
+                setParents([]);
+            }
         } catch (err) {
-            console.error('Error fetching students:', err);
-            setError('An error occurred while fetching students');
+            console.error('Error fetching parents:', err);
+            setError('An error occurred while fetching parents: ' + (err.response?.data?.message || err.message));
+        } finally {
             setLoading(false);
         }
     };
 
-    // Filter students based on search term
-    const filteredStudents = students.filter(student =>
-        student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    // Filter parents based on search term
+    const filteredParents = parents.filter(parent =>
+        parent.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        parent.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) {
@@ -69,7 +71,7 @@ const AdminParentList = () => {
                 <div className="psych-dashboard">
                     <div className="page-header">
                         <div className="page-title">
-                            <FaGraduationCap className="page-icon" />
+                            <FaUserFriends className="page-icon" />
                             <h1>Parents Directory</h1>
                         </div>
                         <div className="page-actions">
@@ -103,50 +105,50 @@ const AdminParentList = () => {
                         <div className="stats-card">
                             <div className="stats-card-inner">
                                 <div className="stats-icon-area">
-                                    <FaGraduationCap className="stats-icon" />
+                                    <FaUserFriends className="stats-icon" />
                                 </div>
                                 <div className="stats-content">
-                                    <h2 className="stats-number">{filteredStudents.length}</h2>
+                                    <h2 className="stats-number">{filteredParents.length}</h2>
                                     <p className="stats-label">Total Parents</p>
                                 </div>
                             </div>
                             <div className="stats-footer">
                                 <span className="stats-info">
-                                    {searchTerm && filteredStudents.length !== students.length ?
-                                        `Showing ${filteredStudents.length} of ${students.length} students` :
-                                        "All students"}
+                                    {searchTerm && filteredParents.length !== parents.length ?
+                                        `Showing ${filteredParents.length} of ${parents.length} parents` :
+                                        "All parents"}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {filteredStudents.length === 0 ? (
+                    {filteredParents.length === 0 ? (
                         <div className="psych-empty">
-                            <FaGraduationCap className="psych-empty-icon" />
+                            <FaUserFriends className="psych-empty-icon" />
                             <h3>{searchTerm ? "No parents match your search" : "No parents found"}</h3>
                             <p>Try modifying your search criteria or check back later.</p>
                         </div>
                     ) : (
                         <div className="psych-grid">
-                            {filteredStudents.map((student) => (
-                                <div key={student.id} className="psych-card">
+                            {filteredParents.map((parent) => (
+                                <div key={parent.id} className="psych-card">
                                     <div className="psych-card-header">
                                         <div className="psych-avatar">
-                                            {student.name ? student.name.charAt(0).toUpperCase() : '?'}
+                                            {parent.name ? parent.name.charAt(0).toUpperCase() : '?'}
                                         </div>
                                     </div>
                                     <div className="psych-card-body">
-                                        <h5 className="psych-name">{student.name || 'N/A'}</h5>
-                                        <p className="psych-email">{student.email}</p>
+                                        <h5 className="psych-name">{parent.name || 'N/A'}</h5>
+                                        <p className="psych-email">{parent.email}</p>
                                     </div>
                                     <div className="psych-card-footer">
                                         <div className="button-group">
-                                            <Link to={`/userdetail/${student.email}`} className="psych-view-btn">
+                                            <Link to={`/userdetail/${parent.email}`} className="psych-view-btn">
                                                 <FaEye /> View Profile
                                             </Link>
                                             <Link
-                                                to={`/admin/students/appointments/${student.id}`}
-                                                state={{ student: student }}
+                                                to={`/admin/parents/appointments/${parent.id}`}
+                                                state={{ parent: parent }}
                                                 className="psych-app-btn"
                                             >
                                                 <FaCalendarAlt /> Appointments

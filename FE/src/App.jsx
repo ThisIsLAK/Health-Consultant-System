@@ -152,6 +152,7 @@ function App() {
         <Route path='/admin/students/appointments/:studentId' element={<ProtectedRoute element={<AdminStuAppointment />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminstulist' element={<ProtectedRoute element={<AdminStuList />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminparentlist' element={<ProtectedRoute element={<AdminParentList />} allowedRoles={['ADMIN']} />} />
+        <Route path='/admin/parents/appointments/:parentId' element={<ProtectedRoute element={<AdminParentAppointment />} allowedRoles={['ADMIN']} />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { Alert, Spinner, Badge, Table } from 'react-bootstrap';
-import { FaArrowLeft, FaCalendarAlt, FaUserMd, FaCheckCircle, FaTimesCircle, FaInfoCircle } from 'react-icons/fa';
+import { format, parseISO, isToday } from 'date-fns'; // Import date-fns functions
+import { FaArrowLeft, FaCalendarAlt, FaUserMd, FaCheckCircle, FaTimesCircle, FaInfoCircle, FaClock } from 'react-icons/fa';
 import axios from 'axios';
 import AdminHeader from '../../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../../component/admin/AdminSiderbar';
@@ -43,7 +44,20 @@ const AdminPsychoAppointment = () => {
                 console.log('Appointments data:', response.data);
                 // Check if response has the correct structure
                 const appointmentsData = response.data.result || response.data;
-                setAppointments(appointmentsData);
+                
+                // Process appointments to add isPast property
+                const processedAppointments = appointmentsData.map(app => {
+                    const appDate = new Date(app.appointmentDate);
+                    const now = new Date();
+                    const isPast = appDate < now && appDate.toDateString() !== now.toDateString();
+                    
+                    return {
+                        ...app,
+                        isPast
+                    };
+                });
+                
+                setAppointments(processedAppointments);
                 
                 // No need to fetch student names since they're not available
                 // Just set a placeholder for each unique user ID
@@ -78,24 +92,51 @@ const AdminPsychoAppointment = () => {
         });
     };
 
-    // Check if appointment is in the past
-    const isAppointmentInPast = (dateString) => {
-        if (!dateString) return false;
-        const appointmentDate = new Date(dateString);
-        return appointmentDate < new Date();
+    // Function to determine appointment status based on active property and date
+    const getAppointmentStatus = (appointment) => {
+        const appointmentDate = new Date(appointment.appointmentDate);
+        const isPastAppointment = appointmentDate < new Date() && 
+            !isToday(appointmentDate);
+        
+        if (appointment.active === false) {
+            return 'CANCELLED';
+        } else if (appointment.active === true) {
+            return 'COMPLETED';
+        } else if (isPastAppointment) {
+            return 'PAST';
+        } else {
+            return 'UPCOMING';
+        }
     };
 
-    // Get status badge based on active property and date
-    const getStatusBadge = (active, appointmentDate) => {
-        if (!active) {
-            return <Badge bg="danger">Cancelled</Badge>;
+    // Get status badge based on appointment status
+    const getStatusBadge = (appointment) => {
+        const status = getAppointmentStatus(appointment);
+        
+        let bgColor, label;
+        switch(status) {
+            case 'UPCOMING':
+                bgColor = 'primary';
+                label = 'Upcoming';
+                break;
+            case 'COMPLETED':
+                bgColor = 'success';
+                label = 'Completed';
+                break;
+            case 'CANCELLED':
+                bgColor = 'danger';
+                label = 'Cancelled';
+                break;
+            case 'PAST':
+                bgColor = 'secondary';
+                label = 'Past';
+                break;
+            default:
+                bgColor = 'info';
+                label = 'Unknown';
         }
         
-        if (isAppointmentInPast(appointmentDate)) {
-            return <Badge bg="secondary">Completed</Badge>;
-        }
-        
-        return <Badge bg="success">Upcoming</Badge>;
+        return <Badge bg={bgColor}>{label}</Badge>;
     };
 
     // First initial for avatar
@@ -121,9 +162,16 @@ const AdminPsychoAppointment = () => {
         );
     }
 
-    // Count active and inactive appointments
-    const activeAppointments = appointments.filter(app => app.active).length;
-    const cancelledAppointments = appointments.filter(app => !app.active).length;
+    // Count appointments by status for statistics
+    const countAppointmentsByStatus = () => {
+        return appointments.reduce((counts, app) => {
+            const status = getAppointmentStatus(app);
+            counts[status] = (counts[status] || 0) + 1;
+            return counts;
+        }, {});
+    };
+
+    const statusCounts = countAppointmentsByStatus();
 
     return (
         <>
@@ -177,12 +225,21 @@ const AdminPsychoAppointment = () => {
                                 </div>
                             </div>
                             <div className="stat-item">
-                                <div className="stat-icon active">
+                                <div className="stat-icon completed">
                                     <FaCheckCircle />
                                 </div>
                                 <div className="stat-content">
-                                    <h3>{activeAppointments}</h3>
-                                    <p>Active</p>
+                                    <h3>{statusCounts.COMPLETED || 0}</h3>
+                                    <p>Completed</p>
+                                </div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-icon upcoming">
+                                    <FaClock />
+                                </div>
+                                <div className="stat-content">
+                                    <h3>{statusCounts.UPCOMING || 0}</h3>
+                                    <p>Upcoming</p>
                                 </div>
                             </div>
                             <div className="stat-item">
@@ -190,8 +247,17 @@ const AdminPsychoAppointment = () => {
                                     <FaTimesCircle />
                                 </div>
                                 <div className="stat-content">
-                                    <h3>{cancelledAppointments}</h3>
+                                    <h3>{statusCounts.CANCELLED || 0}</h3>
                                     <p>Cancelled</p>
+                                </div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-icon past">
+                                    <FaCalendarAlt />
+                                </div>
+                                <div className="stat-content">
+                                    <h3>{statusCounts.PAST || 0}</h3>
+                                    <p>Past</p>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +295,7 @@ const AdminPsychoAppointment = () => {
                                                     <td>{appointment.studentEmail}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
-                                                    <td>{getStatusBadge(appointment.active, appointment.appointmentDate)}</td>
+                                                    <td>{getStatusBadge(appointment)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>
