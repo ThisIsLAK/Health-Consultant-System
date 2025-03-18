@@ -452,7 +452,7 @@
 .psy-survey-id {
   font-size: 0.85rem;
   color: #4b5563;
-  font-weight: 500;
+  font-weight: bold;
   display: block;
   word-break: break-all;
   font-family: monospace;

@@ -51,7 +51,7 @@ const Report = () => {
                       <i className="bi bi-calendar-check"></i>
                     </div>
                     <div className="ps-3">
-                      <h6>{dashboardData.appointmentSummary.totalAppointments}</h6>
+                      <h6>Total: {dashboardData.appointmentSummary.totalAppointments}</h6>
                       <span className="text-success small pt-1 fw-bold">
                         {dashboardData.appointmentSummary.activeAppointments}
                       </span> <span className="text-muted small pt-2 ps-1">active</span>
@@ -71,7 +71,7 @@ const Report = () => {
                       <i className="bi bi-heart-pulse"></i>
                     </div>
                     <div className="ps-3">
-                      <h6>{dashboardData.supportProgramSummary.totalPrograms}</h6>
+                      <h6>Total: {dashboardData.supportProgramSummary.totalPrograms}</h6>
                       <span className="text-success small pt-1 fw-bold">
                         {dashboardData.supportProgramSummary.totalParticipants}
                       </span> <span className="text-muted small pt-2 ps-1">participants</span>
@@ -91,7 +91,7 @@ const Report = () => {
                       <i className="bi bi-clipboard-check"></i>
                     </div>
                     <div className="ps-3">
-                      <h6>{dashboardData.surveySummary.totalSurveys}</h6>
+                      <h6>Total: {dashboardData.surveySummary.totalSurveys}</h6>
                       <span className="text-success small pt-1 fw-bold">
                         {dashboardData.surveySummary.totalSurveyResults}
                       </span> <span className="text-muted small pt-2 ps-1">results</span>

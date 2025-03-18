@@ -153,7 +153,7 @@ const PsyAppointments = () => {
                 console.log("Appointments response:", response.data);
 
                 if (response.data && Array.isArray(response.data.result)) {
-                    // Process the appointments based on the provided schema
+                    // Process the appointments based on the schema
                     const formattedAppointments = response.data.result.map(app => {
                         // Parse the date
                         const date = parseISO(app.appointmentDate);

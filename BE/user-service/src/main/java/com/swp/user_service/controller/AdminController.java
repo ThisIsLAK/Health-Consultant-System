@@ -80,6 +80,25 @@ public class AdminController {
                 .build();
     }
 
+
+    @GetMapping("/allstudents")
+    public ApiResponse<List<UserResponse>> getAllStudents() {
+        List<UserResponse> userResponse = adminService.getAllStudents();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userResponse)
+                .message("All students retrieved successfully")
+                .build();
+    }
+
+    @GetMapping("/allparents")
+    public ApiResponse<List<UserResponse>> getAllParents() {
+        List<UserResponse> userResponse = adminService.getAllParents();
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userResponse)
+                .message("All parents retrieved successfully")
+                .build();
+    }
+
     /************************************************************
      *                  SUPPORT PROGRAM CONTROLLER              *
      ************************************************************/
