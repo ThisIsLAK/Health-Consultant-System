@@ -245,24 +245,24 @@ public class AppointmentService {
     public AppointmentSummaryResponse getAppointmentSummary() {
         List<Appointment> appointments = appointmentRepository.findAll();
         if (appointments == null) {
-            appointments = Collections.emptyList(); // Avoid NullPointerException
+            appointments = Collections.emptyList();
         }
 
         long totalAppointments = appointments.size();
-        long activeAppointments = appointments.stream()
-                .filter(app -> app.getActive() != null && app.getActive())
+        long completedAppointments = appointments.stream()
+                .filter(app -> Boolean.TRUE.equals(app.getActive()))
                 .count();
         long cancelledAppointments = appointments.stream()
-                .filter(app -> app.getCancelledAt() != null)
+                .filter(app -> Boolean.FALSE.equals(app.getActive()))
                 .count();
         long upcomingAppointments = appointments.stream()
-                .filter(app -> app.getActive() != null && app.getActive())
+                .filter(app -> app.getActive() == null)
                 .filter(app -> app.getAppointmentDate() != null && app.getAppointmentDate().after(new Date()))
                 .count();
 
         return AppointmentSummaryResponse.builder()
                 .totalAppointments(totalAppointments)
-                .activeAppointments(activeAppointments)
+                .completedAppointments(completedAppointments)
                 .cancelledAppointments(cancelledAppointments)
                 .upcomingAppointments(upcomingAppointments)
                 .build();

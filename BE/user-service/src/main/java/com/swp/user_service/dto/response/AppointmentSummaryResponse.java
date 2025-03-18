@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AppointmentSummaryResponse {
     private Long totalAppointments;
-    private Long activeAppointments;
+    private Long completedAppointments;
     private Long cancelledAppointments;
     private Long upcomingAppointments;
 }
