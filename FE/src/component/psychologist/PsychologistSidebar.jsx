@@ -35,13 +35,6 @@ const PsychologistSidebar = () => {
         </li>
 
         <li className='nav-item'>
-          <a href="/psyapphistory" className='nav-link'>
-            <i className='bi bi-clock-history'></i>
-            <span>Appointment History</span>
-          </a>
-        </li>
-
-        <li className='nav-item'>
           <a
             href="#"
             className='nav-link collapsed'  // Matching CSS for collapsed style

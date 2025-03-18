@@ -184,7 +184,7 @@ const UserList = () => {
                                             <table className="table table-hover align-middle border-bottom">
                                                 <thead className="bg-light">
                                                     <tr>
-                                                        <th className="py-3" style={{ width: '50%' }}>Student</th>
+                                                        <th className="py-3" style={{ width: '50%' }}>Student Name</th>
                                                         <th className="py-3" style={{ width: '50%' }}>Email</th>
                                                     </tr>
                                                 </thead>

@@ -46,7 +46,6 @@ import UserList from './pages/psychologist/UserList/UserList';
 import ParentList from './pages/psychologist/ParentList/ParentList';
 import UserDetail from './pages/psychologist/UserDetail/UserDetail';
 import TherapyNote from './pages/psychologist/TherapyNote/TherapyNote';
-import PsyAppHistory from './pages/psychologist/PsyAppHistory/PsyAppHistory';
 import PsyAppDetail from './pages/psychologist/PsyAppDetail/PsyAppDetail';
 import PsychologistAccount from './pages/psychologist/PsychologistAccount/PsychologistAccount'
 import PsyAppointments from './pages/psychologist/Appointments/PsyAppointments';
@@ -121,7 +120,6 @@ function App() {
         <Route path='/parentlist' element={<ProtectedRoute element={<ParentList />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/patientdetail' element={<ProtectedRoute element={<UserDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/therapynote' element={<ProtectedRoute element={<TherapyNote />} allowedRoles={['PSYCHOLOGIST']} />} />
-        <Route path='/psyapphistory' element={<ProtectedRoute element={<PsyAppHistory />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappdetail' element={<ProtectedRoute element={<PsyAppDetail />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyaccount' element={<ProtectedRoute element={<PsychologistAccount />} allowedRoles={['PSYCHOLOGIST']} />} />
         <Route path='/psyappointment' element={<ProtectedRoute element={<PsyAppointments />} allowedRoles={['PSYCHOLOGIST']} />} />

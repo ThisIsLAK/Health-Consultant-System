@@ -447,7 +447,7 @@ const PsyAppointments = () => {
                                                     <div className="name-status">
                                                         <h3 className="patient-name">
                                                             <User size={16} className="user-icon" />
-                                                            Student ID: {appointment.studentName}
+                                                            User Name: {appointment.studentName}
                                                         </h3>
                                                         <div className="status-wrapper">
                                                             {appointment.timing === 'past' &&
@@ -463,7 +463,7 @@ const PsyAppointments = () => {
                                                     <div className="info-item">
                                                         <User className="icon" size={16} />
                                                         <span className="text">
-                                                            Student Email: {appointment.studentEmail}
+                                                            User Email: {appointment.studentEmail}
                                                         </span>
                                                     </div>
 

@@ -250,8 +250,8 @@ const AppointmentHistory = () => {
                             <table className="table table-borderless datatable">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col">Student Name</th>
-                                        <th scope="col">Student Email</th>
+                                        <th scope="col">User Name</th>
+                                        <th scope="col">User Email</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Time Slot</th>
                                         <th scope="col">Psychologist</th>

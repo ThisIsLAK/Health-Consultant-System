@@ -301,8 +301,8 @@ const ManagingAppointment = () => {
                                                 <th>Status</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
-                                                <th>Student</th>
-                                                <th>Student Email</th>
+                                                <th>User Name</th>
+                                                <th>User Email</th>
                                                 <th>Psychologist</th>
                                                 <th>Psychologist Email</th>
                                                 <th>Actions</th>

@@ -12,6 +12,7 @@ com\swp\user_service\entity\Survey.class
 com\swp\user_service\dto\request\SurveyQuestionUpdateRequest$SurveyQuestionUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SurveyAnswerOptionResponse.class
 com\swp\user_service\dto\response\AuthenticationResponse$AuthenticationResponseBuilder.class
+com\swp\user_service\dto\request\LogoutRequest$LogoutRequestBuilder.class
 com\swp\user_service\dto\response\SurveyQuestionResponse.class
 com\swp\user_service\entity\Appointment.class
 com\swp\user_service\service\ManagerService.class
@@ -29,6 +30,7 @@ com\swp\user_service\dto\request\SurveyUpdateRequest$SurveyUpdateRequestBuilder.
 com\swp\user_service\service\PsyService.class
 com\swp\user_service\mapper\SurveyAnswerOptionMapper.class
 com\swp\user_service\entity\User$UserBuilder.class
+com\swp\user_service\dto\response\SurveySummaryResponse$SurveySummaryResponseBuilder.class
 com\swp\user_service\entity\SurveyResult$SurveyResultBuilder.class
 com\swp\user_service\dto\response\BlogResponse.class
 com\swp\user_service\dto\response\UserAnswerResponse$UserAnswerResponseBuilder.class
@@ -42,6 +44,8 @@ com\swp\user_service\dto\response\SurveyQuestionResponse$SurveyQuestionResponseB
 com\swp\user_service\entity\SupportProgram$SupportProgramBuilder.class
 com\swp\user_service\entity\SurveySuggestion.class
 com\swp\user_service\dto\response\AppointmentResponse$AppointmentResponseBuilder.class
+com\swp\user_service\dto\response\DashboardResponse.class
+com\swp\user_service\dto\response\SurveySummaryResponse.class
 com\swp\user_service\service\SurveyService.class
 com\swp\user_service\dto\request\SurveyCreationRequest.class
 com\swp\user_service\dto\response\SurveyResultResponse$SurveyResultResponseBuilder.class
@@ -59,7 +63,9 @@ com\swp\user_service\entity\Appointment$AppointmentBuilder.class
 com\swp\user_service\entity\SurveyAnswerOption$SurveyAnswerOptionBuilder.class
 com\swp\user_service\dto\request\IntrospectRequest.class
 com\swp\user_service\dto\request\SupportProgramSignupRequest$SupportProgramSignupRequestBuilder.class
+com\swp\user_service\repository\InvalidatedTokenRepository.class
 com\swp\user_service\dto\response\SupportProgramResponse$SupportProgramResponseBuilder.class
+com\swp\user_service\dto\response\UserSummaryResponse.class
 com\swp\user_service\dto\request\AuthenticationRequest$AuthenticationRequestBuilder.class
 com\swp\user_service\configuration\ApplicationInitConfig.class
 com\swp\user_service\controller\ManagerController.class
@@ -68,6 +74,8 @@ com\swp\user_service\mapper\PsychologistMapperImpl.class
 com\swp\user_service\service\UserService.class
 com\swp\user_service\dto\request\SurveyAnswerOptionUpdateRequest$SurveyAnswerOptionUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SupportProgramResponse.class
+com\swp\user_service\dto\request\LogoutRequest.class
+com\swp\user_service\dto\response\UserSummaryResponse$UserSummaryResponseBuilder.class
 com\swp\user_service\service\BlogService.class
 com\swp\user_service\dto\request\SurveyAnswerOptionUpdateRequest.class
 com\swp\user_service\dto\response\UserAnswerResponse.class
@@ -80,12 +88,14 @@ com\swp\user_service\repository\UserAnswerRepository.class
 com\swp\user_service\dto\request\UserUpdateRequest$UserUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SurveyAnswerOptionResponse$SurveyAnswerOptionResponseBuilder.class
 com\swp\user_service\exception\GlobalExceptionHandler.class
+com\swp\user_service\entity\InvalidatedToken.class
 com\swp\user_service\dto\request\SupportProgramRequest.class
 com\swp\user_service\dto\request\UserCreationRequest.class
 com\swp\user_service\UserServiceApplication.class
 com\swp\user_service\dto\request\SubmitUserAnswerRequest$SubmitUserAnswerRequestBuilder.class
 com\swp\user_service\dto\request\SurveyAnswerOptionRequest.class
 com\swp\user_service\entity\SurveyQuestion$SurveyQuestionBuilder.class
+com\swp\user_service\dto\response\AppointmentSummaryResponse.class
 com\swp\user_service\entity\Survey$SurveyBuilder.class
 com\swp\user_service\dto\response\IntrospectResponse.class
 com\swp\user_service\mapper\SupportProgramMapper.class
@@ -98,10 +108,12 @@ com\swp\user_service\dto\request\AuthenticationRequest.class
 com\swp\user_service\entity\Role$RoleBuilder.class
 com\swp\user_service\dto\response\AllSurveyResponse.class
 com\swp\user_service\repository\SurveyQuestionRepository.class
+com\swp\user_service\dto\response\SupportProgramSummaryResponse$SupportProgramSummaryResponseBuilder.class
 com\swp\user_service\mapper\SurveyQuestionMapper.class
 com\swp\user_service\repository\SurveyResultRepository.class
 com\swp\user_service\dto\response\SurveyResultResponse.class
 com\swp\user_service\mapper\SurveyMapper.class
+com\swp\user_service\dto\response\DashboardResponse$DashboardResponseBuilder.class
 com\swp\user_service\entity\SurveySuggestion$SurveySuggestionBuilder.class
 com\swp\user_service\service\SupportProgramService.class
 com\swp\user_service\repository\SupportProgramRepository.class
@@ -121,11 +133,13 @@ com\swp\user_service\dto\request\IntrospectRequest$IntrospectRequestBuilder.clas
 com\swp\user_service\repository\AppointmentRepository.class
 com\swp\user_service\dto\request\SurveyAnswerOptionRequest$SurveyAnswerOptionRequestBuilder.class
 com\swp\user_service\dto\request\SurveyCreationRequest$SurveyCreationRequestBuilder.class
+com\swp\user_service\entity\InvalidatedToken$InvalidatedTokenBuilder.class
 com\swp\user_service\entity\User.class
 com\swp\user_service\exception\AppException.class
 com\swp\user_service\dto\request\ResetPasswordRequest.class
 com\swp\user_service\dto\request\UserCreationRequest$UserCreationRequestBuilder.class
 com\swp\user_service\dto\response\UserResponse.class
+com\swp\user_service\dto\response\AppointmentSummaryResponse$AppointmentSummaryResponseBuilder.class
 com\swp\user_service\dto\request\UserUpdateRequest.class
 com\swp\user_service\mapper\UserAnswerMapper.class
 com\swp\user_service\dto\request\ResetPasswordRequest$ResetPasswordRequestBuilder.class
@@ -135,5 +149,6 @@ com\swp\user_service\dto\request\SupportProgramSignupRequest.class
 com\swp\user_service\dto\request\UserUpdateByAdminRequest.class
 com\swp\user_service\dto\response\AppointmentResponse.class
 com\swp\user_service\entity\SurveyAnswerOption.class
+com\swp\user_service\dto\response\SupportProgramSummaryResponse.class
 com\swp\user_service\mapper\AppointmentMapperImpl.class
 com\swp\user_service\service\AdminService.class
