@@ -196,9 +196,18 @@ public class AppointmentService {
 
     public List<AppointmentResponse> getUserAppointments(String id) {
         List<Appointment> appointments = appointmentRepository.findByUser_Id(id);
-        return appointments.stream()
-                .map(appointmentMapper::toAppointmentResponse)
-                .collect(Collectors.toList());
+        List<AppointmentResponse> responses = appointmentMapper.toAppointmentResponses(appointments);
+        responses.forEach(response -> {
+            String psychologistId = response.getPsychologistId();
+            Optional<User> psychologistOpt = userRepository.findById(psychologistId)
+                    .filter(p -> Objects.equals(p.getRole().getRoleId(), "4"));
+
+            User psychologist = psychologistOpt.get();
+            response.setPsychologistName(psychologist.getName());
+            response.setPsychologistEmail(psychologist.getEmail());
+
+        });
+        return responses;
     }
 
     public List<AppointmentResponse> getAllAppointments() {
