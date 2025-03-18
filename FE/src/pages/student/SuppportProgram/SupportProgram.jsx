@@ -14,13 +14,13 @@ const SupportProgram = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const programsPerPage = 9;
+  const programsPerPage = 6; // Đổi từ 9 thành 6 để giới hạn 6 chương trình mỗi trang
 
   useEffect(() => {
     // Check if user is authenticated
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
-    
+
     if (token) {
       fetchSupportPrograms();
     } else {
@@ -33,19 +33,19 @@ const SupportProgram = () => {
       setLoading(true);
       // Get token from localStorage
       const token = localStorage.getItem('token');
-      
+
       // Make API call with authentication
       const response = await axios.get('http://localhost:8080/identity/users/allsupportprogramsactive', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
-      
+
       console.log("Support programs response:", response.data);
-      
+
       // Get the programs from the response.result array
       const programsData = response.data.result || [];
-      
+
       // Don't filter by active since the API already returns only active programs
       // and the active field is null in the response
       setPrograms(programsData);
@@ -69,8 +69,8 @@ const SupportProgram = () => {
   // Filter programs based on search term
   const filteredPrograms = programs.filter(program => {
     return program.programName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           (program.description && program.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
-           program.programCode.toLowerCase().includes(searchTerm.toLowerCase());
+      (program.description && program.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      program.programCode.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   // Calculate pagination
@@ -94,7 +94,7 @@ const SupportProgram = () => {
     return (
       <>
         <Navbar />
-        <LoginPrompt 
+        <LoginPrompt
           featureName="support programs"
           title="Discover programs designed for your wellbeing"
           message="Our support programs are tailored to help you navigate life's challenges. Sign in to explore programs that match your needs."
@@ -107,7 +107,7 @@ const SupportProgram = () => {
 
   return (
     <div className="support-page">
-      <Navbar/>
+      <Navbar />
       <div className="support-hero">
         <div className="support-hero-content">
           <h1>Support Programs</h1>
@@ -139,7 +139,7 @@ const SupportProgram = () => {
               <h2>Our Support Services</h2>
               <p className="support-count">{filteredPrograms.length} program{filteredPrograms.length !== 1 ? 's' : ''} available</p>
             </div>
-            
+
             {filteredPrograms.length === 0 ? (
               <div className="no-programs">
                 <p>No support programs found matching your search. Please try a different keyword.</p>
@@ -180,16 +180,16 @@ const SupportProgram = () => {
                     </div>
                   ))}
                 </div>
-                
+
                 {filteredPrograms.length > programsPerPage && (
                   <div className="pagination-container-mui">
                     <div className="pagination-info">
                       Showing {currentPrograms.length > 0 ? `${indexOfFirstProgram + 1}-${Math.min(indexOfLastProgram, filteredPrograms.length)}` : "0"} of {filteredPrograms.length} programs
                     </div>
-                    
+
                     <Stack spacing={2}>
-                      <Pagination 
-                        count={Math.ceil(filteredPrograms.length / programsPerPage)} 
+                      <Pagination
+                        count={Math.ceil(filteredPrograms.length / programsPerPage)}
                         page={currentPage}
                         onChange={handlePageChange}
                         color="primary"
@@ -207,7 +207,7 @@ const SupportProgram = () => {
           </>
         )}
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
