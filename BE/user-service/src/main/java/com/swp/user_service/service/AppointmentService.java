@@ -186,7 +186,7 @@ public class AppointmentService {
         }
 
         validateCancellationTime(appointment);
-        
+
         appointment.setActive(false);
         appointment.setCancelledAt(LocalDateTime.now());
         appointmentRepository.save(appointment);
@@ -244,16 +244,25 @@ public class AppointmentService {
 
     public AppointmentSummaryResponse getAppointmentSummary() {
         List<Appointment> appointments = appointmentRepository.findAll();
+        if (appointments == null) {
+            appointments = Collections.emptyList();
+        }
+
         long totalAppointments = appointments.size();
-        long activeAppointments = appointments.stream().filter(Appointment::getActive).count();
-        long cancelledAppointments = appointments.stream().filter(app -> app.getCancelledAt() != null).count();
+        long completedAppointments = appointments.stream()
+                .filter(app -> Boolean.TRUE.equals(app.getActive()))
+                .count();
+        long cancelledAppointments = appointments.stream()
+                .filter(app -> Boolean.FALSE.equals(app.getActive()))
+                .count();
         long upcomingAppointments = appointments.stream()
-                .filter(app -> app.getActive() && app.getAppointmentDate().after(new Date()))
+                .filter(app -> app.getActive() == null)
+                .filter(app -> app.getAppointmentDate() != null && app.getAppointmentDate().after(new Date()))
                 .count();
 
         return AppointmentSummaryResponse.builder()
                 .totalAppointments(totalAppointments)
-                .activeAppointments(activeAppointments)
+                .completedAppointments(completedAppointments)
                 .cancelledAppointments(cancelledAppointments)
                 .upcomingAppointments(upcomingAppointments)
                 .build();
