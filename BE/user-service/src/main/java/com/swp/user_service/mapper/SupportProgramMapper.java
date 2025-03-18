@@ -32,7 +32,12 @@ public interface SupportProgramMapper {
     @Named("mapParticipants")
     default List<UserResponse> mapParticipants(List<User> participants) {
         return participants != null ? participants.stream()
-                .map(user -> new UserResponse(user.getId(), user.getName(), user.getEmail(),user.getActive(), Role.builder().build()))
+                .map(user -> new UserResponse(
+                        user.getId(),
+                        user.getName(),
+                        user.getEmail(),
+                        user.getActive(),
+                        user.getRole()))
                 .collect(Collectors.toList()) : null;
     }
 }

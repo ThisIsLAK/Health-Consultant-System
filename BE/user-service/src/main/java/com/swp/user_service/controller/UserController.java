@@ -179,6 +179,14 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/mysupportprograms")
+    public ApiResponse<List<SupportProgramResponse>> getUserSupportProgramHistory() {
+        return ApiResponse.<List<SupportProgramResponse>>builder()
+                .result(supportProgramService.getUserSupportProgramHistory())
+                .message("Retrieved user's support program history successfully")
+                .build();
+    }
+
     /************************************************************
      *                  SURVEY CONTROLLER                       *
      ************************************************************/
