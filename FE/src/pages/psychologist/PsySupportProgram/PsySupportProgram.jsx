@@ -23,6 +23,8 @@ const PsySupportProgram = () => {
                 // Access the result array from the response data
                 if (response.data && response.data.result && Array.isArray(response.data.result)) {
                     setPrograms(response.data.result);
+                    //log out the response data
+                    console.log(response.data.result);
                 } else {
                     // If the response structure doesn't match expected format, set empty array
                     console.error("Unexpected response format:", response.data);
@@ -77,61 +79,63 @@ const PsySupportProgram = () => {
                     </div>
                 ) : (
                     <div className="psy-program-list">
-                        {programs.map((program, index) => (
-                            <div key={program.programCode || index} className="psy-program-card">
-                                <div className="psy-program-header">
-                                    <h3>{program.programName || 'Untitled Program'}</h3>
-                                    {isProgramActive(program.active) && (
-                                        <span className="active-badge">Active</span>
-                                    )}
-                                </div>
-                                <div className="psy-program-body">
-                                    <p className="psy-program-description">
-                                        {program.description || 'No description available.'}
-                                    </p>
-                                    <div className="psy-program-details">
-                                        <div className="psy-detail-item">
-                                            <i className="bi bi-calendar-event"></i>
-                                            <span><strong>Start:</strong> {formatDate(program.startDate)}</span>
-                                        </div>
-                                        <div className="psy-detail-item">
-                                            <i className="bi bi-calendar-check"></i>
-                                            <span><strong>End:</strong> {formatDate(program.endDate)}</span>
-                                        </div>
-                                        <div className="psy-detail-item">
-                                            <i className="bi bi-people-fill"></i>
-                                            <span><strong>Registered Users:</strong> {program.registeredUsers}</span>
-                                        </div>
-                                        {program.participants && program.participants.length > 0 && (
-                                            <div className="psy-detail-item psy-participants">
-                                                <i className="bi bi-person-check"></i>
-                                                <span>
-                                                    <strong>Participants:</strong>
-                                                    <ul className="psy-participant-list">
-                                                        {program.participants.slice(0, 3).map(participant => (
-                                                            <li key={participant.id}>
-                                                                {participant.name} ({participant.email})
-                                                            </li>
-                                                        ))}
-                                                        {program.participants.length > 3 && (
-                                                            <li>+{program.participants.length - 3} more</li>
-                                                        )}
-                                                    </ul>
-                                                </span>
-                                            </div>
+                        {programs
+                            .filter(program => program.active !== false) // Only show programs where active is not false
+                            .map((program, index) => (
+                                <div key={program.programCode || index} className="psy-program-card">
+                                    <div className="psy-program-header">
+                                        <h3>{program.programName || 'Untitled Program'}</h3>
+                                        {isProgramActive(program.active) && (
+                                            <span className="active-badge">Active</span>
                                         )}
                                     </div>
+                                    <div className="psy-program-body">
+                                        <p className="psy-program-description">
+                                            {program.description || 'No description available.'}
+                                        </p>
+                                        <div className="psy-program-details">
+                                            <div className="psy-detail-item">
+                                                <i className="bi bi-calendar-event"></i>
+                                                <span><strong>Start:</strong> {formatDate(program.startDate)}</span>
+                                            </div>
+                                            <div className="psy-detail-item">
+                                                <i className="bi bi-calendar-check"></i>
+                                                <span><strong>End:</strong> {formatDate(program.endDate)}</span>
+                                            </div>
+                                            <div className="psy-detail-item">
+                                                <i className="bi bi-people-fill"></i>
+                                                <span><strong>Registered Users:</strong> {program.registeredUsers}</span>
+                                            </div>
+                                            {program.participants && program.participants.length > 0 && (
+                                                <div className="psy-detail-item psy-participants">
+                                                    <i className="bi bi-person-check"></i>
+                                                    <span>
+                                                        <strong>Participants:</strong>
+                                                        <ul className="psy-participant-list">
+                                                            {program.participants.slice(0, 3).map(participant => (
+                                                                <li key={participant.id}>
+                                                                    {participant.name} ({participant.email})
+                                                                </li>
+                                                            ))}
+                                                            {program.participants.length > 3 && (
+                                                                <li>+{program.participants.length - 3} more</li>
+                                                            )}
+                                                        </ul>
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="psy-program-footer">
+                                        <Link
+                                            to={`/psysupport/${program.programCode}`}
+                                            className="psy-view-btn"
+                                        >
+                                            View Details
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div className="psy-program-footer">
-                                    <Link
-                                        to={`/psysupport/${program.programCode}`}
-                                        className="psy-view-btn"
-                                    >
-                                        View Details
-                                    </Link>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 )}
             </div>
