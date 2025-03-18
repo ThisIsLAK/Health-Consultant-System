@@ -67,25 +67,30 @@ const AppointmentHistory = () => {
     }
   };
 
-  // Format time slot for display
-  const formatTimeSlot = (timeSlot) => {
-    if (!timeSlot) return 'N/A';
+// Format time slot for display
+const formatTimeSlot = (timeSlot) => {
+  if (!timeSlot) return 'N/A';
+  
+  // If timeSlot is already formatted like "09:00 - 11:00", parse and reformat it
+  if (timeSlot.includes(' - ')) {
+    const [start, end] = timeSlot.split(' - ');
+    const startHour = parseInt(start.split(':')[0]);
+    const endHour = parseInt(end.split(':')[0]);
+    return `${startHour}h-${endHour}h`;
+  }
+  
+  // Otherwise format it as a range (assuming 2-hour slots)
+  try {
+    const [hours, minutes] = timeSlot.split(':');
+    const startHour = parseInt(hours);
+    const endHour = startHour + 2;
     
-    // If timeSlot is already formatted like "09:00 - 11:00", return it as is
-    if (timeSlot.includes(' - ')) return timeSlot;
-    
-    // Otherwise format it as a range (assuming 2-hour slots)
-    try {
-      const [hours, minutes] = timeSlot.split(':');
-      const startHour = parseInt(hours);
-      const endHour = startHour + 2;
-      
-      return `${hours.padStart(2, '0')}:${minutes || '00'} - ${endHour.toString().padStart(2, '0')}:${minutes || '00'}`;
-    } catch (error) {
-      console.error('Time slot formatting error:', error);
-      return timeSlot;
-    }
-  };
+    return `${startHour}h-${endHour}h`;
+  } catch (error) {
+    console.error('Time slot formatting error:', error);
+    return timeSlot;
+  }
+};
 
   // Cancel appointment function
   const cancelAppointment = async (appointmentId) => {

@@ -351,7 +351,7 @@ const PsyAppointments = () => {
                         </div>
 
                         <div className="date-navigation">
-                            <button className="nav-button" onClick={goToPreviousDay}>
+                            <button className="date-button" onClick={goToPreviousDay}>
                                 <ChevronLeft size={18} />
                             </button>
                             <div className={`date-display ${dateFilterActive ? 'date-active' : ''}`}>
@@ -365,7 +365,7 @@ const PsyAppointments = () => {
                                     </button>
                                 )}
                             </div>
-                            <button className="nav-button" onClick={goToNextDay}>
+                            <button className="date-button" onClick={goToNextDay}>
                                 <ChevronRight size={18} />
                             </button>
                         </div>
@@ -425,9 +425,7 @@ const PsyAppointments = () => {
                                 <div key={groupIndex} className={`appointment-date-group timing-${group.timing}`}>
                                     <h3 className={`date-group-header ${group.timing}`}>
                                         {group.formattedDate}
-                                        {group.timing === 'past' && <span className="timing-indicator past">Past</span>}
-                                        {group.timing === 'today' && <span className="timing-indicator today">Today</span>}
-                                        {group.timing === 'future' && <span className="timing-indicator future">Upcoming</span>}
+                                        {/* Removed all timing indicator spans from here */}
                                     </h3>
                                     {group.appointments.map(appointment => (
                                         <div
@@ -448,11 +446,25 @@ const PsyAppointments = () => {
                                                         <h3 className="patient-name">
                                                             <User size={16} className="user-icon" />
                                                             User Name: {appointment.studentName}
+                                                            {/* Show timing badge only if not cancelled */}
+                                                            {appointment.status === 'CANCELLED' ? (
+                                                                <span className="timing-badge cancelled"> Cancelled</span>
+                                                            ) : (
+                                                                <>
+                                                                    {appointment.timing === 'past' && 
+                                                                        <span className="timing-badge past"> Past</span>
+                                                                    }
+                                                                    {appointment.timing === 'today' && 
+                                                                        <span className="timing-badge today"> Today</span>
+                                                                    }
+                                                                    {appointment.timing === 'future' && 
+                                                                        <span className="timing-badge future"> Upcoming</span>
+                                                                    }
+                                                                </>
+                                                            )}
                                                         </h3>
                                                         <div className="status-wrapper">
-                                                            {appointment.timing === 'past' &&
-                                                                <span className="timing-badge past">Past</span>
-                                                            }
+                                                            {/* Removed the timing badge from here */}
                                                         </div>
                                                     </div>
                                                 </div>
