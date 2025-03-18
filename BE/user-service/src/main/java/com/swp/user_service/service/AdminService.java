@@ -22,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -135,5 +137,21 @@ public class AdminService {
         return activeUsers.stream()
                 .map(userMapper::toUserResponse)
                 .toList();
+    }
+
+    public List<UserResponse> getAllStudents() {
+        return userRepository.findAll().stream()
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "2")
+                        && Boolean.TRUE.equals(user.getActive()))
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserResponse> getAllParents() {
+        return userRepository.findAll().stream()
+                .filter(user -> Objects.equals(user.getRole().getRoleId(), "5")
+                        && Boolean.TRUE.equals(user.getActive()))
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
     }
 }

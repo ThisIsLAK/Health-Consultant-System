@@ -66,22 +66,6 @@ public class PsyController {
                 .build();
     }
 
-    @GetMapping("/allstudents")
-    public ApiResponse<List<UserResponse>> getAllStudents() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(psyService.getAllStudents())
-                .message("All students retrieved successfully")
-                .build();
-    }
-
-    @GetMapping("/allparents")
-    public ApiResponse<List<UserResponse>> getAllParents() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(psyService.getAllParents())
-                .message("All parents retrieved successfully")
-                .build();
-    }
-
     /************************************************************
      *                  SUPPORT PROGRAM CONTROLLER              *
      ************************************************************/
