@@ -66,6 +66,12 @@ const AdminSidebar = () => {
                 <span>Student List</span>
               </NavLink>
             </li>
+            <li>
+              <NavLink to="/adminparentlist">
+                <i className='bi bi-person-badge'></i>
+                <span>Parent List</span>
+              </NavLink>
+            </li>
           </ul>
         </li>
 

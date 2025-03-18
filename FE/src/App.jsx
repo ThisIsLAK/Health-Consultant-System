@@ -73,6 +73,8 @@ import AdminPsychoList from './pages/components/admin/ManagingAppointment/psycho
 import AdminPsychoAppointment from './pages/components/admin/ManagingAppointment/psychologist/AdminPsychoAppointment';
 import AdminStuList from './pages/components/admin/ManagingAppointment/student/AdminStuList';
 import AdminStuAppointment from './pages/components/admin/ManagingAppointment/student/AdminStuAppointment';
+import AdminParentAppointment from './pages/components/admin/ManagingAppointment/AdminParentList/AdminParentAppoitment';
+import AdminParentList from './pages/components/admin/ManagingAppointment/AdminParentList/AdminParentList';
 
 function App() {
   return (
@@ -147,6 +149,7 @@ function App() {
         <Route path='/admin/psychologists/appointments/:psychologistId' element={<ProtectedRoute element={<AdminPsychoAppointment />} allowedRoles={['ADMIN']} />} />
         <Route path='/admin/students/appointments/:studentId' element={<ProtectedRoute element={<AdminStuAppointment />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminstulist' element={<ProtectedRoute element={<AdminStuList />} allowedRoles={['ADMIN']} />} />
+        <Route path='/adminparentlist' element={<ProtectedRoute element={<AdminParentList />} allowedRoles={['ADMIN']} />} />
       </Routes>
     </BrowserRouter>
   );
