@@ -14,6 +14,7 @@ import AboutUs from './pages/student/AboutUs/AboutUs';
 import Blog from './pages/student/Blog/Blog';
 import LoginSignup from './pages/login/LoginSignup';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
+import SupportProgramHistory from './pages/student/SuppportProgram/SupportProgramHistory';
 import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
@@ -88,6 +89,7 @@ function App() {
         <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} allowGuest={true}/>} />
+        <Route path='/supporthistory' element={<ProtectedRoute element={<SupportProgramHistory />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} />} allowGuest={true}/>
         <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} allowGuest={true}/>} />

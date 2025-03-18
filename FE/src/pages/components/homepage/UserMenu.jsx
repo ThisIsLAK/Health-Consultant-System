@@ -149,6 +149,12 @@ const UserMenu = () => {
                     View Appointments
                 </Dropdown.Item>
                 <Dropdown.Item
+                    href="/supporthistory"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-center"
+                >
+                    Your Support Programs
+                </Dropdown.Item>
+                <Dropdown.Item
                     onClick={() => handleSignOut()}
                     className="block px-4 py-2 text-red-600 hover:bg-red-100 w-full text-center"
                 >
