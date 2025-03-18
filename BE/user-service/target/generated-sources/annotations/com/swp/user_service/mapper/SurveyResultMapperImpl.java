@@ -25,6 +25,7 @@ public class SurveyResultMapperImpl implements SurveyResultMapper {
         surveyResultResponse.surveyId( surveyResultSurveySurveyId( surveyResult ) );
         surveyResultResponse.userId( surveyResultUserId( surveyResult ) );
         surveyResultResponse.userName( surveyResultUserName( surveyResult ) );
+        surveyResultResponse.surveyTitle( surveyResultSurveyTitle( surveyResult ) );
         surveyResultResponse.score( surveyResult.getScore() );
 
         return surveyResultResponse.build();
@@ -73,5 +74,20 @@ public class SurveyResultMapperImpl implements SurveyResultMapper {
             return null;
         }
         return name;
+    }
+
+    private String surveyResultSurveyTitle(SurveyResult surveyResult) {
+        if ( surveyResult == null ) {
+            return null;
+        }
+        Survey survey = surveyResult.getSurvey();
+        if ( survey == null ) {
+            return null;
+        }
+        String title = survey.getTitle();
+        if ( title == null ) {
+            return null;
+        }
+        return title;
     }
 }
