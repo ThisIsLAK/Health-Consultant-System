@@ -184,8 +184,7 @@ const AdminSurvey = () => {
                                 <h3 className="mainsurvey-title">{survey.title || 'Untitled Survey'}</h3>
                                 <p className="survey-description">{survey.description || 'No description available'}</p>
                                 <div className="survey-meta">
-                                    <span>Created: {formatDate(survey.createdAt)}</span>
-                                    <span>Status: {survey.status || 'Draft'}</span>
+                                    <span>Status: {survey.status || 'In Acitve'}</span>
                                 </div>
                                 <div className="survey-actions">
                                     <button
