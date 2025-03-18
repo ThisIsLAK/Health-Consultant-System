@@ -13,6 +13,7 @@ public interface SurveyResultMapper {
     @Mapping(source = "survey.surveyId", target = "surveyId")
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.name", target = "userName")
+    @Mapping(source = "survey.title", target = "surveyTitle")
     @Mapping(source = "score", target = "score")
     SurveyResultResponse toSurveyResultResponse(SurveyResult surveyResult);
 }
