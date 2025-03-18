@@ -26,7 +26,9 @@ public class SurveyResultMapperImpl implements SurveyResultMapper {
         surveyResultResponse.userId( surveyResultUserId( surveyResult ) );
         surveyResultResponse.userName( surveyResultUserName( surveyResult ) );
         surveyResultResponse.surveyTitle( surveyResultSurveyTitle( surveyResult ) );
-        surveyResultResponse.score( surveyResult.getScore() );
+        if ( surveyResult.getScore() != null ) {
+            surveyResultResponse.score( surveyResult.getScore() );
+        }
 
         return surveyResultResponse.build();
     }
