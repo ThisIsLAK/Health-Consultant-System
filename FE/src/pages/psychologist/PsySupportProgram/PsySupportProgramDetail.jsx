@@ -194,8 +194,8 @@ const PsySupportProgramDetail = () => {
             return (
               <div key={index} className={`psy-score-card ${evaluationClass}`}>
                 <div className="psy-score-header">
-                  <span className="psy-survey-label">Survey ID:</span>
-                  <span className="psy-survey-id">{result.surveyId}</span>
+                  <span className="psy-survey-label">Survey Name:</span>
+                  <span className="psy-survey-id">{result.surveyTitle}</span>
                 </div>
                 <div className="psy-total-score">
                   <div className="psy-score-label">Total Score</div>
