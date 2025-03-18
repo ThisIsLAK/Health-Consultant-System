@@ -1,10 +1,8 @@
 package com.swp.user_service.dto.response;
 
-import com.swp.user_service.entity.User;
-import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import com.swp.user_service.entity.Appointment;
+
 
 import java.util.Date;
 

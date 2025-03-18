@@ -163,4 +163,12 @@ public class PsyController {
                 .message("Active appointments retrieved successfully")
                 .build();
     }
+
+    @PutMapping("/completeappointment/{appointmentId}")
+    public ApiResponse<Void> completeAppointment(@PathVariable String appointmentId) {
+        appointmentService.completeAppointment(appointmentId);
+        return ApiResponse.<Void>builder()
+                .message("Appointment completed successfully")
+                .build();
+    }
 }

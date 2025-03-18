@@ -28,11 +28,6 @@ public class AppointmentRequest {
     @NotNull(message = "Time slot is required")
     String timeSlot;
 
-    private Boolean active;
-    @PrePersist
-    protected void onCreate() {
-        if (active == null) {
-            active = true;
-        }
-    }
+    Boolean active;
+
 }
