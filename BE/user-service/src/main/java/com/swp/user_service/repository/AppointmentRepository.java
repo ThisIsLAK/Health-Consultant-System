@@ -3,6 +3,7 @@ package com.swp.user_service.repository;
 import com.swp.user_service.entity.Appointment;
 
 import com.swp.user_service.entity.User;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -41,4 +42,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
 
     List<Appointment> findByUserIdAndPsychologistIdAndCancelledAtIsNotNull(String userId, String psychologistId);
 
+    boolean existsByUserIdAndAppointmentDateAndCancelledAtIsNotNull(String userId, Date appointmentDate);
 }

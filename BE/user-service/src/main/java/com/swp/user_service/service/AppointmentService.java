@@ -97,20 +97,26 @@ public class AppointmentService {
                 psychologist.getId(), request.getAppointmentDate(), request.getTimeSlot()
         );
 
-        boolean userHasAppointmentOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDate(
-                request.getUserId(), request.getAppointmentDate()
-        );
-
-        // Nếu user đã có lịch hẹn trong cùng ngày, ném lỗi
-        if (userHasAppointmentOnSameDay) {
-            throw new AppException(ErrorCode.ONE_APPOINTMENT_PER_DAY_LIMIT);
-        }
-
-        // Nếu slot đã bị đặt trước đó, ném lỗi
         if (slotAlreadyBooked) {
             throw new AppException(ErrorCode.SLOT_IS_BOOKING);
         }
 
+        // Kiểm tra xem người dùng đã hủy cuộc hẹn nào trong cùng ngày chưa
+        boolean hasCancelledOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDateAndCancelledAtIsNotNull(
+                request.getUserId(), request.getAppointmentDate()
+        );
+
+        // Nếu chưa hủy cuộc hẹn nào trong ngày, áp dụng giới hạn 1 lần/ngày
+        if (!hasCancelledOnSameDay) {
+            boolean userHasAppointmentOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDate(
+                    request.getUserId(), request.getAppointmentDate()
+            );
+
+            if (userHasAppointmentOnSameDay) {
+                throw new AppException(ErrorCode.ONE_APPOINTMENT_PER_DAY_LIMIT);
+            }
+        }
+        // Nếu đã hủy, không áp dụng giới hạn 1 lần/ngày, chỉ dựa vào cooldown (đã xử lý trong validateCooldown)
         boolean userSlotAlreadyBooked = appointmentRepository.existsByUserIdAndAppointmentDateAndTimeSlot(
                 request.getUserId(), request.getAppointmentDate(), request.getTimeSlot()
         );
@@ -118,7 +124,6 @@ public class AppointmentService {
         if (userSlotAlreadyBooked) {
             throw new AppException(ErrorCode.SLOT_IS_BOOKING);
         }
-
     }
 
     private void validateCooldown(AppointmentRequest request) {
