@@ -516,122 +516,117 @@ const PsyAppointments = () => {
                     {!loading && !error && groupedAppointments.length > 0 && (
                         <div className="appointments-list">
                             {groupedAppointments.map((group, groupIndex) => (
-                                <div key={groupIndex} className={`appointment-date-group timing-${group.timing}`}>
+                                <div key={groupIndex} className={`appointment-date-group`}>
                                     <h3 className={`date-group-header ${group.timing}`}>
                                         {group.formattedDate}
-                                        {/* Removed all timing indicator spans from here */}
                                     </h3>
-                                    {group.appointments.map(appointment => (
-                                        <div
-                                            className={`appointment-card status-${appointment.status.toLowerCase()} timing-${appointment.timing}`}
-                                            key={appointment.appointmentId}
-                                        >
-                                            {/* Time section */}
-                                            <div className="time-section">
-                                                <div className={`time-slot-tag ${appointment.timing}`}>
-                                                    {appointment.timeSlot}
-                                                </div>
-                                            </div>
-
-                                            {/* Details section */}
-                                            <div className="details-section">
-                                                <div className="app-header">
-                                                    <div className="name-status">
-                                                        <h3 className="patient-name">
-                                                            <User size={16} className="user-icon" />
-                                                            User Name: {appointment.studentName}
-                                                            {/* Show appropriate status badge */}
-                                                            {appointment.status === 'CANCELLED' && (
-                                                                <span className="timing-badge cancelled"> Cancelled</span>
-                                                            )}
-                                                            {appointment.status === 'COMPLETED' && (
-                                                                <span className="timing-badge completed"> Completed</span>
-                                                            )}
-                                                            {appointment.status === 'PAST' && (
-                                                                <span className="timing-badge past"> Past</span>
-                                                            )}
-                                                            {appointment.status === 'UPCOMING' && (
-                                                                <span className="timing-badge upcoming"> 
-                                                                    {appointment.timing === 'today' ? 'Today' : 'Upcoming'}
-                                                                </span>
-                                                            )}
-                                                        </h3>
+                                    <div className="appointments-container">
+                                        {group.appointments.map(appointment => (
+                                            <div
+                                                className={`appointment-card status-${appointment.status.toLowerCase()} timing-${appointment.timing}`}
+                                                key={appointment.appointmentId}
+                                            >
+                                                {/* Time section */}
+                                                <div className="time-section">
+                                                    <div className={`time-slot-tag ${appointment.timing}`}>
+                                                        {appointment.timeSlot}
                                                     </div>
                                                 </div>
 
-                                                <div className="info-grid">
-
-                                                    {/* User ID information */}
-                                                    <div className="info-item">
-                                                        <User className="icon" size={16} />
-                                                        <span className="text">
-                                                            User Email: {appointment.studentEmail}
-                                                        </span>
+                                                {/* Details section */}
+                                                <div className="details-section">
+                                                    <div className="app-header">
+                                                        <div className="name-status">
+                                                            <h3 className="patient-name">
+                                                                <User size={16} className="user-icon" />
+                                                                {appointment.studentName}
+                                                                {/* Status badges */}
+                                                                {appointment.status === 'CANCELLED' && (
+                                                                    <span className="timing-badge cancelled">Cancelled</span>
+                                                                )}
+                                                                {appointment.status === 'COMPLETED' && (
+                                                                    <span className="timing-badge completed">Completed</span>
+                                                                )}
+                                                                {appointment.status === 'PAST' && (
+                                                                    <span className="timing-badge past">Past</span>
+                                                                )}
+                                                                {appointment.status === 'UPCOMING' && (
+                                                                    <span className="timing-badge upcoming">
+                                                                        {appointment.timing === 'today' ? 'Today' : 'Upcoming'}
+                                                                    </span>
+                                                                )}
+                                                            </h3>
+                                                        </div>
                                                     </div>
 
+                                                    <div className="info-grid">
+                                                        {/* User Email information */}
+                                                        <div className="info-item">
+                                                            <Mail className="icon" size={16} />
+                                                            <span className="text">
+                                                                {appointment.studentEmail}
+                                                            </span>
+                                                        </div>
 
-                                                    {/* Date information */}
-                                                    <div className="info-item">
-                                                        <Calendar className="icon" size={16} />
-                                                        <span className="text">
-                                                            {appointment.formattedDate}
-                                                        </span>
+                                                        {/* Date information */}
+                                                        <div className="info-item">
+                                                            <Calendar className="icon" size={16} />
+                                                            <span className="text">
+                                                                {appointment.formattedDate}
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Time information */}
+                                                        <div className="info-item">
+                                                            <Clock className="icon" size={16} />
+                                                            <span className="text">
+                                                                Time: {appointment.timeSlot}
+                                                            </span>
+                                                        </div>
                                                     </div>
+                                                </div>
 
-                                                    {/* Time slot information */}
-                                                    <div className="info-item">
-                                                        <Clock className="icon" size={16} />
-                                                        <span className="text">
-                                                            Time Slot: {appointment.timeSlot}
-                                                        </span>
-                                                    </div>
+                                                {/* Actions section */}
+                                                <div className="actions">
+                                                    {/* Cancel button - for UPCOMING appointments only */}
+                                                    {appointment.status === 'UPCOMING' && (
+                                                        <button
+                                                            className="action-btn cancel-appointment"
+                                                            onClick={() => showCancelConfirmation(appointment.appointmentId)}
+                                                            disabled={cancellingAppointment === appointment.appointmentId}
+                                                        >
+                                                            {cancellingAppointment === appointment.appointmentId ? (
+                                                                <span>Cancelling...</span>
+                                                            ) : (
+                                                                <>
+                                                                    <AlertCircle className="icon" size={16} />
+                                                                    <span>Cancel</span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    )}
 
-
-                                                    {/* Remove the Appointment ID information section */}
+                                                    {/* Complete button - for UPCOMING and PAST appointments */}
+                                                    {(appointment.status === 'UPCOMING' || appointment.status === 'PAST') && (
+                                                        <button
+                                                            className="action-btn complete-appointment"
+                                                            onClick={() => showCompleteConfirmation(appointment.appointmentId)}
+                                                            disabled={cancellingAppointment === appointment.appointmentId}
+                                                        >
+                                                            {cancellingAppointment === appointment.appointmentId ? (
+                                                                <span>Processing...</span>
+                                                            ) : (
+                                                                <>
+                                                                    <Clock className="icon" size={16} />
+                                                                    <span>Complete</span>
+                                                                </>
+                                                            )}
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </div>
-
-                                            {/* Actions section - show appropriate buttons based on status */}
-                                            <div className="actions">
-                                                {/* Cancel button - show for UPCOMING appointments only */}
-                                                {appointment.status === 'UPCOMING' && (
-                                                    <button
-                                                        className="action-btn cancel-appointment"
-                                                        onClick={() => showCancelConfirmation(appointment.appointmentId)}
-                                                        disabled={cancellingAppointment === appointment.appointmentId}
-                                                    >
-                                                        {cancellingAppointment === appointment.appointmentId ? (
-                                                            <span>Cancelling...</span>
-                                                        ) : (
-                                                            <>
-                                                                <AlertCircle className="icon" size={16} />
-                                                                <span>Cancel Appointment</span>
-                                                            </>
-                                                        )}
-                                                    </button>
-                                                )}
-
-                                                {/* Complete button - show for UPCOMING (today) and PAST appointments */}
-                                                {(appointment.status === 'UPCOMING' && appointment.timing === 'today' || 
-                                                appointment.status === 'PAST') && (
-                                                    <button
-                                                        className="action-btn complete-appointment"
-                                                        onClick={() => showCompleteConfirmation(appointment.appointmentId)}
-                                                        disabled={cancellingAppointment === appointment.appointmentId}
-                                                    >
-                                                        {cancellingAppointment === appointment.appointmentId ? (
-                                                            <span>Processing...</span>
-                                                        ) : (
-                                                            <>
-                                                                <Clock className="icon" size={16} />
-                                                                <span>Mark as Completed</span>
-                                                            </>
-                                                        )}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
                                 </div>
                             ))}
                         </div>
