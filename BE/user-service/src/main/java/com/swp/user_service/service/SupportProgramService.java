@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -161,6 +162,24 @@ public class SupportProgramService {
                 .totalParticipants(totalParticipants)
                 .programsEndingSoon(programsEndingSoon)
                 .build();
+    }
+
+    public List<SupportProgramResponse> getUserSupportProgramHistory() {
+        // Lấy email từ context của người dùng đăng nhập
+        var context = SecurityContextHolder.getContext();
+        String email = context.getAuthentication().getName();
+
+        // Tìm user theo email
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        // Lấy danh sách chương trình user đã tham gia
+        List<SupportProgram> registeredPrograms = supportProgramRepository.findByParticipantsContaining(user);
+
+        // Chuyển đổi sang response DTO
+        return registeredPrograms.stream()
+                .map(supportProgramMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
 }

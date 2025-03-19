@@ -14,14 +14,14 @@ const SurveyList = () => {
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [surveysPerPage] = useState(9);
+    const [surveysPerPage] = useState(6); // Đổi từ 9 thành 6 để giới hạn 6 khảo sát mỗi trang
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
         // Check if user is authenticated
         const token = localStorage.getItem('token');
         setIsAuthenticated(!!token);
-        
+
         if (token) {
             fetchSurveys();
         } else {
@@ -56,8 +56,8 @@ const SurveyList = () => {
     };
 
     // Filter surveys based on search term
-    const filteredSurveys = surveys.filter(survey => 
-        survey.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const filteredSurveys = surveys.filter(survey =>
+        survey.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         survey.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -80,7 +80,7 @@ const SurveyList = () => {
         return (
             <>
                 <Navbar />
-                <LoginPrompt 
+                <LoginPrompt
                     featureName="health surveys"
                     title="Would you like to take a health assessment?"
                     message="Our health surveys help us understand your needs better and provide personalized recommendations. Sign in to get started."
@@ -132,7 +132,7 @@ const SurveyList = () => {
                             <h2>Available Surveys</h2>
                             <p className="survey-count">{filteredSurveys.length} survey{filteredSurveys.length !== 1 ? 's' : ''} available</p>
                         </div>
-                        
+
                         {filteredSurveys.length === 0 ? (
                             <div className="no-surveys">
                                 <p>No surveys found matching your search. Please try a different keyword.</p>
@@ -165,16 +165,16 @@ const SurveyList = () => {
                                         </div>
                                     ))}
                                 </div>
-                                
+
                                 {filteredSurveys.length > surveysPerPage && (
                                     <div className="pagination-container-mui">
                                         <div className="pagination-info">
                                             Showing {currentSurveys.length > 0 ? `${indexOfFirstSurvey + 1}-${Math.min(indexOfLastSurvey, filteredSurveys.length)}` : "0"} of {filteredSurveys.length} surveys
                                         </div>
-                                        
+
                                         <Stack spacing={2}>
-                                            <Pagination 
-                                                count={Math.ceil(filteredSurveys.length / surveysPerPage)} 
+                                            <Pagination
+                                                count={Math.ceil(filteredSurveys.length / surveysPerPage)}
                                                 page={currentPage}
                                                 onChange={(event, value) => paginate(value)}
                                                 color="primary"

@@ -14,6 +14,7 @@ import AboutUs from './pages/student/AboutUs/AboutUs';
 import Blog from './pages/student/Blog/Blog';
 import LoginSignup from './pages/login/LoginSignup';
 import SupportProgram from './pages/student/SuppportProgram/SupportProgram';
+import SupportProgramHistory from './pages/student/SuppportProgram/SupportProgramHistory';
 import NoticePage from './pages/student/Notice/NoticePage';
 import UserInfo from './pages/student/UserInfo/UserInfo';
 import EditProfile from './pages/student/EditProfile/EditProfile';
@@ -73,6 +74,8 @@ import AdminPsychoList from './pages/components/admin/ManagingAppointment/psycho
 import AdminPsychoAppointment from './pages/components/admin/ManagingAppointment/psychologist/AdminPsychoAppointment';
 import AdminStuList from './pages/components/admin/ManagingAppointment/student/AdminStuList';
 import AdminStuAppointment from './pages/components/admin/ManagingAppointment/student/AdminStuAppointment';
+import AdminParentAppointment from './pages/components/admin/ManagingAppointment/AdminParentList/AdminParentAppoitment';
+import AdminParentList from './pages/components/admin/ManagingAppointment/AdminParentList/AdminParentList';
 
 function App() {
   return (
@@ -86,6 +89,7 @@ function App() {
         <Route path='/contact' element={<ProtectedRoute element={<ContactUs />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/aboutus' element={<ProtectedRoute element={<AboutUs />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/support' element={<ProtectedRoute element={<SupportProgram />} allowedRoles={['USER']} allowGuest={true}/>} />
+        <Route path='/supporthistory' element={<ProtectedRoute element={<SupportProgramHistory />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path="/support/:programCode" element={<ProtectedRoute element={<ProgramDetail />} />} allowGuest={true}/>
         <Route path='/notice' element={<ProtectedRoute element={<NoticePage />} allowedRoles={['USER']} allowGuest={true}/>} />
         <Route path='/info' element={<ProtectedRoute element={<UserInfo />} allowedRoles={['USER']} allowGuest={true}/>} />
@@ -147,6 +151,8 @@ function App() {
         <Route path='/admin/psychologists/appointments/:psychologistId' element={<ProtectedRoute element={<AdminPsychoAppointment />} allowedRoles={['ADMIN']} />} />
         <Route path='/admin/students/appointments/:studentId' element={<ProtectedRoute element={<AdminStuAppointment />} allowedRoles={['ADMIN']} />} />
         <Route path='/adminstulist' element={<ProtectedRoute element={<AdminStuList />} allowedRoles={['ADMIN']} />} />
+        <Route path='/adminparentlist' element={<ProtectedRoute element={<AdminParentList />} allowedRoles={['ADMIN']} />} />
+        <Route path='/admin/parents/appointments/:parentId' element={<ProtectedRoute element={<AdminParentAppointment />} allowedRoles={['ADMIN']} />} />
       </Routes>
     </BrowserRouter>
   );

@@ -32,6 +32,8 @@ const PsySupportProgramDetail = () => {
           }
         );
 
+        console.log('Program details API response:', response.data);
+
         if (response.data && response.data.result) {
           setProgram(response.data.result);
           // If program has participants, store them
@@ -70,6 +72,8 @@ const PsySupportProgramDetail = () => {
           }
         }
       );
+
+      console.log(`Survey results API response for user ${userId}:`, response.data);
 
       if (response.data && response.data.result) {
         // Store results in the state, indexed by userId
@@ -190,8 +194,8 @@ const PsySupportProgramDetail = () => {
             return (
               <div key={index} className={`psy-score-card ${evaluationClass}`}>
                 <div className="psy-score-header">
-                  <span className="psy-survey-label">Survey ID:</span>
-                  <span className="psy-survey-id">{result.surveyId}</span>
+                  <span className="psy-survey-label">Survey Name:</span>
+                  <span className="psy-survey-id">{result.surveyTitle}</span>
                 </div>
                 <div className="psy-total-score">
                   <div className="psy-score-label">Total Score</div>
@@ -388,40 +392,7 @@ const PsySupportProgramDetail = () => {
                         {/* Display the total scores from the new endpoint */}
                         {renderSurveyScores(surveyResults[selectedParticipant])}
                         
-                        {/* Keep the existing detailed results if needed */}
-                        {surveyResults[selectedParticipant].answerDetails && (
-                          <div className="psy-detailed-results">
-                            <h4>Detailed Survey Responses</h4>
-                            {Object.entries(groupSurveyResults(surveyResults[selectedParticipant].answerDetails)).map(([surveyId, survey]) => (
-                              <div key={surveyId} className="psy-survey-result-card">
-                                <div className="psy-survey-result-header">
-                                  <h5>{survey.title}</h5>
-                                  <span className="psy-survey-id-badge">ID: {surveyId}</span>
-                                </div>
-                                
-                                {survey.description && <p className="psy-survey-description">{survey.description}</p>}
-                                
-                                <div className="psy-answers-list">
-                                  {survey.answers.map((answer, index) => (
-                                    <div key={index} className="psy-answer-item">
-                                      <div className="psy-question">
-                                        <span className="psy-question-number">Q{index + 1}:</span> 
-                                        {answer.questionText}
-                                      </div>
-                                      <div className="psy-answer">
-                                        <span className="psy-answer-label">Response:</span> 
-                                        {answer.answerText}
-                                        {typeof answer.score === 'number' && (
-                                          <span className="psy-score">Score: {answer.score}</span>
-                                        )}
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                        {/* Removed detailed survey responses section as it's not needed */}
                       </div>
                     )}
                   </div>

@@ -1030,6 +1030,42 @@ export default class ApiService {
     }
 
     /**
+     * Get the support program selected by the user
+     * @returns {Promise<Object>} Response object with status and data/message
+     */
+    static async getMySupportProgram() {
+        try {
+            console.log("Fetching my support program with headers:", this.getHeader());
+
+            const response = await axios.get(
+                `${this.BASE_URL}/identity/users/mysupportprograms`,
+                { headers: this.getHeader() }
+            );
+
+            console.log("Fetched my support program:", response.data);
+
+            if (response.data) {
+                return {
+                    status: 200,
+                    data: response.data,
+                    message: "Support program fetched successfully"
+                };
+            } else {
+                return {
+                    status: 400,
+                    message: "No support program data received"
+                };
+            }
+        } catch (error) {
+            console.error("Error fetching my support program:", error);
+            return {
+                status: error.response?.status || 400,
+                message: error.response?.data?.message || error.message || "Failed to fetch support program"
+            };
+        }
+    }
+
+    /**
      * Creates a new user by admin
      * @param {Object} userData - The user data containing email, password, name, role, etc.
      * @returns {Promise<Object>} Response object with status and data/message

@@ -1,58 +1,64 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, Spinner } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import ApiService from '../../../../../service/ApiService';
-import { FaEye, FaGraduationCap, FaSearch, FaUserAlt, FaTimes, FaCalendarAlt } from 'react-icons/fa';
-import './AdminStuList.css';
+import axios from 'axios'; // Import axios for API calls
+import { FaEye, FaUserFriends, FaSearch, FaTimes, FaCalendarAlt } from 'react-icons/fa';
 import AdminHeader from '../../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../../component/admin/AdminSiderbar';
+import './AdminParentList.css';
 
 const AdminParentList = () => {
-    const [students, setStudents] = useState([]);
+    const [parents, setParents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
-        fetchStudents();
+        fetchParents();
     }, []);
 
-    const fetchStudents = async () => {
+    const fetchParents = async () => {
         try {
             setLoading(true);
-            const response = await ApiService.getAllUsers();
+            // Get token from localStorage
+            const token = localStorage.getItem('token');
+            
+            // Make API call to fetch parents
+            const response = await axios.get('http://localhost:8080/identity/admin/allparents', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-            if (response.status === 200) {
-                // Filter users with USER role based on the response schema
-                const studentsList = response.data.filter(user =>
-                    user.role && user.role.roleName === 'STUDENT'
-                );
-                setStudents(studentsList);
+            if (response.data && Array.isArray(response.data.result)) {
+                setParents(response.data.result);
                 setError(null);
             } else {
-                setError(response.message || 'Failed to fetch students');
+                setError('Failed to load parents data. Invalid response format.');
+                setParents([]);
             }
         } catch (err) {
-            console.error('Error fetching students:', err);
-            setError('An error occurred while fetching students');
+            console.error('Error fetching parents:', err);
+            setError('An error occurred while fetching parents: ' + (err.response?.data?.message || err.message));
         } finally {
             setLoading(false);
         }
     };
 
-    // Filter students based on search term
-    const filteredStudents = students.filter(student =>
-        student.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        student.email?.toLowerCase().includes(searchTerm.toLowerCase())
+    // Filter parents based on search term
+    const filteredParents = parents.filter(parent =>
+        parent.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        parent.email?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) {
         return (
-            <div className="stu-loading-container">
-                <div className="stu-loading-spinner">
+            <div className="psych-loading-container">
+                <div className="psych-loading-spinner">
                     <Spinner animation="border" variant="primary" />
                 </div>
-                <p>Loading students...</p>
+                <p>Loading parents...</p>
             </div>
         );
     }
@@ -62,11 +68,11 @@ const AdminParentList = () => {
             <AdminHeader />
             <AdminSidebar />
             <main id="main" className="main">
-                <div className="stu-dashboard">
+                <div className="psych-dashboard">
                     <div className="page-header">
                         <div className="page-title">
-                            <FaGraduationCap className="page-icon" />
-                            <h1>Students Directory</h1>
+                            <FaUserFriends className="page-icon" />
+                            <h1>Parents Directory</h1>
                         </div>
                         <div className="page-actions">
                             <div className="refined-search">
@@ -74,13 +80,13 @@ const AdminParentList = () => {
                                     <FaSearch className="search-input-icon" />
                                     <input
                                         type="text"
-                                        placeholder="Search students..."
+                                        placeholder="Search parents..."
                                         value={searchTerm}
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         className="search-input-field"
                                     />
                                     {searchTerm && (
-                                        <button 
+                                        <button
                                             className="search-clear-btn"
                                             onClick={() => setSearchTerm('')}
                                             aria-label="Clear search"
@@ -93,57 +99,57 @@ const AdminParentList = () => {
                         </div>
                     </div>
 
-                    {error && <Alert variant="danger" className="stu-alert">{error}</Alert>}
+                    {error && <Alert variant="danger" className="psych-alert">{error}</Alert>}
 
                     <div className="stats-overview">
                         <div className="stats-card">
                             <div className="stats-card-inner">
                                 <div className="stats-icon-area">
-                                    <FaGraduationCap className="stats-icon" />
+                                    <FaUserFriends className="stats-icon" />
                                 </div>
                                 <div className="stats-content">
-                                    <h2 className="stats-number">{filteredStudents.length}</h2>
-                                    <p className="stats-label">Total Students</p>
+                                    <h2 className="stats-number">{filteredParents.length}</h2>
+                                    <p className="stats-label">Total Parents</p>
                                 </div>
                             </div>
                             <div className="stats-footer">
                                 <span className="stats-info">
-                                    {searchTerm && filteredStudents.length !== students.length ? 
-                                        `Showing ${filteredStudents.length} of ${students.length} students` : 
-                                        "All students"}
+                                    {searchTerm && filteredParents.length !== parents.length ?
+                                        `Showing ${filteredParents.length} of ${parents.length} parents` :
+                                        "All parents"}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    {filteredStudents.length === 0 ? (
-                        <div className="stu-empty">
-                            <FaGraduationCap className="stu-empty-icon" />
-                            <h3>{searchTerm ? "No students match your search" : "No students found"}</h3>
+                    {filteredParents.length === 0 ? (
+                        <div className="psych-empty">
+                            <FaUserFriends className="psych-empty-icon" />
+                            <h3>{searchTerm ? "No parents match your search" : "No parents found"}</h3>
                             <p>Try modifying your search criteria or check back later.</p>
                         </div>
                     ) : (
-                        <div className="stu-grid">
-                            {filteredStudents.map((student) => (
-                                <div key={student.id} className="stu-card">
-                                    <div className="stu-card-header">
-                                        <div className="stu-avatar">
-                                            {student.name ? student.name.charAt(0).toUpperCase() : '?'}
+                        <div className="psych-grid">
+                            {filteredParents.map((parent) => (
+                                <div key={parent.id} className="psych-card">
+                                    <div className="psych-card-header">
+                                        <div className="psych-avatar">
+                                            {parent.name ? parent.name.charAt(0).toUpperCase() : '?'}
                                         </div>
                                     </div>
-                                    <div className="stu-card-body">
-                                        <h5 className="stu-name">{student.name || 'N/A'}</h5>
-                                        <p className="stu-email">{student.email}</p>
+                                    <div className="psych-card-body">
+                                        <h5 className="psych-name">{parent.name || 'N/A'}</h5>
+                                        <p className="psych-email">{parent.email}</p>
                                     </div>
-                                    <div className="stu-card-footer">
+                                    <div className="psych-card-footer">
                                         <div className="button-group">
-                                            <Link to={`/userdetail/${student.email}`} className="stu-view-btn">
+                                            <Link to={`/userdetail/${parent.email}`} className="psych-view-btn">
                                                 <FaEye /> View Profile
                                             </Link>
-                                            <Link 
-                                                to={`/admin/students/appointments/${student.id}`} 
-                                                state={{ student: student }}
-                                                className="stu-app-btn"
+                                            <Link
+                                                to={`/admin/parents/appointments/${parent.id}`}
+                                                state={{ parent: parent }}
+                                                className="psych-app-btn"
                                             >
                                                 <FaCalendarAlt /> Appointments
                                             </Link>

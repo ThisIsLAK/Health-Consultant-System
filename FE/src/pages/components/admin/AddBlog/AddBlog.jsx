@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import ApiService from '../../../../service/ApiService';
 import './AddBlog.css';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const AddBlog = () => {
     const navigate = useNavigate();
@@ -29,10 +30,15 @@ const AddBlog = () => {
 
         try {
             const response = await ApiService.createBlog(blogData);
-            
+
             if (response.status === 200) {
-                alert('Blog created successfully!');
-                navigate('/adminblog'); // Adjust this route as needed
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Blog created successfully!',
+                }).then(() => {
+                    navigate('/adminblog'); // Điều hướng sau khi nhấn OK
+                });
             } else {
                 setError(response.message || 'Failed to create blog');
             }
@@ -49,10 +55,10 @@ const AddBlog = () => {
 
             <main id='main' className='main'>
                 <PageTitle page="Add Blog" />
-                
+
                 <div className="addblog-container">
                     {error && <div className="error-message">{error}</div>}
-                    
+
                     {/* Basic Blog Information */}
                     <div className="blog-basic-info">
                         <h2 className="section-title">Basic Information</h2>

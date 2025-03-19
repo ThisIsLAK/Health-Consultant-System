@@ -1,8 +1,10 @@
 .psy-support-container {
   padding: 1rem;
   max-width: 1200px;
-  margin: 5rem auto; /* Center the container */
-  margin-left: 330px; /* Make room for sidebar */
+  margin: 5rem auto;
+  /* Center the container */
+  margin-left: 330px;
+  /* Make room for sidebar */
 }
 
 .psy-support-header {
@@ -193,7 +195,7 @@
     margin-left: 0;
     padding-top: 20px;
   }
-  
+
   .psy-program-list {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
@@ -203,4 +205,22 @@
   .psy-program-list {
     grid-template-columns: 1fr;
   }
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto; /* Căn giữa và giữ khoảng cách */
+  width: fit-content; /* Giới hạn chiều rộng dựa trên nội dung */
+  padding: 10px 0;
+}
+
+.pagination-container .MuiPaginationItem-root {
+  color: #007bff;
+}
+
+.pagination-container .MuiPaginationItem-page.Mui-selected {
+  background-color: #007bff;
+  color: white;
 }

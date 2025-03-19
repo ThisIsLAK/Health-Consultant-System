@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
-import { Alert, Spinner, Badge, Table } from 'react-bootstrap';
-import { format, parseISO, isToday } from 'date-fns'; // Import date-fns functions
-import { FaArrowLeft, FaCalendarAlt, FaUserMd, FaCheckCircle, FaTimesCircle, FaInfoCircle, FaClock } from 'react-icons/fa';
+import { Alert, Spinner, Badge, Table } from 'react-bootstrap'; // Added Table component
+import { format, parseISO, isToday } from 'date-fns';
+import { FaArrowLeft, FaCalendarAlt, FaUserMd, FaCheckCircle, FaTimesCircle, FaEye, FaClock, FaInfoCircle } from 'react-icons/fa';
 import axios from 'axios';
 import AdminHeader from '../../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../../component/admin/AdminSiderbar';
-import './AdminPsychoAppointment.css';
+import '../student/AdminStuAppointment.css'; // Using the same CSS as AdminStuAppointment
 
-const AdminPsychoAppointment = () => {
-    const { psychologistId } = useParams();
+const AdminParentAppointment = () => {
+    const { parentId } = useParams();
     const location = useLocation();
-    const psychologistData = location.state?.psychologist || null;
+    const parentData = location.state?.parent || null;
     
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -20,18 +20,16 @@ const AdminPsychoAppointment = () => {
 
     useEffect(() => {
         fetchAppointments();
-    }, [psychologistId]);
+    }, [parentId]);
 
     const fetchAppointments = async () => {
         try {
             setLoading(true);
-            
-            // Get the token from localStorage
             const token = localStorage.getItem('token');
             
-            // Fetch appointments for the psychologist
+            // Use the viewuserappointmentlist endpoint instead of psyappointment endpoint
             const response = await axios.get(
-                `http://localhost:8080/identity/admin/psyappointment/${psychologistId}`,
+                `http://localhost:8080/identity/admin/viewuserappointmentlist/${parentId}`,
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -41,8 +39,6 @@ const AdminPsychoAppointment = () => {
             );
 
             if (response.data) {
-                console.log('Appointments data:', response.data);
-                // Check if response has the correct structure
                 const appointmentsData = response.data.result || response.data;
                 
                 // Process appointments to add isPast property
@@ -58,16 +54,11 @@ const AdminPsychoAppointment = () => {
                 });
                 
                 setAppointments(processedAppointments);
-                
-                // No need to fetch student names since they're not available
-                // Just set a placeholder for each unique user ID
                 const studentIds = [...new Set(appointmentsData.map(app => app.userId))];
                 const studentNamesObj = {};
-                
                 studentIds.forEach(id => {
                     studentNamesObj[id] = `Student ${id.substring(0, 6)}...`;
                 });
-                
                 setStudentNames(studentNamesObj);
                 setError(null);
             } else {
@@ -81,7 +72,6 @@ const AdminPsychoAppointment = () => {
         }
     };
 
-    // Format date to a readable format
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
@@ -90,6 +80,12 @@ const AdminPsychoAppointment = () => {
             month: 'long',
             day: 'numeric'
         });
+    };
+
+    const isAppointmentInPast = (dateString) => {
+        if (!dateString) return false;
+        const appointmentDate = new Date(dateString);
+        return appointmentDate < new Date();
     };
 
     // Function to determine appointment status based on active property and date
@@ -139,29 +135,6 @@ const AdminPsychoAppointment = () => {
         return <Badge bg={bgColor}>{label}</Badge>;
     };
 
-    // First initial for avatar
-    const getInitial = () => {
-        if (psychologistData && psychologistData.name) {
-            return psychologistData.name.charAt(0).toUpperCase();
-        }
-        return 'P';
-    };
-
-    if (loading) {
-        return (
-            <>
-                <AdminHeader />
-                <AdminSidebar />
-                <main id="main" className="main">
-                    <div className="loading-container">
-                        <Spinner animation="border" variant="primary" />
-                        <p>Loading appointments...</p>
-                    </div>
-                </main>
-            </>
-        );
-    }
-
     // Count appointments by status for statistics
     const countAppointmentsByStatus = () => {
         return appointments.reduce((counts, app) => {
@@ -173,6 +146,27 @@ const AdminPsychoAppointment = () => {
 
     const statusCounts = countAppointmentsByStatus();
 
+    const getInitial = () => {
+        return parentData && parentData.name ? parentData.name.charAt(0).toUpperCase() : 'P';
+    };
+
+    if (loading) {
+        return (
+            <>
+                <AdminHeader />
+                <AdminSidebar />
+                <main id="main" className="main">
+                    <div className="psych-loading-container">
+                        <div className="psych-loading-spinner">
+                            <Spinner animation="border" variant="primary" />
+                        </div>
+                        <p>Loading appointments...</p>
+                    </div>
+                </main>
+            </>
+        );
+    }
+
     return (
         <>
             <AdminHeader />
@@ -181,13 +175,13 @@ const AdminPsychoAppointment = () => {
                 <div className="appointment-dashboard">
                     <div className="page-header">
                         <div className="header-wrapper">
-                            <Link to="/adminpsycholist" className="back-button">
-                                <FaArrowLeft /> Back to Psychologists
+                            <Link to="/adminparentlist" className="back-button">
+                                <FaArrowLeft /> Back to Parents
                             </Link>
                             <div className="page-title">
                                 <FaCalendarAlt className="title-icon" />
                                 <h1>
-                                    Appointments for {psychologistData?.name || `Psychologist ${psychologistId.substring(0, 8)}...`}
+                                    Appointments for {parentData?.name || `Parent ${parentId ? parentId.substring(0, 8) + '...' : 'Unknown'}`}
                                 </h1>
                             </div>
                         </div>
@@ -199,7 +193,7 @@ const AdminPsychoAppointment = () => {
                         </Alert>
                     )}
 
-                    <div className="psychologist-info card">
+                    <div className="student-info card">
                         <div className="card-body">
                             <div className="avatar-section">
                                 <div className="avatar">
@@ -207,8 +201,8 @@ const AdminPsychoAppointment = () => {
                                 </div>
                             </div>
                             <div className="info-section">
-                                <h2>{psychologistData?.name || `Psychologist ID: ${psychologistId.substring(0, 12)}...`}</h2>
-                                <p><strong>Email:</strong> {psychologistData?.email || 'Not available'}</p>
+                                <h2>{parentData?.name || `Parent ID: ${parentId ? parentId.substring(0, 12) + '...' : 'Unknown'}`}</h2>
+                                <p><strong>Email:</strong> {parentData?.email || 'Not available'}</p>
                             </div>
                         </div>
                     </div>
@@ -225,7 +219,7 @@ const AdminPsychoAppointment = () => {
                                 </div>
                             </div>
                             <div className="stat-item">
-                                <div className="stat-icon completed">
+                                <div className="stat-icon active">
                                     <FaCheckCircle />
                                 </div>
                                 <div className="stat-content">
@@ -268,7 +262,7 @@ const AdminPsychoAppointment = () => {
                             <div className="card-body text-center">
                                 <FaInfoCircle className="empty-icon" />
                                 <h3>No Appointments Found</h3>
-                                <p>This psychologist has no appointments yet.</p>
+                                <p>This parent has no appointments yet.</p>
                             </div>
                         </div>
                     ) : (
@@ -280,8 +274,8 @@ const AdminPsychoAppointment = () => {
                                         <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>User Name</th>
-                                                <th>User Email</th>
+                                                <th>Psychologist</th>
+                                                <th>Psychologist Email</th>
                                                 <th>Date</th>
                                                 <th>Time Slot</th>
                                                 <th>Status</th>
@@ -291,8 +285,8 @@ const AdminPsychoAppointment = () => {
                                             {appointments.map((appointment, index) => (
                                                 <tr key={appointment.appointmentId}>
                                                     <td>{index + 1}</td>
-                                                    <td>{appointment.studentName}</td>
-                                                    <td>{appointment.studentEmail}</td>
+                                                    <td>{appointment.psychologistName || "Not available"}</td>
+                                                    <td>{appointment.psychologistEmail || "Not available"}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
                                                     <td>{getStatusBadge(appointment)}</td>
@@ -310,4 +304,4 @@ const AdminPsychoAppointment = () => {
     );
 };
 
-export default AdminPsychoAppointment;
+export default AdminParentAppointment;

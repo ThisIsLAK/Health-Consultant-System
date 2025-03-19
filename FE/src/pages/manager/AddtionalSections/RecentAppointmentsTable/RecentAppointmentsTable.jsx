@@ -1,89 +1,100 @@
 import React, { useState, useEffect } from 'react';
-import ApiService from '../../../../service/ApiService';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { format, parseISO, isToday } from 'date-fns'; // Import date-fns functions
 
 const RecentAppointmentsTable = () => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
-    // This is a placeholder - in a real implementation, you would add an API endpoint to fetch recent appointments
     useEffect(() => {
-        // Simulating API call with the mock data for now
-        // In a real implementation, replace this with an actual API call
-        setLoading(true);
-        setTimeout(() => {
-            setAppointments(mockItems);
-            setLoading(false);
-        }, 500);
+        const fetchRecentAppointments = async () => {
+            try {
+                // Get the authentication token from localStorage
+                const token = localStorage.getItem('token');
+                
+                if (!token) {
+                    console.error('No authentication token found');
+                    return;
+                }
+                
+                const response = await axios.get('http://localhost:8080/identity/manager/allappointments', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (response.data.code === 1000) {
+                    // Sort appointments by date (newest first) and time slot
+                    const sortedAppointments = response.data.result.sort((a, b) => {
+                        // Compare appointment dates first
+                        const dateComparison = new Date(b.appointmentDate) - new Date(a.appointmentDate);
+                        
+                        // If dates are the same, compare time slots
+                        if (dateComparison === 0) {
+                            // Extract hours from time slot strings (e.g., "9:00-10:00" → 9)
+                            const aHour = parseInt(a.timeSlot.split(':')[0]);
+                            const bHour = parseInt(b.timeSlot.split(':')[0]);
+                            return bHour - aHour; // Later time slots come first
+                        }
+                        
+                        return dateComparison;
+                    });
+                    
+                    // Take only the first 5
+                    const recentAppointments = sortedAppointments.slice(0, 5);
+                    setAppointments(recentAppointments);
+                }
+            } catch (error) {
+                console.error('Error fetching appointments:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        // Real implementation would look like:
-        // const fetchRecentAppointments = async () => {
-        //   try {
-        //     const response = await ApiService.getRecentAppointments();
-        //     if (response.status === 200) {
-        //       setAppointments(response.data);
-        //     }
-        //   } catch (error) {
-        //     console.error("Error fetching appointments:", error);
-        //   } finally {
-        //     setLoading(false);
-        //   }
-        // };
-        // fetchRecentAppointments();
+        fetchRecentAppointments();
     }, []);
 
-    const mockItems = [
-        {
-            _id: '1',
-            number: '#2644',
-            customer: 'Nguyễn Minh Hoàng',
-            service: 'Mental Health Consultation',
-            time: '2023-11-20 14:00',
-            status: 'Confirmed',
-        },
-        {
-            _id: '2',
-            number: '#2457',
-            customer: 'Ngô Chí Kiên',
-            service: 'Depression Screening',
-            time: '2023-11-21 09:30',
-            status: 'Pending',
-        },
-        {
-            _id: '3',
-            number: '#2147',
-            customer: 'Trần Phương Khánh',
-            service: 'Anxiety Treatment',
-            time: '2023-11-19 15:45',
-            status: 'Cancelled',
-        },
-        {
-            _id: '4',
-            number: '#2049',
-            customer: 'Tô Triều Vỹ',
-            service: 'Psychological Assessment',
-            time: '2023-11-22 11:15',
-            status: 'Confirmed',
-        },
-        {
-            _id: '5',
-            number: '#3592',
-            customer: 'Nguyễn Phương Nam',
-            service: 'Mental Wellness Checkup',
-            time: '2023-11-23 16:30',
-            status: 'Pending',
-        },
-    ];
+    // Format date string to readable format
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB'); // DD/MM/YYYY format
+    };
+
+    // Updated appointment status determination function using the consistent logic
+    const getAppointmentStatus = (appointment) => {
+        const appointmentDate = parseISO(appointment.appointmentDate);
+        const isPastAppointment = new Date(appointmentDate) < new Date() && !isToday(appointmentDate);
+        
+        // Determine status based on 'active' property and date:
+        // - active = null -> UPCOMING
+        // - active = false -> CANCELLED
+        // - active = true -> COMPLETED
+        // - past date (and not cancelled or completed) -> PAST
+        if (appointment.active === false) {
+            return { label: 'Cancelled', value: 'Cancelled' };
+        } else if (appointment.active === true) {
+            return { label: 'Completed', value: 'Completed' };
+        } else if (isPastAppointment && appointment.active === null) {
+            return { label: 'Past', value: 'Past' };
+        } else {
+            return { label: 'Upcoming', value: 'Upcoming' };
+        }
+    };
 
     const handleStatus = status => {
         switch (status) {
-            case 'Confirmed':
+            case 'Completed':
                 return 'success';
-            case 'Pending':
-                return 'warning';
+            case 'Upcoming':
+                return 'primary';
             case 'Cancelled':
                 return 'danger';
+            case 'Past':
+                return 'secondary';
             default:
-                return 'primary';
+                return 'info';
         }
     };
 
@@ -92,38 +103,43 @@ const RecentAppointmentsTable = () => {
     }
 
     return (
-        <table className="table table-borderless datatable">
-            <thead className="table-light">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Patient</th>
-                    <th scope="col">Service</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                {appointments.map(item => (
-                    <tr key={item._id}>
-                        <th scope="row">
-                            <a href="#">{item.number}</a>
-                        </th>
-                        <td>{item.customer}</td>
-                        <td>
-                            <a href="#" className="text-primary fw-bold">
-                                {item.service}
-                            </a>
-                        </td>
-                        <td>{item.time}</td>
-                        <td>
-                            <span className={`badge bg-${handleStatus(item.status)}`}>
-                                {item.status}
-                            </span>
-                        </td>
+        <>
+            <table className="table table-borderless datatable">
+                <thead className="table-light">
+                    <tr>
+                        <th scope="col">User</th>
+                        <th scope="col">User Email</th>
+                        <th scope="col">Psychologist</th>
+                        <th scope="col">Psychologist Email</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Time</th>
+                        <th scope="col">Status</th>
                     </tr>
-                ))}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    {appointments.map(item => {
+                        const status = getAppointmentStatus(item);  
+                        return (
+                            <tr key={item.appointmentId}>
+                                <td>{item.studentName}</td>
+                                <td>{item.studentEmail}</td>
+                                <td>
+                                    {item.psychologistName}
+                                </td>
+                                <td>{item.psychologistEmail}</td>
+                                <td>{formatDate(item.appointmentDate)}</td>
+                                <td>{item.timeSlot}</td>
+                                <td>
+                                    <span className={`badge bg-${handleStatus(status.value)}`}>
+                                        {status.label}
+                                    </span>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </>
     );
 };
 

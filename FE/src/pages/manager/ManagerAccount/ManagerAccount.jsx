@@ -1,79 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { FaUser, FaEnvelope, FaUserTag } from 'react-icons/fa';
 import ManagerHeader from '../../../component/manager/ManagerHeader';
 import ManagerSidebar from '../../../component/manager/ManagerSidebar';
 import PageTitle from '../../../component/manager/PageTitle';
+import ApiService from '../../../service/ApiService';
 
 const ManagerAccount = () => {
-    const [showPassword, setShowPassword] = useState(false);
-    const [managerData, setManagerData] = useState({
-        username: 'manager123',
-        password: 'password123',
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        phone: '123-456-7890'
+    const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        role: ''
     });
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+    const fetchUserInfo = async () => {
+        try {
+            const response = await ApiService.getLoggedInUserInfo();
+            if (response.status === 200 && response.data) {
+                const userInfo = response.data.result;
+                setUserData({
+                    name: userInfo.name || '',
+                    email: userInfo.email || '',
+                    role: userInfo.role?.roleName || ApiService.getUserRole() || ''
+                });
+            } else {
+                setError(response.message || 'Không thể lấy thông tin người dùng');
+            }
+        } catch (err) {
+            setError('Đã xảy ra lỗi khi lấy thông tin người dùng');
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="loading-container">
+                <div className="spinner"></div>
+                <p>Loading Account...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="error-container">
+                <div className="error-icon">!</div>
+                <p>{error}</p>
+                <button onClick={fetchUserInfo} className="retry-button">Try Again</button>
+            </div>
+        );
+    }
+
     return (
-        <div>
+        <div className="admin-layout">
             <ManagerHeader />
             <ManagerSidebar />
 
-            <main id='main' className='main'>
+            <main id="main" className="main">
                 <PageTitle page="Your Account" />
 
-                <div className="add-form-container">
-                    <form className="admin-form">
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Username</label>
-                                <input type="text" value={managerData.username} readOnly />
+                <div className="account-container">
+                    <div className="account-header">
+                        <div className="account-avatar">
+                            {userData.name.charAt(0).toUpperCase()}
+                        </div>
+                        <h2>{userData.name}</h2>
+                        <span className="role-badge">{userData.role}</span>
+                    </div>
+
+                    <div className="account-details">
+                        <div className="detail-card">
+                            <div className="detail-icon">
+                                <FaUser />
                             </div>
-                            <div className="form-group">
-                                <label>Password</label>
-                                <div className="form-group">
-                                    <input
-                                        type={showPassword ? "text" : "password"}
-                                        value={managerData.password}
-                                        readOnly
-                                    />
-                                    <button
-                                        type="button"
-                                        className="eye-button"
-                                        onClick={togglePasswordVisibility}
-                                    >
-                                        <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                                    </button>
-                                </div>
+                            <div className="detail-content">
+                                <h3>Full Name</h3>
+                                <p>{userData.name}</p>
                             </div>
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>First Name</label>
-                                <input type="text" value={managerData.firstName} readOnly />
+                        <div className="detail-card">
+                            <div className="detail-icon">
+                                <FaEnvelope />
                             </div>
-                            <div className="form-group">
-                                <label>Last Name</label>
-                                <input type="text" value={managerData.lastName} readOnly />
+                            <div className="detail-content">
+                                <h3>Email</h3>
+                                <p>{userData.email}</p>
                             </div>
                         </div>
 
-                        <div className="form-row">
-                            <div className="form-group">
-                                <label>Email</label>
-                                <input type="email" value={managerData.email} readOnly />
+                        <div className="detail-card">
+                            <div className="detail-icon">
+                                <FaUserTag />
                             </div>
-                            <div className="form-group">
-                                <label>Phone Number</label>
-                                <input type="tel" value={managerData.phone} readOnly />
+                            <div className="detail-content">
+                                <h3>Role</h3>
+                                <p>{userData.role}</p>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </main>
         </div>

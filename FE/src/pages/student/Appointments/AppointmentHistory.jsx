@@ -9,13 +9,15 @@ import Sidebar from '../UserInfo/Sidebar';
 // Import MUI components
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+// Import SweetAlert2
+import Swal from 'sweetalert2';
 import './AppointmentHistory.css';
 
 const AppointmentHistory = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filter, setFilter] = useState('all'); // 'all', 'upcoming', 'past', 'cancelled'
+  const [filter, setFilter] = useState('upcoming'); // Changed default filter from 'all' to 'upcoming'
   const [cancelling, setCancelling] = useState(false); // Track cancellation state
   const [currentPage, setCurrentPage] = useState(1);
   const [appointmentsPerPage] = useState(1);
@@ -67,29 +69,47 @@ const AppointmentHistory = () => {
     }
   };
 
-  // Format time slot for display
-  const formatTimeSlot = (timeSlot) => {
-    if (!timeSlot) return 'N/A';
+// Format time slot for display
+const formatTimeSlot = (timeSlot) => {
+  if (!timeSlot) return 'N/A';
+  
+  // If timeSlot is already formatted like "09:00 - 11:00", parse and reformat it
+  if (timeSlot.includes(' - ')) {
+    const [start, end] = timeSlot.split(' - ');
+    const startHour = parseInt(start.split(':')[0]);
+    const endHour = parseInt(end.split(':')[0]);
+    return `${startHour}h-${endHour}h`;
+  }
+  
+  // Otherwise format it as a range (assuming 2-hour slots)
+  try {
+    const [hours, minutes] = timeSlot.split(':');
+    const startHour = parseInt(hours);
+    const endHour = startHour + 2;
     
-    // If timeSlot is already formatted like "09:00 - 11:00", return it as is
-    if (timeSlot.includes(' - ')) return timeSlot;
-    
-    // Otherwise format it as a range (assuming 2-hour slots)
-    try {
-      const [hours, minutes] = timeSlot.split(':');
-      const startHour = parseInt(hours);
-      const endHour = startHour + 2;
-      
-      return `${hours.padStart(2, '0')}:${minutes || '00'} - ${endHour.toString().padStart(2, '0')}:${minutes || '00'}`;
-    } catch (error) {
-      console.error('Time slot formatting error:', error);
-      return timeSlot;
-    }
-  };
+    return `${startHour}h-${endHour}h`;
+  } catch (error) {
+    console.error('Time slot formatting error:', error);
+    return timeSlot;
+  }
+};
 
   // Cancel appointment function
   const cancelAppointment = async (appointmentId) => {
-    if (!window.confirm('Are you sure you want to cancel this appointment?')) {
+    // Replace window.confirm with SweetAlert2
+    const result = await Swal.fire({
+      title: 'Cancel Appointment',
+      text: "Are you sure you want to cancel this appointment? This action cannot be undone.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#E53E3E',
+      cancelButtonColor: '#718096',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, keep it',
+      reverseButtons: true
+    });
+    
+    if (!result.isConfirmed) {
       return;
     }
     
@@ -115,36 +135,66 @@ const AppointmentHistory = () => {
       console.log('Cancel appointment response:', response.data);
       
       if (response.data.code === 1000) {
-        toast.success('Appointment cancelled successfully');
+        // Show success message with SweetAlert2 instead of toast
+        await Swal.fire({
+          title: 'Cancelled!',
+          text: 'Your appointment has been cancelled successfully.',
+          icon: 'success',
+          confirmButtonColor: '#4F46E5'
+        });
+        
         // Refresh the appointment list
         fetchAppointments();
       } else {
-        toast.error(response.data.message || 'Failed to cancel appointment');
+        Swal.fire({
+          title: 'Error',
+          text: response.data.message || 'Failed to cancel appointment',
+          icon: 'error',
+          confirmButtonColor: '#4F46E5'
+        });
       }
       
       setCancelling(false);
     } catch (error) {
       console.error('Error cancelling appointment:', error);
-      toast.error('Failed to cancel appointment. Please try again.');
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to cancel appointment. Please try again.',
+        icon: 'error',
+        confirmButtonColor: '#4F46E5'
+      });
       setCancelling(false);
     }
   };
 
-  // Check if date is in the future and appointment is active
-  const isUpcoming = (dateString, isActive) => {
+  // Updated: Check if date is in the future and appointment is not cancelled
+  const isUpcoming = (dateString, active) => {
     const appointmentDate = new Date(dateString);
     const now = new Date();
-    return appointmentDate > now && isActive;
+    return appointmentDate > now && active !== false && active !== 0;
+  };
+
+  // Get appointment status based on active flag and date - MOVED UP
+  const getAppointmentStatus = (appointment) => {
+    if (appointment.active === false || appointment.active === 0) {
+      return 'cancelled';
+    } else if (appointment.active === true || appointment.active === 1) {
+      return 'completed';
+    }
+    
+    const appointmentDate = new Date(appointment.appointmentDate);
+    const now = new Date();
+    return appointmentDate > now ? 'upcoming' : 'past';
   };
 
   // Sort appointments by date (nearest first)
   const sortAppointmentsByDate = (appts) => {
     return [...appts].sort((a, b) => {
-      // First check active status - prioritize active appointments
-      if ((a.active === true || a.active === 1) && (b.active === false || b.active === 0)) {
+      // First check active status - prioritize upcoming appointments
+      if ((a.active === null || a.active === undefined) && (b.active === true || b.active === 1 || b.active === false || b.active === 0)) {
         return -1;
       }
-      if ((a.active === false || a.active === 0) && (b.active === true || b.active === 1)) {
+      if ((b.active === null || b.active === undefined) && (a.active === true || a.active === 1 || a.active === false || a.active === 0)) {
         return 1;
       }
       
@@ -169,17 +219,19 @@ const AppointmentHistory = () => {
     });
   };
 
-  // Filter and sort appointments based on selected filter
+  // Updated: Filter and sort appointments based on selected filter
   const getFilteredAndSortedAppointments = () => {
     const filtered = appointments.filter(appointment => {
+      const status = getAppointmentStatus(appointment);
+      
       if (filter === 'cancelled') {
-        return appointment.active === false || appointment.active === 0;
+        return status === 'cancelled';
       } else if (filter === 'upcoming') {
-        return isUpcoming(appointment.appointmentDate, appointment.active === true || appointment.active === 1);
+        return status === 'upcoming';
       } else if (filter === 'past') {
-        const appointmentDate = new Date(appointment.appointmentDate);
-        const now = new Date();
-        return appointmentDate < now && (appointment.active === true || appointment.active === 1);
+        return status === 'past';
+      } else if (filter === 'completed') {
+        return status === 'completed';
       }
       return true; // 'all' filter
     });
@@ -203,17 +255,6 @@ const AppointmentHistory = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [filter]);
-
-  // Get appointment status
-  const getAppointmentStatus = (appointment) => {
-    if (appointment.active === false || appointment.active === 0) {
-      return 'cancelled';
-    }
-    
-    const appointmentDate = new Date(appointment.appointmentDate);
-    const now = new Date();
-    return appointmentDate > now ? 'upcoming' : 'past';
-  };
 
   return (
     <div className="profile-page">
@@ -239,6 +280,12 @@ const AppointmentHistory = () => {
                 onClick={() => setFilter('upcoming')}
               >
                 Upcoming
+              </button>
+              <button 
+                className={`filter-btn ${filter === 'completed' ? 'active' : ''}`}
+                onClick={() => setFilter('completed')}
+              >
+                Completed
               </button>
               <button 
                 className={`filter-btn ${filter === 'past' ? 'active' : ''}`}
@@ -286,7 +333,11 @@ const AppointmentHistory = () => {
                         <div className={`appointment-status ${status}`}>
                           {status === 'cancelled' 
                             ? 'Cancelled' 
-                            : status === 'upcoming' ? 'Upcoming' : 'Past'}
+                            : status === 'upcoming' 
+                            ? 'Upcoming' 
+                            : status === 'completed'
+                            ? 'Completed'
+                            : 'Past'}
                         </div>
                         
                         <div className="appointment-details">
@@ -373,7 +424,9 @@ const AppointmentHistory = () => {
                   {filter === 'upcoming' 
                     ? "You don't have any upcoming appointments scheduled."
                     : filter === 'past'
-                    ? "You don't have any past appointments."
+                    ? "You don't have any past appointments that need to be reviewed."
+                    : filter === 'completed'
+                    ? "You don't have any completed appointments."
                     : filter === 'cancelled'
                     ? "You don't have any cancelled appointments."
                     : "You haven't booked any appointments yet."}

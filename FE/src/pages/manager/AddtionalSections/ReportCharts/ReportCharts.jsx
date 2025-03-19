@@ -48,7 +48,7 @@ const ReportCharts = () => {
                 curve: 'smooth'
             },
             xaxis: {
-                categories: ['Total', 'Active', 'Completed/Canceled', 'Upcoming/Ending Soon']
+                categories: ['Total', 'Active/Completed', 'Cancelled/Participants', 'Upcoming/EndingSoon/AvgScore']
             },
             tooltip: {
                 y: {
@@ -91,7 +91,7 @@ const ReportCharts = () => {
                     name: 'Appointments',
                     data: [
                         appointmentSummary.totalAppointments,
-                        appointmentSummary.activeAppointments,
+                        appointmentSummary.completedAppointments,
                         appointmentSummary.cancelledAppointments,
                         appointmentSummary.upcomingAppointments
                     ]
@@ -101,7 +101,7 @@ const ReportCharts = () => {
                     data: [
                         supportProgramSummary.totalPrograms,
                         supportProgramSummary.activePrograms,
-                        0, // No "completed" data in API response
+                        supportProgramSummary.totalParticipants,
                         supportProgramSummary.programsEndingSoon
                     ]
                 },
@@ -114,7 +114,30 @@ const ReportCharts = () => {
                         surveySummary.averageScore
                     ]
                 }
-            ]
+            ],
+            options: {
+                ...chartData.options,
+                title: {
+                    text: 'Health Dashboard Overview',
+                    align: 'center',
+                    style: {
+                        fontSize: '16px',
+                        fontWeight: 'bold'
+                    }
+                },
+                subtitle: {
+                    text: 'Appointments, Programs, and Surveys',
+                    align: 'center'
+                },
+                xaxis: {
+                    categories: [
+                        'Total', 
+                        'Completed/Active', 
+                        'Cancelled/Participants/Results', 
+                        'Upcoming/EndingSoon/AvgScore'
+                    ]
+                }
+            }
         });
     };
 
@@ -124,13 +147,33 @@ const ReportCharts = () => {
 
     return (
         <div>
+            <h5 className="card-title">Activity Overview</h5>
             {dashboardData ? (
-                <Chart
-                    options={chartData.options}
-                    series={chartData.series}
-                    type={chartData.options.chart.type}
-                    height={chartData.options.chart.height}
-                />
+                <div>
+                    <Chart
+                        options={chartData.options}
+                        series={chartData.series}
+                        type={chartData.options.chart.type}
+                        height={chartData.options.chart.height}
+                    />
+                    <div className="mt-3">
+                        <small className="text-muted">
+                            <strong>Chart Legend:</strong><br/>
+                            <span className="text-primary">• Appointments:</span> Total ({dashboardData.appointmentSummary.totalAppointments}), 
+                                                             Completed ({dashboardData.appointmentSummary.completedAppointments}), 
+                                                             Cancelled ({dashboardData.appointmentSummary.cancelledAppointments}), 
+                                                             Upcoming ({dashboardData.appointmentSummary.upcomingAppointments})<br/>
+                            <span className="text-success">• Programs:</span> Total ({dashboardData.supportProgramSummary.totalPrograms}), 
+                                                         Active ({dashboardData.supportProgramSummary.activePrograms}), 
+                                                         Participants ({dashboardData.supportProgramSummary.totalParticipants}), 
+                                                         Ending Soon ({dashboardData.supportProgramSummary.programsEndingSoon})<br/>
+                            <span className="text-warning">• Surveys:</span> Total ({dashboardData.surveySummary.totalSurveys}), 
+                                                        Active ({dashboardData.surveySummary.activeSurveys}), 
+                                                        Results ({dashboardData.surveySummary.totalSurveyResults}), 
+                                                        Average Score ({dashboardData.surveySummary.averageScore})
+                        </small>
+                    </div>
+                </div>
             ) : (
                 <div>No dashboard data available</div>
             )}

@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
-import ApiService from '../../../../service/ApiService'; // Đảm bảo import ApiService
-import './AddSurvey.css'; // Make sure to create this CSS file
+import ApiService from '../../../../service/ApiService';
+import './AddSurvey.css';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const AddSurvey = () => {
   const [surveyTitle, setSurveyTitle] = useState('');
   const [surveyDescription, setSurveyDescription] = useState('');
-  const [surveyCode, setSurveyCode] = useState(''); // Bỏ giá trị mặc định sinh tự động
+  const [surveyCode, setSurveyCode] = useState('');
   const [questions, setQuestions] = useState([]);
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState({
@@ -17,10 +18,17 @@ const AddSurvey = () => {
     answers: [{ text: '', points: 0 }],
   });
   const [isAddingQuestion, setIsAddingQuestion] = useState(false);
-  
 
-  // Handle adding a new question
+  // Handle adding a new question with limit
   const handleAddQuestion = () => {
+    if (questions.length >= 9) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Limit Reached',
+        text: 'You have reached the maximum limit of 9 questions.',
+      });
+      return;
+    }
     setIsAddingQuestion(true);
     setCurrentQuestion({
       question: '',
@@ -67,12 +75,20 @@ const AddSurvey = () => {
   // Save the current question
   const handleSaveQuestion = () => {
     if (!currentQuestion.question.trim()) {
-      alert('Please enter a question');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Question',
+        text: 'Please enter a question.',
+      });
       return;
     }
-    
+
     if (currentQuestion.answers.some(answer => !answer.text.trim())) {
-      alert('Please fill in all answers');
+      Swal.fire({
+        icon: 'error',
+        title: 'Incomplete Answers',
+        text: 'Please fill in all answers.',
+      });
       return;
     }
 
@@ -88,21 +104,32 @@ const AddSurvey = () => {
   // Handle creating survey
   const handleCreateSurvey = async () => {
     if (!surveyCode.trim()) {
-      alert('Please enter a survey code');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Survey Code',
+        text: 'Please enter a survey code.',
+      });
       return;
     }
 
     if (!surveyTitle.trim()) {
-      alert('Please enter a survey title');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Title',
+        text: 'Please enter a survey title.',
+      });
       return;
     }
 
     if (questions.length === 0) {
-      alert('Please add at least one question');
+      Swal.fire({
+        icon: 'error',
+        title: 'No Questions',
+        text: 'Please add at least one question.',
+      });
       return;
     }
 
-    // Format survey data to match the required structure, including surveyCode
     const surveyData = {
       surveyCode: surveyCode,
       title: surveyTitle,
@@ -119,27 +146,38 @@ const AddSurvey = () => {
     console.log('Survey data to be submitted:', surveyData);
 
     try {
-      // Gọi hàm createSurvey từ ApiService
       const response = await ApiService.createSurvey(surveyData);
       console.log('Survey creation response:', response);
 
       if (response.status === 200) {
-        alert('Survey created successfully!');
-        navigate('/adminsurvey');
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Survey created successfully!',
+        }).then(() => {
+          navigate('/adminsurvey');
+        });
         console.log('Created survey details:', response.data);
 
-        // Reset form sau khi tạo thành công
         setSurveyTitle('');
         setSurveyDescription('');
-        setSurveyCode(''); // Reset surveyCode
+        setSurveyCode('');
         setQuestions([]);
       } else {
-        alert(`Failed to create survey: ${response.message}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: `Failed to create survey: ${response.message}`,
+        });
         console.error('Failed to create survey:', response.message);
       }
     } catch (error) {
       console.error('Error during survey creation:', error);
-      alert('An error occurred while creating the survey. Please try again.');
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while creating the survey. Please try again.',
+      });
     }
   };
 
@@ -149,15 +187,13 @@ const AddSurvey = () => {
       <AdminSidebar />
       <main id='main' className='main'>
         <PageTitle page="Create Survey" />
-        
+
         <div className="addsurvey-container">
           {/* Basic Survey Information */}
           <div className="survey-basic-info">
             <h2 className="section-title">Basic Information</h2>
             <div className="form-group">
-              <label className="form-label">
-                Survey Code
-              </label>
+              <label className="form-label">Survey Code</label>
               <input
                 type="text"
                 className="form-input"
@@ -167,9 +203,7 @@ const AddSurvey = () => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">
-                Survey Title
-              </label>
+              <label className="form-label">Survey Title</label>
               <input
                 type="text"
                 className="form-input"
@@ -179,9 +213,7 @@ const AddSurvey = () => {
               />
             </div>
             <div className="form-group">
-              <label className="form-label">
-                Description
-              </label>
+              <label className="form-label">Description</label>
               <textarea
                 className="form-textarea"
                 value={surveyDescription}
@@ -234,9 +266,7 @@ const AddSurvey = () => {
               <div className="new-question-card">
                 <h3 className="question-form-title">Add New Question</h3>
                 <div className="form-group">
-                  <label className="form-label">
-                    Question
-                  </label>
+                  <label className="form-label">Question</label>
                   <input
                     type="text"
                     className="form-input"
