@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface SurveyRepository extends JpaRepository<Survey, String> {
     List<Survey> findByActiveTrue();
     Optional<Survey> findBySurveyCode(String surveyCode);
+    boolean existsBySurveyCode(String surveyCode);
 
 }

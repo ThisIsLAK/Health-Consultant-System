@@ -44,6 +44,8 @@ public class SurveyService {
         try {
             // Tạo survey
             Survey survey = new Survey();
+            if (surveyRepository.existsBySurveyCode(request.getSurveyCode()))
+                throw new AppException(ErrorCode.SURVEY_CODE_EXIST);
             survey.setSurveyCode(request.getSurveyCode());
             survey.setTitle(request.getTitle());
             survey.setDescription(request.getDescription());
