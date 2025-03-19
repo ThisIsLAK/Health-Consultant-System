@@ -37,6 +37,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, String
     @Query("SELECT a FROM Appointment a WHERE a.psychologistId =:psychologistId AND a.active = :active")
     List<Appointment> findAllByPsychologistIdAndActive(@Param("psychologistId") String psychologistId, @Param("active") Boolean active);
 
+    boolean existsByUserIdAndAppointmentDate(String userId, Date appointmentDate);
+
     List<Appointment> findByUserIdAndPsychologistIdAndCancelledAtIsNotNull(String userId, String psychologistId);
 
 }

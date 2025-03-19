@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -138,13 +139,20 @@ public class SupportProgramService {
 
     public SupportProgramSummaryResponse getSupportProgramSummary() {
         List<SupportProgram> programs = supportProgramRepository.findAll();
+        if (programs == null) {
+            programs = Collections.emptyList();
+        }
+
         long totalPrograms = programs.size();
-        long activePrograms = programs.stream().filter(SupportProgram::getActive).count();
+        long activePrograms = programs.stream()
+                .filter(program -> program.getActive() != null && program.getActive())
+                .count();
         long totalParticipants = programs.stream()
-                .mapToLong(program -> program.getParticipants().size())
+                .mapToLong(program -> program.getParticipants() != null ? program.getParticipants().size() : 0)
                 .sum();
         long programsEndingSoon = programs.stream()
-                .filter(program -> program.getActive() && program.getEndDate() != null)
+                .filter(program -> program.getActive() != null && program.getActive())
+                .filter(program -> program.getEndDate() != null)
                 .filter(program -> ChronoUnit.DAYS.between(LocalDate.now(), program.getEndDate()) <= 7)
                 .count();
 

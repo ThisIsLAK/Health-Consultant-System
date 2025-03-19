@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useLocation } from 'react-router-dom';
 import { Alert, Spinner, Badge, Table } from 'react-bootstrap';
-import { FaArrowLeft, FaCalendarAlt, FaGraduationCap, FaCheckCircle, FaTimesCircle, FaInfoCircle } from 'react-icons/fa';
+import { format, parseISO, isToday } from 'date-fns'; // Import isToday from date-fns
+import { FaArrowLeft, FaCalendarAlt, FaGraduationCap, FaCheckCircle, FaTimesCircle, FaInfoCircle, FaClock } from 'react-icons/fa';
 import axios from 'axios';
 import AdminHeader from '../../../../../component/admin/AdminHeader';
 import AdminSidebar from '../../../../../component/admin/AdminSiderbar';
@@ -11,6 +12,27 @@ const AdminStuAppointment = () => {
     const { studentId } = useParams();
     const location = useLocation();
     const studentData = location.state?.student || null;
+    const statusUtils = location.state?.statusUtils || {
+        // Default implementation if not provided
+        getAppointmentStatus: (appointment) => {
+            const appointmentDate = new Date(appointment.appointmentDate);
+            const isPastAppointment = appointmentDate < new Date() && 
+                !isToday(appointmentDate);
+            
+            if (appointment.active === false) {
+                return 'CANCELLED';
+            } else if (appointment.active === true) {
+                return 'COMPLETED';
+            } else if (isPastAppointment) {
+                // If it's a past appointment but not explicitly cancelled or completed
+                return 'PAST';
+            } else {
+                return 'UPCOMING';
+            }
+        },
+        getAppointmentClass: (status) => status.toLowerCase(),
+        getStatusLabel: (status) => status
+    };
     
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -43,7 +65,20 @@ const AdminStuAppointment = () => {
                 console.log('Student appointments data:', response.data);
                 // Check if response has the correct structure
                 const appointmentsData = response.data.result || response.data;
-                setAppointments(appointmentsData);
+                
+                // Process appointments to add isPast property
+                const processedAppointments = appointmentsData.map(app => {
+                    const appDate = new Date(app.appointmentDate);
+                    const now = new Date();
+                    const isPast = appDate < now && appDate.toDateString() !== now.toDateString();
+                    
+                    return {
+                        ...app,
+                        isPast
+                    };
+                });
+                
+                setAppointments(processedAppointments);
                 
                 // Create placeholder names for psychologists
                 const psychologistIds = [...new Set(appointmentsData.map(app => app.psychologistId))];
@@ -77,11 +112,31 @@ const AdminStuAppointment = () => {
         });
     };
 
-    // Get status badge based on active property
-    const getStatusBadge = (active) => {
-        return active ? 
-            <Badge bg="success">Active</Badge> : 
-            <Badge bg="danger">Cancelled</Badge>;
+    // Updated function to get status badge with appropriate colors
+    const getStatusBadge = (appointment) => {
+        const status = statusUtils.getAppointmentStatus(appointment);
+        const statusClass = statusUtils.getAppointmentClass(status);
+        const label = statusUtils.getStatusLabel(status);
+        
+        let bgColor;
+        switch(statusClass) {
+            case 'upcoming':
+                bgColor = 'primary';
+                break;
+            case 'completed':
+                bgColor = 'success';
+                break;
+            case 'cancelled':
+                bgColor = 'danger';
+                break;
+            case 'past':
+                bgColor = 'secondary';
+                break;
+            default:
+                bgColor = 'info';
+        }
+        
+        return <Badge bg={bgColor}>{label}</Badge>;
     };
 
     // First initial for avatar
@@ -107,9 +162,16 @@ const AdminStuAppointment = () => {
         );
     }
 
-    // Count active and inactive appointments
-    const activeAppointments = appointments.filter(app => app.active).length;
-    const cancelledAppointments = appointments.filter(app => !app.active).length;
+    // Update the appointment counts based on new status logic
+    const countAppointmentsByStatus = () => {
+        return appointments.reduce((counts, app) => {
+            const status = statusUtils.getAppointmentStatus(app);
+            counts[status] = (counts[status] || 0) + 1;
+            return counts;
+        }, {});
+    };
+
+    const statusCounts = countAppointmentsByStatus();
 
     return (
         <>
@@ -167,8 +229,17 @@ const AdminStuAppointment = () => {
                                     <FaCheckCircle />
                                 </div>
                                 <div className="stat-content">
-                                    <h3>{activeAppointments}</h3>
-                                    <p>Active</p>
+                                    <h3>{statusCounts.COMPLETED || 0}</h3>
+                                    <p>Completed</p>
+                                </div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-icon upcoming">
+                                    <FaClock />
+                                </div>
+                                <div className="stat-content">
+                                    <h3>{statusCounts.UPCOMING || 0}</h3>
+                                    <p>Upcoming</p>
                                 </div>
                             </div>
                             <div className="stat-item">
@@ -176,8 +247,17 @@ const AdminStuAppointment = () => {
                                     <FaTimesCircle />
                                 </div>
                                 <div className="stat-content">
-                                    <h3>{cancelledAppointments}</h3>
+                                    <h3>{statusCounts.CANCELLED || 0}</h3>
                                     <p>Cancelled</p>
+                                </div>
+                            </div>
+                            <div className="stat-item">
+                                <div className="stat-icon past">
+                                    <FaCalendarAlt />
+                                </div>
+                                <div className="stat-content">
+                                    <h3>{statusCounts.PAST || 0}</h3>
+                                    <p>Past</p>
                                 </div>
                             </div>
                         </div>
@@ -215,7 +295,7 @@ const AdminStuAppointment = () => {
                                                     <td>{appointment.psychologistEmail}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
-                                                    <td>{getStatusBadge(appointment.active)}</td>
+                                                    <td>{getStatusBadge(appointment)}</td>
                                                 </tr>
                                             ))}
                                         </tbody>

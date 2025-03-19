@@ -4,6 +4,7 @@ import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import ApiService from '../../../../service/ApiService';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const EditSurvey = () => {
   const { surveyId } = useParams();
@@ -16,14 +17,13 @@ const EditSurvey = () => {
   const [editingQuestionId, setEditingQuestionId] = useState(null);
   const [currentQuestion, setCurrentQuestion] = useState({
     questionId: null,
-    surveyId: null, // Thêm surveyId cho mỗi câu hỏi
+    surveyId: null,
     questionText: '',
     answers: [{ optionId: null, optionText: '', points: 0 }],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch survey data on mount
   useEffect(() => {
     const fetchSurveyData = async () => {
       try {
@@ -39,7 +39,7 @@ const EditSurvey = () => {
               surveyData.questions.map((q) => ({
                 id: q.questionId || Date.now(),
                 questionId: q.questionId,
-                surveyId: q.surveyId || surveyId, // Lấy surveyId từ API hoặc từ params
+                surveyId: q.surveyId || surveyId,
                 questionText: q.questionText,
                 answers: q.answerOptions.map((a) => ({
                   id: a.optionId || Date.now(),
@@ -63,12 +63,11 @@ const EditSurvey = () => {
     fetchSurveyData();
   }, [surveyId]);
 
-  // Handle starting to edit a question
   const handleEditQuestion = (question) => {
     setEditingQuestionId(question.id);
     setCurrentQuestion({
       questionId: question.questionId,
-      surveyId: question.surveyId, // Thêm surveyId
+      surveyId: question.surveyId,
       questionText: question.questionText,
       answers: question.answers.map((a) => ({
         optionId: a.optionId,
@@ -78,7 +77,6 @@ const EditSurvey = () => {
     });
   };
 
-  // Handle changing current question text
   const handleQuestionChange = (e) => {
     setCurrentQuestion({
       ...currentQuestion,
@@ -86,7 +84,6 @@ const EditSurvey = () => {
     });
   };
 
-  // Handle changing answer text
   const handleAnswerTextChange = (index, e) => {
     const updatedAnswers = [...currentQuestion.answers];
     updatedAnswers[index].optionText = e.target.value;
@@ -96,7 +93,6 @@ const EditSurvey = () => {
     });
   };
 
-  // Handle changing answer points
   const handleAnswerPointsChange = (index, e) => {
     const updatedAnswers = [...currentQuestion.answers];
     updatedAnswers[index].points = parseInt(e.target.value) || 0;
@@ -106,15 +102,22 @@ const EditSurvey = () => {
     });
   };
 
-  // Save the edited question
   const handleSaveQuestion = () => {
     if (!currentQuestion.questionText.trim()) {
-      alert('Please enter a question');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Question',
+        text: 'Please enter a question.',
+      });
       return;
     }
 
     if (currentQuestion.answers.some(answer => !answer.optionText.trim())) {
-      alert('Please fill in all answers');
+      Swal.fire({
+        icon: 'error',
+        title: 'Incomplete Answers',
+        text: 'Please fill in all answers.',
+      });
       return;
     }
 
@@ -124,47 +127,56 @@ const EditSurvey = () => {
     setEditingQuestionId(null);
   };
 
-  // Cancel editing
   const handleCancelEdit = () => {
     setEditingQuestionId(null);
     setCurrentQuestion({
       questionId: null,
-      surveyId: surveyId, // Sử dụng surveyId từ params
+      surveyId: surveyId,
       questionText: '',
       answers: [{ optionId: null, optionText: '', points: 0 }],
     });
   };
 
-  // Remove a question
   const handleRemoveQuestion = (id) => {
     setQuestions(questions.filter(question => question.id !== id));
   };
 
-  // Handle updating survey
   const handleUpdateSurvey = async () => {
     if (!surveyCode.trim()) {
-      alert('Please enter a survey code');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Survey Code',
+        text: 'Please enter a survey code.',
+      });
       return;
     }
 
     if (!surveyTitle.trim()) {
-      alert('Please enter a survey title');
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Title',
+        text: 'Please enter a survey title.',
+      });
       return;
     }
 
     if (questions.length === 0) {
-      alert('Please add at least one question');
+      Swal.fire({
+        icon: 'error',
+        title: 'No Questions',
+        text: 'Please add at least one question.',
+      });
       return;
     }
 
     const surveyData = {
-      surveyId: surveyId, // Thêm surveyId vào body
+      surveyId: surveyId,
       surveyCode: surveyCode,
       title: surveyTitle,
       description: surveyDescription,
       questions: questions.map((q) => ({
         questionId: q.questionId ? String(q.questionId) : undefined,
-        surveyId: q.surveyId || surveyId, // Thêm surveyId cho mỗi câu hỏi
+        surveyId: q.surveyId || surveyId,
         questionText: q.questionText,
         answerOptions: q.answers.map((answer) => ({
           optionId: answer.optionId ? String(answer.optionId) : undefined,
@@ -179,14 +191,27 @@ const EditSurvey = () => {
     try {
       const response = await ApiService.updateSurvey(surveyId, surveyData);
       if (response.status === 200) {
-        alert('Survey updated successfully!');
-        navigate('/adminsurvey');
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Survey updated successfully!',
+        }).then(() => {
+          navigate('/adminsurvey');
+        });
       } else {
-        alert(`Failed to update survey: ${response.message}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed',
+          text: `Failed to update survey: ${response.message}`,
+        });
       }
     } catch (error) {
       console.error('Update error:', error.response?.data || error.message);
-      alert(`An error occurred while updating the survey: ${error.response?.data?.message || error.message}`);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: `An error occurred while updating the survey: ${error.response?.data?.message || error.message}`,
+      });
     }
   };
 
@@ -226,7 +251,7 @@ const EditSurvey = () => {
       <AdminSidebar />
       <main id='main' className='main'>
         <PageTitle page="Edit Survey" />
-        
+
         <div className="addsurvey-container">
           {/* Basic Survey Information */}
           <div className="survey-basic-info">

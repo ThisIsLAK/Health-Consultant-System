@@ -39,9 +39,12 @@ public enum ErrorCode {
     SURVEY_CREATION_FAILED(1033, "Can not create survey"),
     DATABASE_ERROR(1034, "Error when save to database"),
     SURVEY_NOT_FOUND(1035, "Survey not found"),
-    PSYCHOLOGIST_NOT_FOUND(1036,"psychologist not found" ),
-    SURVEY_CODE_EXIST(1037, "Survey code is exist")
+    PSYCHOLOGIST_NOT_FOUND(1036,"Psychologist not found" ),
+    ONE_APPOINTMENT_PER_DAY_LIMIT(1037,"One day you can only book one time" ),
+    APPOINTMENT_ALREADY_COMPLETED(1038,"Appointment already completed" ),
+    SURVEY_CODE_EXIST(1039, "Survey Code is exist")
     ;   //<<====chu y dau (;)===========================================================================================
+
 
 
 

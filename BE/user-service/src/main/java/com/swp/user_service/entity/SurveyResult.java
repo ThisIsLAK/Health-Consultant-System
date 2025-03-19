@@ -26,6 +26,6 @@ public class SurveyResult {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    int score;
+    Integer score;
 }
 

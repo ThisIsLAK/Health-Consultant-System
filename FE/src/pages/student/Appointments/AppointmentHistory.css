@@ -212,6 +212,16 @@
   background-color: #F56565;
 }
 
+/* Add styling for completed status */
+.appointment-status.completed {
+  background-color: #38B2AC;
+  color: white;
+}
+
+.appointment-card.completed {
+  border-left-color: #38B2AC;
+}
+
 .appointment-details {
   display: flex;
   flex-direction: column;
@@ -743,6 +753,16 @@
 
 .appointment-status.cancelled {
   background-color: #F56565;
+}
+
+/* Add styling for completed status */
+.appointment-status.completed {
+  background-color: #38B2AC;
+  color: white;
+}
+
+.appointment-card.completed {
+  border-left-color: #38B2AC;
 }
 
 .appointment-details {

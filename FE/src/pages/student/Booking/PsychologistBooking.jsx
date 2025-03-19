@@ -74,6 +74,29 @@ const PsychologistBooking = () => {
     setIsAuthenticated(!!token);
   }, []);
 
+  // Display booking rules popup when component mounts
+  useEffect(() => {
+    if (isAuthenticated) {
+      Swal.fire({
+        title: 'Booking Information',
+        html: `
+          <div style="text-align: left; padding: 10px;">
+            <p><strong>Important Booking Rules:</strong></p>
+            <ul style="padding-left: 20px;">
+              <li>You must book appointments at least 24 hours in advance.</li>
+              <li>After cancelling an appointment, you must wait 2 hours before booking another appointment with the same psychologist.</li>
+              <li>You can only book 1 appointment per day.</li>
+            </ul>
+          </div>
+        `,
+        icon: 'info',
+        confirmButtonColor: '#3498db',
+        confirmButtonText: 'I Understand',
+        width: '36em'
+      });
+    }
+  }, [isAuthenticated]);
+
   // Fetch psychologists from the API only if authenticated
   useEffect(() => {
     if (!isAuthenticated) return;

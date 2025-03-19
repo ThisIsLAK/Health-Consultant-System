@@ -231,15 +231,26 @@ public class SurveyService {
 
     public SurveySummaryResponse getSurveySummary() {
         List<Survey> surveys = surveyRepository.findAll();
-        long totalSurveys = surveys.size();
-        long activeSurveys = surveys.stream().filter(Survey::getActive).count();
+        if (surveys == null) {
+            surveys = Collections.emptyList();
+        }
 
+        long totalSurveys = surveys.size();
+        long activeSurveys = surveys.stream()
+                .filter(survey -> survey.getActive() != null && survey.getActive())
+                .count();
 
         List<SurveyResult> surveyResults = surveyResultRepository.findAll();
-        long totalSurveyResults = surveyResults.size();
+        if (surveyResults == null) {
+            surveyResults = Collections.emptyList();
+        }
 
+        long totalSurveyResults = surveyResults.size();
         double averageScore = totalSurveyResults > 0
-                ? surveyResults.stream().mapToInt(SurveyResult::getScore).average().orElse(0.0)
+                ? surveyResults.stream()
+                .mapToInt(SurveyResult::getScore)
+                .average()
+                .orElse(0.0)
                 : 0.0;
 
         return SurveySummaryResponse.builder()

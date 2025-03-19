@@ -4,11 +4,15 @@ import { Link } from 'react-router-dom';
 import './PsySupportProgram.css';
 import PsychologistSidebar from '../../../component/psychologist/PsychologistSidebar';
 import PsychologistHeader from '../../../component/psychologist/PsychologistHeader';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const PsySupportProgram = () => {
     const [programs, setPrograms] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const programsPerPage = 9; // Giới hạn 9 chương trình mỗi trang
 
     useEffect(() => {
         const fetchPrograms = async () => {
@@ -20,13 +24,10 @@ const PsySupportProgram = () => {
                     }
                 });
 
-                // Access the result array from the response data
                 if (response.data && response.data.result && Array.isArray(response.data.result)) {
                     setPrograms(response.data.result);
-                    //log out the response data
                     console.log(response.data.result);
                 } else {
-                    // If the response structure doesn't match expected format, set empty array
                     console.error("Unexpected response format:", response.data);
                     setPrograms([]);
                 }
@@ -51,10 +52,20 @@ const PsySupportProgram = () => {
         return active === true;
     };
 
+    const indexOfLastProgram = currentPage * programsPerPage;
+    const indexOfFirstProgram = indexOfLastProgram - programsPerPage;
+    const currentPrograms = programs
+        .filter(program => program.active !== false)
+        .slice(indexOfFirstProgram, indexOfLastProgram);
+
+    const handlePageChange = (event, pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
+
     return (
         <>
-        <PsychologistHeader/>
-        <PsychologistSidebar/>
+            <PsychologistHeader />
+            <PsychologistSidebar />
             <div className="psy-support-container">
                 <div className="psy-support-header">
                     <h2>Support Programs</h2>
@@ -78,10 +89,9 @@ const PsySupportProgram = () => {
                         <p>No support programs found</p>
                     </div>
                 ) : (
-                    <div className="psy-program-list">
-                        {programs
-                            .filter(program => program.active !== false) // Only show programs where active is not false
-                            .map((program, index) => (
+                    <>
+                        <div className="psy-program-list">
+                            {currentPrograms.map((program, index) => (
                                 <div key={program.programCode || index} className="psy-program-card">
                                     <div className="psy-program-header">
                                         <h3>{program.programName || 'Untitled Program'}</h3>
@@ -136,7 +146,23 @@ const PsySupportProgram = () => {
                                     </div>
                                 </div>
                             ))}
-                    </div>
+                        </div>
+
+                        <div className="pagination-container">
+                            <Stack spacing={2}>
+                                <Pagination
+                                    count={Math.ceil(programs.filter(program => program.active !== false).length / programsPerPage)}
+                                    page={currentPage}
+                                    onChange={handlePageChange}
+                                    color="primary"
+                                    size="large"
+                                    showFirstButton
+                                    showLastButton
+                                    siblingCount={1}
+                                />
+                            </Stack>
+                        </div>
+                    </>
                 )}
             </div>
         </>

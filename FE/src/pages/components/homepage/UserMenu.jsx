@@ -99,7 +99,7 @@ const UserMenu = () => {
         return (
             <>
                 <button className="btn-signin" onClick={() => navigate("/login")}>Sign In</button>
-                <button className="btn-get-started" onClick={() => navigate("/support")}>Get Started</button>
+                <button className="btn-get-started" onClick={() => navigate("/login")}>Get Started</button>
             </>
         );
     }
@@ -147,6 +147,12 @@ const UserMenu = () => {
                     className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-center"
                 >
                     View Appointments
+                </Dropdown.Item>
+                <Dropdown.Item
+                    href="/supporthistory"
+                    className="block px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-center"
+                >
+                    Your Support Programs
                 </Dropdown.Item>
                 <Dropdown.Item
                     onClick={() => handleSignOut()}
