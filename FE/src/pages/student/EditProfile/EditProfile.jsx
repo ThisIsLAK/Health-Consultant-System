@@ -184,9 +184,10 @@ const EditProfile = () => {
                           name="email" 
                           value={userInfo.email} 
                           onChange={handleInputChange} 
-                          className="form-control"
-                          placeholder="Enter your email address"
+                          className="form-control disabled"
+                          readOnly
                         />
+                        <small className="form-text">Email cannot be changed</small>
                       </div>
                     </div>
 

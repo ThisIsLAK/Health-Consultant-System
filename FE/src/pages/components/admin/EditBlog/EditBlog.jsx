@@ -5,7 +5,7 @@ import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import ApiService from '../../../../service/ApiService';
 import './EditBlog.css';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 
 const EditBlog = () => {
     const navigate = useNavigate();
@@ -22,28 +22,30 @@ const EditBlog = () => {
         if (blogCode) {
             fetchBlog();
         } else {
-            setLoading(false);
             setError('No blog code provided');
+            setLoading(false);
         }
     }, [blogCode]);
 
     const fetchBlog = async () => {
         try {
+            setLoading(true);
             console.log("Fetching blog with code:", blogCode);
             const response = await ApiService.getBlogByCode(blogCode);
 
-            if (response.status === 200 && response.data) {
-                console.log("Received blog data:", response.data);
+            if (response.status === 200 && response.data && response.data.result) {
+                const blog = response.data.result;
+                console.log("Received blog data:", blog);
                 setBlogData({
-                    title: response.data.title || '',
-                    blogCode: response.data.blogCode || blogCode,
-                    description: response.data.description || ''
+                    title: blog.title || '',
+                    blogCode: blog.blogCode || blogCode,
+                    description: blog.description || ''
                 });
             } else {
-                setError(response.message || 'Failed to fetch blog details');
+                setError(response.message || 'Blog not found');
             }
         } catch (err) {
-            setError('Failed to fetch blog details');
+            setError('Failed to fetch blog details. Please try again later.');
             console.error('Error fetching blog:', err);
         } finally {
             setLoading(false);
@@ -87,10 +89,31 @@ const EditBlog = () => {
             <div>
                 <AdminHeader />
                 <AdminSidebar />
-                <main id='main' className='main'>
+                <main id="main" className="main">
                     <PageTitle page="Edit Blog" />
                     <div className="editblog-container">
-                        <div className="loading-spinner">Loading...</div>
+                        <div className="loading-spinner">Loading blog data...</div>
+                    </div>
+                </main>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div>
+                <AdminHeader />
+                <AdminSidebar />
+                <main id="main" className="main">
+                    <PageTitle page="Edit Blog" />
+                    <div className="editblog-container">
+                        <div className="error-message">{error}</div>
+                        <button
+                            className="btn btn-retry"
+                            onClick={fetchBlog}
+                        >
+                            Retry
+                        </button>
                     </div>
                 </main>
             </div>
@@ -101,20 +124,15 @@ const EditBlog = () => {
         <div>
             <AdminHeader />
             <AdminSidebar />
-
-            <main id='main' className='main'>
+            <main id="main" className="main">
                 <PageTitle page="Edit Blog" />
-
                 <div className="editblog-container">
                     {error && <div className="error-message">{error}</div>}
 
-                    {/* Basic Blog Information */}
                     <div className="blog-basic-info">
                         <h2 className="section-title">Basic Information</h2>
                         <div className="form-group">
-                            <label className="form-label">
-                                Blog Title
-                            </label>
+                            <label className="form-label">Blog Title</label>
                             <input
                                 type="text"
                                 className="form-input"
@@ -126,9 +144,7 @@ const EditBlog = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label className="form-label">
-                                Blog Code
-                            </label>
+                            <label className="form-label">Blog Code</label>
                             <input
                                 type="text"
                                 className="form-input"
@@ -141,9 +157,7 @@ const EditBlog = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label className="form-label">
-                                Description
-                            </label>
+                            <label className="form-label">Description</label>
                             <textarea
                                 className="form-textarea"
                                 name="description"
@@ -156,7 +170,6 @@ const EditBlog = () => {
                         </div>
                     </div>
 
-                    {/* Update Blog Button */}
                     <div className="blog-submit-container">
                         <button
                             onClick={handleSubmit}

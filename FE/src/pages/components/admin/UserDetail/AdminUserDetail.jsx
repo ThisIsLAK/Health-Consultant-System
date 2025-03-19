@@ -271,7 +271,7 @@ const AdminUserDetail = () => {
                                         </Row>
 
                                         <Row>
-                                            <Col md={6}>
+                                            <Col md={12}>
                                                 <Form.Group className="mb-4">
                                                     <Form.Label className="text-muted fw-bold">
                                                         <FaUser className="me-2" />Name
@@ -283,44 +283,9 @@ const AdminUserDetail = () => {
                                                         onChange={handleInputChange}
                                                     />
                                                 </Form.Group>
-                                            </Col>
-                                            <Col md={6}>
-                                                <Form.Group className="mb-4">
-                                                    <Form.Label className="text-muted fw-bold">
-                                                        Status
-                                                    </Form.Label>
-                                                    <Form.Select
-                                                        name="active"
-                                                        value={editedUser.active === true ? 'true' : 'false'}
-                                                        onChange={e => setEditedUser(prev => ({
-                                                            ...prev,
-                                                            active: e.target.value === 'true'
-                                                        }))}
-                                                    >
-                                                        <option value="true">Active</option>
-                                                        <option value="false">Inactive</option>
-                                                    </Form.Select>
-                                                </Form.Group>
-                                            </Col>
+                                            </Col>                                         
                                         </Row>
                                         
-                                        <Row>
-                                            <Col md={12}>
-                                                <Form.Group className="mb-4">
-                                                    <Form.Label className="text-muted fw-bold">
-                                                        Additional Information
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        as="textarea"
-                                                        name="additionalInfo"
-                                                        value={editedUser.additionalInfo || ''}
-                                                        onChange={handleInputChange}
-                                                        rows={4}
-                                                        placeholder="Enter any additional notes about this user..."
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                        </Row>
                                     </Form>
                                 </Card.Body>
                                 <Card.Footer className="bg-light d-flex justify-content-end">

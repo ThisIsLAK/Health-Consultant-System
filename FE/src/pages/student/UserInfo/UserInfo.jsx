@@ -108,9 +108,6 @@ const UserInfo = () => {
                                         <span className="info-label">Last Login</span>
                                         <span className="info-value">Today</span>
                                     </div>
-                                    <div className="card-actions">
-                                        <button className="action-button">Change Password</button>
-                                    </div>
                                 </div>
                             </div>
                         </div>

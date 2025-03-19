@@ -35,11 +35,6 @@ const Sidebar = ({ activeItem = 'profile' }) => {
                     <span>My Programs</span>
                 </a>
                 
-                <a href="/editprofile" className={`sidebar-item ${activeItem === 'settings' ? 'active' : ''}`}>
-                    <div className="sidebar-icon">⚙️</div>
-                    <span>Account Settings</span>
-                </a>
-                
                 <div className="sidebar-divider"></div>
                 
                 <div className="sidebar-item" onClick={handleSignOut}>
