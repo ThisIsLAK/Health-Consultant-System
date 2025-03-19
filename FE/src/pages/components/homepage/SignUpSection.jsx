@@ -9,7 +9,7 @@ const SignUpSection = () => {
 
     const handleSignUpClick = () => {
         // Navigate to the registration page
-        navigate("/register");
+        navigate("/login");
     };
 
     // If user is logged in, don't display the signup section

@@ -99,7 +99,7 @@ const UserMenu = () => {
         return (
             <>
                 <button className="btn-signin" onClick={() => navigate("/login")}>Sign In</button>
-                <button className="btn-get-started" onClick={() => navigate("/support")}>Get Started</button>
+                <button className="btn-get-started" onClick={() => navigate("/login")}>Get Started</button>
             </>
         );
     }
