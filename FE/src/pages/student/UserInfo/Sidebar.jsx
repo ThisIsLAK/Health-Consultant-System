@@ -29,6 +29,11 @@ const Sidebar = ({ activeItem = 'profile' }) => {
                     <div className="sidebar-icon">📅</div>
                     <span>My Appointments</span>
                 </a>
+
+                <a href="/supporthistory" className={`sidebar-item ${activeItem === 'supporthistory' ? 'active' : ''}`}>
+                    <div className="sidebar-icon">📅</div>
+                    <span>My Programs</span>
+                </a>
                 
                 <a href="/editprofile" className={`sidebar-item ${activeItem === 'settings' ? 'active' : ''}`}>
                     <div className="sidebar-icon">⚙️</div>
