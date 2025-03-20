@@ -225,7 +225,6 @@ const LoginSignup = () => {
               onChange={handleSigninChange}
               required />
           </div>
-          <a href="#" className="forgot">Forgot your password?</a>
           <button id="loginsignup">Sign In</button>
         </form>
       </div>

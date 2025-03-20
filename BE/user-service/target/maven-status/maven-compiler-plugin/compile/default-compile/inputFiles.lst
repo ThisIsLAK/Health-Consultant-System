@@ -4,7 +4,6 @@ D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\ApiResponse.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\mapper\UserMapper.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\repository\SurveyAnswerOptionRepository.java
-D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\repository\SurveySuggestionRepository.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\BlogResponse.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\AuthenticationResponse.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\Role.java
@@ -46,7 +45,6 @@ D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\mapper\SurveyQuestionMapper.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\repository\UserRepository.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\service\ManagerService.java
-D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\SurveySuggestion.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\request\SubmitUserAnswerRequest.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\SurveyAnswerOption.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\SurveyQuestion.java

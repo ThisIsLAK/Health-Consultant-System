@@ -25,46 +25,37 @@ const SurveyDetail = () => {
       const response = await ApiService.getSurveyById(surveyId);
       if (response.status === 200) {
         const surveys = response.data.result || response.data;
+        let apiSurvey;
+
         if (Array.isArray(surveys)) {
-          const matchedSurvey = surveys.find(survey => survey.surveyId === surveyId);
-          if (!matchedSurvey) {
+          apiSurvey = surveys.find(survey => survey.surveyId === surveyId);
+          if (!apiSurvey) {
             throw new Error(`Survey with ID ${surveyId} not found`);
           }
-          const formattedSurvey = {
-            id: matchedSurvey.surveyId,
-            surveyCode: matchedSurvey.surveyCode || "No code available", // Add surveyCode
-            title: matchedSurvey.title || "Untitled Survey",
-            description: matchedSurvey.description || "No description available",
-            questions: matchedSurvey.questions.map(q => ({
-              id: q.questionId,
-              question: q.questionText,
-              answers: q.answerOptions.map(a => ({
-                id: a.optionId,
-                text: a.optionText,
-                points: a.score
-              }))
-            }))
-          };
-          setSurvey(formattedSurvey);
         } else {
-          const apiSurvey = surveys;
-          const formattedSurvey = {
-            id: apiSurvey.surveyId,
-            surveyCode: apiSurvey.surveyCode || "No code available", // Add surveyCode
-            title: apiSurvey.title || "Untitled Survey",
-            description: apiSurvey.description || "No description available",
-            questions: apiSurvey.questions.map(q => ({
+          apiSurvey = surveys;
+        }
+
+        const formattedSurvey = {
+          id: apiSurvey.surveyId,
+          surveyCode: apiSurvey.surveyCode || "No code available",
+          title: apiSurvey.title || "Untitled Survey",
+          description: apiSurvey.description || "No description available",
+          questions: apiSurvey.questions
+            .map(q => ({
               id: q.questionId,
               question: q.questionText,
-              answers: q.answerOptions.map(a => ({
-                id: a.optionId,
-                text: a.optionText,
-                points: a.score
-              }))
+              answers: q.answerOptions
+                .map(a => ({
+                  id: a.optionId,
+                  text: a.optionText,
+                  points: a.score,
+                }))
+                .sort((a, b) => a.id - b.id), // Sắp xếp answers theo optionId
             }))
-          };
-          setSurvey(formattedSurvey);
-        }
+            .sort((a, b) => a.id - b.id), // Sắp xếp questions theo questionId
+        };
+        setSurvey(formattedSurvey);
       } else {
         throw new Error("Failed to fetch survey details");
       }
@@ -119,7 +110,7 @@ const SurveyDetail = () => {
           <div className="survey-info-section">
             <div className="survey-header">
               <h1 className="survey-title">{survey.title}</h1>
-              <p className="survey-code">Survey Code: {survey.surveyCode}</p> {/* Display surveyCode */}
+              <p className="survey-code">Survey Code: {survey.surveyCode}</p>
             </div>
             <div className="survey-description">
               <p>{survey.description}</p>

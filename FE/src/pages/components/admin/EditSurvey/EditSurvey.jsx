@@ -4,7 +4,7 @@ import PageTitle from '../../../../component/admin/PageTitle';
 import AdminSidebar from '../../../../component/admin/AdminSiderbar';
 import AdminHeader from '../../../../component/admin/AdminHeader';
 import ApiService from '../../../../service/ApiService';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 
 const EditSurvey = () => {
   const { surveyId } = useParams();
@@ -35,20 +35,25 @@ const EditSurvey = () => {
             setSurveyTitle(surveyData.title || '');
             setSurveyDescription(surveyData.description || '');
             setSurveyCode(surveyData.surveyCode || '');
-            setQuestions(
-              surveyData.questions.map((q) => ({
-                id: q.questionId || Date.now(),
+
+            const sortedQuestions = surveyData.questions
+              .map((q) => ({
+                id: q.questionId,
                 questionId: q.questionId,
                 surveyId: q.surveyId || surveyId,
                 questionText: q.questionText,
-                answers: q.answerOptions.map((a) => ({
-                  id: a.optionId || Date.now(),
-                  optionId: a.optionId,
-                  optionText: a.optionText,
-                  score: a.score, // Sử dụng "score" từ API
-                })),
+                answers: q.answerOptions
+                  .map((a) => ({
+                    id: a.optionId,
+                    optionId: a.optionId,
+                    optionText: a.optionText,
+                    score: a.score,
+                  }))
+                  .sort((a, b) => a.optionId - b.optionId), // Sắp xếp answers theo optionId
               }))
-            );
+              .sort((a, b) => a.questionId - b.questionId); // Sắp xếp questions theo questionId
+
+            setQuestions(sortedQuestions);
           }
         } else {
           throw new Error('Failed to fetch survey details');
@@ -72,7 +77,7 @@ const EditSurvey = () => {
       answers: question.answers.map((a) => ({
         optionId: a.optionId,
         optionText: a.optionText,
-        score: a.score, // Sử dụng "score"
+        score: a.score,
       })),
     });
   };
@@ -185,7 +190,7 @@ const EditSurvey = () => {
         answerOptions: q.answers.map((answer) => ({
           optionId: answer.optionId ? String(answer.optionId) : undefined,
           optionText: answer.optionText,
-          score: parseInt(answer.score), // Sử dụng "score"
+          score: parseInt(answer.score),
         })),
       })),
     };
@@ -317,7 +322,7 @@ const EditSurvey = () => {
 
                     <h4 className="answers-title">Answers</h4>
                     {currentQuestion.answers.map((answer, index) => (
-                      <div key={index} className="answer-form-group">
+                      <div key={answer.optionId || index} className="answer-form-group">
                         <div className="answer-input-container">
                           <input
                             type="text"
@@ -369,7 +374,7 @@ const EditSurvey = () => {
                     </div>
                     <div className="answer-list">
                       {q.answers.map((answer, index) => (
-                        <div key={index} className="answer-item">
+                        <div key={answer.id} className="answer-item">
                           <span className="answer-number">{index + 1}</span>
                           <span className="answer-text">
                             {answer.optionText} - <span>{answer.score}</span> score
