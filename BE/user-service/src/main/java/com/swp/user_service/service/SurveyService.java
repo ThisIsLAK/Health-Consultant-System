@@ -165,13 +165,14 @@ public class SurveyService {
         }
 
         String surveyId = request.getSurveyId();
-        log.info("Updating survey with ID: {}", surveyId);  
+        log.info("Updating survey with ID: {}", surveyId);
 
         try {
             Survey survey = surveyRepository.findById(surveyId)
                     .orElseThrow(() -> new RuntimeException("Survey not found with ID: " + surveyId));
 
             // Chỉ cập nhật nếu trường không null
+            Optional.ofNullable(request.getSurveyCode()).ifPresent(survey::setSurveyCode);
             Optional.ofNullable(request.getTitle()).ifPresent(survey::setTitle);
             Optional.ofNullable(request.getDescription()).ifPresent(survey::setDescription);
             Optional.ofNullable(request.getActive()).ifPresent(survey::setActive);
