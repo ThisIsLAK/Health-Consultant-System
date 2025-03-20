@@ -19,7 +19,7 @@ const EditSurvey = () => {
     questionId: null,
     surveyId: null,
     questionText: '',
-    answers: [{ optionId: null, optionText: '', points: 0 }],
+    answers: [{ optionId: null, optionText: '', score: 0 }],
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,7 +45,7 @@ const EditSurvey = () => {
                   id: a.optionId || Date.now(),
                   optionId: a.optionId,
                   optionText: a.optionText,
-                  score: a.score,
+                  score: a.score, // Sử dụng "score" từ API
                 })),
               }))
             );
@@ -72,7 +72,7 @@ const EditSurvey = () => {
       answers: question.answers.map((a) => ({
         optionId: a.optionId,
         optionText: a.optionText,
-        points: a.score,
+        score: a.score, // Sử dụng "score"
       })),
     });
   };
@@ -93,9 +93,9 @@ const EditSurvey = () => {
     });
   };
 
-  const handleAnswerPointsChange = (index, e) => {
+  const handleAnswerScoreChange = (index, e) => {
     const updatedAnswers = [...currentQuestion.answers];
-    updatedAnswers[index].points = parseInt(e.target.value) || 0;
+    updatedAnswers[index].score = parseInt(e.target.value) || 0;
     setCurrentQuestion({
       ...currentQuestion,
       answers: updatedAnswers,
@@ -112,7 +112,7 @@ const EditSurvey = () => {
       return;
     }
 
-    if (currentQuestion.answers.some(answer => !answer.optionText.trim())) {
+    if (currentQuestion.answers.some((answer) => !answer.optionText.trim())) {
       Swal.fire({
         icon: 'error',
         title: 'Incomplete Answers',
@@ -121,9 +121,13 @@ const EditSurvey = () => {
       return;
     }
 
-    setQuestions(questions.map(q =>
-      q.id === editingQuestionId ? { ...currentQuestion, id: q.id, questionId: q.questionId, surveyId: q.surveyId } : q
-    ));
+    setQuestions(
+      questions.map((q) =>
+        q.id === editingQuestionId
+          ? { ...currentQuestion, id: q.id, questionId: q.questionId, surveyId: q.surveyId }
+          : q
+      )
+    );
     setEditingQuestionId(null);
   };
 
@@ -133,12 +137,12 @@ const EditSurvey = () => {
       questionId: null,
       surveyId: surveyId,
       questionText: '',
-      answers: [{ optionId: null, optionText: '', points: 0 }],
+      answers: [{ optionId: null, optionText: '', score: 0 }],
     });
   };
 
   const handleRemoveQuestion = (id) => {
-    setQuestions(questions.filter(question => question.id !== id));
+    setQuestions(questions.filter((question) => question.id !== id));
   };
 
   const handleUpdateSurvey = async () => {
@@ -181,7 +185,7 @@ const EditSurvey = () => {
         answerOptions: q.answers.map((answer) => ({
           optionId: answer.optionId ? String(answer.optionId) : undefined,
           optionText: answer.optionText,
-          score: parseInt(answer.points),
+          score: parseInt(answer.score), // Sử dụng "score"
         })),
       })),
     };
@@ -220,7 +224,7 @@ const EditSurvey = () => {
       <div>
         <AdminHeader />
         <AdminSidebar />
-        <main id='main' className='main'>
+        <main id="main" className="main">
           <PageTitle page="Edit Survey" />
           <div className="addsurvey-container">
             <div className="loading-spinner">Loading...</div>
@@ -235,7 +239,7 @@ const EditSurvey = () => {
       <div>
         <AdminHeader />
         <AdminSidebar />
-        <main id='main' className='main'>
+        <main id="main" className="main">
           <PageTitle page="Edit Survey" />
           <div className="addsurvey-container">
             <div className="error-message">{error}</div>
@@ -249,7 +253,7 @@ const EditSurvey = () => {
     <div>
       <AdminHeader />
       <AdminSidebar />
-      <main id='main' className='main'>
+      <main id="main" className="main">
         <PageTitle page="Edit Survey" />
 
         <div className="addsurvey-container">
@@ -327,66 +331,61 @@ const EditSurvey = () => {
                           <input
                             type="number"
                             className="form-input answer-points-input"
-                            value={answer.points}
-                            onChange={(e) => handleAnswerPointsChange(index, e)}
-                            placeholder="Points"
+                            value={answer.score}
+                            onChange={(e) => handleAnswerScoreChange(index, e)}
+                            placeholder="Score"
                           />
                         </div>
                       </div>
                     ))}
 
                     <div className="question-form-actions">
-                      <button
-                        onClick={handleSaveQuestion}
-                        className="btn btn-success"
-                      >
+                      <button onClick={handleSaveQuestion} className="btn btn-success">
                         Save
                       </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="btn btn-danger"
-                      >
+                      <button onClick={handleCancelEdit} className="btn btn-danger">
                         Cancel
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <div className="question-header">
-                    <h3 className="question-title">{q.questionText}</h3>
-                    <div>
-                      <button
-                        onClick={() => handleEditQuestion(q)}
-                        className="btn btn-edit"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleRemoveQuestion(q.id)}
-                        className="btn btn-delete"
-                      >
-                        Delete
-                      </button>
+                  <div>
+                    <div className="question-header">
+                      <h3 className="question-title">{q.questionText}</h3>
+                      <div>
+                        <button
+                          onClick={() => handleEditQuestion(q)}
+                          className="btn btn-edit"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleRemoveQuestion(q.id)}
+                          className="btn btn-delete"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                    <div className="answer-list">
+                      {q.answers.map((answer, index) => (
+                        <div key={index} className="answer-item">
+                          <span className="answer-number">{index + 1}</span>
+                          <span className="answer-text">
+                            {answer.optionText} - <span>{answer.score}</span> score
+                          </span>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
-                <div className="answer-list">
-                  {q.answers.map((answer, index) => (
-                    <div key={index} className="answer-item">
-                      <span className="answer-number">{index + 1}</span>
-                      <span className="answer-text">{answer.optionText} - {answer.points} points</span>
-                    </div>
-                  ))}
-                </div>
               </div>
             ))}
           </div>
 
           {/* Update Survey Button */}
           <div className="survey-submit-container">
-            <button
-              onClick={handleUpdateSurvey}
-              className="btn btn-submit"
-            >
+            <button onClick={handleUpdateSurvey} className="btn btn-submit">
               Update Survey
             </button>
           </div>
