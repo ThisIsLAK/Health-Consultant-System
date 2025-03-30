@@ -276,4 +276,11 @@ public class UserController {
                 .build();
     }
 
+    @PostMapping("/sendEmailAppointment")
+    public ApiResponse<Void> sendEmailAppointment(@RequestBody EmailAppointmentRequest emailRequest) {
+        appointmentService.sendEmail(emailRequest);
+        return ApiResponse.<Void>builder()
+                .message("Email sent successfully")
+                .build();
+    }
 }

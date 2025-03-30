@@ -45,8 +45,8 @@ public enum ErrorCode {
     SURVEY_CODE_EXIST(1039, "Survey Code is exist"),
     EMAIL_NOT_PROVIDED(1040, "You need to provide email"),
     INVALID_VERIFICATION_TOKEN(1041, "Token to verify is invalid"),
-    EMAIL_ALREADY_VERIFIED(1042, "Email is verified already")
-    ;   //<<====chu y dau (;)===========================================================================================
+    EMAIL_ALREADY_VERIFIED(1042, "Email is verified already"),
+    EMAIL_SENDING_FAILED(1043,"Email sending failed" );   //<<====chu y dau (;)===========================================================================================
 
 
 

@@ -1,6 +1,7 @@
 package com.swp.user_service.service;
 
 import com.swp.user_service.dto.request.AppointmentRequest;
+import com.swp.user_service.dto.request.EmailAppointmentRequest;
 import com.swp.user_service.dto.response.AppointmentResponse;
 import com.swp.user_service.dto.response.AppointmentSummaryResponse;
 import com.swp.user_service.entity.Appointment;
@@ -12,11 +13,14 @@ import com.swp.user_service.repository.AppointmentRepository;
 import com.swp.user_service.repository.PsyRepository;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +44,7 @@ public class AppointmentService {
     PsyRepository psychologistRepository;
     AppointmentMapper appointmentMapper;
     RoleRepository roleRepository;
+    JavaMailSender mailSender;
 
     @PreAuthorize("hasAnyRole('STUDENT', 'PARENT')")
     public AppointmentResponse bookAppointment(AppointmentRequest request) {
@@ -65,10 +70,10 @@ public class AppointmentService {
             throw new AppException(ErrorCode.PYSOCHOLOGIST_NOT_ACTIVE );
         }
 
-        //goi ham kiem tra slot da duoc booking chua
+        // hàm kiểm tra slot có bị trùng không
         validateSlotAvailability(request);
 
-        // tao cuoc hen
+        // tạo một cuộc hẹn mới
         Appointment appointment = new Appointment();
         appointment.setUser(user);
         appointment.setPsychologistId(psychologist.getId());
@@ -77,6 +82,9 @@ public class AppointmentService {
         appointment.setActive(null);
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
+
+        // Gửi email thông báo sau khi book thành công
+        sendBookingConfirmationEmail(user, psychologist, savedAppointment);
 
         return appointmentMapper.toAppointmentResponse(savedAppointment);
     }
@@ -176,6 +184,52 @@ public class AppointmentService {
         if (now.isAfter(cancellationDeadline)) {
             throw new AppException(ErrorCode.CANCELLATION_TOO_LATE);
         }
+    }
+
+    public void sendEmail(EmailAppointmentRequest emailRequest) {
+        Appointment appointment = appointmentRepository.findById(emailRequest.getAppointmentId())
+                .orElseThrow(() -> new AppException(ErrorCode.APPOINTMENT_NOT_FOUND));
+
+        User user = userRepository.findByEmail(emailRequest.getUserEmail())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
+
+        User psychologist = userRepository.findById(emailRequest.getPsychologistId())
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
+
+        sendBookingConfirmationEmail(user, psychologist, appointment);
+    }
+
+
+    private void sendBookingConfirmationEmail(User user, User psychologist, Appointment appointment) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(user.getEmail());
+            helper.setSubject("Appointment Booking Confirmation");
+            helper.setText(buildEmailContent(user, psychologist, appointment), true); // true để hỗ trợ HTML
+
+            mailSender.send(message);
+            log.info("Booking confirmation email sent to {}", user.getEmail());
+        } catch (MessagingException e) {
+            log.error("Failed to send email to {}: {}", user.getEmail(), e.getMessage());
+            throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
+        }
+    }
+
+    private String buildEmailContent(User user, User psychologist, Appointment appointment) {
+        return "<h1>Appointment Confirmation</h1>" +
+                "<p>Dear " + user.getName() + ",</p>" +
+                "<p>Your appointment has been successfully booked with the following details:</p>" +
+                "<ul>" +
+                "<li><strong>Psychologist:</strong> " + psychologist.getName() + " (" + psychologist.getEmail() + ")</li>" +
+                "<li><strong>Date:</strong> " + appointment.getAppointmentDate() + "</li>" +
+                "<li><strong>Time Slot:</strong> " + appointment.getTimeSlot() + "</li>" +
+                "<li><strong>Location:</strong> Phòng 102, Trường Tiểu học ABC, Quận 9, TP HCM</li>" +
+                "</ul>" +
+                "<p>Please arrive on time. If you need to cancel, do so at least 4 hours before the appointment.</p>" +
+                "<p>Thank you,</p>" +
+                "<p>Your Appointment System</p>";
     }
 
     public void cancelAppointment(String appointmentId) {
@@ -288,5 +342,5 @@ public class AppointmentService {
         appointment.setActive(true);
         appointmentRepository.save(appointment);
     }
-
+    
 }
