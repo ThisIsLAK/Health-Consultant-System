@@ -46,6 +46,15 @@ public class UserController {
     ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.createUser(request))
+                .message("Register successfully. Check your email to verify.")
+                .build();
+    }
+
+    @GetMapping("/verify-email")
+    ApiResponse<String> verifyEmail(@RequestParam String token) {
+        userService.verifyEmail(token);
+        return ApiResponse.<String>builder()
+                .result("Verify email successfully")
                 .build();
     }
 

@@ -29,11 +29,17 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     List<UserAnswer> answers;
 
+    Boolean emailVerified;
+    String verificationToken;
+
     Boolean active;
     @PrePersist
     protected void onCreate() {
         if (active == null) {
             active = true;
+        }
+        if (emailVerified == null) {
+            emailVerified = false;  // Mặc định chưa xác thực
         }
     }
 }

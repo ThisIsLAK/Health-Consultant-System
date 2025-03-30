@@ -42,7 +42,10 @@ public enum ErrorCode {
     PSYCHOLOGIST_NOT_FOUND(1036,"Psychologist not found" ),
     ONE_APPOINTMENT_PER_DAY_LIMIT(1037,"One day you can only book one time" ),
     APPOINTMENT_ALREADY_COMPLETED(1038,"Appointment already completed" ),
-    SURVEY_CODE_EXIST(1039, "Survey Code is exist")
+    SURVEY_CODE_EXIST(1039, "Survey Code is exist"),
+    EMAIL_NOT_PROVIDED(1040, "You need to provide email"),
+    INVALID_VERIFICATION_TOKEN(1041, "Token to verify is invalid"),
+    EMAIL_ALREADY_VERIFIED(1042, "Email is verified already")
     ;   //<<====chu y dau (;)===========================================================================================
 
 

@@ -20,4 +20,5 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     List<User> findByRole_RoleIdAndActive(String roleId, Boolean active); // Truy vấn theo roleId và trạng thái active
 
+    Optional<User> findByVerificationToken(String token);
 }
