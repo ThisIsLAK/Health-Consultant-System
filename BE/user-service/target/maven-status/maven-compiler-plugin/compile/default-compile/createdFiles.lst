@@ -3,7 +3,6 @@ com\swp\user_service\mapper\BlogMapperImpl.class
 com\swp\user_service\mapper\SurveyAnswerOptionMapperImpl.class
 com\swp\user_service\entity\UserAnswer$UserAnswerBuilder.class
 com\swp\user_service\mapper\UserAnswerMapperImpl.class
-com\swp\user_service\repository\SurveySuggestionRepository.class
 com\swp\user_service\dto\request\SurveyUpdateRequest.class
 com\swp\user_service\dto\request\UserUpdateByAdminRequest$UserUpdateByAdminRequestBuilder.class
 com\swp\user_service\dto\request\AppointmentRequest.class
@@ -42,7 +41,6 @@ com\swp\user_service\service\AppointmentService.class
 com\swp\user_service\dto\request\SurveyQuestionCreationRequest$SurveyQuestionCreationRequestBuilder.class
 com\swp\user_service\dto\response\SurveyQuestionResponse$SurveyQuestionResponseBuilder.class
 com\swp\user_service\entity\SupportProgram$SupportProgramBuilder.class
-com\swp\user_service\entity\SurveySuggestion.class
 com\swp\user_service\dto\response\AppointmentResponse$AppointmentResponseBuilder.class
 com\swp\user_service\dto\response\DashboardResponse.class
 com\swp\user_service\dto\response\SurveySummaryResponse.class
@@ -114,7 +112,6 @@ com\swp\user_service\repository\SurveyResultRepository.class
 com\swp\user_service\dto\response\SurveyResultResponse.class
 com\swp\user_service\mapper\SurveyMapper.class
 com\swp\user_service\dto\response\DashboardResponse$DashboardResponseBuilder.class
-com\swp\user_service\entity\SurveySuggestion$SurveySuggestionBuilder.class
 com\swp\user_service\service\SupportProgramService.class
 com\swp\user_service\repository\SupportProgramRepository.class
 com\swp\user_service\repository\UserRepository.class
