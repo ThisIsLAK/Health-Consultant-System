@@ -1,5 +1,6 @@
 package com.swp.user_service.configuration;
 
+import com.swp.user_service.service.CustomOidcUserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,7 +37,7 @@ public class SecurityConfig {
     private String signerKey;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, CustomOidcUserService customOidcUserService) throws Exception {
         httpSecurity
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Bật CORS
                 .authorizeHttpRequests(request -> request
@@ -47,6 +48,9 @@ public class SecurityConfig {
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .oidcUserService(customOidcUserService) // Thêm UserService để load user
+                        )
                         .successHandler((request, response, authentication) -> {
                             response.sendRedirect("http://localhost:5173"); // Chuyển hướng về frontend
                         })
