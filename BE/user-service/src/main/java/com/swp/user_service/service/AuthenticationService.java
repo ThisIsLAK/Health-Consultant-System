@@ -11,10 +11,12 @@ import com.swp.user_service.dto.request.LogoutRequest;
 import com.swp.user_service.dto.response.AuthenticationResponse;
 import com.swp.user_service.dto.response.IntrospectResponse;
 import com.swp.user_service.entity.InvalidatedToken;
+import com.swp.user_service.entity.Role;
 import com.swp.user_service.entity.User;
 import com.swp.user_service.exception.AppException;
 import com.swp.user_service.exception.ErrorCode;
 import com.swp.user_service.repository.InvalidatedTokenRepository;
+import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -23,8 +25,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -46,6 +50,7 @@ public class AuthenticationService {
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
     InvalidatedTokenRepository invalidatedTokenRepository;
+    RoleRepository roleRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -72,7 +77,7 @@ public class AuthenticationService {
     //Build thong tin cua 1 token
     //De tao 1 token thi chung ta can co header, body( chua nhung noi dung chung ta
     //gui di trong token
-    private String generateToken(User user) {
+    public String generateToken(User user) {
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -179,5 +184,38 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return signedJWT;
+    }
+
+    public AuthenticationResponse handleGoogleLogin(Authentication authentication) {
+        // Lấy thông tin từ Google
+        OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
+        String email = oidcUser.getEmail();
+
+        if (email == null) {
+            throw new AppException(ErrorCode.EMAIL_NOT_PROVIDED);
+        }
+
+        // Tìm hoặc tạo role
+        Role role = roleRepository.findByRoleName("STUDENT")
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+        // Tìm hoặc tạo user
+        User user = userRepository.findByEmail(email)
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .email(email)
+                            .role(role)
+                            .build();
+                    return userRepository.save(newUser);
+                });
+
+        // Sinh token
+        String token = generateToken(user);
+
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .userId(user.getId())
+                .build();
     }
 }

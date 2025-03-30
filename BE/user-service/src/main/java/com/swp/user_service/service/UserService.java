@@ -14,6 +14,7 @@ import com.swp.user_service.mapper.UserMapper;
 import com.swp.user_service.repository.AppointmentRepository;
 import com.swp.user_service.repository.RoleRepository;
 import com.swp.user_service.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -43,21 +44,52 @@ public class UserService {
     RoleRepository roleRepository;
     AppointmentMapper appointmentMapper;
     AppointmentRepository appointmentRepository;
+    EmailService emailService;
 
     public UserResponse createUser(UserCreationRequest request) {
-
         if (userRepository.existsByEmail(request.getEmail()))
             throw new AppException(ErrorCode.EMAIL_EXIST);
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmailVerified(false); // Chưa xác thực email
 
         Role role = roleRepository.findByRoleName("STUDENT")
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
-
         user.setRole(role);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        User savedUser = userRepository.save(user);
+
+        // Tạo token xác thực
+        String verificationToken = java.util.UUID.randomUUID().toString();
+        savedUser.setVerificationToken(verificationToken);
+
+        // Lưu lại user với token
+        savedUser = userRepository.save(savedUser); // Lưu lại để cập nhật token
+
+        // Gửi email xác thực
+        try {
+            log.info("Attempting to send verification email to: {}", savedUser.getEmail());
+            emailService.sendVerificationEmail(savedUser.getEmail(), verificationToken);
+        } catch (MessagingException e) {
+            log.error("Failed to send verification email", e);
+            throw new RuntimeException(e);
+        }
+
+        return userMapper.toUserResponse(savedUser);
+    }
+
+    public void verifyEmail(String token) {
+        User user = userRepository.findByVerificationToken(token)
+                .orElseThrow(() -> new AppException(ErrorCode.INVALID_VERIFICATION_TOKEN));
+
+        if (user.getEmailVerified()) {
+            throw new AppException(ErrorCode.EMAIL_ALREADY_VERIFIED);
+        }
+
+        user.setEmailVerified(true);
+        user.setVerificationToken(null); // Xóa token sau khi xác thực
+        userRepository.save(user);
     }
 
     public UserResponse getMyInfo(){
