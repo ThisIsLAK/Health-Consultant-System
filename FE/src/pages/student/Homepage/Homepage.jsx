@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Navbar from '../../components/homepage/Navbar'
 import HowItWorks from '../../components/homepage/HowItWorks'
@@ -11,6 +11,9 @@ import Footer from '../../components/homepage/Footer'
 import './Homepage.css'
 
 const Homepage = () => {
+  useEffect(() => {
+    document.title = "Home";
+  }, [])
   return (
   <div>
     <Navbar/>
