@@ -12,6 +12,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -49,4 +51,18 @@ public class AuthenticationController {
                 .build();
     }
 
+    @GetMapping("/google/login")
+    ApiResponse<AuthenticationResponse> handleGoogleLogin() {
+        // Lấy thông tin authentication từ SecurityContext
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Gọi service để xử lý và sinh token
+        AuthenticationResponse authResponse = authenticationService.handleGoogleLogin(authentication);
+
+        // Trả về response theo định dạng ApiResponse
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(authResponse)
+                .message("Google login successful")
+                .build();
+    }
 }

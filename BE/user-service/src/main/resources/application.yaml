@@ -20,6 +20,17 @@ spring:
             client-id: 985843049180-gk3iqdd98tnm561lvrn5aina1h41s5uc.apps.googleusercontent.com
             client-secret: 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
             redirect-uri: http://localhost:8080/identity/login/oauth2/code/google
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: tbinhduong0101@gmail.com
+    password: vfgd rete asnc eacy
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 springdoc:
   api-docs:
