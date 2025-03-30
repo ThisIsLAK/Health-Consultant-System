@@ -46,7 +46,11 @@ public class SecurityConfig {
                         .requestMatchers("/psychologists/**").hasAnyRole("MANAGER", "ADMIN", "PSYCHOLOGIST")
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().authenticated())
-                .oauth2Login(Customizer.withDefaults()) // Thêm Google Sign-In
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("http://localhost:5173"); // Chuyển hướng về frontend
+                        })
+                )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(jwtDecoder())
