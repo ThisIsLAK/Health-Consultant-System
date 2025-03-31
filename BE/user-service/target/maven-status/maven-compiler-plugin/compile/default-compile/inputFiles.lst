@@ -79,11 +79,13 @@ D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\service\SurveyQuestionService.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\SurveyQuestionResponse.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\User.java
+D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\request\EmailAppointmentRequest.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\mapper\SurveyResultMapper.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\entity\UserAnswer.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\service\AuthenticationService.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\request\UserUpdateRequest.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\AppointmentSummaryResponse.java
+D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\service\EmailService.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\service\BlogService.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\UserServiceApplication.java
 D:\ALL_CODING_PROJECT\Folder SWP\hoangswp\BE\user-service\src\main\java\com\swp\user_service\dto\response\SupportProgramResponse.java
