@@ -57,7 +57,7 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
                         .successHandler((request, response, authentication) -> {
                             // Chuyển hướng tới endpoint callback trong Controller
-                            response.sendRedirect("/identity/auth/google/login");
+                            response.sendRedirect("http://localhost:5173");
                         })
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
