@@ -69,6 +69,7 @@ com\swp\user_service\configuration\ApplicationInitConfig.class
 com\swp\user_service\controller\ManagerController.class
 com\swp\user_service\dto\response\ApiResponse$ApiResponseBuilder.class
 com\swp\user_service\mapper\PsychologistMapperImpl.class
+com\swp\user_service\service\CustomOidcUserService.class
 com\swp\user_service\service\UserService.class
 com\swp\user_service\dto\request\SurveyAnswerOptionUpdateRequest$SurveyAnswerOptionUpdateRequestBuilder.class
 com\swp\user_service\dto\response\SupportProgramResponse.class
