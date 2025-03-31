@@ -60,6 +60,10 @@ public class AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.EMAIL_NOT_EXIST));
 
+        if (!user.getEmailVerified()) {
+            throw new AppException(ErrorCode.EMAIL_NOT_VERIFIED);
+        }
+
         boolean authenticated = passwordEncoder.matches(request.getPassword(),
                 user.getPassword());
 
