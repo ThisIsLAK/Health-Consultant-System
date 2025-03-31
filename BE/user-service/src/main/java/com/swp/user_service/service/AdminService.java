@@ -116,7 +116,7 @@ public class AdminService {
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+        user.setEmailVerified(true);
         user.setRole(role);
 
         try {

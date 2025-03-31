@@ -72,7 +72,7 @@ public class SecurityConfig {
                             AuthenticationResponse authResponse = authenticationService
                                     .handleGoogleLogin(authentication);
                             //Trỏ về trang chủ
-                            response.sendRedirect("http://localhost:5173");
+                            response.sendRedirect("http://localhost:8080/identity/auth/google/login");
                         })
 
 
