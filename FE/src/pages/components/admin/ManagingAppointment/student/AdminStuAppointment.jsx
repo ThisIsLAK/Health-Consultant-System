@@ -37,7 +37,6 @@ const AdminStuAppointment = () => {
     const [appointments, setAppointments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [psychologistNames, setPsychologistNames] = useState({});
 
     useEffect(() => {
         fetchAppointments();
@@ -79,16 +78,6 @@ const AdminStuAppointment = () => {
                 });
                 
                 setAppointments(processedAppointments);
-                
-                // Create placeholder names for psychologists
-                const psychologistIds = [...new Set(appointmentsData.map(app => app.psychologistId))];
-                const psychologistNamesObj = {};
-                
-                psychologistIds.forEach(id => {
-                    psychologistNamesObj[id] = `Psychologist ${id.substring(0, 6)}...`;
-                });
-                
-                setPsychologistNames(psychologistNamesObj);
                 setError(null);
             } else {
                 setError('No data received from the server');
@@ -291,7 +280,7 @@ const AdminStuAppointment = () => {
                                             {appointments.map((appointment, index) => (
                                                 <tr key={appointment.appointmentId}>
                                                     <td>{index + 1}</td>
-                                                    <td>{psychologistNames[appointment.psychologistName]}</td>
+                                                    <td>{appointment.psychologistName}</td>
                                                     <td>{appointment.psychologistEmail}</td>
                                                     <td>{formatDate(appointment.appointmentDate)}</td>
                                                     <td>{appointment.timeSlot}</td>
