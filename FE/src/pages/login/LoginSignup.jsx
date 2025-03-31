@@ -159,10 +159,6 @@ const LoginSignup = () => {
       <div className="form-container sign-up-container">
         <form className="loginsignup-form" onSubmit={handleSignup}>
           <h1 className="loginsignup-h1">Create Account</h1>
-          <div className="social-container">
-            <a href="http://localhost:8080/identity/login" className="social"><i className="fab fa-google-plus-g"></i></a>
-          </div>
-          <span className="loginsignup-span">or use your email for registration</span>
           <div className="infield">
             <input className="loginsignup-input"
               type="text"
@@ -199,10 +195,6 @@ const LoginSignup = () => {
         <form className="loginsignup-form" onSubmit={handleSignin}>
           <h1 className="loginsignup-h1">Sign in</h1>
           {message && <p className="message">{message}</p>}
-          <div className="social-container">
-            <a href="http://localhost:8080/identity/login" className="social"><i className="fab fa-google-plus-g"></i></a>
-          </div>
-          <span className="loginsignup-span">or use your account</span>
           <div className="infield">
             <input className="loginsignup-input"
               type="email"
