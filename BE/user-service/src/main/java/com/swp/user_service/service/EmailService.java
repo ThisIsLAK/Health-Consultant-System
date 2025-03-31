@@ -40,7 +40,7 @@ public class EmailService {
                 <style>
                     body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
                     .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                    .button { display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #fff; text-decoration: none; border-radius: 5px; }
+                    .button { display: inline-block; padding: 10px 20px; background-color: #007BFF; color: #fff !important; text-decoration: none; border-radius: 5px; }
                     .footer { font-size: 12px; color: #777; margin-top: 20px; }
                 </style>
             </head>
