@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class AuthenticationRequest {
 
     String email;
+    Boolean emailVerified;
     String password;
     String userId;
 }

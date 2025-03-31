@@ -56,6 +56,7 @@ public class ApplicationInitConfig {
                 User user = User.builder()
                         .name("admin")
                         .email("admin@gmail.com")
+                        .emailVerified(true)
                         .password(passwordEncoder.encode("admin123"))
                         .role(adminRole)  // Gán Role entity
                         .build();
@@ -65,29 +66,29 @@ public class ApplicationInitConfig {
             }
 
             // Thêm Survey nếu chưa có
-            if (surveyRepository.count() == 0
-                    || (surveyRepository.findBySurveyCode("gad-7")).isEmpty()
-                            && (surveyRepository.findBySurveyCode("phq-9")).isEmpty()) {
-                Survey gad7Survey = Survey.builder()
-                        .surveyCode("gad-7")
-                        .title("Generalized Anxiety Disorder Assessment")
-                        .description("A screening tool for generalized anxiety disorder.")
-                        .createdDate(new Date())
-                        .active(true)
-                        .build();
-
-                Survey phq9Survey = Survey.builder()
-                        .surveyCode("phq-9")
-                        .title("Patient Health Questionnaire for Depression")
-                        .description("A screening tool for depression severity.")
-                        .createdDate(new Date())
-                        .active(true)
-                        .build();
-
-                surveyRepository.saveAll(List.of(gad7Survey, phq9Survey));
-                surveyRepository.flush();
-                log.warn("GAD-7 & PHQ-9 surveys have been created");
-            }
+//            if (surveyRepository.count() == 0
+//                    || (surveyRepository.findBySurveyCode("gad-7")).isEmpty()
+//                            && (surveyRepository.findBySurveyCode("phq-9")).isEmpty()) {
+//                Survey gad7Survey = Survey.builder()
+//                        .surveyCode("gad-7")
+//                        .title("Generalized Anxiety Disorder Assessment")
+//                        .description("A screening tool for generalized anxiety disorder.")
+//                        .createdDate(new Date())
+//                        .active(true)
+//                        .build();
+//
+//                Survey phq9Survey = Survey.builder()
+//                        .surveyCode("phq-9")
+//                        .title("Patient Health Questionnaire for Depression")
+//                        .description("A screening tool for depression severity.")
+//                        .createdDate(new Date())
+//                        .active(true)
+//                        .build();
+//
+//                surveyRepository.saveAll(List.of(gad7Survey, phq9Survey));
+//                surveyRepository.flush();
+//                log.warn("GAD-7 & PHQ-9 surveys have been created");
+//            }
 
 //            // Thêm dữ liệu SurveySuggestion nếu chưa có
 //            if (surveySuggestionRepository.count() == 0) {

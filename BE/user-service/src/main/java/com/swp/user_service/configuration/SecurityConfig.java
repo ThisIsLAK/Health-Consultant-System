@@ -1,10 +1,16 @@
 package com.swp.user_service.configuration;
 
+import com.swp.user_service.dto.response.AuthenticationResponse;
+import com.swp.user_service.service.AuthenticationService;
 import com.swp.user_service.service.CustomOidcUserService;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,18 +34,24 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINT = {"/users", "/auth/token", "/auth/introspect", "/auth/google/callback", "users/verify-email"};
+    private final String[] PUBLIC_ENDPOINT = {"/users", "/auth/token", "/auth/introspect", "/auth/google/callback", "/users/verify-email", "/identity/login"};
     private static final String[] AUTH_WHITELIST = {
             "/api/v1/auth/**", "/v3/api-docs/**", "/v3/api-docs.yaml", "/swagger-ui/**", "/swagger-ui.html"
     };
 
-    private final CustomOidcUserService customOidcUserService;
+    final CustomOidcUserService customOidcUserService;
+    final AuthenticationService authenticationService;
 
     @Value("${jwt.signerKey}")
-    private String signerKey;
+    String signerKey;
+
+    public SecurityConfig(CustomOidcUserService customOidcUserService, AuthenticationService authenticationService) {
+        this.customOidcUserService = customOidcUserService;
+        this.authenticationService = authenticationService;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -56,9 +68,14 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(customOidcUserService))
                         .successHandler((request, response, authentication) -> {
-                            // Chuyển hướng tới endpoint callback trong Controller
+                            //Gọi handleGoogleLogin để lấy token
+                            AuthenticationResponse authResponse = authenticationService
+                                    .handleGoogleLogin(authentication);
+                            //Trỏ về trang chủ
                             response.sendRedirect("http://localhost:5173");
                         })
+
+
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
@@ -100,8 +117,4 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(10);
-    }
 }

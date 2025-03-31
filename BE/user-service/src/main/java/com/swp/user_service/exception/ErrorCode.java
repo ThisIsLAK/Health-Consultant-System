@@ -46,7 +46,9 @@ public enum ErrorCode {
     EMAIL_NOT_PROVIDED(1040, "You need to provide email"),
     INVALID_VERIFICATION_TOKEN(1041, "Token to verify is invalid"),
     EMAIL_ALREADY_VERIFIED(1042, "Email is verified already"),
-    EMAIL_SENDING_FAILED(1043,"Email sending failed" );   //<<====chu y dau (;)===========================================================================================
+    EMAIL_SENDING_FAILED(1043,"Email sending failed" ),
+    EMAIL_NOT_VERIFIED(1044, "You need to verify your email first")
+    ;   //<<====chu y dau (;)===========================================================================================
 
 
 
