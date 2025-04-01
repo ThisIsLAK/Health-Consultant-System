@@ -47,28 +47,25 @@ public class PsyService {
     }
 
     public UserResponse updatePsy(String id, PsychologistUpdateRequest request) {
-        // Tìm psychologist theo ID và đảm bảo roleId = 4
+        // tim psychologist theo id
         User psychologist = userRepository.findById(id)
                 .filter(user -> Objects.equals(user.getRole().getRoleId(), "4"))
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
 
-        // Cập nhật name nếu không null hoặc rỗng
+        // cap nhat thông tin psychologist
         if (request.getName() != null && !request.getName().isEmpty()) {
             psychologist.setName(request.getName());
         }
 
-        // Cập nhật email nếu không null hoặc rỗng
         if (request.getEmail() != null && !request.getEmail().isEmpty()) {
             psychologist.setEmail(request.getEmail());
         }
-
-        // Cập nhật password nếu không null hoặc rỗng (cần hash password nếu có)
         if (request.getPassword() != null && !request.getPassword().isEmpty()) {
-            String hashedPassword = passwordEncoder.encode(request.getPassword()); // Cần inject PasswordEncoder
+            String hashedPassword = passwordEncoder.encode(request.getPassword()); //PasswordEncoder
             psychologist.setPassword(hashedPassword);
         }
 
-        // Lưu lại thông tin psychologist sau khi cập nhật
+        // luu lai thong tin psychologist sau khi cap nhat
         User updatedPsychologist = userRepository.save(psychologist);
 
         return userMapper.toUserResponse(updatedPsychologist);
