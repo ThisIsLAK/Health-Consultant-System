@@ -16,7 +16,6 @@ function AddSupportProgram() {
     description: '',
     startDate: '',
     endDate: '',
-    active: true
   });
 
   const [errors, setErrors] = useState({});
@@ -212,21 +211,6 @@ function AddSupportProgram() {
                     </Form.Group>
                   </Col>
                 </Row>
-
-                <Form.Group className="mb-4">
-                  <Form.Check
-                    type="switch"
-                    id="active"
-                    name="active"
-                    label="Program Active"
-                    checked={formData.active}
-                    onChange={handleChange}
-                    className="form-switch"
-                  />
-                  <Form.Text className="text-muted">
-                    Inactive programs won't be visible to users
-                  </Form.Text>
-                </Form.Group>
 
                 <div className="button-row">
                   <Button

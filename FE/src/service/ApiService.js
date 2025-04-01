@@ -393,7 +393,7 @@ export default class ApiService {
             // Handle response format with code, message, result structure
             if (response.data && typeof response.data === 'object') {
                 if (response.data.code !== undefined) {
-                    if (response.data.code === 0) {
+                    if (response.data.code === 1000) {
                         return {
                             status: 200,
                             data: response.data.result || response.data,

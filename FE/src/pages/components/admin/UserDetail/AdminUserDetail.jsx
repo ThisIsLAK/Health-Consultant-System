@@ -265,6 +265,8 @@ const AdminUserDetail = () => {
                                                         name="email"
                                                         value={editedUser.email || ''}
                                                         onChange={handleInputChange}
+                                                        readOnly
+                                                        disabled
                                                     />
                                                 </Form.Group>
                                             </Col>
