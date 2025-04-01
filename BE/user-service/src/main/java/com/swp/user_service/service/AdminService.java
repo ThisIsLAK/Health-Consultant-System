@@ -53,8 +53,6 @@ public class AdminService {
             }
     }
 
-    //Kiem tra truoc luc goi ham. Neu la role ADMIN thi moi goi duoc ham
-
     public List<UserResponse> getUsers(){
 
         log.info("In method get users");
@@ -69,7 +67,6 @@ public class AdminService {
     }
 
     //cap lai mat khau cho user
-
     public UserResponse resetUserPassword(String email, ResetPasswordRequest request) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -100,7 +97,6 @@ public class AdminService {
     }
 
     //tao tk cho moi user
-
     public UserResponse createUserByAdmin(UserCreationRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail()))
@@ -110,7 +106,7 @@ public class AdminService {
             throw new AppException(ErrorCode.NAME_REQUIRED);
         }
 
-        String roleId = request.getRoleId() != null ? request.getRoleId() : "2"; // Mặc định là STUDENT nếu không có role được thêm vào trong lúc tạo
+        String roleId = request.getRoleId() != null ? request.getRoleId() : "2"; // mac dinh la STUDENT neu khong co role duoc them vao trong luc tao
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
 

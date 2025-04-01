@@ -114,7 +114,9 @@ public class SurveyService {
 
         SurveyResponse response = surveyMapper.toSurveyResponse(survey);
         response.setQuestions(survey.getQuestions().stream()
+                //surveyQuestionMapper là một mapper giúp chuyển đổi SurveyQuestion thành SurveyQuestionResponse
                 .map(surveyQuestionMapper::toSurveyQuestionResponse)
+                //Chuyển kết quả từ Stream(surveyquestion) thành SurveyQuestionResponse rồi gán vào response
                 .collect(Collectors.toList()));
 
         return response;

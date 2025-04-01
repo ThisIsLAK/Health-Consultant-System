@@ -33,7 +33,7 @@ public class ManagerService {
     }
 
     public List<UserSummaryResponse> getActiveUsersByRoleId(String roleId) {
-        List<User> users = userRepository.findByRole_RoleIdAndActive(roleId, true); // Lấy user có active = true
+        List<User> users = userRepository.findByRole_RoleIdAndActive(roleId, true);
         return users.stream()
                 .map(user -> new UserSummaryResponse(user.getName(), user.getEmail(), user.getActive()))
                 .collect(Collectors.toList());
