@@ -70,10 +70,10 @@ public class AppointmentService {
             throw new AppException(ErrorCode.PYSOCHOLOGIST_NOT_ACTIVE );
         }
 
-        // hàm kiểm tra slot có bị trùng không
+        // goi ham kiem tra slot da duoc dat chua
         validateSlotAvailability(request);
 
-        // tạo một cuộc hẹn mới
+        // tao cuoc hen moi
         Appointment appointment = new Appointment();
         appointment.setUser(user);
         appointment.setPsychologistId(psychologist.getId());
@@ -83,24 +83,24 @@ public class AppointmentService {
 
         Appointment savedAppointment = appointmentRepository.save(appointment);
 
-        // Gửi email thông báo sau khi book thành công
+        // gui email cho user khi dat cuoc hen thanh cong
         sendBookingConfirmationEmail(user, psychologist, savedAppointment);
 
         return appointmentMapper.toAppointmentResponse(savedAppointment);
     }
 
     private void validateSlotAvailability(AppointmentRequest request) {
-        // Kiểm tra xem slot có hợp lệ không
+        // kiem tra slot co hop le khong
         if (!VALID_TIME_SLOTS.contains(request.getTimeSlot())) {
             throw new AppException(ErrorCode.INVALID_SLOT);
         }
 
-        // Lấy psychologist từ userRepository với roleId = 4
+        // kiem tra xem user nay co phai la psychologist khong
         User psychologist = userRepository.findById(request.getPsychologistId())
-                .filter(p -> Objects.equals(p.getRole().getRoleId(), "4")) // Kiểm tra roleId = 4
+                .filter(p -> Objects.equals(p.getRole().getRoleId(), "4")) //role = 4 la psychologist
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_PSYCHOLOGIST));
 
-        // Kiểm tra xem slot có bị trùng không (cùng ngày, cùng khung giờ, cùng psychologist)
+        //kiem tra xem slot co bi trung khong (cung ngay, cung khung gio, cung psychologist)
         boolean slotAlreadyBooked = appointmentRepository.existsByPsychologistIdAndAppointmentDateAndTimeSlot(
                 psychologist.getId(), request.getAppointmentDate(), request.getTimeSlot()
         );
@@ -109,12 +109,12 @@ public class AppointmentService {
             throw new AppException(ErrorCode.SLOT_IS_BOOKING);
         }
 
-        // Kiểm tra xem người dùng đã hủy cuộc hẹn nào trong cùng ngày chưa
+        //kiem tra xem nguoi dung da huy cuoc hen nao trong cung ngay chua
         boolean hasCancelledOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDateAndCancelledAtIsNotNull(
                 request.getUserId(), request.getAppointmentDate()
         );
 
-        // Nếu chưa hủy cuộc hẹn nào trong ngày, áp dụng giới hạn 1 lần/ngày
+        //neu chua huy cuoc hen nao trong ngay thi ap dung gioi han 1 lan/ngay
         if (!hasCancelledOnSameDay) {
             boolean userHasAppointmentOnSameDay = appointmentRepository.existsByUserIdAndAppointmentDate(
                     request.getUserId(), request.getAppointmentDate()
@@ -124,7 +124,7 @@ public class AppointmentService {
                 throw new AppException(ErrorCode.ONE_APPOINTMENT_PER_DAY_LIMIT);
             }
         }
-        // Nếu đã hủy, không áp dụng giới hạn 1 lần/ngày, chỉ dựa vào cooldown (đã xử lý trong validateCooldown)
+        // neu da huy thi khong ap dung gioi han 1 lan/ngay ma chi dua vao cooldown (da xu ly trong validateCooldown)
         boolean userSlotAlreadyBooked = appointmentRepository.existsByUserIdAndAppointmentDateAndTimeSlot(
                 request.getUserId(), request.getAppointmentDate(), request.getTimeSlot()
         );
@@ -154,7 +154,7 @@ public class AppointmentService {
         }
     }
     private LocalDateTime getAppointmentStartTime(Date appointmentDate, String timeSlot) {
-        // Convert Date to LocalDateTime
+        // chuyen Date sang LocalDateTime
         Instant instant = appointmentDate.toInstant();
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         LocalDate datePart = dateTime.toLocalDate();
@@ -163,7 +163,7 @@ public class AppointmentService {
         String startHourStr = timeSlot.split("-")[0].replace("h", "").trim();
         int startHour = Integer.parseInt(startHourStr);
 
-        // Combine date with start hour (assuming minutes are 00)
+        // ket hop datePart va startHour
         return LocalDateTime.of(datePart.getYear(), datePart.getMonth(), datePart.getDayOfMonth(), startHour, 0);
     }
 
@@ -206,19 +206,36 @@ public class AppointmentService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setTo(user.getEmail());
-            helper.setSubject("Appointment Booking Confirmation");
+            helper.setSubject("Appointment Booking Information"); // Tiêu đề email
             helper.setText(buildEmailContent(user, psychologist, appointment), true); // true để hỗ trợ HTML
 
             mailSender.send(message);
-            log.info("Booking confirmation email sent to {}", user.getEmail());
+            log.info("Booking information email sent to {}", user.getEmail());
         } catch (MessagingException e) {
             log.error("Failed to send email to {}: {}", user.getEmail(), e.getMessage());
             throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
         }
     }
 
+    private void sendBookingCancelEmail(User user, User psychologist, Appointment appointment) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(user.getEmail());
+            helper.setSubject("Appointment Cancellation Notice"); // Sua tieu de email
+            helper.setText(buildEmailContentCancel(user, psychologist, appointment), true); // goi ham noi dung email
+
+            mailSender.send(message);
+            log.info("Cancellation email sent to {}", user.getEmail());
+        } catch (MessagingException e) {
+            log.error("Failed to send cancellation email to {}: {}", user.getEmail(), e.getMessage());
+            throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
+        }
+    }
+
     private String buildEmailContent(User user, User psychologist, Appointment appointment) {
-        return "<h1>Appointment Confirmation</h1>" +
+        return "<h1>Appointment Information</h1>" +
                 "<p>Dear " + user.getName() + ",</p>" +
                 "<p>Your appointment has been successfully booked with the following details:</p>" +
                 "<ul>" +
@@ -229,7 +246,23 @@ public class AppointmentService {
                 "</ul>" +
                 "<p>Please arrive on time. If you need to cancel, do so at least 4 hours before the appointment.</p>" +
                 "<p>Thank you,</p>" +
-                "<p>Your Appointment System</p>";
+                "<p>SWP391 Mental Healthcare Systems</p>";
+    }
+
+    private String buildEmailContentCancel(User user, User psychologist, Appointment appointment) {
+        return "<h1>Appointment Cancellation Notice</h1>" +
+                "<p>Dear " + user.getName() + ",</p>" +
+                "<p>We regret to inform you that your appointment has been cancelled with the following details:</p>" +
+                "<ul>" +
+                "<li><strong>Psychologist:</strong> " + psychologist.getName() + " (" + psychologist.getEmail() + ")</li>" +
+                "<li><strong>Date:</strong> " + appointment.getAppointmentDate() + "</li>" +
+                "<li><strong>Time Slot:</strong> " + appointment.getTimeSlot() + "</li>" +
+                "<li><strong>Location:</strong> Phòng 102, Trường Tiểu học ABC, Quận 9, TP HCM</li>" +
+                "</ul>" +
+                "<p>If you have any questions or need to reschedule, please contact us at [admin@gmail.com].</p>" +
+                "<p>Sorry for the inconvenience</p>" +
+                "<p>SWP391 Mental Healthcare Systems</p>";
+
     }
 
     public void cancelAppointment(String appointmentId) {
@@ -246,9 +279,16 @@ public class AppointmentService {
 
         validateCancellationTime(appointment);
 
+        // gui email cho user khi huy cuoc hen
+        User user = appointment.getUser();
+        User psychologist = userRepository.findById(appointment.getPsychologistId())
+                .orElseThrow(() -> new AppException(ErrorCode.PSYCHOLOGIST_NOT_FOUND));
+        sendBookingCancelEmail(user, psychologist, appointment);
+
         appointment.setActive(false);
         appointment.setCancelledAt(LocalDateTime.now());
         appointmentRepository.save(appointment);
+
     }
 
     public List<AppointmentResponse> getPsychologistAppointments(String psychologistId) {
