@@ -154,7 +154,7 @@ public class AppointmentService {
         }
     }
     private LocalDateTime getAppointmentStartTime(Date appointmentDate, String timeSlot) {
-        // Convert Date to LocalDateTime
+        // chuyen Date sang LocalDateTime
         Instant instant = appointmentDate.toInstant();
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
         LocalDate datePart = dateTime.toLocalDate();
@@ -163,7 +163,7 @@ public class AppointmentService {
         String startHourStr = timeSlot.split("-")[0].replace("h", "").trim();
         int startHour = Integer.parseInt(startHourStr);
 
-        // Combine date with start hour (assuming minutes are 00)
+        // ket hop datePart va startHour
         return LocalDateTime.of(datePart.getYear(), datePart.getMonth(), datePart.getDayOfMonth(), startHour, 0);
     }
 
@@ -206,19 +206,36 @@ public class AppointmentService {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
             helper.setTo(user.getEmail());
-            helper.setSubject("Appointment Booking Confirmation");
+            helper.setSubject("Appointment Booking Information"); // Tiêu đề email
             helper.setText(buildEmailContent(user, psychologist, appointment), true); // true để hỗ trợ HTML
 
             mailSender.send(message);
-            log.info("Booking confirmation email sent to {}", user.getEmail());
+            log.info("Booking information email sent to {}", user.getEmail());
         } catch (MessagingException e) {
             log.error("Failed to send email to {}: {}", user.getEmail(), e.getMessage());
             throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
         }
     }
 
+    private void sendBookingCancelEmail(User user, User psychologist, Appointment appointment) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+            helper.setTo(user.getEmail());
+            helper.setSubject("Appointment Cancellation Notice"); // Sửa tiêu đề email
+            helper.setText(buildEmailContentCancel(user, psychologist, appointment), true); // Gọi đúng hàm xây dựng nội dung
+
+            mailSender.send(message);
+            log.info("Cancellation email sent to {}", user.getEmail());
+        } catch (MessagingException e) {
+            log.error("Failed to send cancellation email to {}: {}", user.getEmail(), e.getMessage());
+            throw new AppException(ErrorCode.EMAIL_SENDING_FAILED);
+        }
+    }
+
     private String buildEmailContent(User user, User psychologist, Appointment appointment) {
-        return "<h1>Appointment Confirmation</h1>" +
+        return "<h1>Appointment Information</h1>" +
                 "<p>Dear " + user.getName() + ",</p>" +
                 "<p>Your appointment has been successfully booked with the following details:</p>" +
                 "<ul>" +
@@ -229,7 +246,23 @@ public class AppointmentService {
                 "</ul>" +
                 "<p>Please arrive on time. If you need to cancel, do so at least 4 hours before the appointment.</p>" +
                 "<p>Thank you,</p>" +
-                "<p>Your Appointment System</p>";
+                "<p>SWP391 Mental Healthcare Systems</p>";
+    }
+
+    private String buildEmailContentCancel(User user, User psychologist, Appointment appointment) {
+        return "<h1>Appointment Cancellation Notice</h1>" +
+                "<p>Dear " + user.getName() + ",</p>" +
+                "<p>We regret to inform you that your appointment has been cancelled with the following details:</p>" +
+                "<ul>" +
+                "<li><strong>Psychologist:</strong> " + psychologist.getName() + " (" + psychologist.getEmail() + ")</li>" +
+                "<li><strong>Date:</strong> " + appointment.getAppointmentDate() + "</li>" +
+                "<li><strong>Time Slot:</strong> " + appointment.getTimeSlot() + "</li>" +
+                "<li><strong>Location:</strong> Phòng 102, Trường Tiểu học ABC, Quận 9, TP HCM</li>" +
+                "</ul>" +
+                "<p>If you have any questions or need to reschedule, please contact us at [admin@gmail.com].</p>" +
+                "<p>Sorry for the inconvenience</p>" +
+                "<p>SWP391 Mental Healthcare Systems</p>";
+
     }
 
     public void cancelAppointment(String appointmentId) {
@@ -246,9 +279,16 @@ public class AppointmentService {
 
         validateCancellationTime(appointment);
 
+        // Gửi email thông báo hủy cuộc hẹn
+        User user = appointment.getUser();
+        User psychologist = userRepository.findById(appointment.getPsychologistId())
+                .orElseThrow(() -> new AppException(ErrorCode.PSYCHOLOGIST_NOT_FOUND));
+        sendBookingCancelEmail(user, psychologist, appointment);
+
         appointment.setActive(false);
         appointment.setCancelledAt(LocalDateTime.now());
         appointmentRepository.save(appointment);
+
     }
 
     public List<AppointmentResponse> getPsychologistAppointments(String psychologistId) {
