@@ -47,7 +47,10 @@ public class SurveyQuestionService {
         // Cập nhật danh sách đáp án
         List<SurveyAnswerOption> answerOptions = request.getAnswerOptions().stream()
                 .map(optionRequest -> {
+                    //Chuyển từng optionRequest thành SurveyAnswerOption
+                    //bằng surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest).
                     SurveyAnswerOption option = surveyAnswerOptionMapper.toSurveyAnswerOption(optionRequest);
+                    //liên kết đáp án với câu hỏi
                     option.setSurveyQuestion(finalQuestion);
                     return option;
                 })

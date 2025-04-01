@@ -55,6 +55,8 @@ public class SupportProgramService {
     }
 
     public List<SupportProgramResponse> getAllSupportPrograms() {
+        //stream để kết hợp nhiều thao tác lại với nhau, ví dụ: map, collect, filter, ...
+        //mà không cần phải sử dụng nhiều vòng lặp
         return supportProgramRepository.findAll().stream()
                 .map(supportProgramMapper::toResponse)
                 .collect(Collectors.toList());
